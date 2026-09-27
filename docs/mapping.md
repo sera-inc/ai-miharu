@@ -1,6 +1,6 @@
 # mapping.md — 実装値 → トークン対応表
 
-**対象**: `.`　**生成日**: 2026-09-27　**生成**: `scripts/inventory.mjs`
+**対象**: `/home/student01/jobs/shadow-ai-guard-001/source`　**生成日**: 2026-09-27　**生成**: `scripts/inventory.mjs`
 **ステータス**: DeepSeek 4.1 Flash による仮対応（人間レビュー未承認、Phase 1 未完了）
 
 > この表は設計書 §6 Phase 1 の中核資産です。設計書は人間による対応トークン決定・レビューを要求します。
@@ -284,53 +284,53 @@
 
 | 実装値 | 出現回数 | 対応トークン | 状態 | 備考（代表ファイル） |
 |---|---|---|---|---|
-| `10px` | 138 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: DADS の余白スケールに 10px 対応のトークンがなく、border-radius や font-size など余白以外の用途も混在しているため一意に決められない。 |
+| `10px` | 138 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに10px相当がなく、近い8px/16pxへ置換すると余白寸法が変わるため保留。 |
 | `8px` | 114 | --app-space-2 | AI仮対応 | `extension/demo/index.html` 他4件。DeepSeek 判定: 8px は DADS の spacing-2 に一致し、提示文脈の厳密な 8px は gap/padding/top/bottom などの余白用途に使われているため。 |
-| `12px` | 113 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 12px は DADS の spacing-3 に一致するが、padding/margin の余白用途と border-radius/box-shadow の用途が混在し、値単体では一意に決められない。 |
-| `14px` | 109 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: DADS の余白スケールに 14px 対応のトークンがなく、padding/gap の余白と font-size/box-shadow の用途が混在しているため。 |
-| `6px` | 106 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: DADS の余白スケールに 6px 対応のトークンがなく、margin/padding の余白と border-radius の用途が混在しているため。 |
-| `16px` | 85 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 16px は DADS の spacing-4 に一致するが、top/right/gap の余白と font-size/blur/box-shadow の用途が混在し一意に決められない。 |
-| `4px` | 74 | 保留 | 保留 | `extension/src/guard.js` 他3件。DeepSeek 判定: 4px は DADS の spacing-1 に一致するが、提示文脈では border/box-shadow/outline-offset など余白以外の用途が中心で、余白トークンに対応させる根拠が一意でない。 |
-| `2px` | 68 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 2px は DADS の spacing-05 に一致するが、margin の余白と outline/width/box-shadow の用途が混在し一意に決められない。 |
-| `20px` | 60 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 20px は DADS の spacing-5 に一致するが、padding の余白と min-width/box-shadow の用途が混在し一意に決められない。 |
-| `5px` | 59 | 保留 | 保留 | `extension/src/guard.js` 他3件。DeepSeek 判定: DADS の余白スケールに 5px 対応のトークンがなく、padding/margin の余白と border-radius の用途が混在しているため。 |
-| `9px` | 55 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: DADS の余白スケールに 9px 対応のトークンがなく、gap の余白と border-radius の用途が混在しているため。 |
-| `7px` | 55 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: DADS の余白スケールに 7px 対応のトークンがなく、margin の余白と border-radius/stroke-width の用途が混在しているため。 |
-| `18px` | 51 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: paddingの余白として使われる一方、box-shadowのYオフセットやheightにも同じ18pxがあり用途が一意でない。またDADS spacingに18pxはない。 |
-| `11px` | 42 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: gap/marginの余白とfont-sizeの両方で使われ、用途が一意でない。DADS spacingに11pxはない。 |
-| `17px` | 42 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: margin/paddingの余白とfont-sizeの両方で使われ、用途が一意でない。DADS spacingに17pxはない。 |
-| `3px` | 32 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: margin/paddingの余白とbox-shadowのoffset/spreadの両方で使われ、用途が一意でない。DADS spacingに3pxはない。 |
-| `15px` | 32 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: margin/padding/gapの余白とfont-size/fontの両方で使われ、用途が一意でない。DADS spacingに15pxはない。 |
-| `13px` | 26 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: marginの余白とfont-sizeの両方で使われ、用途が一意でない。DADS spacingに13pxはない。 |
-| `1px` | 22 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: border幅としての使用が多く、marginの余白にも同じ1pxがあり用途が一意でない。DADS spacingに1pxはない。 |
-| `22px` | 16 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: paddingの余白とwidth:calc()内の計算値の両方で使われ、用途が一意でない。DADS spacingに22pxはない。 |
-| `24px` | 12 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: gap/paddingの余白では--app-space-6に一致するが、box-shadowのぼかし値にも同じ24pxがあり用途が一意でない。 |
-| `19px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: gapの余白とfont-sizeの両方で使われ、用途が一意でない。DADS spacingに19pxはない。 |
-| `21px` | 6 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: margin/paddingの余白だが、DADS spacingに21pxはなく、近い20pxとは意味が異なる。 |
+| `12px` | 113 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに12px相当がなく、近い8px/16pxとは値が異なるため保留。 |
+| `14px` | 109 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに14px相当がなく、近い16pxとは値が異なるため保留。 |
+| `6px` | 106 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに6px相当がなく、4px/8pxとは値が異なるため保留。 |
+| `16px` | 85 | --app-space-2 | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークン --app-space-2 が16pxと一致し、padding/gap等の余白用途で使われているため。 |
+| `4px` | 74 | --app-space-05 | AI仮対応 | `extension/src/guard.js` 他3件。DeepSeek 判定: 候補トークン --app-space-05 が4pxと一致し、margin/padding等の余白用途で使われているため。 |
+| `2px` | 68 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに2px相当がなく、0px/4pxとは値が異なるため保留。 |
+| `20px` | 60 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに20px相当がなく、16px/24pxとは値が異なるため保留。 |
+| `5px` | 59 | 保留 | 保留 | `extension/src/guard.js` 他3件。DeepSeek 判定: 候補トークンに5px相当がなく、4px/8pxとは値が異なるため保留。 |
+| `9px` | 55 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに9px相当がなく、8px/16pxとは値が異なるため保留。 |
+| `7px` | 55 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに7px相当がなく、8pxとは値が異なるため保留。 |
+| `18px` | 51 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: DADSの余白トークンに18pxは存在せず、近い16px/24pxとは値も意味も異なるため。 |
+| `11px` | 42 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに11pxがなく、8px/16pxなどへ置換すると値が変わるため。 |
+| `17px` | 42 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに17pxがなく、16pxでは値も用途が異なるため。 |
+| `3px` | 32 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに3pxがなく、4pxや0pxとは異なる値のため。 |
+| `15px` | 32 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに15pxがなく、16pxとは値も意味も一致しないため。 |
+| `13px` | 26 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに13pxがなく、8px/16pxでは置換できないため。 |
+| `1px` | 22 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに1pxがなく、0pxとは異なる余白値のため。 |
+| `22px` | 16 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに22pxがなく、24pxとは値も用途も異なるため。 |
+| `24px` | 12 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: --app-space-3と--app-gutterの両方が24pxで、ソースではgap/グリッド間隔とpadding/marginに混在し用途が一意に決められないため。 |
+| `19px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 候補トークンに19pxがなく、16px/24pxでは値が異なるため。 |
+| `21px` | 6 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 候補トークンに21pxがなく、24pxとは値も意味も一致しないため。 |
 | `45px` | 6 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: max-width:145pxの部分文字列として抽出された誤検知であり、box-shadowのぼかし値でもあるため余白値ではない。 |
-| `32px` | 4 | 保留 | 保留 | `extension/demo/index.html` 他1件。DeepSeek 判定: 32pxはmarginの余白として使われる一方、width/heightのサイズ指定や232pxの部分文字列にも出現し、用途が一意でない。候補の--app-space-5は32pxだが、サイズ用途に誤適用されるため保留。 |
-| `28px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 28pxに一致する候補トークンがない。paddingの余白、width/height、box-shadowのオフセットなど用途が混在している。 |
-| `26px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 26pxに一致する候補トークンがない。paddingの余白、font-size、width/heightなど用途が混在している。 |
-| `30px` | 3 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 30pxに一致する候補トークンがない。430pxや130pxの部分文字列、box-shadowのオフセットとしての出現が主で、余白用途として一意に扱えない。 |
-| `38px` | 3 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 38pxに一致する候補トークンがない。min-heightのサイズ指定やコメント内の文字列であり、余白用途ではない。 |
-| `55px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 55pxに一致する候補トークンがない。paddingの余白だが、候補に55px相当のトークンがない。 |
-| `40px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 40pxは--app-space-6に一致するが、paddingの余白とmin-heightのサイズ指定、340pxの部分文字列が混在し、一意に決められない。 |
-| `25px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 25pxに一致する候補トークンがない。font-sizeやwidth/heightのサイズ指定が主で、余白用途ではない。 |
-| `64px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 64pxは--app-space-8に一致するが、paddingの余白とmin-heightのサイズ指定が混在し、一意に決められない。 |
-| `35px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 35pxに一致する候補トークンがない。min-heightのサイズ指定であり、余白用途ではない。 |
-| `23px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 23pxに一致する候補トークンがない。paddingの余白とline-height、コメント内の文字列が混在している。 |
-| `4.5px` | 2 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: 4.5pxに一致する候補トークンがない。paddingの余白だが、候補に4.5px相当のトークンがない。 |
-| `1.6em` | 1 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: margin-top の余白だが、1.6em は相対単位で DADS spacing の候補値に一致しないため。 |
+| `32px` | 4 | --app-space-4 | AI仮対応 | `extension/demo/index.html` 他1件。DeepSeek 判定: 候補トークン --app-space-4 が 32px に対応し、gap・padding-left・margin などの余白用途で使われているため。 |
+| `28px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 余白として使われているが、候補トークンに 28px に対応する値がないため。 |
+| `26px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 余白として使われているが、候補トークンに 26px に対応する値がないため。 |
+| `30px` | 3 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 余白として使われているが、候補トークンに 30px に対応する値がないため。 |
+| `38px` | 3 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 余白として使われているが、候補トークンに 38px に対応する値がないため。 |
+| `55px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 余白として使われているが、候補トークンに 55px に対応する値がないため。 |
+| `40px` | 2 | --app-space-5 | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: 候補トークン --app-space-5 が 40px に対応し、padding などの余白用途で使われているため。 |
+| `25px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 余白として使われているが、候補トークンに 25px に対応する値がないため。 |
+| `64px` | 2 | --app-space-8 | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: 候補トークン --app-space-8 が 64px に対応し、padding・margin などの余白用途で使われているため。 |
+| `35px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 余白として使われているが、候補トークンに 35px に対応する値がないため。 |
+| `23px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 余白として使われているが、候補トークンに 23px に対応する値がないため。 |
+| `4.5px` | 2 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: 余白として使われているが、候補の --app-space-05 は 4px であり 4.5px とは一致しないため。 |
+| `1.6em` | 1 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: margin-top の余白値だが、em は要素のフォントサイズに依存する相対値であり、候補の px 固定 spacing トークンと同一意味にならないため。 |
 | `27px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: flex-basis と min-height の寸法指定で、余白カテゴリの値ではないため。 |
-| `58px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: margin-left と min-height で用途が混在し、候補トークンにも 58px 対応がないため。 |
-| `56px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: padding-bottom の余白だが、56px に対応する候補トークンがないため。 |
+| `58px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: margin-left の余白値だが、候補トークンの 4/8/16/24/32/40/48/64px のいずれにも一致せず、近い値への置換も意味が異なるため。 |
+| `56px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: padding-bottom の余白値だが、候補に 56px がなく、48px や 64px とは値も意味も一致しないため。 |
 | `48px` | 1 | --app-space-6 | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: main の padding-bottom 48px は DADS spacing-6 (48px) に対応する余白値のため。 |
 | `36px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: height/min-height の寸法指定で、余白カテゴリの値ではないため。 |
 | `50px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: box-shadow の blur radius で、余白ではないため。 |
-| `44px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: padding と box-shadow の blur で用途が混在し、候補トークンにも 44px 対応がないため。 |
-| `60px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: padding-bottom と min-height で用途が混在し、候補トークンにも 60px 対応がないため。 |
+| `44px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: padding-top の余白値だが、候補に 44px がなく、40px や 48px への近似置換はできないため。 |
+| `60px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: padding-bottom の余白値だが、候補に 60px がなく、64px とは値が異なるため。 |
 | `1.5px` | 1 | 除外 | 除外 | `portal/app/static/index.html`。DeepSeek 判定: font-size:11.5px の一部を誤抽出したもので、独立した余白値ではないため。 |
-| `223px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: padding-left の余白だが、223px に対応する候補トークンがないため。 |
+| `223px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: padding-left の余白値だが、候補に 223px がなく、任意のレイアウト値として spacing トークンへ一意に対応できないため。 |
 
 ## 角丸
 
@@ -383,4 +383,4 @@
 
 ---
 
-検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 93、保留 223、除外 33）
+検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 98、保留 218、除外 33）
