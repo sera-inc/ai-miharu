@@ -98,10 +98,10 @@ def test_the_page_carries_the_approval_view_and_the_tracker():
     assert "'cli-approve'" in INDEX.split("const VIEWS =", 1)[1][:200]
     assert "if (h.startsWith('cli-approve/')) {" in INDEX
     assert "async function cliApprove()" in INDEX
-    assert "Only an owner can approve a command" in INDEX
+    assert "このエステートをアップグレードするコマンドを承認できるのはオーナーだけです" in INDEX
     assert 'data-act="cli-approve"' in INDEX and 'data-act="cli-deny"' in INDEX
     assert "function upgradeTracker()" in INDEX and "function upgradeWatch()" in INDEX
-    assert "<b>Portal restarting</b>" in INDEX
+    assert "<b>ポータルを再起動中</b>" in INDEX
     assert "uiCommand('aiguardctl upgrade --portal ' + location.origin)" in INDEX
 
 

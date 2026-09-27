@@ -153,7 +153,7 @@ def test_the_page_offers_no_control_whose_answer_is_already_403():
 
 def test_the_accounts_table_shows_and_edits_an_email():
     """Built in #199 as an API with no way to reach it from the page."""
-    assert "<th>email</th>" in INDEX
+    assert "<th>メールアドレス</th>" in INDEX
     assert 'data-act="user-email-form"' in INDEX
     assert "id=\"user-email\"" in INDEX, "and on the create row too"
 
@@ -244,9 +244,9 @@ def test_the_sso_card_says_it_is_beta():
     sign-in had never met a real app registration, which stopped being true
     the day one deployment ran it end to end. One tenant is not proof, so
     the pill stays and the claim behind it is now countable."""
-    card = INDEX.split("<h3>Single sign-on</h3>", 1)[1][:900]
+    card = INDEX.split("<h3>シングルサインオン</h3>", 1)[1][:900]
     assert 'class="pill p-amb"' in card
-    assert ">beta</span>" in card
+    assert ">ベータ</span>" in card
     assert "one real Entra tenant" in card
     assert "not yet run against" not in card
 

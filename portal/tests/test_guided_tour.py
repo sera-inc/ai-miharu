@@ -189,7 +189,7 @@ def test_leaving_the_tour_early_says_where_it_lives():
     which is the only place that says the tour can be taken again."""
     assert '<dialog id="tourdlg"' in INDEX
     assert "if (!done) tourDoneShow();" in INDEX
-    assert "Settings &rsaquo; Getting started" in INDEX
+    assert "設定 › はじめに" in INDEX
 
 
 def test_the_tour_reaches_every_section_of_the_nav():

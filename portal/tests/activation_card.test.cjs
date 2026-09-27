@@ -38,9 +38,9 @@ const ACTIVE = {state: 'active', id: 'NYX-0001', org: 'Acme Group Ltd',
 test('with no key, the card says open edition and claims nothing else', () => {
   const out = render({state: 'none'});
   assert.match(out, /open edition/);
-  assert.match(out, /Open edition/);
+  assert.match(out, /オープンエディション/);
   assert.match(out, /Apache 2\.0/);
-  assert.match(out, /offline, no outbound request/);
+  assert.match(out, /オフライン、外部リクエストなし/);
   assert.doesNotMatch(out, /activated/);
 });
 
@@ -48,8 +48,8 @@ test('a failed read is not "no subscription"', () => {
   // The bug this exists to stop: answering the question from a read that
   // never happened, and telling a paying customer they have no licence.
   const out = render({state: 'unknown'});
-  assert.match(out, /not read/);
-  assert.match(out, /nothing is claimed either way/);
+  assert.match(out, /未読み取り/);
+  assert.match(out, /どちらとも断定されません/);
   assert.doesNotMatch(out, /Open source/);
   assert.doesNotMatch(out, /Paste an activation key/);
 });
@@ -67,7 +67,7 @@ test('an activated deployment shows what it bought, and never the key', () => {
 
 test('moving to Nyxus is one command against this portal, with the key from the shell', () => {
   const out = render(ACTIVE);
-  assert.match(out, /Move this deployment to Nyxus/);
+  assert.match(out, /このデプロイを Nyxus に移行する/);
   assert.match(out, /aiguardctl upgrade --edition nyxus --portal https:\/\/ai-guard-portal\.example\.com --nyxus-version &lt;version&gt; --dry-run/);
   assert.match(out, /export NYXUS_KEY=/);
   // Not the old steps: a second release on new storage, and a key on a command line.
@@ -110,7 +110,7 @@ test('a key this release cannot verify says to upgrade before suspecting it', ()
   assert.match(out, /cannot be checked/);
   assert.match(out, /upgrade first/);
   assert.match(out, /aaaa-bbbb-cccc/);
-  assert.match(out, /Remove it/);
+  assert.match(out, /削除する/);
 });
 
 test('only an owner is offered the field', () => {

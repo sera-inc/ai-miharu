@@ -160,13 +160,13 @@ def test_linking_a_tool_is_four_steps_with_a_review():
     step with nothing showing the licence, its covered tools and the cost
     together."""
     for needle in ("function bwRail(", "function bwBodyReview(",
-                   "const BW_STEPS", "Review and link",
-                   'class="tiers"', "<th>Tier</th>", "Price / seat",
+                   "const BW_STEPS", "確認してリンク",
+                   'class="tiers"', "<th>プラン</th>", "シートあたりの価格",
                    "bw-tsum", "bw-money"):
         assert needle in INDEX, needle
     # The rail summary carries the money, not a step count: this is the one
     # wizard whose subject is a number.
-    assert "Monthly spend" in INDEX
+    assert "月間支出" in INDEX
     assert "function bwLive()" in INDEX
     # Currency is read off the screen too, or every figure renders unitless
     # until the step is left.
@@ -200,7 +200,7 @@ def test_the_member_step_names_every_connector_and_its_plan():
     The general note replaced a ChatGPT-specific one: naming a single absence
     made it look like the only one, when every tool without a connector is in
     exactly the same position."""
-    assert "plan, and how" in INDEX
+    assert "プラン、およびその方法" in INDEX
     # There used to be a SECOND table listing only the built connectors,
     # directly above a dropdown containing exactly those same connectors. It
     # said nothing the full table does not, and having both invited the
@@ -218,7 +218,7 @@ def test_a_tool_with_no_licence_mates_says_so():
     """Atlassian Rovo shares a licence group with nothing, so "Also covers"
     rendered an empty chip row and a bare "more tools..." - which reads as a
     control that failed to load rather than one with nothing to offer."""
-    assert "Nothing in the registry" in INDEX
+    assert "レジストリ内に、このツールとライセンスグループまたはベンダーを共有するものはない" in INDEX
     assert "choose from every tool" in INDEX
 
 

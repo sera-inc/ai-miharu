@@ -280,7 +280,7 @@ def test_the_page_carries_the_new_settings_ui():
                    "settingRow('alertmanager_url'",
                    "settingRow('grafana_url'",
                    "settingRow('log_store_password'",
-                   "logs:write and logs:read", "kubectl get svc"):
+                   "logs:write と logs:read の両方", "kubectl get svc"):
         assert needle in html, needle
 
 

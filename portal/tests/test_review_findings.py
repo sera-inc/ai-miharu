@@ -277,12 +277,12 @@ def test_the_shell_says_so_when_the_read_failed():
     html = open(os.path.join(index, "app", "static", "index.html")).read()
     # A banner above every view, not on the one page that checked.
     assert "function loadBanner()" in html
-    assert "this page is not an answer" in html
+    assert "このページは回答ではありません" in html
     assert "const tb = tabbar() + loadBanner();" in html
     # The confident lines are gated on the read having worked.
     assert "const dataOk = () => !loadError;" in html
-    for gated in ("None seen. That is a result",
-                  "also has a collector reporting",
+    for gated in ("何も観測されていません。それも結果であり",
+                  "スキャナーの検出結果があるすべてのデバイスには、コレクターからの報告もあります",
                   "Nothing outstanding in this window",
                   "That is a real answer for a small estate"):
         before = html.split(gated)[0]

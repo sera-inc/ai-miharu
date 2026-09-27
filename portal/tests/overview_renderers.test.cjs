@@ -31,7 +31,7 @@ test('collector coverage counts actual signals, including a source-less observed
   const c=context({G:{devices:{a:{collector_seen:true},b:{scanner_seen:true},c:{}},tools:{},personal_accounts:[]}});
   const f=c.uiOverviewFacts();
   assert.equal(f.collectors,1);assert.equal(f.coverage,33);assert.equal(f.gaps.length,1);
-  assert.match(c.widgets.detection_coverage(),/No collector signal <b>2<\/b>/);
+  assert.match(c.widgets.detection_coverage(),/コレクターシグナルなし <b>2<\/b>/);
 });
 test('no observed devices gives unavailable coverage rather than an invented percentage',()=>{
   const c=context({G:{devices:{},tools:{},personal_accounts:[]},S:{reporting:0,groups:[]}});
@@ -43,7 +43,7 @@ test('a failed findings read never presents retained counts as current data',()=
   const c=context({dataOk:()=>false});
   assert.match(c.widgets.stat_row(),/Data unavailable/);
   assert.doesNotMatch(c.widgets.stat_row(),/Monitoring healthy/);
-  assert.match(c.widgets.top_tools(),/Findings are unavailable/);
+  assert.match(c.widgets.top_tools(),/検出結果を利用できません/);
   assert.match(c.widgets.detection_coverage(),/Collector coverage unavailable/);
 });
 test('unavailable register data is separate from zero decisions',()=>{
@@ -68,7 +68,7 @@ test('the table contains every matching tool instead of truncating away cloud-on
 });
 test('the personal filter uses open lifecycle findings, not all historic personal rows',()=>{
   const c=context({PSTAT:{a:{status:'accepted'}}});vm.runInContext('UI_PERSONAL_TOOLS = true;',c);
-  const out=c.widgets.top_tools();assert.match(out,/No tools match this view/);assert.match(out,/0 of 1 discovered tools/);
+  const out=c.widgets.top_tools();assert.match(out,/この表示に一致するツールはありません/);assert.match(out,/0 of 1 discovered tools/);
 });
 test('tool metadata and finding identifiers are escaped before becoming markup',()=>{
   const id='x" onclick="bad';const attack='<img src=x onerror=bad>';

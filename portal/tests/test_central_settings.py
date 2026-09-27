@@ -226,7 +226,7 @@ def test_the_page_carries_the_editors():
     for needle in ("gov-edit", "gov-save", "gov-clear", "save-domains",
                    "clear-domains", "save-extid", "change-password",
                    "/api/settings", "/api/governance-decisions",
-                   "/api/password", "set in the portal"):
+                   "/api/password", "ポータルで設定"):
         assert needle in html, needle
 
 
@@ -258,7 +258,7 @@ def test_the_settings_tabs_share_one_save_and_secrets_keep_their_own():
     # per-field saves - each of their steps gates on its value being stored.
     assert 'data-act="save-domains"' in html
     assert 'data-act="save-extid"' in html
-    assert "${batch ? '' : '<button class=\"mini\" data-act=\"save-markings\">Save</button>'}" in html
+    assert "${batch ? '' : '<button class=\"mini\" data-act=\"save-markings\">保存</button>'}" in html
 
 
 def test_getting_started_has_its_own_tab():

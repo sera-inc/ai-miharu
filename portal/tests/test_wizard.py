@@ -324,7 +324,7 @@ def test_every_setup_doc_reference_is_a_real_file():
 
 def test_the_page_carries_the_review_queue():
     html = (main.STATIC / "index.html").read_text()
-    for needle in ("review_queue", "Awaiting a decision", "new today",
+    for needle in ("review_queue", "判断待ち", "今日の新規",
                    "docUrl", "github.com/AmanSK5/shadow-ai-guard/blob/"):
         assert needle in html, needle
 
@@ -376,7 +376,7 @@ def test_the_hosting_step_says_where_not_just_how():
     thing that cannot serve these."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("AWS S3", "Azure Blob Storage", "Google Cloud Storage",
-                   "artifact repository", "not a container registry"):
+                   "アーティファクトリポジトリ", "コンテナレジストリではありません"):
         assert needle in html, needle
     # The S3 gotcha the extension README documents, where it is needed.
     assert "arn:aws:s3:::your-bucket/*" in html
@@ -418,8 +418,8 @@ def test_the_rail_says_what_each_step_costs_to_skip():
     ISO evidence all inherit that. Once the required steps are in, the summary
     says so, because the moment it starts working is worth naming."""
     html = (main.STATIC / "index.html").read_text()
-    for needle in ("required", "recommended", "optional",
-                   "You can deploy now", "Start collecting", "Make it useful",
+    for needle in ("必須", "推奨", "任意",
+                   "今すぐデプロイできます", "Start collecting", "Make it useful",
                    "every account reads as personal",
                    "nothing can deploy without it"):
         assert needle in html, needle
@@ -488,7 +488,7 @@ def test_skipping_the_wizard_says_where_it_went():
     assert "canGo ? 'wiz-finish' : 'wiz-skip'" in html
     assert "if (act === 'wiz-skip') { skipShow(); return; }" in html
     assert '<dialog id="skipdlg"' in html
-    assert "Settings &rsaquo; Getting started" in html
+    assert "設定 › はじめに" in html
     # Confirming does exactly what finishing does, rather than a second copy
     # of it that can drift.
     assert "await managedAction('wiz-finish')" in html
