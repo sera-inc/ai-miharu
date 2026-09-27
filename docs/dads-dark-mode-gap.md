@@ -71,3 +71,7 @@
 - 機能削除またはUX変更がある場合、その告知、代替、厳密テスト計画の承認。
 
 この文書は DeepSeek の出力を整形した提案であり、トークンの追加や CSS の置換を実行した証拠ではありません。
+
+## 2026-09-27 製品方針と Layer 2 提案
+
+管理者は Shadow AI Guard の既存ダーク表示を維持し、DADS Layer 2 の追加トークン案を作ると決定した。これはこの製品の方針であり、digital-design-system 設計書 §9.2 U-04 の組織全体の決定ではない。DeepSeek v4.1 Flash が専用の 31 トークンを提案し、ライト・ダークの 282 色組合せを機械検証した。提案は `sera-inc/digital-design-system` の `feat/shadow-ai-guard-dark-layer2` ブランチの `docs/proposals/dads-layer2-dark-proposal.md` に配置する。現時点ではトークンも製品 UI も未変更。
