@@ -13,7 +13,7 @@
       "pluginId": "loki"
     }
   ],
-  "title": "AI Guard - Shadow AI Visibility",
+  "title": "世良AIガバナンス - シャドーAIの可視性",
   "uid": "ai-guard",
   "tags": [
     "ai-guard",
@@ -38,12 +38,12 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "## Shadow AI visibility\n**What this shows:** every AI tool detected across your organisation's devices and cloud accounts, updated continuously (endpoints report through the day; cloud sources scan daily). **Presence of a tool is informational.** Red numbers mean a *personal* (non-corporate) account is signed into an AI tool on a managed device, or an unexplained integration was found - those route to your alerting channel automatically. Set the corporate domain regex in the dashboard variables above."
+        "content": "## シャドーAIの可視性\n**表示内容:** 組織のデバイスとクラウドアカウント全体で検出されたすべてのAIツール。継続的に更新されます（エンドポイントは日中を通じて報告し、クラウドソースは毎日スキャンします）。**ツールの存在自体は情報提供です。** 赤い数値は、管理対象デバイス上で*個人*（法人以外）アカウントがAIツールにサインインしているか、説明のつかない連携が見つかったことを意味し、これらは自動的にアラート通知チャネルへ送られます。法人ドメインの正規表現は、上部のダッシュボード変数で設定してください。"
       }
     },
     {
       "type": "stat",
-      "title": "Active personal-account sessions",
+      "title": "アクティブな個人アカウントセッション",
       "gridPos": {
         "h": 5,
         "w": 5,
@@ -74,14 +74,15 @@
                 "value": 1
               }
             ]
-          }
+          },
+          "displayName": "アクティブな個人アカウントセッション"
         }
       },
-      "description": "How many personal (non-corporate) AI account sessions are currently live on managed devices. 0 is the goal. Resets briefly when the receiver service restarts; the table below is the durable record."
+      "description": "管理対象デバイス上で現在有効な個人（法人以外）AIアカウントセッションの数。0が目標です。レシーバーサービスの再起動時に一時的にリセットされます。下の表が永続的な記録です。"
     },
     {
       "type": "stat",
-      "title": "Devices reporting (24h)",
+      "title": "報告デバイス（24時間）",
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -104,11 +105,16 @@
           "instant": true
         }
       ],
-      "description": "Distinct devices that sent at least one finding in the last 24 hours, across all detection surfaces. Macs report through the day; Windows and network devices appear via the daily 06:00 scan. This is the total the two OS panels to the right break down."
+      "description": "過去24時間に少なくとも1件の検出結果を送信した重複を除くデバイス数（すべての検出面）。Macは日中を通して報告し、Windowsとネットワーク機器は毎日06:00のスキャンで現れます。右側の2つのOSパネルはこの合計を内訳表示します。",
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "報告デバイス（24時間）"
+        }
+      }
     },
     {
       "type": "stat",
-      "title": "Tools in registry",
+      "title": "登録済みツール",
       "gridPos": {
         "h": 5,
         "w": 5,
@@ -125,12 +131,17 @@
           "instant": true
         }
       ],
-      "description": "How many AI products the platform knows how to detect. Grows via a weekly automated discovery review - not a problem number, just coverage."
+      "description": "プラットフォームが検出方法を把握しているAI製品の数。週次の自動検出レビューで増加します。問題を示す数値ではなく、カバレッジです。",
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "登録済みツール"
+        }
+      }
     },
     {
       "type": "stat",
-      "title": "Hours since last finding, per surface",
-      "description": "Freshness check per detection surface. cli/ide/desktop/mcp should stay under ~24h, cloud/network under ~26h (daily scan). A red value means that detection layer has stopped reporting and the dashboard may be blind there.",
+      "title": "検出サーフェスごとの最終検出からの経過時間",
+      "description": "検出サーフェスごとの鮮度チェック。cli/ide/desktop/mcp は約24時間以内、cloud/network は約26時間以内（毎日スキャン）に収まる必要があります。赤い値は、その検出レイヤーが報告を停止しており、ダッシュボードがその領域を監視できていない可能性を示します。",
       "gridPos": {
         "h": 5,
         "w": 9,
@@ -174,7 +185,7 @@
     },
     {
       "type": "table",
-      "title": "Who is running what (last 7 days, filterable)",
+      "title": "誰が何を実行しているか（過去7日間、フィルタ可）",
       "gridPos": {
         "h": 10,
         "w": 24,
@@ -215,7 +226,15 @@
               "device": 5,
               "severity": 6
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "surface": "サーフェス",
+              "account_type": "アカウント種別",
+              "account_domain": "アカウントドメイン",
+              "device": "デバイス",
+              "severity": "重大度"
+            }
           }
         },
         {
@@ -235,7 +254,7 @@
           }
         }
       ],
-      "description": "Every person/tool/device seen in the last 7 days. Pinned to 7 days: the dashboard time picker does not change it. Filter with the Tool and Account type controls at the top. account_type: personal = a non-corporate account is signed in (needs a conversation), work = a corporate account (fine), none = the tool is present but no account was readable (e.g. an installed IDE extension), which is not the same as 'no account'.",
+      "description": "過去7日間に確認されたすべてのユーザー／ツール／デバイス。7日固定：ダッシュボードの時間ピッカーでは変更されません。上部のツールとアカウント種別コントロールでフィルタできます。account_type: personal = 非法人アカウントでサインイン（要対話）、work = 法人アカウント（問題なし）、none = ツールは存在するがアカウントを読み取れなかった（例：インストール済みIDE拡張機能）。これは「アカウントなし」とは異なります。",
       "timeFrom": "7d",
       "fieldConfig": {
         "defaults": {
@@ -263,19 +282,91 @@
                     "type": "value",
                     "options": {
                       "personal": {
-                        "text": "personal",
+                        "text": "個人",
                         "color": "red",
                         "index": 0
                       },
                       "work": {
-                        "text": "work",
+                        "text": "法人",
                         "color": "green",
                         "index": 1
                       },
                       "none": {
-                        "text": "presence only",
+                        "text": "存在のみ",
                         "color": "text",
                         "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "severity"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "info": {
+                        "text": "情報",
+                        "index": 0
+                      },
+                      "warn": {
+                        "text": "警告",
+                        "index": 1
                       }
                     }
                   }
@@ -291,8 +382,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Findings by severity (rate)",
-      "description": "Reporting activity over time. Green (info) = tools being present, normal. Yellow (warn) = personal accounts or unexplained integrations - each also goes to Slack. A flat-zero chart means reporting has stopped, which is itself a problem.",
+      "title": "重要度別の検出（レート）",
+      "description": "時系列の報告アクティビティ。緑（info）= ツールの存在、正常。黄（warn）= 個人アカウントまたは説明のない連携。それぞれSlackにも送信されます。チャートがゼロで平坦な場合は報告が停止しており、それ自体が問題です。",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -316,12 +407,38 @@
             "drawStyle": "bars",
             "fillOpacity": 60
           }
-        }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "info"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "情報"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "warn"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "警告"
+              }
+            ]
+          }
+        ]
       }
     },
     {
       "type": "piechart",
-      "title": "Findings by surface (7d)",
+      "title": "検出面別の検出（7日）",
       "gridPos": {
         "h": 8,
         "w": 5,
@@ -339,11 +456,99 @@
           "refId": "A"
         }
       ],
-      "description": "Where the evidence comes from: browser = login pages, cli/ide/mcp/desktop = on the device itself, network = DNS traffic, cloud = Microsoft 365 records."
+      "description": "証跡の取得元：browser = ログインページ、cli/ide/mcp/desktop = デバイス上、network = DNSトラフィック、cloud = Microsoft 365の記録。",
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cli"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "CLI"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "browser"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "ブラウザ"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cloud"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "クラウド"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "desktop"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "デスクトップ"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "ネットワーク"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mcp"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "MCP"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ide"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IDE"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "type": "bargauge",
-      "title": "Top tools (devices, 7d)",
+      "title": "上位ツール（デバイス数、7日）",
       "gridPos": {
         "h": 8,
         "w": 7,
@@ -388,11 +593,11 @@
           }
         }
       ],
-      "description": "The ten most widespread AI tools, counted as the number of distinct devices each was seen on in the last 7 days. Full list in the inventory table below."
+      "description": "過去7日間に最も多くのデバイスで確認されたAIツール上位10件。各ツールが確認された重複を除くデバイス数で集計。全リストは下のインベントリテーブルにあります。"
     },
     {
       "type": "timeseries",
-      "title": "Personal-account sessions over time",
+      "title": "個人アカウントセッションの推移",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -416,11 +621,11 @@
           }
         }
       },
-      "description": "History of total live personal-account sessions. Spikes show when someone signed into a personal account; drops show sessions expiring. Per-tool breakdown is in the Loki inventory table."
+      "description": "有効な個人アカウントセッション合計の履歴。急増は誰かが個人アカウントにサインインしたタイミングを示し、減少はセッションの期限切れを示します。ツール別の内訳は Loki のインベントリテーブルにあります。"
     },
     {
       "type": "logs",
-      "title": "Recent warn findings",
+      "title": "最近の警告検出",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -441,11 +646,11 @@
           "queryType": "range"
         }
       ],
-      "description": "The raw record of recent warnings - personal accounts and unexplained integrations - newest first. Each of these also produced a Slack alert."
+      "description": "最近の警告（個人アカウントおよび説明のない連携）の生レコード。新しい順。これらはそれぞれSlackアラートも生成しています。"
     },
     {
       "type": "barchart",
-      "title": "Personal-account sessions (total)",
+      "title": "個人アカウントセッション（合計）",
       "gridPos": {
         "h": 8,
         "w": 8,
@@ -475,11 +680,11 @@
         },
         "overrides": []
       },
-      "description": "Total live personal-account sessions. Per-OS breakdown is in the Loki findings-by-OS panel. Empty means none active right now."
+      "description": "有効な個人アカウントセッションの合計。OS別の内訳は Loki の findings-by-OS パネルにあります。空の場合は、現在アクティブなセッションがないことを意味します。"
     },
     {
       "type": "piechart",
-      "title": "Findings by OS (7d)",
+      "title": "OS別の検出（7日）",
       "gridPos": {
         "h": 8,
         "w": 8,
@@ -516,11 +721,11 @@
         "defaults": {},
         "overrides": []
       },
-      "description": "All findings by device platform. 'n/a (cloud/network)' is evidence from sources that cannot know the platform (sign-in logs, DNS, email) - expected, not an error."
+      "description": "デバイスプラットフォーム別のすべての検出。'n/a (cloud/network)' はプラットフォームを特定できないソース（サインインログ、DNS、メール）からの証跡で、想定内でありエラーではありません。"
     },
     {
       "type": "table",
-      "title": "Surface x OS (devices, 7d)",
+      "title": "検出面×OS（デバイス数、7日）",
       "gridPos": {
         "h": 8,
         "w": 8,
@@ -553,7 +758,8 @@
               "Value #A": 2
             },
             "renameByName": {
-              "Value #A": "devices (7d)"
+              "Value #A": "デバイス (7日)",
+              "surface": "サーフェス"
             }
           }
         },
@@ -577,20 +783,67 @@
               "type": "value",
               "options": {
                 "unknown": {
-                  "text": "not reported",
+                  "text": "未報告",
                   "index": 0
                 }
               }
             }
           ]
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
-      "description": "Distinct devices per detection surface and platform over 7 days. A device appears on every surface it was seen on, so the column does not sum to the device total."
+      "description": "過去7日間の検出面別・プラットフォーム別の重複を除くデバイス数。デバイスは確認されたすべての検出面に表示されるため、列の合計はデバイス総数にはなりません。"
     },
     {
       "type": "barchart",
-      "title": "Personal-account sessions (total)",
+      "title": "個人アカウントセッション（合計）",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -619,11 +872,11 @@
         },
         "overrides": []
       },
-      "description": "Total personal-account sessions. Per-domain breakdown is available in the Loki inventory table. Empty means no personal accounts currently active."
+      "description": "個人アカウントセッションの合計。ドメイン別の内訳は Loki のインベントリテーブルで確認できます。空の場合は、現在アクティブな個人アカウントがないことを意味します。"
     },
     {
       "type": "bargauge",
-      "title": "Devices with findings, by OS",
+      "title": "検出のあるデバイス（OS別）",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -636,8 +889,8 @@
       },
       "targets": [
         {
-          "expr": "count by (os) (count by (device, os) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | label_format os=`{{ if eq .os \"\" }}pre-os{{ else if eq .os \"unknown\" }}n/a (cloud/network){{ else }}{{ .os }}{{ end }}` | __error__=`` [7d])))",
-          "legendFormat": "{{os}}",
+          "expr": "count by (os_display) (count by (device, os_display, os) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | label_format os_display=`{{ if eq .os \"\" }}未設定{{ else if eq .os \"unknown\" }}該当なし（クラウド/ネットワーク）{{ else if eq .os \"macos\" }}macOS{{ else if eq .os \"linux\" }}Linux{{ else if eq .os \"windows\" }}Windows{{ else }}{{ .os }}{{ end }}` | label_format os=`{{ if eq .os \"\" }}pre-os{{ else if eq .os \"unknown\" }}n/a (cloud/network){{ else }}{{ .os }}{{ end }}` | __error__=`` [7d])))",
+          "legendFormat": "{{os_display}}",
           "refId": "A",
           "instant": true,
           "queryType": "instant"
@@ -657,10 +910,10 @@
         "defaults": {},
         "overrides": []
       },
-      "description": "Distinct devices with any finding in 7 days, by platform. A device with both device-level and network evidence is counted under each - see the reconciling stats at the top for exclusive counts."
+      "description": "過去7日間に何らかの検出があった重複を除くデバイス数（プラットフォーム別）。デバイスレベルとネットワークの両方の証跡があるデバイスはそれぞれにカウントされます。排他的なカウントは上部の整合統計を参照してください。"
     },
     {
-      "title": "AI tool inventory (all tools, by device count, 7d)",
+      "title": "AIツールインベントリ（全ツール、デバイス数別、7日）",
       "type": "table",
       "datasource": {
         "type": "loki",
@@ -697,7 +950,8 @@
               "Value #A": 1
             },
             "renameByName": {
-              "Value #A": "devices (7d)"
+              "Value #A": "デバイス (7日)",
+              "tool": "ツール"
             }
           }
         },
@@ -725,10 +979,10 @@
       "options": {
         "showHeader": true
       },
-      "description": "The complete list of AI tools detected in the last 7 days and how many devices each appears on. This is the living replacement for the monthly manual audit."
+      "description": "過去7日間に検出されたAIツールの完全なリストと、各ツールが確認されたデバイス数。これは毎月の手動監査に代わる常時更新のリストです。"
     },
     {
-      "title": "MCP integrations (who wired what, 7d)",
+      "title": "MCP連携（誰が何を接続したか、7日）",
       "type": "table",
       "datasource": {
         "type": "loki",
@@ -767,7 +1021,12 @@
               "device": 2,
               "Value #A": 3
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "device": "デバイス",
+              "Value #A": "件数"
+            }
           }
         },
         {
@@ -794,12 +1053,12 @@
       "options": {
         "showHeader": true
       },
-      "description": "Integrations people have connected to their AI tools (MCP servers): which integration, who, and on which device. Not alarming by default - this is an inventory for review."
+      "description": "ユーザーがAIツールに接続した連携（MCPサーバー）：どの連携を、誰が、どのデバイスで。既定では警告対象ではありません。レビュー用のインベントリです。"
     },
     {
       "type": "stat",
-      "title": "...confirmed macOS",
-      "description": "Devices from the 24h total whose findings include device-level macOS evidence (MDM inventory or the endpoint collector).",
+      "title": "…macOS確認済み",
+      "description": "24時間合計のうち、検出結果にデバイスレベルのmacOS証跡（MDMインベントリまたはエンドポイントコレクタ）が含まれるデバイス。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -824,15 +1083,16 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "noValue": "0"
+          "noValue": "0",
+          "displayName": "macOS確認済み"
         },
         "overrides": []
       }
     },
     {
       "type": "stat",
-      "title": "...confirmed Windows",
-      "description": "Devices from the 24h total whose findings include device-level Windows evidence (Intune inventory).",
+      "title": "…Windows確認済み",
+      "description": "24時間合計のうち、検出結果にデバイスレベルのWindows証跡（Intuneインベントリ）が含まれるデバイス。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -857,15 +1117,16 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "noValue": "0"
+          "noValue": "0",
+          "displayName": "Windows確認済み"
         },
         "overrides": []
       }
     },
     {
       "type": "stat",
-      "title": "...confirmed Linux",
-      "description": "Devices from the 24h total whose findings include device-level Linux evidence.",
+      "title": "…Linux確認済み",
+      "description": "24時間合計のデバイスのうち、検出結果にデバイスレベルの Linux 証跡が含まれるもの。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -890,14 +1151,15 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "noValue": "0"
+          "noValue": "0",
+          "displayName": "Linux確認済み"
         },
         "overrides": []
       }
     },
     {
       "type": "row",
-      "title": "Key tools (last 7 days)",
+      "title": "主要ツール（過去7日間）",
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -909,8 +1171,8 @@
     },
     {
       "type": "table",
-      "title": "Claude (Anthropic, all surfaces)",
-      "description": "Every Anthropic surface in one place. The tool column shows why one product appears under several names: claude.ai is the browser extension reporting a domain, claude-code is the CLI and the IDE extension, claude is the desktop app, and anthropic.claude-code is the raw VS Code extension ID from before tool-name normalisation (those age out of the 7 day window on their own). Work accounts here are expected; personal accounts are the ones to act on. Approval status is a governance position recorded in the registry and does not change what alerts.",
+      "title": "Claude（Anthropic、すべての検出面）",
+      "description": "Anthropic のすべてのサーフェスを一箇所に。ツール列には、1つの製品が複数の名前で表示される理由が示されます: claude.ai はドメインを報告するブラウザ拡張機能、claude-code は CLI と IDE 拡張機能、claude はデスクトップアプリ、anthropic.claude-code はツール名正規化前の生の VS Code 拡張機能 ID です（これらは 7 日間のウィンドウから自然に外れます）。ここでの仕事用アカウントは想定内です。対応すべきは個人アカウントです。承認ステータスはレジストリに記録されたガバナンス上の位置づけであり、アラート対象を変えるものではありません。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -951,7 +1213,14 @@
               "account_domain": 4,
               "device": 5
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "surface": "サーフェス",
+              "account_type": "アカウント種別",
+              "account_domain": "アカウントドメイン",
+              "device": "デバイス"
+            }
           }
         },
         {
@@ -997,19 +1266,65 @@
                     "type": "value",
                     "options": {
                       "personal": {
-                        "text": "personal",
+                        "text": "個人",
                         "color": "red",
                         "index": 0
                       },
                       "work": {
-                        "text": "work",
+                        "text": "法人",
                         "color": "green",
                         "index": 1
                       },
                       "none": {
-                        "text": "presence only",
+                        "text": "存在のみ",
                         "color": "text",
                         "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
                       }
                     }
                   }
@@ -1025,8 +1340,8 @@
     },
     {
       "type": "table",
-      "title": "ChatGPT (OpenAI, all surfaces)",
-      "description": "chatgpt.com is the browser extension reporting a domain; chatgpt is the desktop app or IDE extension. Approval status comes from the registry and records a governance position; it does not affect severity or alerting. Presence of a tool is info and never alerts, whether approved or not. Personal accounts are warn and are the real signal.",
+      "title": "ChatGPT（OpenAI、すべての検出面）",
+      "description": "chatgpt.com はドメインを報告するブラウザ拡張機能、chatgpt はデスクトップアプリまたは IDE 拡張機能です。承認ステータスはレジストリから取得され、ガバナンス上の位置づけを記録するもので、重要度やアラートには影響しません。ツールの存在は情報であり、承認の有無にかかわらずアラートは発報されません。個人アカウントは警告対象であり、これが本当のシグナルです。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -1067,7 +1382,14 @@
               "account_domain": 4,
               "device": 5
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "surface": "サーフェス",
+              "account_type": "アカウント種別",
+              "account_domain": "アカウントドメイン",
+              "device": "デバイス"
+            }
           }
         },
         {
@@ -1113,19 +1435,65 @@
                     "type": "value",
                     "options": {
                       "personal": {
-                        "text": "personal",
+                        "text": "個人",
                         "color": "red",
                         "index": 0
                       },
                       "work": {
-                        "text": "work",
+                        "text": "法人",
                         "color": "green",
                         "index": 1
                       },
                       "none": {
-                        "text": "presence only",
+                        "text": "存在のみ",
                         "color": "text",
                         "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
                       }
                     }
                   }
@@ -1141,8 +1509,8 @@
     },
     {
       "type": "table",
-      "title": "Codex CLI (OpenAI)",
-      "description": "Account identity comes from the id_token JWT inside ~/.codex/auth.json, so the account domain here is who the CLI is actually signed in as. The heaviest source of personal accounts on developer machines.",
+      "title": "Codex CLI（OpenAI）",
+      "description": "アカウントIDは~/.codex/auth.json内のid_token JWTから取得されるため、ここでのアカウントドメインはCLIが実際にサインインしているアカウントです。開発者マシンにおける個人アカウントの最大の発生源です。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -1183,7 +1551,14 @@
               "account_domain": 4,
               "device": 5
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "surface": "サーフェス",
+              "account_type": "アカウント種別",
+              "account_domain": "アカウントドメイン",
+              "device": "デバイス"
+            }
           }
         },
         {
@@ -1229,19 +1604,65 @@
                     "type": "value",
                     "options": {
                       "personal": {
-                        "text": "personal",
+                        "text": "個人",
                         "color": "red",
                         "index": 0
                       },
                       "work": {
-                        "text": "work",
+                        "text": "法人",
                         "color": "green",
                         "index": 1
                       },
                       "none": {
-                        "text": "presence only",
+                        "text": "存在のみ",
                         "color": "text",
                         "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
                       }
                     }
                   }
@@ -1258,7 +1679,7 @@
     {
       "type": "table",
       "title": "Fireflies",
-      "description": "Meeting transcription, so the data path matters more than the tool: transcripts of internal calls leave the estate. Cloud surface findings have no device, because the evidence is an Entra sign-in or a mailbox rather than a machine. Relevant to the plan tier question: SSO, EU data residency and SCIM are Enterprise-only.",
+      "description": "会議文字起こしのため、ツールそのものよりもデータ経路が重要です。社内通話の文字起こしが組織外に出ます。クラウド検出面の検出にはデバイスがありません。証跡がマシンではなくEntraサインインまたはメールボックスだからです。プラン階層の検討に関係します：SSO、EUデータレジデンシー、SCIMはEnterprise限定です。",
       "datasource": {
         "type": "loki",
         "uid": "${DS_LOKI}"
@@ -1299,7 +1720,14 @@
               "account_domain": 4,
               "device": 5
             },
-            "renameByName": {}
+            "renameByName": {
+              "user": "ユーザー",
+              "tool": "ツール",
+              "surface": "サーフェス",
+              "account_type": "アカウント種別",
+              "account_domain": "アカウントドメイン",
+              "device": "デバイス"
+            }
           }
         },
         {
@@ -1345,19 +1773,65 @@
                     "type": "value",
                     "options": {
                       "personal": {
-                        "text": "personal",
+                        "text": "個人",
                         "color": "red",
                         "index": 0
                       },
                       "work": {
-                        "text": "work",
+                        "text": "法人",
                         "color": "green",
                         "index": 1
                       },
                       "none": {
-                        "text": "presence only",
+                        "text": "存在のみ",
                         "color": "text",
                         "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "network": {
+                        "text": "ネットワーク",
+                        "index": 0
+                      },
+                      "cli": {
+                        "text": "CLI",
+                        "index": 1
+                      },
+                      "desktop": {
+                        "text": "デスクトップ",
+                        "index": 2
+                      },
+                      "browser": {
+                        "text": "ブラウザ",
+                        "index": 3
+                      },
+                      "mcp": {
+                        "text": "MCP",
+                        "index": 4
+                      },
+                      "ide": {
+                        "text": "IDE",
+                        "index": 5
+                      },
+                      "cloud": {
+                        "text": "クラウド",
+                        "index": 6
                       }
                     }
                   }
@@ -1373,7 +1847,7 @@
     },
     {
       "type": "row",
-      "title": "Paste guard",
+      "title": "ペーストガード",
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -1386,7 +1860,7 @@
     },
     {
       "type": "stat",
-      "title": "Pastes stopped (7d)",
+      "title": "停止したペースト（7日）",
       "id": 11,
       "gridPos": {
         "h": 5,
@@ -1426,15 +1900,16 @@
             "mode": "fixed",
             "fixedColor": "orange"
           },
-          "decimals": 0
+          "decimals": 0,
+          "displayName": "停止したペースト"
         },
         "overrides": []
       },
-      "description": "Paste/drop events where the browser extension's paste guard intercepted a secret pattern."
+      "description": "ブラウザ拡張機能のペーストガードが秘密情報パターンを傍受したペースト／ドロップイベント。"
     },
     {
       "type": "stat",
-      "title": "Overridden (7d)",
+      "title": "上書き（7日）",
       "id": 12,
       "gridPos": {
         "h": 5,
@@ -1490,15 +1965,16 @@
               }
             ]
           },
-          "decimals": 0
+          "decimals": 0,
+          "displayName": "上書き（7日）"
         },
         "overrides": []
       },
-      "description": "Times a person clicked Paste anyway after a warning. This is the number that decides when warn becomes block."
+      "description": "警告後にユーザーがそれでもペーストをクリックした回数。この数値がwarnをblockに切り替える判断材料になります。"
     },
     {
       "type": "stat",
-      "title": "Paste guard: active devices (24h)",
+      "title": "ペーストガード：アクティブデバイス（24時間）",
       "id": 13,
       "gridPos": {
         "h": 5,
@@ -1538,15 +2014,16 @@
             "mode": "fixed",
             "fixedColor": "green"
           },
-          "decimals": 0
+          "decimals": 0,
+          "displayName": "ペーストガード：アクティブデバイス（24時間）"
         },
         "overrides": []
       },
-      "description": "Devices whose paste guard sent a heartbeat in the last 24h. A heartbeat proves the whole chain works on that device; compare against your MDM scope count."
+      "description": "過去24時間にペーストガードがハートビートを送信したデバイス。ハートビートはそのデバイスでチェーン全体が動作していることを証明します。MDMの対象台数と比較してください。"
     },
     {
       "type": "timeseries",
-      "title": "Paste-guard events by tool",
+      "title": "ツール別のペーストガードイベント",
       "id": 14,
       "gridPos": {
         "h": 8,
@@ -1593,7 +2070,7 @@
     },
     {
       "type": "table",
-      "title": "Paste-guard detail (7d)",
+      "title": "ペーストガード詳細（7日）",
       "id": 15,
       "gridPos": {
         "h": 8,
@@ -1629,7 +2106,7 @@
               "Time": true
             },
             "renameByName": {
-              "Value": "events"
+              "Value": "イベント"
             }
           }
         }
@@ -1638,16 +2115,16 @@
         "showHeader": true,
         "sortBy": [
           {
-            "displayName": "events",
+            "displayName": "イベント",
             "desc": true
           }
         ]
       },
-      "description": "Multi-detector pastes appear as a comma-joined detectors value; that is the extension's report shape."
+      "description": "複数検出器のペーストはカンマ結合のdetectors値として表示されます。これは拡張機能のレポート形式です。"
     },
     {
       "type": "table",
-      "title": "Paste guard: device coverage (24h)",
+      "title": "ペーストガード：デバイスカバレッジ（24時間）",
       "id": 16,
       "gridPos": {
         "h": 8,
@@ -1684,7 +2161,7 @@
               "Value": true
             },
             "renameByName": {
-              "pastemode": "mode"
+              "pastemode": "モード"
             }
           }
         }
@@ -1693,12 +2170,12 @@
         "showHeader": true,
         "sortBy": [
           {
-            "displayName": "device",
+            "displayName": "デバイス",
             "desc": false
           }
         ]
       },
-      "description": "Per-device paste guard state from heartbeats: which extension version is running and which mode it is in."
+      "description": "ハートビートからのデバイス別ペーストガード状態：実行中の拡張機能バージョンとそのモード。"
     }
   ],
   "schemaVersion": 39,
@@ -1707,7 +2184,7 @@
     "list": [
       {
         "name": "tool",
-        "label": "Tool",
+        "label": "ツール",
         "type": "query",
         "datasource": {
           "type": "loki",
@@ -1726,7 +2203,7 @@
         "current": {
           "selected": true,
           "text": [
-            "All"
+            "すべて"
           ],
           "value": [
             "$__all"
@@ -1737,34 +2214,34 @@
       },
       {
         "name": "account",
-        "label": "Account type",
+        "label": "アカウント種別",
         "type": "custom",
-        "query": "All : .*,Personal : personal,Work : work,Presence only : none",
+        "query": "すべて : .*,個人 : personal,法人 : work,存在のみ : none",
         "options": [
           {
             "selected": true,
-            "text": "All",
+            "text": "すべて",
             "value": ".*"
           },
           {
             "selected": false,
-            "text": "Personal",
+            "text": "個人",
             "value": "personal"
           },
           {
             "selected": false,
-            "text": "Work",
+            "text": "法人",
             "value": "work"
           },
           {
             "selected": false,
-            "text": "Presence only",
+            "text": "存在のみ",
             "value": "none"
           }
         ],
         "current": {
           "selected": true,
-          "text": "All",
+          "text": "すべて",
           "value": ".*"
         },
         "multi": false,
@@ -1772,7 +2249,7 @@
       },
       {
         "name": "corp_domains",
-        "label": "Corporate domains (regex)",
+        "label": "法人ドメイン（正規表現）",
         "type": "textbox",
         "query": "example[.]com|example[.]co[.]uk",
         "current": {
@@ -1781,7 +2258,7 @@
         },
         "options": [],
         "hide": 0,
-        "description": "Regex of account domains that count as corporate/work. Escape dots. Everything else with a non-empty domain shows as personal."
+        "description": "法人／業務として扱うアカウントドメインの正規表現。ドットはエスケープしてください。それ以外でドメインが空でないものは個人として表示されます。"
       }
     ]
   }

@@ -1638,7 +1638,7 @@ async function load(force) {
     }
     loadError = '';
   } catch (e) {
-    loadError = String(e.message || e);
+    loadError = uiErrorText(e && e.message ? e.message : e);
   }
   // First run: a managed deployment that has never finished onboarding
   // opens on the wizard - unless the operator navigated somewhere on
@@ -2576,7 +2576,7 @@ const WIDGETS = {
             <td>${a.process
               ? '<span class="ui-badge risk">既知のツールはありません</span>'
               : a.accountable ? '<span class="ui-badge good">' + esc(a.user || a.identity || 'ある人物') + '</span>'
-              : '<span class="ui-badge risk">' + esc(a.identity || 'unattributed') + '</span>'}</td>
+              : '<span class="ui-badge risk">' + esc(a.identity || '未帰属') + '</span>'}</td>
           </tr>`).join('')}</tbody></table></div>` : ''}`;
     return `<div class="wcard w6 ui-widget ui-agentic-card">${head(c.autonomous || 0)}
       ${body}
@@ -2875,7 +2875,7 @@ const WIDGETS = {
       ${uiFocusRows(f)}
       <details class="ui-queue-details">
         <summary>判断と検出結果のキュー <span>${candidates.length
-          ? `${candidates.length} 件の新規検出${candidates.length === 1 ? 'y' : 'ies'}`
+          ? `${candidates.length} 件の新規検出`
           : f.undecided === null ? 'AI台帳未読み取り' : `${f.undecided} 件が判定待ち`}</span></summary>
         ${uiReviewQueueDetail()}
       </details></div>`;
@@ -2899,11 +2899,11 @@ const WIDGETS = {
     return `<div class="wcard w4" style="padding:10px">
       <iframe src="${esc(base)}/d-solo/${esc(p.uid)}/?${q}&panelId=${esc(p.panel_id)}"
         style="width:100%;height:210px;border:0;border-radius:6px;background:var(--sf2)"
-        title="${esc(p.title || 'Grafanaパネル')}"></iframe></div>`;
+        title="${esc(UI_GRAFANA_PANEL_NAMES[p.title] || p.title || 'Grafanaパネル')}"></iframe></div>`;
   },
 
   error: (w) => `<div class="wcard w12"><h3>ウィジェットが描画されていません</h3>
-    <div class="note" style="margin:0">${esc(w.error)}</div>
+    <div class="note" style="margin:0">${esc(uiErrorText(w.error, 0))}</div>
     <p class="src-note">このウィジェットが失敗したことを知らせるために表示しています。何も表示されずに黙って消えるのを避けるためです。</p></div>`,
 };
 
@@ -4039,11 +4039,11 @@ async function register() {
         // page of "undefined" instead of the reason.
         let d = r.statusText;
         try { d = (await r.json()).detail || d; } catch (e2) { /* keep */ }
-        return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(String(d))}</div>`;
+        return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(uiErrorText(d, r.status))}</div>`;
       }
       REG = await r.json();
     }
-    catch (e) { return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(String(e.message || e))}</div>`; }
+    catch (e) { return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(uiErrorText(String(e.message || e), 0))}</div>`; }
   }
   if (CFG.managed && CFG.managed.enabled) {
     if (!REGTOOLS) {
@@ -4127,7 +4127,7 @@ async function register() {
     }
 
     if (r.status_source === 'governance' || r.status_source === 'portal') {
-      let out = `<span class="pill ${PILL[r.status]||'p-mut'}">${LABEL[r.status]||esc(r.status)}</span>`;
+      let out = `<span class="pill ${PILL[r.status]||'p-mut'}">${LABEL[r.status]||'不明'}</span>`;
       if (r.status_reason === 'approval_expired') {
         out += `<span class="gov-sub">以前は ${LABEL[r.stored_status]||''}</span>`;
       }
@@ -4266,7 +4266,7 @@ async function register() {
 async function paste() {
   if (!PG) {
     try { PG = await (await fetch('/api/paste-guard' + hq())).json(); }
-    catch (e) { return `<h2>ペーストガード</h2><div class="note">ペーストガードのアクティビティを読み取れませんでした: ${esc(String(e.message || e))}</div>`; }
+    catch (e) { return `<h2>ペーストガード</h2><div class="note">ペーストガードのアクティビティを読み取れませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
   }
   const rows = (PG.rows || []).filter(r => match(r.tool));
 
@@ -4314,7 +4314,7 @@ async function paste() {
 async function iso() {
   if (!EV) {
     try { EV = await (await fetch('/api/evidence' + hq())).json(); }
-    catch (e) { return `<h2>ISO/IEC 42001エビデンス</h2><div class="note">エビデンスインデックスを構築できませんでした: ${esc(String(e.message || e))}</div>`; }
+    catch (e) { return `<h2>ISO/IEC 42001エビデンス</h2><div class="note">エビデンスインデックスを構築できませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
   }
   const e = EV;
   const n = v => `<b>${v}</b>`;
@@ -4588,18 +4588,86 @@ function pasteGuardFields() {
   return pasteGuardBehaviourFields(true);
 }
 
-// The last result of a connection test, rendered where its button lives.
+// 接続テストの結果を表示する。英語の既知メッセージは uiTestText で日本語化する。
+function uiTestText(raw) {
+  if (raw == null) return '';
+  const s = String(raw);
+  if (!s) return '';
+  // 既に日本語を含む文字列はそのまま返す
+  if (/[\u3000-\u30ff\u3400-\u9fff]/.test(s)) return s;
+
+  let m;
+  if ((m = s.match(/^could not reach (.+?)\/healthz from inside the cluster \((.+)\)\. That can be normal: if URL only reachable from endpoints' VPN\/tailnet, confirm via curl \1\/healthz from fleet machine\.$/))) {
+    return 'クラスタ内から ' + m[1] + '/healthz に到達できませんでした（' + m[2] + '）。これは正常な場合があります。URL がエンドポイントの VPN/tailnet からのみ到達可能な場合は、fleet マシンで curl ' + m[1] + '/healthz を実行して確認してください。';
+  }
+  if ((m = s.match(/^(.+?) answered, but not like an ai-guard receiver$/))) {
+    return m[1] + ' は応答しましたが、ai-guard receiver として認識できません';
+  }
+  if (s === 'the host has no dot: machines other than this one cannot resolve a short name. On Tailscale use the full .ts.net address, not the ingress short name.') {
+    return 'ホスト名にドットがありません。このマシン以外では短い名前を解決できません。Tailscale では ingress の短い名前ではなく、完全な .ts.net アドレスを使用してください。';
+  }
+  if ((m = s.match(/^read failed \((.+)\)$/))) {
+    return '読み取りに失敗しました（' + m[1] + '）';
+  }
+  if (s === 'the credentials are wrong or lack read access; on Grafana Cloud the token needs logs:read as well as logs:write') {
+    return '認証情報が間違っているか、読み取りアクセスがありません。Grafana Cloud ではトークンに logs:write だけでなく logs:read も必要です。';
+  }
+  if ((m = s.match(/^could not reach the log store \((.+)\)$/))) {
+    return 'ログストアに到達できませんでした（' + m[1] + '）';
+  }
+  if ((m = s.match(/^the log store answered HTTP (\d+)$/))) {
+    return 'ログストアが HTTP ' + m[1] + ' を返しました';
+  }
+  if (s === 'the push URL is probably the base URL rather than the push endpoint, which is /loki/api/v1/push') {
+    return 'push URL が push エンドポイントではなくベース URL である可能性があります。push エンドポイントは /loki/api/v1/push です。';
+  }
+  if (s === 'a username and password are needed, or are wrong') {
+    return 'ユーザー名とパスワードが必要です。または間違っています。';
+  }
+  if (s === 'the username and password are wrong, or lack write access') {
+    return 'ユーザー名とパスワードが間違っているか、書き込みアクセスがありません。';
+  }
+  if ((m = s.match(/^could not reach (.+?) from inside the cluster \((.+)\)\. These files must be reachable by every browser in fleet, but corporate-only hosts can be checked from a fleet machine\.$/))) {
+    return 'クラスタ内から ' + m[1] + ' に到達できませんでした（' + m[2] + '）。これらのファイルは fleet 内のすべてのブラウザーから到達可能である必要がありますが、社内専用ホストは fleet マシンから確認できます。';
+  }
+  if ((m = s.match(/^the hosted manifest describes (.+?), not the saved extension id - browsers pointed at it will never install or update this extension$/))) {
+    return 'ホストされているマニフェストは ' + m[1] + ' を記述していますが、保存された拡張機能 ID ではありません。このマニフェストを参照するブラウザーは、この拡張機能をインストールまたは更新できません。';
+  }
+  if ((m = s.match(/^the hosted manifest says version (.+?); the source this portal serves is (.+?)\. Fine if packed a different version on purpose\.$/))) {
+    return 'ホストされているマニフェストのバージョンは ' + m[1] + ' です。このポータルが提供するソースは ' + m[2] + ' です。意図的に別バージョンをパッケージした場合は問題ありません。';
+  }
+  if ((m = s.match(/^(.+?) answered, but not with XML an update manifest could parse as$/))) {
+    return m[1] + ' は応答しましたが、更新マニフェストとして解析できる XML ではありません';
+  }
+  if (s === 'the hosted manifest matches the saved extension id') {
+    return 'ホストされているマニフェストは保存された拡張機能 ID と一致しています';
+  }
+  if ((m = s.match(/^served as (.+?); Firefox expects application\/x-xpinstall \(some hosts need content type per file\)$/))) {
+    return m[1] + ' として提供されています。Firefox は application/x-xpinstall を期待します（一部のホストではファイルごとに content type が必要です）。';
+  }
+  if ((m = s.match(/^(.+?) answered, but file is not a zip \(\.xpi is one\), or is larger than probe reads$/))) {
+    return m[1] + ' は応答しましたが、ファイルが zip ではない（.xpi は zip です）、または probe の読み取りより大きいです';
+  }
+  if (s === 'the hosted .xpi is not Mozilla-signed (no META-INF/mozilla.rsa) - Firefox will refuse it. Host file AMO returned after signing.') {
+    return 'ホストされている .xpi は Mozilla 署名がありません（META-INF/mozilla.rsa がない）。Firefox は拒否します。AMO が署名後に返したファイルをホストしてください。';
+  }
+  if (s === 'the hosted .xpi is Mozilla-signed') {
+    return 'ホストされている .xpi は Mozilla 署名済みです';
+  }
+  return '設定とサーバーログを確認してください。';
+}
+
 function testNote(which) {
   const t = TESTS[which];
   if (!t) return '';
   const bits = [];
-  if (t.ok) bits.push('<span class="pill p-ok">OK</span>');
+  if (t.ok) bits.push('<span class="pill p-ok">成功</span>');
   else bits.push('<span class="pill p-warn">失敗</span>');
   if (t.version) bits.push('レシーバー ' + esc(t.version));
   if (t.url) bits.push('<span class="mono">' + esc(t.url) + '</span>');
-  if (t.detail) bits.push(esc(t.detail));
-  if (t.hint) bits.push('<i>' + esc(t.hint) + '</i>');
-  (t.warnings || []).forEach(w => bits.push('<span style="color:var(--warn)">' + esc(w) + '</span>'));
+  if (t.detail) bits.push(esc(uiTestText(t.detail)));
+  if (t.hint) bits.push('<i>' + esc(uiTestText(t.hint)) + '</i>');
+  (t.warnings || []).forEach(w => bits.push('<span style="color:var(--warn)">' + esc(uiTestText(w)) + '</span>'));
   return `<div class="src-note" style="margin-top:6px">${bits.join(' · ')}</div>`;
 }
 
@@ -5572,7 +5640,7 @@ function alertingSettings() {
       'ブラウザーが Grafana にアクセスするための URL',
       '保存するとページが再読み込みされます。フレームの権限はこのページ自体のセキュリティポリシーにあり、読み込みごとに固定されています。Grafana 側でも埋め込みを許可する必要があります。', true)}
     ${settingRow('grafana_panels', 'Grafana パネル',
-      'dashboardUid:panelId:Title; セミコロン区切り', '', true)}
+      '例: ai-guard:2:報告デバイス（24時間）; 複数指定はセミコロン区切り', '', true)}
     ${settingRow('grafana_dashboard_uid', 'Grafana ダッシュボード UID',
       'ダッシュボードURLの /d/ セグメント',
       'パネルではなくダッシュボード全体を埋め込みます。完全なダッシュボードURLを貼り付けても機能します。UIDだけに切り詰められます。', true)}
@@ -5702,7 +5770,7 @@ async function ssoProbe(withClient) {
       // would be worse than saying what came back.
       SSOW.done.client = '受理済み · ' + SSOW.client;
       SSOW.err = 'テナントはペアを受け取りましたが、チェックを拒否しました: '
-        + (out.detail || '理由は示されていません')
+        + (out.detail ? uiErrorText(out.detail, 0) : '理由は示されていません')
         + ' これは正常な場合もあります。最終的なテストサインインで判断されます。';
     }
   } else {
@@ -5743,7 +5811,7 @@ window.addEventListener('message', e => {
     SSOW.done.test = 'サインイン中のユーザー: ' + (d.username || 'あなたのアカウント');
     SSOW.err = '';
   } else if (d.ssoTest === 'fail') {
-    SSOW.err = String(d.detail || 'そのサインインは拒否されました');
+    SSOW.err = d.detail ? uiErrorText(d.detail, 0) : 'そのサインインは拒否されました';
   } else { return; }
   SSOW.busy = ''; render();
 });
@@ -6160,7 +6228,7 @@ function activationCard() {
   const note = a.state === 'active'
     ? (soon ? `<p class="health-note warning">このサブスクリプションは ${esc(a.expires)} に期限切れになります。更新すると、ここにあるキーが置き換わります。当日に動作が停止することはありません。ここにあるものはこのキーで有効化されたものではないからです。単にイメージをプルできなくなるだけです。</p>` : '')
     : a.state === 'expired' ? `<p class="health-note warning">このキーは ${esc(a.expires)} に期限切れになりました。デプロイはそのまま継続します。期限切れのサブスクリプションは、新しいイメージとサポートが提供されないという意味であり、ポータルが停止するわけではありません。更新して新しいキーを貼り付けてください。このデプロイを Nyxus に移行するには有効なキーが必要です。</p>`
-    : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(JA_ACTIVATION_REFUSAL[a.code] || a.reason || '')} これは、その署名キーを含むリリースをまだ適用していないデプロイにおける、再発行された署名キーの見え方です。まずアップグレードし、それからキーを疑ってください。</p>`
+    : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(JA_ACTIVATION_REFUSAL[a.code] || (a.reason ? uiErrorText(a.reason, 0) : ''))} これは、その署名キーを含むリリースをまだ適用していないデプロイにおける、再発行された署名キーの見え方です。まずアップグレードし、それからキーを疑ってください。</p>`
     : `<p class="health-note">このデプロイはオープン版を実行しており、それは完全です。このページにも他のどのページにも、キーがないために制限されているものはありません。Nyxus は同じシステムの商用版で、同じコレクター、同じエビデンスを備え、サポート付きのサブスクリプションのもとでプライベート イメージとして配布されます。アクティベーション キーには、発行先の組織と有効期間が記載されており、ここで、このポータルがすでに保持している署名と照合して確認されます。誰にも問い合わせる必要はありません。</p>`;
 
   const form = !owner
@@ -6183,7 +6251,7 @@ function activationCard() {
   return `<section class="health-card health-wide" data-tour="activation"><div class="health-card-head"><div><span>エディション</span><h3>Nyxus</h3></div><span class="pill ${state[0]}">${state[1]}</span></div>
     ${facts}
     ${note}
-    ${ACTMSG ? `<p class="health-note ${ACTMSG.ok ? '' : 'danger'}">${esc(ACTMSG.text)}</p>` : ''}
+    ${ACTMSG ? `<p class="health-note ${ACTMSG.ok ? '' : 'danger'}">${esc(ACTMSG.ok ? ACTMSG.text : uiErrorText(ACTMSG.text, 0))}</p>` : ''}
     ${steps}
     ${form}
   </section>`;
@@ -6282,7 +6350,7 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
         <div><dt>最新リリース</dt><dd>${u.latest ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.latest)}</a>${u.published_at ? ` <span>· ${esc(String(u.published_at).slice(0, 10))}</span>` : ''}` : '—'}</dd></div>
         <div><dt>デプロイ実行者</dt><dd>${esc(route)}${d.chart_version ? ` <span>· ${esc(d.chart_version)}</span>` : ''}</dd></div>
         <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ' : '未確認')}</dd></div></dl>
-      ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(u.error)}</p>` : ''}
+      ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(uiErrorText(u.error,0))}</p>` : ''}
       ${!u.enabled ? `<p class="health-note">チェックはオフになっています（<span class="mono">UPDATE_CHECK=off</span>）、そのためこのポータルは外部へのリクエストを行いません。リリースは以下に掲載されています。 <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">github.com</a>。</p>` : ''}
       ${!u.comparable && u.enabled ? `<p class="health-note">このポータルはリリース番号を報告しないため、最新リリースは表示されますが比較されません。</p>` : ''}
       ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードするとレシーバーとポータルが再起動します。保存されているものは変更されず、コレクターはそれを介して報告を続けます。</p>
@@ -6362,7 +6430,7 @@ async function cliApprove() {
   const g = CLIGRANT;
   if (g.error) return head + `<div class="note">${esc(g.error)}</div>
     <p class="lede">コードはコマンドが要求してから10分で失効します。新しいコードが必要な場合は、コマンドを再実行してください。</p>`;
-  if (g.status !== 'pending') return head + `<div class="note">このリクエストはすでに${esc(g.status)}です。</div>`;
+  if (g.status !== 'pending') return head + `<div class="note">このリクエストはすでに${esc({pending:'保留中',approved:'承認済み',denied:'拒否済み',expired:'期限切れ',issued:'発行済み',running:'実行中',consumed:'消費済み'}[g.status] || '不明')}です。</div>`;
   return head + `<p class="lede">誰かがこのポータルに対してアップグレードコマンドを実行しました。何かを行う前に、オーナーが承認するのを待っています。</p>
   <section class="health-card health-wide needs-attention cli-grant">
     <div class="health-card-head"><div><span>コマンドの承認</span><h3>アップグレードがオーナーの判断を待っています</h3></div><span class="pill p-amb">決定待ち</span></div>
@@ -6426,11 +6494,46 @@ function upgradeTracker() {
     : r.status === 'stale' ? '<span class="pill p-warn">未確認</span>'
     : r.outcome === 'succeeded' ? '<span class="pill p-ok">成功</span>'
     : r.outcome === 'unverified' ? '<span class="pill p-amb">実行済み、未確認</span>'
-    : `<span class="pill p-warn">${esc(r.outcome || 'finished')}</span>`;
+    : `<span class="pill p-warn">${esc(r.outcome ? ({finished:'完了',succeeded:'成功',unverified:'実行済み、未確認',failed:'失敗',skipped:'スキップ',running:'実行中',stale:'未確認'}[r.outcome] || '不明') : '完了')}</span>`;
   const note = r.status === 'stale'
     ? 'コマンドは結果を確認する前に報告を停止したため、この実行は終了されませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。'
     : r.outcome === 'unverified' ? 'コマンドは実行されましたが、結果を確認できませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。' : '';
   const stat = s => s === 'done' ? 'p-ok' : s === 'failed' ? 'p-warn' : s === 'skipped' ? 'p-mut' : 'p-amb';
+  const statusLabel = s => ({running:'実行中', done:'完了', failed:'失敗', skipped:'スキップ', stale:'未確認'}[s] || '不明');
+  const KNOWN_STEPS = {
+    "back up the receiver database": "レシーバーデータベースをバックアップ",
+    "carry the release's credentials": "リリースの認証情報を引き継ぐ",
+    "sign in to the registry": "レジストリにサインイン",
+    "create the pull secret": "プルシークレットを作成",
+    "wait for Shadow AI Guard to stop": "Shadow AI Guard の停止を待機",
+    "write Nyxus's values": "Nyxus の values を書き込む",
+    "remove the Shadow AI Guard release": "Shadow AI Guard リリースを削除",
+    "wait for the release's objects to be deleted": "リリースのオブジェクトが削除されるのを待機",
+    "install Nyxus": "Nyxus をインストール",
+    "check the Tailscale machine names": "Tailscale のマシン名を確認",
+    "prepare Nyxus's project": "Nyxus プロジェクトを準備",
+    "pull Nyxus's images": "Nyxus のイメージをプル",
+    "stop Shadow AI Guard": "Shadow AI Guard を停止",
+    "note when it stopped": "停止した時刻を記録",
+    "start Nyxus": "Nyxus を起動"
+  };
+  const translateStep = step => {
+    if (!step) return '';
+    const s = String(step).trim();
+    if (/^(kubectl|docker|helm)\b/.test(s)) return `実行コマンド: ${s}`;
+    if (KNOWN_STEPS[s]) return KNOWN_STEPS[s];
+    const m = s.match(/^stop\s+(.+)$/i);
+    if (m) return `デプロイ ${m[1]} を停止`;
+    return '実行手順（詳細は実行ログを確認）';
+  };
+  const translateDetail = detail => {
+    if (!detail) return '';
+    const d = String(detail).trim();
+    const m = d.match(/^exit\s+(\d+)$/i);
+    if (m) return `終了コード ${m[1]}`;
+    if (/[ぁ-んァ-ヶ一-龯ー]/.test(d)) return d;
+    return '詳細は実行ログを確認';
+  };
   // A step is reported twice, once when it starts and once when it ends;
   // one line per step, carrying whichever report came last.
   const latest = [];
@@ -6442,9 +6545,9 @@ function upgradeTracker() {
     <div class="upgrade-run-head"><b>アップグレード ${esc(r.from_version)} → ${esc(r.to_version)}</b> ${pill}
       <span>${esc(r.route)} · 開始: ${when(r.started_at)}（実行者: ${esc(r.started_by_name || '所有者')}）</span></div>
     ${note ? `<p class="health-note warning">${note}</p>` : ''}
-    <ol class="upgrade-steps">${latest.map(s => `<li><span class="pill ${stat(s.status)}">${esc(s.status)}</span> <span class="upgrade-step" title="${esc(s.step)}">${esc(s.step)}</span>${s.detail ? ` <span>· ${esc(s.detail)}</span>` : ''}</li>`).join('')
+    <ol class="upgrade-steps">${latest.map(s => `<li><span class="pill ${stat(s.status)}">${esc(statusLabel(s.status))}</span> <span class="upgrade-step" title="${esc(translateStep(s.step))}">${esc(translateStep(s.step))}</span>${s.detail ? ` <span>· ${esc(translateDetail(s.detail))}</span>` : ''}</li>`).join('')
       || '<li><span class="pill p-amb">実行中</span> 最初のステップを待っています</li>'}</ol>
-    ${r.status !== 'running' && r.detail ? `<p class="src-note">${esc(r.detail)}</p>` : ''}
+    ${r.status !== 'running' && r.detail ? `<p class="src-note">${esc(translateDetail(r.detail))}</p>` : ''}
   </div>`;
 }
 
@@ -6452,7 +6555,7 @@ async function diagnostics() {
   if (CFG.managed && CFG.managed.enabled) await upgradeFetch();
   if (!DIAG) {
     try { DIAG = await (await fetch('/api/diagnostics')).json(); }
-    catch (e) { return `<h2>システムヘルス</h2><div class="note">システムヘルスを読み取れませんでした: ${esc(String(e.message || e))}</div>`; }
+    catch (e) { return `<h2>システムヘルス</h2><div class="note">システムヘルスを読み取れませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
   }
   const managed = CFG.managed && CFG.managed.enabled;
   if (managed && ACT === null) {
@@ -6561,7 +6664,7 @@ const docUrl = d => 'https://github.com/AmanSK5/shadow-ai-guard/blob/'
 
 function setup() {
   if (loadError) return `<h2>ソース</h2>
-    <div class="note">検出結果を読み取れませんでした: ${esc(loadError)}</div>
+    <div class="note">検出結果を読み取れませんでした: ${esc(uiErrorText(loadError, 0))}</div>
     <p class="lede">ポータルはLokiから読み取ります。自身では何も収集しません。設定するには、 <code>LOKI_URL</code> レシーバーが書き込むのと同じLokiを指定します。</p>`;
   if (!S) return '<h2>ソース</h2><p class="lede">利用可能なステータスがありません。</p>';
 
@@ -6667,12 +6770,12 @@ function dashboard() {
   ${openIn(base)}
   <p class="lede">${esc(base)} からパネルが埋め込まれています。フレームが空白のままの場合、
   Grafana が埋め込みを拒否しています - 確認: <code>allow_embedding</code> およびCookieの <code>SameSite</code> 設定をGrafana側で行ってください。</p>
-  ${bad.length ? `<div class="note">${bad.map(b => esc(b.error)).join('<br>')}</div>` : ''}
+  ${bad.length ? `<div class="note">${bad.map(b => esc(uiErrorText(b.error, 0))).join('<br>')}</div>` : ''}
   <div style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(420px,1fr))">
   ${panels.filter(p => !p.error).map(p => `
     <iframe src="${esc(base)}/d-solo/${esc(p.uid)}/?${q}&panelId=${esc(p.panel_id)}"
       style="width:100%;height:300px;border:1px solid var(--bd);border-radius:10px;background:var(--sf)"
-      title="${esc(p.title || 'Grafanaパネル')}"></iframe>`).join('')}
+      title="${esc(UI_GRAFANA_PANEL_NAMES[p.title] || p.title || 'Grafanaパネル')}"></iframe>`).join('')}
   </div>`;
 }
 
@@ -6701,7 +6804,7 @@ async function managedError(r, title) {
   if (r.status === 401) { sessionLost(); return ''; }
   let d = r.statusText;
   try { d = (await r.json()).detail || d; } catch (e) { /* keep statusText */ }
-  return `<h2>${esc(title)}</h2><div class="note">${esc(String(d))}</div>`;
+  return `<h2>${esc(title)}</h2><div class="note">${esc(uiErrorText(d, r.status))}</div>`;
 }
 
 async function fleet() {
@@ -7005,7 +7108,7 @@ function bConversionNote(subs) {
     return `設定で優先通貨を設定すると、合計を1つ表示できます。どちらに換算するかの指定がないため、これらは別々に集計されています。`;
   }
   if (!BFX || !BFX.ok) {
-    return `${esc(pref)} に換算されませんでした: 為替レートのソースに到達できませんでした${BFX && BFX.detail ? ` (${esc(BFX.detail)})` : ''}。レシーバーは ECB の日次レートを api.frankfurter.dev から取得します。このデプロイが外向き通信を制限している場合、そのホストに到達できる必要があります。`;
+    return `${esc(pref)} に換算されませんでした: 為替レートのソースに到達できませんでした${BFX && BFX.detail ? ` (${esc(uiErrorText(BFX.detail, 0))})` : ''}。レシーバーは ECB の日次レートを api.frankfurter.dev から取得します。このデプロイが外向き通信を制限している場合、そのホストに到達できる必要があります。`;
   }
   const missing = [...curs].filter(c =>
     c !== pref && !((BFX.rates || {})[c]));
@@ -7265,7 +7368,7 @@ function bwRailLine(st) {
         ? ' · ' + w.provider : '')}
     : {c: 'pend', t: st.d};
   if (st.k === 3) return tot.tiers.length
-    ? {c: 'val', t: bMoney(tot.monthly, bWizCur()) + ' / month · '
+    ? {c: 'val', t: bMoney(tot.monthly, bWizCur()) + ' / 月 · '
         + tot.seats + 'シート'}
     : {c: 'pend', t: st.d};
   return tot.tiers.length ? {c: 'val', t: 'リンク準備完了'} : {c: 'pend', t: st.d};
@@ -7555,7 +7658,7 @@ function bwBodyReview() {
     <tr><td class="sname">シート数</td><td>${tot.tiers.length
       ? tot.tiers.map(t => `<div>${esc(t.name)} — ${t.seats || 0}
           × ${bMoney(t.unit_price_monthly || 0, w.currency)}
-          = ${bMoney((t.seats || 0) * (t.unit_price_monthly || 0), w.currency)} / mo</div>`).join('')
+          = ${bMoney((t.seats || 0) * (t.unit_price_monthly || 0), w.currency)} / 月</div>`).join('')
       : '<span style="color:var(--mut)">未設定</span>'}</td></tr>
     <tr><td class="sname">月次</td><td><b>${bMoney(tot.monthly, w.currency)}</b>
       <div style="color:var(--mut);font-size:12px">更新日 ${esc(w.renewal || '—')}
@@ -7846,7 +7949,7 @@ function budgetImport() {
     <label style="margin-left:6px">これらのユーザーを以下にインポート：
       <select id="b-csv-plan" class="mfield" style="min-width:160px;display:inline-block;width:auto;margin-left:6px">
         <option value="">プランを選択…</option>
-        ${plans.map(x => `<option value="${esc(x.plan_key || 'default')}">${esc(x.plan || x.plan_key || 'default')}</option>`).join('')}
+        ${plans.map(x => `<option value="${esc(x.plan_key || 'default')}">${esc(x.plan || ((x.plan_key && x.plan_key !== 'default') ? x.plan_key : '既定'))}</option>`).join('')}
       </select></label></div>` : ''}
   <p class="lede">ベンダーの管理ページからメンバーのエクスポートを貼り付けてください（ChatGPT Business：ワークスペース設定 → メンバー、Claude：組織設定 → メンバー。このエクスポートには name / email / role / status / seat tier が含まれます）。email / name / role / seat 列を含むヘッダー行を認識し、カンマまたはタブ区切りに対応しているため、ExcelやNumbersから行をそのまま貼り付けても機能します。アドレスの単純なリストも同様です。</p>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
@@ -8042,10 +8145,10 @@ function budgetReport() {
 }
 
 async function budget() {
-  const gate = managedGate('Budget'); if (gate) return gate;
+  const gate = managedGate('予算'); if (gate) return gate;
   if (!BUDGET) {
     const r = await mfetch('/api/budget');
-    if (!r.ok) return managedError(r, 'Budget');
+    if (!r.ok) return managedError(r, '予算');
     BUDGET = await r.json();
   }
   if (!REGTOOLS) {
@@ -8213,7 +8316,7 @@ async function budgetAction(act, el) {
       if (!s) return;
       const out = s.ok ? await s.json() : {ok: false, detail: await _refusal(s)};
       BMSG = out.ok ? `リンクしました。ベンダーから${out.count}名のメンバーを同期しました。`
-        : 'リンクしましたが、初回同期に失敗しました: ' + out.detail;
+        : 'リンクしましたが、初回同期に失敗しました: ' + uiErrorText(out.detail, 0);
     } else if (w.source === 'csv' && !w.editing) {
       BWIZ = null; BUDGET = null;
       BOPEN.add(w.tool_id + '|' + (pk || 'default'));
@@ -8221,7 +8324,7 @@ async function budgetAction(act, el) {
               text: '', parsed: null};
       BMSG = '';
       render(); return;
-    } else BMSG = w.editing ? 'Saved.' : 'リンクしました。カードからユーザーを追加してください。';
+    } else BMSG = w.editing ? '保存しました。' : 'リンクしました。カードからユーザーを追加してください。';
     BOPEN.add(w.tool_id + '|' + (pk || 'default'));
     BWIZ = null; BUDGET = null; render(); return;
   }
@@ -8230,7 +8333,7 @@ async function budgetAction(act, el) {
     if (!r) return;
     const out = r.ok ? await r.json() : {ok: false, detail: await _refusal(r)};
     BMSG = out.ok ? `${out.count} 名のメンバーを ${key} 向けに同期しました。`
-      : `${key} の同期に失敗しました: ` + out.detail;
+      : `${key} の同期に失敗しました: ` + uiErrorText(out.detail, 0);
     BUDGET = null; render(); return;
   }
   if (act === 'b-unlink') {
@@ -8325,15 +8428,24 @@ async function userRole(uid, role) {
   USERS = null; render();
 }
 
+// Localizes an error detail for operator-facing display. Pure: takes the
+// raw string and HTTP status; returns Japanese for known activations and
+// any already-Japanese text, else a neutral Japanese fallback with the code.
+function uiErrorText(raw, status) {
+  if (raw == null) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
+  const s = String(raw);
+  if (!s) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
+  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
+  const activationCode = EN_ACTIVATION_REFUSAL_CODES[s];
+  if (activationCode) return JA_ACTIVATION_REFUSAL[activationCode];
+  return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
+}
+
 // The refusal detail from a failed write, for the message line.
 async function _refusal(r) {
   let d = r.statusText;
   try { d = (await r.json()).detail || d; } catch (e) { /* keep statusText */ }
-  if (typeof d !== 'string') return '入力内容を確認してください。';
-  const activationCode = EN_ACTIVATION_REFUSAL_CODES[d];
-  if (activationCode) return JA_ACTIVATION_REFUSAL[activationCode];
-  if (/[ぁ-んァ-ヶ一-龯]/.test(d)) return d;
-  return `処理できませんでした（HTTP ${r.status}）。入力内容または権限を確認してください。`;
+  return uiErrorText(d, r.status);
 }
 
 // Re-read what a write just invalidated.
@@ -8551,7 +8663,7 @@ async function managedAction(act, el) {
   if (act === 'mail-words-next') {
     mailStash();
     if (await mailSave()) {
-      MAILW.done.words = (MAILW.note || '').trim() ? 'あなたの文面を追加済み' : 'default';
+      MAILW.done.words = (MAILW.note || '').trim() ? 'あなたの文面を追加済み' : '既定';
       MAILW.step = mailIdx('test'); MAILW.err = ''; render();
     }
     return;
@@ -8570,7 +8682,7 @@ async function managedAction(act, el) {
     if (out.ok) { MAILW.done.test = '送信しました。受信トレイを確認してください。'; }
     // The relay's own words. "Could not send" is undebuggable, and relays
     // say useful things here.
-    else { MAILW.err = '送信できませんでした: ' + out.detail; }
+    else { MAILW.err = '送信できませんでした: ' + uiErrorText(out.detail, 0); }
     render(); return;
   }
   if (act === 'mail-quick-test') {
@@ -8578,19 +8690,19 @@ async function managedAction(act, el) {
       .map(u => u.email)[0]) || '';
     if (!to) { MAILMSG = 'あなたのアカウントには送信先アドレスがありません。';
       render(); return; }
-    MAILMSG = 'Sending…'; render();
+    MAILMSG = '送信中…'; render();
     const r = await mfetch('/api/test/mail',
       {method: 'POST', body: JSON.stringify({to})});
     if (r.status === 401) { sessionLost(); return; }
     if (!r.ok) { MAILMSG = '拒否されました: ' + await _refusal(r); render(); return; }
     const out = await r.json();
-    MAILMSG = out.ok ? '送信先: ' + esc(to) + '.' : '送信できませんでした: ' + out.detail;
+    MAILMSG = out.ok ? '送信先: ' + esc(to) + '.' : '送信できませんでした: ' + uiErrorText(out.detail, 0);
     render(); return;
   }
   if (act === 'mail-test') {
     const to = _val('mail-to').trim();
     if (!to) { MAILMSG = 'まず送信先アドレスを入力してください。'; render(); return; }
-    MAILMSG = 'Sending…'; render();
+    MAILMSG = '送信中…'; render();
     const r = await mfetch('/api/test/mail',
       {method: 'POST', body: JSON.stringify({to})});
     if (r.status === 401) { sessionLost(); return; }
@@ -8598,7 +8710,7 @@ async function managedAction(act, el) {
     const out = await r.json();
     // The relay's own words on failure. "Could not send" is undebuggable,
     // and relays say useful things here.
-    MAILMSG = out.ok ? '送信しました。受信トレイを確認してください。' : '送信できませんでした: ' + out.detail;
+    MAILMSG = out.ok ? '送信しました。受信トレイを確認してください。' : '送信できませんでした: ' + uiErrorText(out.detail, 0);
     render(); return;
   }
   if (act === 'user-invite' || act === 'user-invite-all') {
@@ -8611,7 +8723,7 @@ async function managedAction(act, el) {
     const out = await r.json();
     USERR = out.failed && out.failed.length
       ? out.considered + ' 件中 ' + out.sent + ' 件を送信しました。 '
-        + out.failed.map(f => esc(f.username) + '：' + esc(f.detail)).join('、')
+        + out.failed.map(f => esc(f.username) + '：' + esc(uiErrorText(f.detail, 0))).join('、')
       : (out.sent === 1 ? '招待を送信しました。' : out.sent + ' 件の招待を送信しました。');
     USERS = null; render(); return;
   }
@@ -8739,8 +8851,8 @@ async function managedAction(act, el) {
   if (act === 'sso-step') { ssoGo(+el.getAttribute('data-key')); return; }
   if (act === 'sso-copy') {
     try { await navigator.clipboard.writeText(ssoRedirectGuess());
-      el.textContent = 'copied';
-      setTimeout(() => { el.textContent = 'copy'; }, 1400);
+      el.textContent = 'コピーしました';
+      setTimeout(() => { el.textContent = 'コピー'; }, 1400);
     } catch (e) { el.textContent = '選択してコピーしてください'; }
     return;
   }
@@ -8868,7 +8980,7 @@ async function managedAction(act, el) {
         d = r.status === 422 ? 'フィールドを確認してください。パスワードは12 '
           + '文字以上が必要で、空欄にすることはできません。' : e.detail || d;
       } catch (e) { /* keep statusText */ }
-      showLogin(String(d));
+      showLogin(String(uiErrorText(d, r.status)));
     }
     return;
   }
@@ -8888,7 +9000,7 @@ async function managedAction(act, el) {
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      GOVERR = typeof d === 'string' ? d : 'レビュー日を確認してください: YYYY-MM-DD。';
+      GOVERR = typeof d === 'string' ? uiErrorText(d, r.status) : 'レビュー日を確認してください: YYYY-MM-DD。';
     }
     render(); return;
   }
@@ -8914,7 +9026,7 @@ async function managedAction(act, el) {
       body: JSON.stringify({onboarding_done: true})});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
+      const d = await _refusal(r);
       SETMSG = '完了できませんでした: ' + d; render(); return;
     }
     SETTINGS = await r.json(); SETMSG = '';
@@ -8973,7 +9085,7 @@ async function managedAction(act, el) {
     // nothing typed is lost; toggling back re-renders the form from the
     // JSON if it parses, and stays put with the error if it does not.
     try { RPRE = regEntryFromForm(); RADV = !RADV; RERR = ''; }
-    catch (e) { RERR = 'その JSON は解析できません: ' + String(e.message || e); }
+    catch (e) { RERR = 'その JSON は解析できません。JSON の形式を確認して再試行してください。'; }
     render(); return;
   }
   if (act === 'reg-edit') {
@@ -9032,7 +9144,7 @@ async function managedAction(act, el) {
       {method: 'POST', body: JSON.stringify({key, tool_id: tool})});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
+      const d = await _refusal(r);
       alert('リンクできませんでした: ' + d);
     } else {
       CAND = (CAND || []).filter(x => x.key !== key);
@@ -9051,7 +9163,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      alert('記録できませんでした: ' + d);
+      alert('記録できませんでした: ' + uiErrorText(d, r.status));
     } else {
       CAND = (CAND || []).filter(x => x.key !== key);
       AGENTIC = null;   // that page shows this process today
@@ -9065,7 +9177,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      alert('却下できませんでした: ' + d);
+      alert('却下できませんでした: ' + uiErrorText(d, r.status));
     } else {
       CAND = (CAND || []).filter(x => x.key !== key);
     }
@@ -9074,7 +9186,7 @@ async function managedAction(act, el) {
   if (act === 'reg-save') {
     let entry;
     try { entry = regEntryFromForm(); }
-    catch (e) { RERR = 'その JSON は解析できません: ' + String(e.message || e); render(); return; }
+    catch (e) { RERR = 'その JSON は解析できません。JSON の形式を確認して再試行してください。'; render(); return; }
     const r = await mfetch('/api/registry-entries',
       {method: 'POST', body: JSON.stringify({entries: [entry]})});
     if (r.ok) {
@@ -9086,7 +9198,7 @@ async function managedAction(act, el) {
     } else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      RERR = typeof d === 'string' ? d : '入力項目を確認してください。';
+      RERR = typeof d === 'string' ? uiErrorText(d, r.status) : '入力項目を確認してください。';
       RPRE = entry;  // the redraw keeps what was typed
     }
     render(); return;
@@ -9100,7 +9212,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      alert('削除できませんでした: ' + d);
+      alert('削除できませんでした: ' + uiErrorText(d, r.status));
     } else { RENTRIES = (await r.json()).entries || []; }
     await reloadDerived();
     render(); return;
@@ -9130,7 +9242,7 @@ async function managedAction(act, el) {
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      GOVERR = typeof d === 'string' ? d : '入力項目を確認してください。日付はYYYY-MM-DD形式です。';
+      GOVERR = typeof d === 'string' ? uiErrorText(d, r.status) : '入力項目を確認してください。日付はYYYY-MM-DD形式です。';
       // The redraw prefills from GOVPRE; without this a refusal would also
       // throw away everything the operator just typed.
       GOVPRE = body.decisions[0];
@@ -9146,7 +9258,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      alert('決定をクリアできませんでした: ' + d);
+      alert('決定をクリアできませんでした: ' + uiErrorText(d, r.status));
     }
     REG = null; EV = null; render(); return;
   }
@@ -9177,7 +9289,7 @@ async function managedAction(act, el) {
       // needs a render and a render redraws every field from SETTINGS -
       // which would throw away the several edits that just failed to save.
       const err = document.getElementById('setbar-err');
-      const msg = '保存できませんでした: ' + (typeof d === 'string' ? d : '値を確認してください。');
+      const msg = '保存できませんでした: ' + (typeof d === 'string' ? uiErrorText(d, r.status) : '値を確認してください。');
       if (err) err.textContent = msg; else { SETMSG = msg; render(); }
       return;
     }
@@ -9203,7 +9315,7 @@ async function managedAction(act, el) {
       {method: 'POST', body: JSON.stringify({classification_markings: marks})});
     if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。ロールアウトするには拡張機能のアーティファクトを再生成してください。'; }
     else if (r.status === 401) { sessionLost(); return; }
-    else { let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {} SETMSG = '保存できませんでした: ' + d; }
+    else { let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {} SETMSG = '保存できませんでした: ' + uiErrorText(d, r.status); }
     render(); return;
   }
   if (act === 'save-widgets') {
@@ -9273,7 +9385,7 @@ async function managedAction(act, el) {
     } else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      SETMSG = '保存できませんでした: ' + (typeof d === 'string' ? d : '値を確認してください。');
+      SETMSG = '保存できませんでした: ' + (typeof d === 'string' ? uiErrorText(d, r.status) : '値を確認してください。');
     }
     render(); return;
   }
@@ -9337,7 +9449,7 @@ async function managedAction(act, el) {
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      SETMSG = '保存できませんでした: ' + (typeof d === 'string' ? d : '値を確認してください。');
+      SETMSG = '保存できませんでした: ' + (typeof d === 'string' ? uiErrorText(d, r.status) : '値を確認してください。');
     }
     render(); return;
   }
@@ -9387,14 +9499,14 @@ async function managedAction(act, el) {
     if (r.status === 401 && String(d).indexOf('current password') < 0) {
       sessionLost(); return;
     }
-    say('パスワードは変更されませんでした: ' + (typeof d === 'string' ? d
+    say('パスワードは変更されませんでした: ' + (typeof d === 'string' ? uiErrorText(d, r.status)
       : '新しいパスワードは12文字以上である必要があります。'), false);
     return;
   }
   if (act === 'dismiss-minted') { MINTED = null; render(); return; }
   if (act === 'copy') {
     try { await navigator.clipboard.writeText(el.getAttribute('data-copy') || '');
-          el.textContent = 'copied'; } catch (e) { /* clipboard denied */ }
+          el.textContent = 'コピーしました'; } catch (e) { /* clipboard denied */ }
     return;
   }
   if (act === 'mint') {
@@ -9405,8 +9517,8 @@ async function managedAction(act, el) {
     if (r.ok) { MINTED = await r.json(); TOKENS = null; }
     else {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      MINTED = {error: String(d)};
+      const d = await _refusal(r);
+      MINTED = {error: d};
     }
     render(); return;
   }
@@ -9424,7 +9536,7 @@ async function managedAction(act, el) {
     const r = await mfetch(path, {method: 'POST'});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
+      const d = await _refusal(r);
       alert('失効に失敗しました: ' + d);
     }
     FLEET = null; TOKENS = null; render(); return;
@@ -9439,7 +9551,7 @@ async function managedAction(act, el) {
                            + '/allow-reenrollment', {method: 'POST'});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
+      const d = await _refusal(r);
       alert('再登録を許可できませんでした: ' + d);
     }
     FLEET = null; render(); return;
@@ -9449,7 +9561,7 @@ async function managedAction(act, el) {
     const r = await mfetch('/api/artifacts/' + encodeURIComponent(kind), {method: 'POST'});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
-      let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
+      const d = await _refusal(r);
       alert('アーティファクトを生成できませんでした: ' + d);
       return;
     }
@@ -9694,7 +9806,7 @@ function loadBanner() {
   const denied = /401|403|login|permission|read-only|forbidden/i.test(loadError);
   return `<div class="note" style="border-color:var(--dstr);margin-bottom:14px">
     <strong>検出結果を読み取れなかったため、このページは回答ではありません。</strong>
-    <div class="src-note" style="margin-top:4px;font-style:normal">${esc(loadError)}</div>
+    <div class="src-note" style="margin-top:4px;font-style:normal">${esc(uiErrorText(loadError, 0))}</div>
     <div class="src-note" style="margin-top:6px">${denied
       ? `このアカウントは拒否されました。読み取りはポータル経由で行われますが、この
          デプロイメントにはログストア用の独自の資格情報がないため、読み取りは
@@ -9716,7 +9828,7 @@ async function agentic() {
   if (!AGENTIC) {
     const r = await fetch('/api/agentic' + hq());
     if (!r.ok) return `<h2>エージェント型AI</h2><p class="lede">${
-      esc((await r.json().catch(() => ({}))).detail || r.statusText)}</p>`;
+      esc(await _refusal(r))}</p>`;
     AGENTIC = await r.json();
   }
   const A = AGENTIC.agents || [], c = AGENTIC.counts || {};

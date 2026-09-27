@@ -15,6 +15,8 @@ const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '../app/static/index.html'), 'utf8');
 const card = html.slice(html.indexOf('let ACT = null, ACTMSG = null;'),
                         html.indexOf('function diagnosticsCards() {'));
+const uiErrorText = html.slice(html.indexOf('function uiErrorText('),
+                               html.indexOf('// The refusal detail from a failed write'));
 const escape = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function render(act, {role = 'owner', msg = null} = {}) {
@@ -25,7 +27,7 @@ function render(act, {role = 'owner', msg = null} = {}) {
     esc: escape,
     uiCommand: cmd => `<div class="ui-cmd"><code>${escape(cmd)}</code></div>`,
   });
-  vm.runInContext(card + '; ACT = this.act; ACTMSG = this.msg; this.out = activationCard();',
+  vm.runInContext(card + uiErrorText + '; ACT = this.act; ACTMSG = this.msg; this.out = activationCard();',
                   Object.assign(c, {act, msg}));
   return c.out;
 }
@@ -135,9 +137,16 @@ test('an activated owner can replace or remove, and a viewer sees the facts', ()
 
 test('a refusal is shown as one, and escaped', () => {
   const out = render({state: 'none'},
-                     {msg: {ok: false, text: 'this key is <damaged>'}});
+                     {msg: {ok: false, text: 'このキーは <damaged> です'}});
   assert.match(out, /health-note danger/);
-  assert.match(out, /this key is &lt;damaged&gt;/);
+  assert.match(out, /このキーは &lt;damaged&gt; です/);
+});
+
+test('an unknown English backend message is replaced by the Japanese fallback', () => {
+  const out = render({state: 'none'},
+                     {msg: {ok: false, text: 'Unknown backend error'}});
+  assert.match(out, /health-note danger/);
+  assert.doesNotMatch(out, /Unknown backend error/);
 });
 
 test('an organisation name is escaped rather than rendered', () => {
