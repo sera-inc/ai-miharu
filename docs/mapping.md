@@ -242,43 +242,43 @@
 
 | 実装値 | 出現回数 | 対応トークン | 状態 | 備考（代表ファイル） |
 |---|---|---|---|---|
-| `12px` | 80 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: ソース行の文脈では padding、margin、border-radius、box-shadow、gradient などに使われており、フォントサイズ用途が確認できない。また候補には body-sm と label の両方が 0.75rem(12px) で存在し、用途を一意に特定できないため。 |
-| `10px` | 71 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 文脈は margin、border-radius、box-shadow、padding などで、フォントサイズ用途が確認できない。候補トークンにも一致するサイズがないため。 |
+| `12px` | 80 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 12px は --app-text-body-sm-size と --app-text-label-size の両方に一致し、ソース文脈もテーブル本文・ナビ・メタラベル・フォーム部品など複数用途にまたがるため一意に決められない。 |
+| `10px` | 71 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 10px に一致する候補トークンがない。近い 0.75rem（12px）等へ意味を変えて寄せることもできない。 |
 | `11px` | 60 | --app-text-label-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: .card-section の font-size:11px は大文字化された小さなラベル見出しであり、ラベル用途と判断できる。値は 11px だが DADS のラベルサイズ (0.75rem=12px) に寄せる。 |
-| `13px` | 41 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: .card h3 や .evidence-review-copy h3 の見出し、font:13px/1.45 の本文、button のラベルなど、見出し・本文・ラベルが混在しており一意に決められない。 |
-| `11.5px` | 36 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: .note、.src-note、.qr-none は小さな本文/注記、select はラベル/コントロールで、body-sm と label のどちらに寄せるか一意に決められない。 |
-| `12.5px` | 30 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: nav button はラベル/ボタン、index.html の font-size:12.5px はポップオーバー本文の可能性があり、body-sm と label が混在している。 |
-| `9px` | 27 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 文脈は border-radius、gap などでフォントサイズ用途が確認できず、候補トークンにも一致するサイズがないため。 |
-| `10.5px` | 27 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: ユーザー名、タグ、段落、メタチップ、select など本文とラベルが混在しており、一意に決められない。 |
+| `13px` | 41 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 13px に一致する候補トークンがない。本文・見出し・強調など用途も混在し、14px や 12px への近似置換は不適切。 |
+| `11.5px` | 36 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 11.5px に一致する候補トークンがない。テーブル本文や補足に使われるが 0.75rem（12px）や table-size（14px）とは一致しない。 |
+| `12.5px` | 30 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 12.5px に一致する候補トークンがない。ナビ・本文・見出し補助など用途が広く、12px トークンへの近似は不適切。 |
+| `9px` | 27 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 9px に一致する候補トークンがない。小型ラベルやメタ情報用だが、該当サイズのトークンが候補にない。 |
+| `10.5px` | 27 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 10.5px に一致する候補トークンがない。メタ情報や補足本文用だが、0.75rem（12px）等とは値が異なる。 |
 | `9.5px` | 23 | --app-text-label-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: nav .count のバッジ、.ag-node b の大文字ラベルはいずれも小さな UI ラベル/バッジ用途。DADS の最小ラベルサイズ (0.75rem=12px) に寄せる。 |
-| `8.5px` | 19 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: .posture-copy span の小さなテキストで、ラベルか本文小のどちらか判断できず、候補トークンともサイズが離れている。 |
-| `8px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 文脈は gap、border-radius、box-shadow、padding などでフォントサイズ用途が確認できない。 |
-| `22px` | 9 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 文脈は margin、width、padding などでフォントサイズ用途が確認できない。 |
-| `14px` | 7 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: フォントサイズとしての14pxがある一方、padding/gap等の用途も混在し、フォントサイズ用途でもbody/table/numericの14px候補があり一意に決められないため。 |
-| `13.5px` | 7 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: タブボタンのfont-size指定だが、候補トークンに13.5px相当がなく、近い値の14pxへ置換すると意味が異なるため。 |
-| `16px` | 6 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: nav-chevronのfont-size:16pxがある一方、top/blur/shadow等の用途も混在し、候補に16px相当がないため。 |
-| `17px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: font-size:17pxの用途がある一方、margin/padding等も混在し、候補に17px相当がないため。 |
-| `19px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: font-size:19pxの用途がある一方、gap等も混在し、候補に19px相当がないため。 |
-| `15px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: bodyや見出しにfont-size:15pxがある一方、margin/padding/gap等も混在し、候補に15px相当がないため。 |
+| `8.5px` | 19 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 8.5px に一致する候補トークンがない。極小ラベルや補足用だが、候補に該当サイズがない。 |
+| `8px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 8px に一致する候補トークンがない。大文字ラベルやキャプション用だが、候補に該当サイズがない。 |
+| `22px` | 9 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 22px に一致する候補トークンがない。見出しと数値表示にまたがり、20px/24px/32px の候補へ近似で寄せるのは不適切。 |
+| `14px` | 7 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: h3見出し、strong、summaryなど複数用途で使われ、body-size・heading-sm-size・label-sizeのどれに一意対応するか決められないため。 |
+| `13.5px` | 7 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: table、本文パラグラフ、タブ、注記など複数用途で使われ、table-sizeとbody-sizeの両方が考えられ一意に決められないため。 |
+| `16px` | 6 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: h2/h4見出し、数値・強調値、アイコン用フォントサイズが混在し、heading-sm-sizeやnumeric-sizeに一意対応しないため。 |
+| `17px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 数値・強調値とアイコン用フォントサイズが混在し、numeric-sizeなど候補トークンに一意対応しないため。 |
+| `19px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: chevronアイコン、見出し、数値・金額が混在し、heading-sizeやnumeric-sizeに一意対応しないため。 |
+| `15px` | 5 | --app-text-heading-sm-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: すべてh3/h4の小見出しで用途が一致しており、候補では小見出し用トークンが対応するため。 |
 | `20px` | 4 | 除外 | 除外 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 出現箇所はいずれもmin-width、box-shadow、paddingで、フォントサイズ指定ではないため。 |
-| `26px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: budget-kpis strongにfont-size:26pxがある一方、width/padding等も混在し、候補に26px相当がないため。 |
-| `0.92em` | 3 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: muted/tableのfont-size指定だが、候補は0.75rem等で0.92em相当がなく、近い値へ置換できないため。 |
+| `26px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: KPI/statsの数値とh2見出しが混在し、heading-lg-sizeやdisplay-sm-sizeに一意対応しないため。 |
+| `0.92em` | 3 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: .muted、table、codeで用途が混在し、相対em指定で候補の固定トークンに一意対応しないため。 |
 | `21px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: 出現箇所はいずれもmarginやpaddingで、フォントサイズ指定ではないため。 |
 | `30px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: 430pxや130pxの一部としての誤検出で、独立したフォントサイズ指定ではないため。 |
-| `7.5px` | 3 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: budget-kpis em/table thのfont-size指定だが、候補に7.5px相当がないため。 |
+| `7.5px` | 3 | --app-text-label-size | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: すべて小さなラベル／テーブルヘッダのラベル用途で一致しており、label-sizeが対応するため。 |
 | `24px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: box-shadow、padding、gap の寸法として使われており、font-size 指定ではないためフォントサイズ抽出の誤検知として除外。 |
 | `28px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: box-shadow、padding、width/height の寸法として使われており、font-size 指定ではないため除外。 |
 | `18px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: padding、height、box-shadow などの寸法として使われており、font-size 指定ではないため除外。 |
-| `0.85em` | 2 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: font-size:0.85em の実指定はあるが、0.85em に一致する候補トークンがなく、相対 em で用途も一意に決められないため保留。 |
+| `0.85em` | 2 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: ボタンとコード/等幅表示の両方で使われており用途が異なる。また0.85emは候補トークンのどのサイズとも一致せず、一意に決められない。 |
 | `27px` | 2 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: flex-basis、min-height の寸法として使われており、font-size 指定ではないため除外。 |
-| `25px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: font-size:25px の実指定があるが、候補トークンに 25px 相当がなく、24px や 32px とは値も用途も異なるため保留。 |
-| `1.4em` | 1 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: h1 の font-size:1.4em として使われているが、一致する候補トークンがなく、相対 em のため一意に決められない。 |
-| `1.05em` | 1 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: h2 の font-size:1.05em として使われているが、一致する候補トークンがなく、相対 em のため一意に決められない。 |
+| `25px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 見出し(h2)と統計値(dt)で使われ用途が異なる。統計値には25pxに対応する候補トークンがなく、一意に決められない。 |
+| `1.4em` | 1 | --app-text-heading-lg-size | AI仮対応 | `extension/demo/index.html`。DeepSeek 判定: h1の見出しで、見出し大サイズに相当する。1.4em（約22.4px）は24pxの見出し大トークンに最も近く、役割も一致する。 |
+| `1.05em` | 1 | --app-text-heading-sm-size | AI仮対応 | `extension/demo/index.html`。DeepSeek 判定: h2の見出しで、h1より小さい見出し。1.05em（約16.8px）は18pxの小見出しトークンに最も近く、役割も一致する。 |
 | `32px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: width/height、margin、または 232px の部分一致として現れており、font-size 指定ではないため除外。 |
 | `29px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: width、height、flex-basis の寸法として使われており、font-size 指定ではないため除外。 |
-| `.9em` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: code/.mono の font-size:.9em として使われているが、一致する候補トークンがなく、mono 用トークンとも値が異なるため保留。 |
-| `15.5px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: card-name の font-size:15.5px として使われているが、一致する候補トークンがなく、近い値のトークンに寄せるのは適切でないため保留。 |
-| `14.5px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: CSSのfont-size指定であり抽出誤検知ではないが、候補トークンに14.5pxに対応する値が存在しない。body/tableの14px系やlabel/body-smの0.75remは値が近いだけで用途・値が異なるため、一意に対応付けできない。 |
+| `.9em` | 1 | --app-text-numeric-size | AI仮対応 | `portal/app/static/index.html`。DeepSeek 判定: codeや.monoの等幅表示で、等幅用のnumericサイズ（14px monospace）に対応する。.9em（約14.4px）も近い。 |
+| `15.5px` | 1 | --app-text-heading-sm-size | AI仮対応 | `portal/app/static/index.html`。DeepSeek 判定: カード名でfont-weight:650の見出し的テキスト。DADSの小見出し（18B）に対応し、太字用途も一致する。 |
+| `14.5px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: CSSのfont-sizeとして使われている有効な値だが、候補トークンには14.5pxに対応する値がなく、近い14px系トークンへ置き換えると意味・見た目が変わる可能性があるため。 |
 
 ## 余白
 
@@ -383,4 +383,4 @@
 
 ---
 
-検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 98、保留 218、除外 33）
+検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 104、保留 212、除外 33）
