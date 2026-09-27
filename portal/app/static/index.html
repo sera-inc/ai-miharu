@@ -982,7 +982,7 @@ a.libtn:hover{border-color:var(--pri)}
     <div class="foot"><span class="txt">
       <div class="mono" id="footver">v</div>
       <div>by Aman Karir</div>
-      <div><a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">Source and issues</a></div>
+      <div><a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">ソースと問題点</a></div>
     </span></div>
   </aside>
   <div>
@@ -1045,8 +1045,7 @@ a.libtn:hover{border-color:var(--pri)}
 <dialog id="tourdlg" aria-labelledby="tourdlg-title">
   <h3 id="tourdlg-title">ツアーが終了しました</h3>
   <p class="skipbody">いつでも、次の場所からもう一度実行できます:
-  <strong>設定 › はじめに</strong> - along with the setup
-  wizard.</p>
+  <strong>設定 › はじめに</strong> — セットアップウィザードと併せて</p>
   <div class="pwfoot">
     <button class="mini pri" data-act="tour-notice-close">了解</button>
   </div>
@@ -1071,7 +1070,7 @@ a.libtn:hover{border-color:var(--pri)}
       autocomplete="current-password">
     <label class="pwlbl" for="set-newpass">新しいパスワード</label>
     <input id="set-newpass" class="mfield" type="password"
-      placeholder="12 characters or more" autocomplete="new-password">
+      placeholder="12文字以上" autocomplete="new-password">
     <label class="pwlbl" for="set-confpass">新しいパスワードの確認</label>
     <input id="set-confpass" class="mfield" type="password"
       autocomplete="new-password">
@@ -1501,7 +1500,7 @@ function showLogin(msg) {
           ${passwordFields}
         </div></details>` : `
       ${create ? `<p><input id="li-code" class="mfield" style="width:100%"
-        placeholder="setup code (aigs_…)" autocomplete="off"></p>` : ''}
+        placeholder="セットアップコード（aigs_…）" autocomplete="off"></p>` : ''}
       ${passwordFields}
       ${!create && AUTH && AUTH.sso ? `
         <div class="lidiv"><span>または</span></div>
@@ -1510,7 +1509,7 @@ function showLogin(msg) {
   </div>
   <p class="src-note" style="text-align:center;margin-top:14px">by Aman Karir ·
     <a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank"
-       rel="noopener" style="color:inherit">Source and issues</a></p>
+       rel="noopener" style="color:inherit">ソースと問題点</a></p>
   </div>`;
   const u = forced ? null : document.getElementById(create ? 'li-code' : 'li-user');
   if (u) u.focus();
@@ -2478,16 +2477,16 @@ function uiReviewQueueDetail() {
             <div class="candidate-actions">
               ${c.kind === 'process' ? ((REGTOOLS || []).length ? `<span class="candidate-linker">
                 <select class="mfield" id="cb-${esc(c.key)}"
-                  title="A vendor's binary is often named nothing like its product. Confirm which governed tool this process belongs to.">
+                  title="ベンダーのバイナリは、製品名とはまったく異なる名前であることがよくあります。このプロセスがどのガバナンス対象ツールに属するかを確認してください。">
                   <option value="">所属先…</option>
                   ${(REGTOOLS || []).slice().sort((a, b) => a.name.localeCompare(b.name))
                     .map(t => `<option value="${esc(t.id)}"${
                       t.id === c.suggested_tool ? ' selected' : ''}>${esc(t.name)}</option>`).join('')}
                 </select><button class="mini" data-act="cand-belongs"
                   data-key="${esc(c.key)}">リンク</button></span>`
-                : `<span class="src-note" title="The registry tool list did not load. Refresh the page.">ツール一覧を利用できません</span>`)
+                : `<span class="src-note" title="レジストリのツール一覧が読み込まれませんでした。ページを更新してください。">ツール一覧を利用できません</span>`)
                 + `<button class="mini" data-act="cand-noattr"
-                  data-key="${esc(c.key)}" title="Record that this signal identifies no program.">何も特定しない</button>` : ''}
+                  data-key="${esc(c.key)}" title="このシグナルがどのプログラムも特定しないことを記録します。">何も特定しない</button>` : ''}
               <button class="mini pri" data-act="cand-add" data-key="${esc(c.key)}">AI台帳に追加</button>
               <button class="mini" data-act="cand-dismiss" data-key="${esc(c.key)}">無視</button>
             </div>
@@ -3053,7 +3052,7 @@ function overview() {
               data-key="${esc(k)}" data-size="${z}"
               title="${SIZE_NAME[z]}">${SIZE_LABEL[z]}</button>`).join('')
         : ''}${isStacked ? `<button data-act="w-unstack" data-key="${esc(k)}"
-        title="give this card a column of its own again"
+        title="このカードに再び専用の列を割り当てる"
         >スタック解除</button>` : ''}<button data-act="w-hide" data-key="${esc(k)}"
         >${off ? 'Show' : 'Hide'}</button></span>` : ''}${shown}${editing
         ? `<div class="ov-stack-zone" aria-hidden="true">下にスタック</div>` : ''}</div>`;
@@ -3090,7 +3089,7 @@ function overview() {
       AUTH && AUTH.role !== 'viewer'
         ? ' - the widgets a deployment offers are set under Settings' : ''}.</span>
     <span class="sp"></span>
-    <button class="ghost" data-act="ov-clear" title="Move every card to the tray and start from nothing">キャンバスをクリア</button>
+    <button class="ghost" data-act="ov-clear" title="すべてのカードをトレイに移動し、何もない状態から開始する">キャンバスをクリア</button>
     <button class="ghost" data-act="ov-reset">デフォルトにリセット</button>
     <button class="ghost" data-act="ov-cancel">キャンセル</button>
     <button class="ghost" data-act="ov-preview">プレビュー</button>
@@ -3127,7 +3126,7 @@ function devices() {
   const unattributed = rows.filter(([,d]) => !d.person).length;
   const observedTools = new Set(rows.flatMap(([,d]) => d.tools || [])).size;
   return `<h2>デバイス</h2><p class="lede">${rows.length} device${rows.length === 1 ? '' : 's'} in this window. Each is keyed by the most stable identifier its source could get, usually a serial. Click one for detail.</p>
-  <div class="inventory-summary" data-tour="device-summary" aria-label="Device inventory summary">
+  <div class="inventory-summary" data-tour="device-summary" aria-label="デバイスインベントリの概要">
     <span><b>${rows.length}</b> デバイス</span>
     <span><b>${observedTools}</b> 観測されたAIツール</span>
     <span class="${personal ? 'risk' : ''}"><b>${personal}</b> 個人アカウントあり</span>
@@ -3173,14 +3172,7 @@ function identityMapPanel(unattributed) {
     ${!ro && saved.length ? `<button class="mini" data-act="id-clear">保存されたマップをクリア</button>` : ''}
   </div>
   ${IDMSG ? `<div class="note">${esc(IDMSG)}</div>` : ''}
-  <p class="src-note" style="margin-top:0">The download is the working
-  copy: the rows in effect now, then every machine with nobody attached,
-  commented out - with a name filled in where a local username or the
-  machine's own name suggests one, and blank where nothing does.
-  Uncomment what you believe, delete the rest, upload it back. Those
-  proposals are string matches: nothing is applied on its own, because a
-  mapping this platform invented and then acted on is how the wrong name
-  lands on a report.</p>
+  <p class="src-note" style="margin-top:0">ダウンロードされるのは作業コピーです。現在有効な行が並び、その後に、誰も割り当てられていないすべてのマシンがコメントアウトされて続きます。ローカルのユーザー名またはマシン自身の名前から推測できる場合は名前が入力され、何も推測できない場合は空欄になります。信じるものはコメント解除し、残りは削除して、それをアップロードし直してください。これらの提案は文字列一致です。自動的に適用されるものはありません。このプラットフォームが勝手にマッピングを作成してそれに基づいて処理すると、誤った名前がレポートに載ることになるからです。</p>
   ${IDPARSE ? identityMapEditor() : ''}
   ${saved.length ? `<details style="margin-top:8px"><summary>Saved rows (${saved.length})</summary>
     <table><tr><th>キー</th><th>人物</th><th>変更</th><th>実行者</th></tr>
@@ -3325,14 +3317,14 @@ function tools() {
     });
   return `<h2>ツール</h2><p class="lede">同じツールでも、ブラウザ、デスクトップアプリ、CLIでは3つの異なる露出となるため、サーフェスは個別に表示されます。確認が必要なツールが先に並びます: <span class="pill p-warn">要注意</span> 複数の要因が重なった場合、 <span class="pill p-amb">監視</span> 例えば。どの要因かはツールを開いて確認してください。CursorやWindsurfなどAIを同梱するエディターは、次のように表示されます: <span class="pill p-mut">インストール済みのみ</span> 何かがモデルの実際の実行を示すまでは。「ソースからのID」は、ソースが直接名前を挙げた人物を数えます。AI台帳は、デバイスを通じて関連付けられた人物も数えるため、両者は異なる場合があります。</p>
   <div class="tcard"><table class="ui-page-table"><thead><tr><th>AIツール</th><th>ステータス</th><th>デバイス</th>
-    <th title="People a SOURCE named on this tool. A cloud sign-in carries a person; an endpoint finding carries a machine, and the person behind it comes from the identity map - so this is lower than the register's user count for tools found on endpoints.">ソースからのID</th>
+    <th title="検出ソースがこのツールについて特定した人物。クラウドのサインインは人物を伴い、エンドポイントの検出結果はマシンを伴います。その背後にいる人物はIDマップから取得されるため、エンドポイントで検出されたツールでは、これはAI台帳のユーザー数より少なくなります。">ソースからのID</th>
     <th>サーフェス別</th></tr></thead>
   <tbody>${rows.map(([k,t,a]) => `<tr data-open="tool" data-key="${esc(k)}" style="cursor:pointer">
     <td><strong>${esc(uiToolName(k))}</strong><span class="ui-id">${esc(uiToolInfo(k).vendor ? uiToolInfo(k).vendor + ' · ' : '')}${esc(k)}</span></td><td>${attnPill(a)}${t.usage === 'installed'
-      ? `<span class="pill p-mut" title="Found installed, but nothing has shown a model actually running - no account, no sign-in, and no traffic to the completion backend. Editors that bundle AI (Cursor, Windsurf/Devin Desktop) are useful all day without it.">インストール済みのみ</span>`
+      ? `<span class="pill p-mut" title="インストール済みとして検出されましたが、モデルが実際に動作していることを示すものはありません - アカウントもサインインも、補完バックエンドへのトラフィックもありません。AIを同梱するエディター（Cursor、Windsurf/Devin Desktop）は、AIが実際に動作していなくても一日中役立ちます。">インストール済みのみ</span>`
       : ''}</td>
     <td>${(t.devices||[]).length}${(t.devices_active||[]).length < (t.devices||[]).length
-      ? ` <span class="src-note" style="font-style:normal" title="Of the devices this tool was found on, how many show the AI actually being used.">${(t.devices_active||[]).length} using</span>`
+      ? ` <span class="src-note" style="font-style:normal" title="このツールが検出されたデバイスのうち、AIが実際に使用されていることを示すものはいくつありますか。">${(t.devices_active||[]).length} using</span>`
       : ''}</td><td>${(t.identities||[]).length}</td>
     <td>${ents(t.devices_by_surface||{}).sort((a2,b2)=>b2[1].length-a2[1].length)
       .map(([s,v])=>`<span class="pill p-acc">${esc(s||'none')} ${v.length}</span>`).join('')
@@ -3401,7 +3393,7 @@ function toolDetail(k) {
   <table><tr><th>サーフェス別</th><td>${ents(t.devices_by_surface||{})
     .sort((a,b)=>b[1].length-a[1].length)
     .map(([s,v])=>`<span class="pill p-acc">${esc(s||'none')} ${v.length}</span>`).join('')}</td></tr>
-  <tr><th title="Installed says the product is on the machine. Used says something proved a model ran: an account, a sign-in, an MCP config, or traffic to the completion backend rather than to the update and telemetry hosts the editor reaches on launch anyway.">インストール済み vs 使用済み</th>
+  <tr><th title="インストール済みは、製品がマシン上にあることを示します。使用は、モデルが実行された証拠があることを示します：アカウント、サインイン、MCP設定、またはエディターが起動時にいずれにせよ接続する更新ホストやテレメトリホストではなく、補完バックエンドへのトラフィックです。">インストール済み vs 使用済み</th>
     <td>${(t.devices||[]).length} installed · ${(t.devices_active||[]).length} where the AI ran${
       t.usage === 'installed' && (t.devices||[]).length
         ? ' <span class="src-note" style="font-style:normal">これがAIツールとして使用されていることを示すものはありません</span>' : ''}</td></tr>
@@ -3468,13 +3460,13 @@ function paActions(r) {
   if (st) return `<button class="mini" data-act="pa-reopen" data-key="${key}">再オープン</button>`;
   if (PAFORM === paKey(r)) return `
     <input id="pa-reason" class="mfield" style="min-width:180px"
-      placeholder="why this is acceptable" autocomplete="off">
+      placeholder="これが許容される理由" autocomplete="off">
     <button class="mini" data-act="pa-accept" data-key="${key}">承認</button>
     <button class="mini" data-act="pa-cancel">キャンセル</button>`;
   return `<button class="mini" data-act="pa-ack" data-key="${key}"
-      title="spoken to - stays visible, stops being new">確認</button>
+      title="声かけ済み - 表示されたまま、新規ではなくなります">確認</button>
     <button class="mini" data-act="pa-accept-form" data-key="${key}"
-      title="accepted with a reason - drops out of the open count">承認…</button>`;
+      title="理由付きで承認済み - オープン件数から外れます">承認…</button>`;
 }
 
 const paChip = st => !st ? ''
@@ -3494,7 +3486,7 @@ function personal() {
   const nAcc = all.filter(r => st(r) === 'accepted').length;
   const nTools = new Set(all.map(r => r.tool)).size;
   const nPeople = new Set(all.filter(r => r.user).map(r => r.user)).size;
-  const summary = !all.length ? '' : `<div class="inventory-summary" aria-label="Personal account summary">
+  const summary = !all.length ? '' : `<div class="inventory-summary" aria-label="個人アカウントの概要">
     <span class="${nOpen ? 'risk' : ''}"><b>${nOpen}</b> オープン</span>
     ${lifecycle ? `<span><b>${nAck}</b> 確認済み</span><span><b>${nAcc}</b> 承認済み</span>` : ''}
     <span><b>${nPeople}</b> 名前が記録された人物</span>
@@ -3510,7 +3502,7 @@ function personal() {
   <tbody>${rows.map(r => `<tr${paStatus(r) ? ' class="ui-settled"' : ''}>
     <td>${r.user
       ? esc(r.user) + (r.user_via === 'device'
-        ? ' <span class="pill p-mut" title="This source reported no account name. The person is the one the identity map attaches to this machine.">デバイス経由</span>' : '')
+        ? ' <span class="pill p-mut" title="このソースはアカウント名を報告していません。人物は、IDマップがこのマシンに紐付ける人物です。">デバイス経由</span>' : '')
       : '<span class="pill p-mut">IDなし</span>'}</td>
     <td><span class="ui-badge risk">${esc(r.account_domain)}</span></td>
     <td>${uiToolChip(r.tool)}</td>
@@ -3538,9 +3530,9 @@ function govForm(r) {
     <select id="gov-status" class="mfield">
       ${opt('approved', 'approved')}${opt('not_approved', 'not approved')}${opt('reviewing', 'reviewing')}
     </select>
-    <input id="gov-owner" class="mfield" placeholder="owner, e.g. Security"
+    <input id="gov-owner" class="mfield" placeholder="オーナー、例: セキュリティ"
       value="${esc(pre.owner ?? r.owner ?? '')}">
-    <input id="gov-review" class="mfield" placeholder="review due (YYYY-MM-DD, required for approved)"
+    <input id="gov-review" class="mfield" placeholder="レビュー期限 (YYYY-MM-DD、承認済みの場合は必須)"
       value="${esc(pre.review_due ?? r.review_due ?? '')}">
     <input id="gov-reason" class="mfield" placeholder="reason (optional)"
       value="${esc(pre.reason ?? '')}">
@@ -3836,7 +3828,7 @@ function rwBodyIdent() {
   <div class="sgroup"><h5>自分で追加</h5>
     <div class="addrow">
       <input id="rw-newv" class="mfield" style="min-width:230px"
-        placeholder="an identifier you know, e.g. Acme.app">
+        placeholder="既知の識別子、例: Acme.app">
       <select id="rw-newf" class="mfield" style="min-width:180px">
         ${Object.keys(RW_FIELDLBL).map(f =>
           `<option value="${esc(f)}">${esc(RW_FIELDLBL[f])}</option>`).join('')}
@@ -4008,9 +4000,9 @@ function watchlistBlock(observedIds) {
   ${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="margin-bottom:10px">
     <input id="wiz-owner" class="mfield" value="${esc(WIZOWNER)}"
-      placeholder="owner for these decisions, e.g. Security">
+      placeholder="これらの決定のオーナー、例: セキュリティ">
     <input id="wiz-review" class="mfield" style="min-width:170px"
-      value="${esc(WIZREVIEW || yearOut)}" title="review due date for approvals">
+      value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
   <table><tr><th>ツール</th><th>ベンダー</th><th>決定</th><th></th></tr>
   ${rows.map(t => {
@@ -4281,7 +4273,7 @@ async function paste() {
   const rows = (PG.rows || []).filter(r => match(r.tool));
 
   return `<h2>ペーストガード</h2>
-  <p class="lede">What the paste guard stopped, on which tool, and how often. Only metadata is kept: the guard checks clipboard content on the device and reports which detector fired, so the text itself is never sent or stored. A heeded warning is the guard doing its job. An override is someone who saw the warning and pasted anyway, which is the row worth following up.</p>
+  <p class="lede">ペーストガードが何を止めたか、どのツールで、どのくらいの頻度で止めたか。保存されるのはメタデータのみです。ガードは端末上のクリップボード内容を検査し、どの検出ソースが作動したかを報告するため、テキスト自体は送信も保存もされません。警告に従ったことは、ガードが役割を果たしている証拠です。オーバーライドとは、警告を見たうえでそれでも貼り付けた人のことであり、フォローアップに値する行です。</p>
 
   <dl class="stats">
     <div><dt${(PG.guard_devices || 0) ? '' : ' style="color:var(--dstr)"'}>${PG.guard_devices || 0}</dt>
@@ -4465,7 +4457,7 @@ async function iso() {
 // so a row is label + input + save - what someone changing a value scans
 // for. What stays visible is state (set, and from where), because that is
 // a glance rather than reading.
-const INFO = '<button class="info" data-info type="button" title="about this field">I</button>';
+const INFO = '<button class="info" data-info type="button" title="このフィールドについて">I</button>';
 
 // `batch` puts the field under the Settings view's one Save changes bar
 // instead of giving it a Save button of its own. A SECRET never batches,
@@ -4583,7 +4575,7 @@ function pasteGuardBehaviourFields(batch) {
         style="min-width:340px;resize:vertical;font-family:inherit"
         ${batch ? `data-sfield="classification_markings" data-slist="lines"
           data-sinit="${marks === null ? '' : esc(marks.join('\n'))}"` : ''}
-        placeholder="one marking per line (empty = the default set)">${marks === null ? '' : esc(marks.join('\n'))}</textarea>
+        placeholder="1行に1つのマーキング（空欄 = 既定のセット）">${marks === null ? '' : esc(marks.join('\n'))}</textarea>
       ${batch ? '' : '<button class="mini" data-act="save-markings">保存</button>'}
       ${marksSet ? '<button class="mini" data-act="clear-markings">クリア（デフォルトセット）</button>' : ''}
       <div class="src-note fnote">ガードがペースト内で探す文書フレーズを1行に1つずつ入力します。マークなしにするには空欄を保存し、デフォルトの5つに戻すにはクリアします。ユーザーが貼り付けた内容がデバイスから出ることはなく、一致した検出器だけが報告されます。</div></dd>`;
@@ -4738,24 +4730,17 @@ async function extSetup() {
     your browsers install it from where you host it. This download is the
     extension source shipped with this portal${ver ? ` (version ${esc(ver)})` : ''},
     with its manifest already pointed at
-    <span class="mono">${esc(rx || 'your receiver')}</span> - the one edit
-    packing needs. Unzip it somewhere you will keep: repacking a later
-    release must use the same folder name and the same key.</p>
+    <span class="mono">${esc(rx || 'your receiver')}</span> — パッキングに必要な唯一の編集です。後で保管しておく場所に解凍してください。後のリリースを再パッキングする際は、同じフォルダー名と同じキーを使用する必要があります。</p>
     ${ready ? dlBtn('extension-source', 'download the extension source (zip)')
-      : '<div class="note">No public receiver URL yet - the manifest bakes the origin your browsers report to. Save one in the wizard\'s step 1 (or Settings) and this download appears.</div>'}
-    <p class="src-note">If the receiver URL ever changes, download again and
-    repack - the extension reads no central config, so the origin lives in
-    the package. Trimming the covered AI sites is possible too (edit
-    host_permissions and both content_scripts match lists together), but the
-    default set is the registry's browser surface and most deployments ship
-    it as is.</p>`;
+      : '<div class="note">公開レシーバー URL はまだありません。マニフェストには、ブラウザーが報告先とするオリジンが組み込まれます。ウィザードのステップ 1（または設定）で URL を保存すると、このダウンロードが表示されます。</div>'}
+    <p class="src-note">レシーバー URL が変わった場合は、再度ダウンロードして再パッキングしてください。拡張機能は中央設定を読み取らないため、オリジンはパッケージ内に存在します。対象の AI サイトを削減することも可能です（host_permissions と両方の content_scripts の match リストを一緒に編集します）が、既定のセットはレジストリのブラウザー対象範囲であり、ほとんどのデプロイではそのまま出荷されます。</p>`;
   if (EXTPAGE === 2) body = `
     <h4>パッケージ化して、キーを保管する</h4>
     <p class="lede">パッケージ化は、自分のマシン上の任意の Chromium ブラウザーで行われ、2 つのファイルが生成されます。拡張機能パッケージ（.crx）とその署名キー（.pem）です。</p>
     <ol class="lede" style="line-height:2">
       <li>開く <span class="mono">chrome://extensions</span>、オンにする
         <b>デベロッパーモード</b> （右上）。</li>
-      <li><b>拡張機能をパッケージ化</b> → root directory = the unzipped
+      <li><b>拡張機能をパッケージ化</b> → ルートディレクトリ = 解凍されたもの
         <span class="mono">ai-guard-extension</span> フォルダー。初回はキー欄を空のままにします。</li>
       <li>生成されるもの： <span class="mono">ai-guard-extension.crx</span> と
         <span class="mono">ai-guard-extension.pem</span>.</li>
@@ -4773,7 +4758,7 @@ async function extSetup() {
     <dl class="kv">
       <dt>Chromium 拡張機能 ID</dt><dd>
         <input id="set-extid" class="mfield" style="min-width:340px"
-          placeholder="the 32-letter id, a-p only" value="${esc(st.id)}">
+          placeholder="32文字のID、a-pのみ" value="${esc(st.id)}">
         <button class="mini" data-act="save-extid">保存</button>
         <div class="src-note">a-p の32文字です。それ以外は、ID が誤った場所から読み取られたことを意味します。それはキーではなく、ハッシュでもありません。</div></dd>
     </dl>`;
@@ -4781,11 +4766,7 @@ async function extSetup() {
     <h4>パッケージをホストする</h4>
     <p class="lede">2つの小さなファイルを、フリート内のすべてのブラウザーが取得できる任意の HTTPS ロケーションに配置します：パッケージ化されたもの <span class="mono">${esc(crxName)}</span>
     と、更新マニフェスト（<span class="mono">updates.xml</span>）で、それを指し示すものです。.crx は次のように提供します：
-    <span class="mono">application/x-chrome-extension</span>. Two habits
-    save a later outage: if your host grants read access per file, grant it
-    by prefix instead, or every new release starts life private; and keep
-    the previous .crx up when you upload a new one - re-pointing updates.xml
-    at it is your rollback.</p>
+    <span class="mono">application/x-chrome-extension</span>。2 つの習慣が後の障害を防ぎます。ホストがファイル単位で読み取りアクセスを付与する場合は、代わりにプレフィックス単位で付与してください。そうしないと、新しいリリースがすべて非公開で始まります。また、新しい .crx をアップロードするときは、以前の .crx を残しておいてください。updates.xml の参照先をそれに戻すことがロールバックになります。</p>
     <dl class="kv" style="margin-bottom:14px"><dt>Somewhere to put
       them${INFO}</dt><dd>
       <span class="src-note" style="margin:6px 0 0;display:block">HTTPS 経由の 2 つの静的ファイルです。コンテナレジストリではありません。</span>
@@ -4821,8 +4802,7 @@ async function extSetup() {
     <span class="mono">ID</span> 所有しているアドレス形式のID（例：
     <span class="mono">ai-guard@your-org.example</span>）に設定し、
     <span class="mono">update_url</span> を、次のファイルをホストする場所に設定します：
-    <span class="mono">firefox-updates.json</span>. Then build the .xpi -
-    an .xpi is a zip of the files themselves, not of the folder:</p>
+    <span class="mono">firefox-updates.json</span>。次に .xpi をビルドします。.xpi はフォルダーではなく、ファイル自体を ZIP 圧縮したものです:</p>
     ${extCmd('cd ai-guard-extension && zip -r -FS ../' + xpiName + ' manifest.json background.js content.js guard.js managed-schema.json')}
     <p class="lede"><b>2 · 署名。</b> そのファイルをaddons.mozilla.orgに、次のものとして提出します： <b>自己配布型</b> アドオン（提出時は「自分のサイトで」）。Mozillaは公開せずに署名し、通常は数分で完了します。ホストするファイルは、あなたがビルドしたものではなく、AMOが返すファイルです。署名済み.xpiには
     <span class="mono">META-INF/mozilla.rsa</span>.</p>
@@ -5001,12 +4981,7 @@ async function wizard() {
     ${settingRow('org_name', 'Organisation name', 'Acme Ltd', '')}
   </dl>
   <h4 style="margin-top:18px">マシンがレシーバーに接続する場所</h4>
-  <p class="lede" style="margin-bottom:10px">The URL your laptops and servers
-  will send findings to. It gets baked into every download below, so it has
-  to work from those machines - not just from inside the cluster. That means
-  a DNS record pointing this name at your ingress or reverse proxy, plus a
-  certificate - unless something like a Tailscale operator handles both for
-  you.</p>
+  <p class="lede" style="margin-bottom:10px">ノート PC とサーバーが検出結果を送信する先の URL です。以下のすべてのダウンロードに組み込まれるため、クラスター内からだけでなく、それらのマシンからも機能する必要があります。つまり、この名前をイングレスまたはリバースプロキシに向ける DNS レコードと証明書が必要です。ただし、Tailscale operator のようなものが両方を処理してくれる場合は除きます。</p>
   <p class="lede" style="margin-bottom:10px">どのアドレスかわからない場合は、外部からこのポータルを公開しているアドレスです。確認するには:
   <span class="mono">kubectl get ingress -A</span> Ingressホストの場合、
   <span class="mono">kubectl get svc -A --field-selector
@@ -5026,8 +5001,7 @@ async function wizard() {
   <b>Grafana Cloud Logs</b>、同じAPIをホスト型で提供するものです。すでにGrafanaスタックを運用しているなら、これがお使いのLokiです。</p>
   <p class="lede" style="margin-bottom:10px">それ以外はLoki独自のHTTP APIを実装する必要があり、 <i>両方</i> の半分です。レシーバーが書き込む先は
   <span class="mono">/loki/api/v1/push</span> そしてこのポータルが読み取る元は
-  <span class="mono">/loki/api/v1/query_range</span>. Worth checking before you
-  commit - several log stores advertise Loki-compatible <i>ingest</i> 一方で、独自の言語でクエリに応答し、そのうちの1つは、送信したすべての検出結果を受け取ったうえで、空のポータルを表示します。</p>
+  <span class="mono">/loki/api/v1/query_range</span>。採用を確定する前に確認する価値があります。いくつかのログストアは Loki 互換をうたっています <i>ingest</i> 一方で、独自の言語でクエリに応答し、そのうちの1つは、送信したすべての検出結果を受け取ったうえで、空のポータルを表示します。</p>
   <div style="margin-bottom:10px">
     ${storeBtn('self', 'self-hosted / in-cluster')}
     ${storeBtn('cloud', 'hosted (Grafana Cloud)')}
@@ -5035,13 +5009,9 @@ async function wizard() {
   </div>
   ${WIZSTORE === 'none' ? `<p class="lede">問題ありません。検出結果はレシーバーのコンテナログに残るため、何も失われません。ここでのページは、後から設定でストアを追加するまで空のままです。</p>`
   : `${WIZSTORE === 'self' ? `<p class="lede">Lokiサービスを探す -
-    <span class="mono">kubectl get svc -A | grep -i loki</span> - and paste
-    its base URL, usually
-    <span class="mono">http://loki.&lt;namespace&gt;.svc.cluster.local:3100</span>.
-    An in-cluster Loki normally needs no credentials.</p>`
-  : `<p class="lede">Grafana CloudのLoki詳細ページから、3つ必要です。URL、数値のインスタンスID（これがユーザー名です）、および次の権限を持つアクセスポリシートークンです: <b>logs:write と logs:read の両方</b>. A
-    write-only token is the classic mistake - the test buttons below will
-    catch it.</p>`}
+    <span class="mono">kubectl get svc -A | grep -i loki</span> — 通常は、そのベース URL を貼り付けます
+    <span class="mono">http://loki.&lt;namespace&gt;.svc.cluster.local:3100</span>。クラスター内の Loki は通常、認証情報を必要としません。</p>`
+  : `<p class="lede">Grafana CloudのLoki詳細ページから、3つ必要です。URL、数値のインスタンスID（これがユーザー名です）、および次の権限を持つアクセスポリシートークンです: <b>logs:write と logs:read の両方</b>。書き込み専用トークンは典型的な間違いです。以下のテストボタンがそれを検出します。</p>`}
   <dl class="kv">${logStoreFields(WIZSTORE === 'cloud')}</dl>
   ${logStoreTests()}`}`;
   if (WIZSTEP === 3) body = `<h4>企業ドメイン</h4>
@@ -5062,20 +5032,14 @@ async function wizard() {
   ${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="margin-bottom:10px">
     <input id="wiz-owner" class="mfield" value="${esc(WIZOWNER)}"
-      placeholder="owner for these decisions, e.g. Security">
+      placeholder="これらの決定のオーナー、例: セキュリティ">
     <input id="wiz-review" class="mfield" style="min-width:170px"
-      value="${esc(WIZREVIEW || yearOut)}" title="review due date for approvals">
+      value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
   <table><tr><th>ツール</th><th>ベンダー</th><th>決定</th><th></th></tr>
   ${REGTOOLS.map(toolRow).join('')}</table>`;
   if (WIZSTEP === 5) body = `<h4>ブラウザ拡張機能とペーストガード</h4>
-  <p class="lede" style="margin-bottom:10px">One extension does both jobs:
-  it reports which account is signed into each AI site, and its paste guard
-  warns or blocks risky pastes. It is a one-time pack-and-host, and the
-  guided setup walks it one step at a time - download the pre-configured
-  source here, no checkout needed. Everything it saves gets baked into the
-  ready-made policy downloads in step 7. Fine to skip on a first pass and
-  come back.</p>
+  <p class="lede" style="margin-bottom:10px">1 つの拡張機能が両方の役割を果たします。各 AI サイトでどのアカウントがサインインしているかを報告し、そのペーストガードが危険な貼り付けを警告またはブロックします。これは一度だけのパッキングとホスティングで済み、ガイド付きセットアップが 1 ステップずつ案内します。ここから事前構成済みのソースをダウンロードできます。チェックアウトは不要です。これが保存するものはすべて、ステップ 7 のすぐに使えるポリシー ダウンロードに組み込まれます。最初のパスではスキップして、後で戻ってきてもかまいません。</p>
   ${extStatusRows(true)}
   <p class="src-note" style="margin:14px 0 8px">6つの短いステップ: ダウンロード、パッケージ、ID、ホスティング、Firefox、動作。これらの値はここで管理されます。設定には現在の状態が表示され、変更するにはここへ誘導されます。</p>
   <p style="margin:0"><button class="mini" style="padding:6px 14px"
@@ -5223,10 +5187,7 @@ const MAIL_PRESETS = {
     <ul>
       <li><b>すでに運用しているリレー。</b> このリストの最初のオプションを選んだら、それで終わりです。</li>
       <li><b>直接送信</b>:
-        <span class="mono">yourdomain-com.mail.protection.outlook.com</span>、ポート25、認証情報なし、セキュリティ <b>なし</b>. Delivers only to
-        mailboxes in your own tenant, which is exactly what an invite is.
-        Needs this portal's IP allowed by your SPF, and Microsoft now gives
-        tenants a switch to reject it, so check yours.</li>
+        <span class="mono">yourdomain-com.mail.protection.outlook.com</span>、ポート25、認証情報なし、セキュリティ <b>なし</b>。ご利用のテナント内のメールボックスにのみ配信します。これはまさに招待の動作です。このポータルの IP を SPF で許可する必要があります。また、Microsoft は現在、テナントがこれを拒否するためのスイッチを提供しているため、ご利用の設定を確認してください。</li>
       <li><b>High Volume Email</b>、または <b>Azure Communication Services</b>
         （以下に専用の項目があります）。どちらも先に Azure で設定します。</li>
     </ul>
@@ -5238,12 +5199,7 @@ const MAIL_PRESETS = {
     label: 'Azure Communication Services',
     host: 'smtp.azurecomm.net', port: '587', security: 'starttls',
     help: `<p>メール送信が必要なアプリケーションに対する Microsoft 自身の回答であり、SMTP AUTH が廃止される中で同社がユーザーを案内している先です。</p>
-    <p>Set up in Azure first: a Communication Services resource, an Email
-      Communication Service with a verified domain, and an Entra app
-      registration authorised against the resource. The username is built
-      from those three identifiers joined by dots, and the password is that
-      app registration's client secret - so it is not a mailbox credential
-      and there is no mailbox involved.</p>
+    <p>まず Azure で設定します：Communication Services リソース、検証済みドメインを持つ Email Communication Service、およびそのリソースに対して承認された Entra アプリ登録です。ユーザー名はこれら 3 つの識別子をドットで連結して作成され、パスワードはそのアプリ登録のクライアント シークレットです。つまり、メールボックスの資格情報ではなく、メールボックスは関与しません。</p>
     <p>正確なユーザー名の形式は、SMTP 認証情報を作成するときに Azure ポータルに表示されます。手作業で組み立てるのではなく、そこからコピーしてください。1 つのセグメントを間違えると、役立つ情報が何もない認証エラーで失敗するためです。</p>`,
   },
   google: {
@@ -5289,7 +5245,7 @@ const MAIL_PRESETS = {
 // that would rather not paste a credential into a browser at all.
 const MAIL_ELSEWHERE = `
   <p><b>このフォームは常に機能します</b>、あらゆる種類のデプロイで。以下はすべて、リレーのパスワードがすでにどこかでシークレットになっており、それをここにコピーする手順を避けたい場合の代替手段です。このフォームに保存された値は、それらより優先されます。</p>
-  <p><b>Docker Compose</b> - on the receiver service, or a
+  <p><b>Docker Compose</b> - レシーバーサービス上で、または
     <span class="mono">.env</span> その横のファイル：</p>
   <pre class="mono">receiver:
   environment:
@@ -5299,8 +5255,7 @@ const MAIL_ELSEWHERE = `
     SMTP_USERNAME: relay-user
     SMTP_PASSWORD: \${SMTP_PASSWORD}
     SMTP_FROM: ai-guard@example.com</pre>
-  <p><b>Helm</b> - and if the password is already a Secret in the cluster,
-    point at that one rather than making a second copy:</p>
+  <p><b>Helm</b> - また、パスワードがすでにクラスター内の Secret である場合は、2 つ目のコピーを作らず、そちらを指定してください：</p>
   <pre class="mono">managed:
   smtp:
     host: postfix.mail.svc.cluster.local
@@ -5311,7 +5266,7 @@ const MAIL_ELSEWHERE = `
     password:
       existingSecret: smtp-credentials
       key: password</pre>
-  <p><b>その他</b> - the receiver reads
+  <p><b>その他</b> - レシーバーは次を読み取ります：
     <span class="mono">SMTP_HOST</span>,
     <span class="mono">SMTP_PORT</span>,
     <span class="mono">SMTP_SECURITY</span>,
@@ -5490,7 +5445,7 @@ function mailBody(k) {
     <h4>差出人</h4>
     <p class="lede">リレーが求める場合は認証情報、およびメールが差出人として示すアドレスです。多くのリレーでは、あるIDで認証し、別のIDとして送信するため、これらは別々になっています。</p>
     <p><input id="mw-user" class="mfield" style="min-width:340px"
-      placeholder="username (leave empty if the relay does not authenticate)"
+      placeholder="ユーザー名（リレーが認証を行わない場合は空欄）"
       value="${esc(MAILW.username)}"></p>
     <p><input id="mw-pass" class="mfield" type="password" style="min-width:340px"
       autocomplete="new-password"
@@ -5509,8 +5464,7 @@ function mailBody(k) {
     return `
     <h4>メッセージの内容</h4>
     <p class="lede">メッセージ全体は自由に変更できます。送信時に2つのプレースホルダーが入力されます: <span class="mono">{username}</span> と
-      <span class="mono">{portal_url}</span>. Leave both boxes empty to go
-      back to the wording this ships with.</p>
+      <span class="mono">{portal_url}</span>。両方のボックスを空のままにすると、標準で付属する文言に戻ります。</p>
     <p><input id="mw-subject" class="mfield" style="min-width:340px;width:100%;
       max-width:560px" placeholder="subject" value="${esc(MAILW.subject)}"></p>
     <p><textarea id="mw-body" class="mfield" rows="12"
@@ -5858,24 +5812,20 @@ function ssoBody(k) {
   if (k === 'register') return `
     <h4>アプリケーションを登録する</h4>
     <p class="lede">まず、Microsoft Entra でアプリ登録を作成する必要があります。</p>
-    <p class="lede">Entra 管理センターで、次を開きます <span class="mono">Entra ID → アプリの登録 → 新しい登録</span>. Give it a name
-      your team will recognise, leave the account types on single tenant, and
-      add a <b>Web</b> このリダイレクト URI を使用するプラットフォーム:</p>
+    <p class="lede">Entra 管理センターで、次を開きます <span class="mono">Entra ID → アプリの登録 → 新しい登録</span>。チームが認識できる名前を付け、アカウントの種類はシングル テナントのままにして、次を追加します： <b>Web</b> このリダイレクト URI を使用するプラットフォーム:</p>
     <div class="sscopy"><span class="mono">${esc(ssoRedirectGuess())}</span>
       <button class="mini" data-act="sso-copy">コピー</button></div>
     <p class="lede" style="font-size:12.5px">正確に貼り付けてください。Entra は文字単位で照合するため、末尾のスラッシュがあるだけでも別のアドレスとして扱われます。</p>
     <button class="sshelp" data-act="sso-help">必要な値はどこで確認できますか？</button>
     ${SSOW.help ? `<div class="sshelpbody"><ol>
-      <li><b>ディレクトリ (テナント) ID</b> - the registration's Overview page.</li>
-      <li><b>アプリケーション (クライアント) ID</b> - the same page, just above it.</li>
-      <li><b>クライアント シークレット</b> - Certificates &amp; secrets &rarr; New client
-        secret. Copy the <b>値</b> すぐに。Entra では一度だけ表示され、その後は二度と表示されません。</li></ol></div>` : ''}
+      <li><b>ディレクトリ (テナント) ID</b> - 登録の概要ページ。</li>
+      <li><b>アプリケーション (クライアント) ID</b> - 同じページのすぐ上。</li>
+      <li><b>クライアント シークレット</b> - 証明書とシークレット → 新しいクライアント シークレット。次をコピーします： <b>値</b> すぐに。Entra では一度だけ表示され、その後は二度と表示されません。</li></ol></div>` : ''}
     ${err}<div class="ssacts">
       <button class="mini" data-act="sso-registered">登録済み</button></div>`;
   if (k === 'tenant') return `
     <h4>ご利用のテナント</h4>
-    <p class="lede">ご利用のテナントは、Entra 内の組織のディレクトリです。その ID をここに貼り付けてください。これは、先ほど作成した登録の [概要] ページにあり、ラベルは <b>ディレクトリ (テナント) ID</b>. Your tenant domain
-      works too if you would rather use that.</p>
+    <p class="lede">ご利用のテナントは、Entra 内の組織のディレクトリです。その ID をここに貼り付けてください。これは、先ほど作成した登録の [概要] ページにあり、ラベルは <b>ディレクトリ (テナント) ID</b>。そちらを使いたい場合は、テナント ドメインでも使用できます。</p>
     <p><input id="sso-tenant" class="mfield" style="min-width:340px"
       placeholder="00000000-0000-0000-0000-000000000000"
       value="${esc(SSOW.tenant)}"></p>
@@ -5999,13 +5949,7 @@ function accountSettings() {
   const viewer = AUTH && AUTH.role === 'viewer';
   const users = USERS === null ? '' : `
   <div class="wcard" style="margin-bottom:10px"><h3>アカウント</h3>
-    <p class="lede" style="margin-bottom:10px">An owner decides who may sign
-    in; an admin runs the platform; a viewer reads every page and can change
-    nothing - made for the auditor and the exec. Nobody can act on an
-    account that outranks them, or grant a role above their own. Changing a
-    role applies to that account's next request rather than its next
-    sign-in: nobody has to sign out, though a page already open shows its
-    old buttons until it is reloaded.</p>
+    <p class="lede" style="margin-bottom:10px">オーナーは誰がサインインできるかを決め、管理者はプラットフォームを運用し、閲覧者はすべてのページを読めますが何も変更できません。監査担当者と経営幹部のために作られています。誰も、自分より上位のアカウントに対して操作したり、自分の役割より上位の役割を付与したりすることはできません。役割の変更は、そのアカウントの次回のサインインではなく、次回のリクエストに適用されます。誰もサインアウトする必要はありませんが、すでに開いているページは再読み込みするまで古いボタンを表示します。</p>
     ${USERR ? `<div class="note">${esc(USERR)}</div>` : ''}
     <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>招待済み</th><th>最終サインイン</th><th></th></tr>
     ${USERS.map(u => {
@@ -6017,9 +5961,7 @@ function accountSettings() {
       const may = !viewer && !overRank;
       return `<tr>
       <td>${esc(u.username)}${AUTH && AUTH.username === u.username ? ' <span class="pill p-acc">あなた</span>' : ''}${
-        u.break_glass ? ` <span class="pill p-amb" title="the account this
-        deployment was set up with: its password still works when single
-        sign-on is required">緊急用</span>` : ''}</td>
+        u.break_glass ? ` <span class="pill p-amb" title="このデプロイのセットアップに使用したアカウント: シングルサインオンが必須の場合でも、そのパスワードは引き続き有効です">緊急用</span>` : ''}</td>
       <td>${UEFORM === u.id
         ? `<input id="ue-new" class="mfield" style="min-width:190px"
              placeholder="name@example.com" value="${esc(u.email || '')}"
@@ -6046,7 +5988,7 @@ function accountSettings() {
       <td style="color:var(--mut)">${esc((u.last_login_at || '').slice(0, 10)) || '—'}</td>
       <td class="nw">${URFORM === u.id
         ? `<input id="ur-new" class="mfield" type="password" style="min-width:190px"
-             placeholder="new password (12+)" autocomplete="new-password">
+             placeholder="新しいパスワード（12文字以上）" autocomplete="new-password">
            <button class="mini" data-act="user-reset" data-key="${esc(u.id)}">設定</button>
            <button class="mini" data-act="user-reset-cancel">キャンセル</button>`
         : may ? `<button class="mini" data-act="user-reset-form" data-key="${esc(u.id)}">パスワードをリセット</button>
@@ -6057,10 +5999,10 @@ function accountSettings() {
         name="ai-guard-new-account" autocomplete="off"
         data-lpignore="true" data-1p-ignore data-bwignore>
       <input id="user-pass" class="mfield" type="password"
-        placeholder="password (12+ characters)"
+        placeholder="パスワード（12文字以上）"
         name="ai-guard-new-account-secret" autocomplete="new-password"
         data-lpignore="true" data-1p-ignore data-bwignore>
-      <input id="user-email" class="mfield" placeholder="email (required)"
+      <input id="user-email" class="mfield" placeholder="メールアドレス（必須）"
         autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore>
       <select id="user-role" class="mfield" style="min-width:110px">
         ${ROLE_ORDER.filter(r =>
@@ -6151,22 +6093,12 @@ function ssoEnforceBlock() {
       : `Turn this on and a password stops being enough for every account
          but one. Everyone signs in through Microsoft Entra instead, so the
          multi-factor policy on your tenant covers this portal too.`}</p>
-    ${bg ? `<div class="note"><b>${esc(bg)}</b> is the break-glass account:
-      the one this deployment was set up with, and the only one whose
-      password still works while this is on. It is how you get back in to
-      turn it off if Entra is unreachable, so its password needs to be
-      somewhere you can reach without it. While this is on, that account
-      cannot be deleted or demoted.</div>`
+    ${bg ? `<div class="note"><b>${esc(bg)}</b> は緊急アクセス用アカウントです：このデプロイのセットアップ時に使用されたアカウントで、これが有効な間もパスワードが引き続き機能する唯一のアカウントです。Entra に到達できない場合に、これをオフにするために戻って入る手段となるため、そのパスワードは Entra を使わずに参照できる場所に保管する必要があります。これが有効な間、そのアカウントは削除も降格もできません。</div>`
       : `<div class="note" style="border-color:var(--warn)">このデプロイには緊急用アカウントが指定されていないため、パスワードで戻る方法がありません。緊急用アカウントが指定されるまで、シングルサインオンの必須化は拒否されます。</div>`}
     ${!on && !ready ? `<div class="note" style="border-color:var(--warn)">まだどの所有者も Entra 経由のサインインを完了していません。一度もサインインが成功していない状態で必須化すると、緊急用アカウントだけが残ってしまうため、誰かが完了するまでこの設定は利用可能なままです。</div>` : ''}
     <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
       <p style="margin:0 0 6px"><b style="font-size:13px">どれくらい最近にサインインしている必要があるか</b></p>
-      <p class="lede">Somebody already signed in to Microsoft in their
-        browser was being returned straight here with no interaction at all -
-        click a link and you are inside a tool that says who uses which AI.
-        Signing in now always asks them to pick an account, and this decides
-        how stale that sign-in may be before the provider makes them prove it
-        again.</p>
+      <p class="lede">ブラウザーで Microsoft に既にサインインしていた人は、まったく操作なしでそのままここに戻されていました。リンクをクリックすると、誰がどの AI を使っているかを示すツールに入れました。現在はサインイン時に常にアカウントの選択を求め、これによって、プロバイダーが再度本人確認を求めるまで、そのサインインがどれだけ古くてもよいかが決まります。</p>
       <p><select id="sso-maxage" class="mfield" style="min-width:260px">
         ${[['', 'Every 12 hours (the default)'], ['0', 'Every single time'],
            ['1', 'Every hour'], ['4', 'Every 4 hours'],
@@ -6174,12 +6106,7 @@ function ssoEnforceBlock() {
            ['168', 'Every 7 days']].map(o => `<option value="${o[0]}"${
           v('sso_max_age_hours') === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}
       </select></p>
-      <p class="src-note" style="margin:0">Twelve hours is a working day:
-      nobody is asked twice before lunch, and a laptop left open overnight
-      cannot be walked up to the next morning. It is sent to Microsoft as
-      max_age and checked again on the way back against what the token says
-      about when they actually signed in, because a control that is only ever
-      asked for is not a control.</p>
+      <p class="src-note" style="margin:0">12 時間は 1 勤務日です。昼食前に 2 回求められる人はいません。一晩開いたままのノート PC を翌朝そのまま操作することもできません。これは max_age として Microsoft に送信され、戻ってくるときに、実際にいつサインインしたかについてトークンが示す内容と照合して再確認されます。要求するだけの制御は制御ではないからです。</p>
     </div>
     <p style="margin:12px 0 0"><button class="mini" data-act="sso-enforce"
       data-key="${on ? '' : '1'}"
@@ -6220,7 +6147,7 @@ function activationCard() {
   // knows what the key says, and the command does the moving - on the
   // operator's machine, approved here by an owner, like an upgrade.
   const steps = a.state !== 'active' ? '' : `<details class="how ui-how"><summary>このデプロイを Nyxus に移行する</summary><div class="ui-steps">
-    <p>One command moves this deployment to Nyxus in place. It keeps this receiver's database, so accounts, decisions, enrolled devices and settings come across, and the findings already in your log store stay readable. It runs on your own machine with your own kubeconfig or Docker, and an owner approves it on this page first.</p>
+    <p>1 つのコマンドで、このデプロイをインプレースで Nyxus に移行します。このレシーバーのデータベースを保持するため、アカウント、決定、登録済みデバイス、設定が引き継がれ、ログストアに既にある検出結果も引き続き閲覧できます。自身のマシン上で、自身の kubeconfig または Docker を使用して実行され、その前にこのページでオーナーが承認します。</p>
     <ol class="ui-steplist">
       <li><b>aiguardctl をインストール</b><span>このデプロイをアップグレードするのと同じコマンドです。このページの「アップグレード」を参照してください。</span></li>
       <li><b>キーをシェルに設定してください。</b>${uiCommand("export NYXUS_KEY='<your activation key>'")}<span>ポータルはそれを返却しません。これは認証情報です。コマンドは使用前に、ここに保存されているキーと一致することを確認し、コマンドラインには決して出しません。</span></li>
@@ -6259,7 +6186,7 @@ function activationCard() {
     ? (soon ? `<p class="health-note warning">This subscription runs out on ${esc(a.expires)}. Renewing replaces the key here; nothing stops working on the day, because nothing here was ever switched on by it - the images simply stop being yours to pull.</p>` : '')
     : a.state === 'expired' ? `<p class="health-note warning">This key lapsed on ${esc(a.expires)}. The deployment carries on exactly as it is; a lapsed subscription means no new images and no support, not a portal that stops. Renew and paste the new key; moving this deployment to Nyxus needs an active one.</p>`
     : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(a.reason || '')} This is what a reissued signing key looks like from a deployment that has not taken the release carrying it: upgrade first, and only then suspect the key.</p>`
-    : `<p class="health-note">This deployment runs the open edition, and it is complete: nothing on this page or any other is held back for want of a key. Nyxus is the commercial edition of the same system - the same collectors, the same evidence - distributed as private images under a subscription with support. An activation key names the organisation it was issued to and the term it runs for, and is checked here against a signature this portal already holds, without asking anyone.</p>`;
+    : `<p class="health-note">このデプロイはオープン版を実行しており、それは完全です。このページにも他のどのページにも、キーがないために制限されているものはありません。Nyxus は同じシステムの商用版で、同じコレクター、同じエビデンスを備え、サポート付きのサブスクリプションのもとでプライベート イメージとして配布されます。アクティベーション キーには、発行先の組織と有効期間が記載されており、ここで、このポータルがすでに保持している署名と照合して確認されます。誰にも問い合わせる必要はありません。</p>`;
 
   const form = !owner
     ? `<p class="src-note" style="margin-top:10px">An owner account activates a subscription. ${a.state === 'none' ? 'This deployment has no key stored.' : 'The details above are read-only for your role.'}</p>`
@@ -6273,7 +6200,7 @@ function activationCard() {
       <p class="src-note">ここに貼り付けられ、ここで確認され、レシーバーによって保存されます。これは資格情報であり、購入した内容の証明でもあるため、再表示されることはありません。表示されるのはフィンガープリントのみです。</p>`
     : `<div class="act-entry">
         <input id="act-key" class="mfield" spellcheck="false" autocomplete="off"
-          placeholder="Paste a renewed key to replace this one" value="">
+          placeholder="このキーを置き換えるには、更新されたキーを貼り付けてください" value="">
         <button class="mini" data-act="act-save">置き換え</button>
         <button class="mini" data-act="act-clear">削除</button>
       </div>`;
@@ -6322,7 +6249,7 @@ function diagnosticsCards() {
       <dl class="health-facts"><div><dt>バージョン</dt><dd>${esc(r.version)}</dd></div>
         <div><dt>稼働時間</dt><dd>${dur(r.uptime_seconds)}</dd></div></dl>
       <p class="health-note">Shadow AI Guard is built by Aman Karir.
-        <a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">Source and issues</a></p>
+        <a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">ソースと問題点</a></p>
     </section>
 
     <section class="health-card ${logFresh ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>データパイプライン</span><h3>ログストア</h3></div>${logFresh ? '<span class="pill p-ok">レポート中</span>' : '<span class="pill p-warn">確認が必要</span>'}</div>
@@ -6518,7 +6445,7 @@ function upgradeWatch() {
 }
 function upgradeTracker() {
   const r = UPRUN;
-  if (UPDOWN) return `<div id="upgrade-tracker" class="health-note warning"><b>ポータルを再起動中</b> - the page cannot reach it right now, which is expected mid-rollout. It keeps trying.</div>`;
+  if (UPDOWN) return `<div id="upgrade-tracker" class="health-note warning"><b>ポータルを再起動中</b> - 現在このページからそれに到達できませんが、ロールアウト中は想定内です。試行を続けます。</div>`;
   if (!r) return `<div id="upgrade-tracker"></div>`;
   const pill = r.status === 'running' ? '<span class="pill p-amb">実行中</span>'
     : r.status === 'stale' ? '<span class="pill p-warn">未確認</span>'
@@ -6712,9 +6639,7 @@ function setup() {
   })()}</p>`
   : `<details class="how map-help"><summary>マップの作成方法</summary><div>
   <ol style="padding-left:18px;line-height:2;margin:6px 0">
-    <li><a href="/api/suggest-identities?fmt=csv" style="color:var(--pri)">提案されたマップをダウンロード</a>. It matches local usernames against identities from
-      your cloud sources, and lists what it couldn't match for you to fill
-      in.</li>
+    <li><a href="/api/suggest-identities?fmt=csv" style="color:var(--pri)">提案されたマップをダウンロード</a>。ローカルのユーザー名をクラウドソースの ID と照合し、一致しなかったものは入力できるよう一覧表示します。</li>
     <li>すべての行を確認してください。これらは文字列一致であり、1つ間違えると、別人のアクティビティに誤った人物名が紐づきます。</li>
     <li>このファイルはこのリポジトリの外に保管してください。名前付きの人物をマシンに紐づけるため、個人データです。gitではなく、デプロイ設定と一緒に保存してください。</li>
     <li>設定 <code>IDENTITY_MAP</code> そのパスに設定します。Dockerでは読み取り専用でマウントし、KubernetesではConfigMapまたはSecretをファイルとしてマウントします。</li>
@@ -6817,7 +6742,7 @@ async function fleet() {
   }
   const ds = FLEET.devices || [];
   return `<h2 data-tour="fleet">フリート</h2>
-  <p class="lede">Every device holding a credential. Devices, under Discovery, is different: it shows which have actually reported findings. Revoke cuts off one device only, and it holds: a revoked serial is refused at enrollment even with a valid token, until an admin allows it back for a reimage or a replacement. A live device that enrolls again, such as a reimaged laptop or a scanner that enrolls every run, keeps its row and is noted under enrolled.</p>
+  <p class="lede">資格情報を保持するすべてのデバイス。検出結果の下のデバイスは異なり、実際に検出結果を報告したデバイスを示します。失効は1台のデバイスのみを遮断し、それは維持されます。失効したシリアルは、管理者が再イメージングまたは交換のために再び許可するまで、有効なトークンがあっても登録時に拒否されます。再イメージングされたノートPCや、実行ごとに登録するスキャナーなど、稼働中のデバイスが再度登録する場合は、その行を保持し、登録済みの下に記録されます。</p>
   ${ds.length ? `<table><tr><th>デバイス</th><th>プラットフォーム</th><th>シリアル</th>
     <th>登録済み</th><th>最終確認</th><th>エージェント</th><th>ステータス</th><th></th></tr>
   ${ds.map(d => `<tr>
@@ -6826,7 +6751,7 @@ async function fleet() {
     <td>${when(d.enrolled_at)}${d.reenrolled_at ? `<br><span style="font-size:11px;color:var(--mut)">re-enrolled ×${esc(String((d.enrollments || 1) - 1))}, last ${when(d.reenrolled_at)}</span>` : ''}</td><td>${when(d.last_seen)}</td>
     <td>${esc(d.agent_version || '—')}</td>
     <td>${d.revoked_at ? (d.reenroll_allowed_at
-                       ? '<span class="pill p-amb" title="Revoked, but this serial may enroll once more">再登録許可</span>'
+                       ? '<span class="pill p-amb" title="失効済みですが、このシリアルはもう一度登録できる可能性があります">再登録許可</span>'
                        : '<span class="pill p-mut">失効</span>')
                        : '<span class="pill p-ok">有効</span>'}</td>
     <td>${!d.revoked_at
@@ -6861,7 +6786,7 @@ async function tokens() {
   const state = t => t.revoked_at ? ['revoked', 'p-mut']
     : t.expires_at <= nowIso ? ['expired', 'p-mut'] : ['active', 'p-ok'];
   return `<h2>登録トークン</h2>
-  <p class="lede">An enrollment token goes into your MDM or RMM: a Jamf parameter, the Intune script, an RMM variable. Each machine exchanges it once for its own credential. The token can only enroll devices and cannot submit findings, so a long expiry inside an MDM artifact is fine. Revoke it here when a rollout is done or a token leaks.</p>
+  <p class="lede">登録トークンはMDMまたはRMMに配置します。Jamfのパラメータ、Intuneのスクリプト、RMM変数などです。各マシンは一度だけそれを交換して、自身の資格情報を取得します。トークンはデバイスの登録のみが可能で、検出結果を送信することはできないため、MDMアーティファクト内での長い有効期限は問題ありません。ロールアウトが完了したとき、またはトークンが漏えいしたときは、ここで失効させてください。</p>
   ${MINTED ? (MINTED.error
     ? `<div class="note">${esc(MINTED.error)}
        <button class="mini" data-act="dismiss-minted">無視</button></div>`
@@ -6875,7 +6800,7 @@ async function tokens() {
     <input id="mint-note" class="mfield" placeholder="note, e.g. macOS Jamf rollout">
     <label style="font-size:12px;color:var(--mut)">有効期限まであと
       <input id="mint-ttl" class="mfield" style="min-width:74px" value="180"
-        title="days until this token stops working"> 日</label>
+        title="このトークンが機能しなくなるまでの日数"> 日</label>
     <button class="mini" data-act="mint">トークンを発行</button>
   </div>
   ${ts.length ? `<table><tr><th>ID</th><th>メモ</th><th>作成日</th><th>有効期限</th><th>ステータス</th><th></th></tr>
@@ -7663,7 +7588,7 @@ function bwBodySeats() {
     <dt>更新日</dt><dd><input id="bw-renewal" class="mfield" style="max-width:180px"
       value="${esc(w.renewal || '')}" placeholder="YYYY-MM-DD"></dd>
     <dt>所有者</dt><dd><input id="bw-owner" class="mfield"
-      value="${esc(w.owner || '')}" placeholder="who holds this budget"></dd>
+      value="${esc(w.owner || '')}" placeholder="この予算の保有者"></dd>
   </dl>
   <p class="src-note wnote">The vendor APIs do not expose per-user tiers, so
   tiers come from you either way.${eff.length > 1 ? ' Per-tier coverage is how '
@@ -7929,7 +7854,7 @@ function budgetCard(sub) {
   ${(sub.members || []).length ? `<details class="budget-details budget-users"><summary>Users
       (${(sub.members || []).length}) — ${bProvenance(sub, conn) || 'manual'}</summary>
     <table><tr><th>メンバー</th><th>ロール</th><th>シート</th>
-      <th title="Usage the vendor's own API reports. Only some vendors expose it, and a licence whose users come from a CSV import has none.">ベンダー使用状況</th><th>ソース</th></tr>
+      <th title="ベンダー自身のAPIが報告する使用状況です。一部のベンダーだけがこれを公開しており、ユーザーがCSVインポート由来のライセンスには使用状況がありません。">ベンダー使用状況</th><th>ソース</th></tr>
     ${(sub.members || []).map(memberRow).join('')}</table></details>`
     : `<p class="budget-data-note">No users yet${conn ? ' - run a sync' : ''}.</p>`}
   ${unobserved.length ? `<details class="budget-details budget-warning"><summary>${unobserved.length} paid
@@ -7947,7 +7872,7 @@ function budgetCard(sub) {
     <p class="src-note">ユーザーリストの誰とも一致しなかった観測されたID。照合は名前で行われ、一致しない場合は「未一致」であり、誰かがライセンス未所有であることの証明ではありません。ただし、これらのいくつかが下の個人アカウントと並んでいることこそ、このページが存在する理由であるシャドー支出の全体像です。</p>
     <ul>${strangers.map(n => `<li>${esc(n)}</li>`).join('')}</ul></details>` : ''}
   ${obs.personal.length ? `<details class="budget-details budget-risk"><summary>${obs.personal.length}
-      personal-account ${obs.personal.length === 1 ? 'use' : 'uses'} of ${eff.length > 1 ? 'this licence' : esc(sub.tool_id)}</summary>
+      personal-account ${obs.personal.length === 1 ? 'use' : 'uses'} of ${eff.length > 1 ? 'このライセンス' : esc(sub.tool_id)}</summary>
     <table><tr><th>実行者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントドメイン</th><th>デバイス</th><th>最終確認</th></tr>
     ${obs.personal.map(r => `<tr><td>${esc(r.user || '—')}</td>
       ${eff.length > 1 ? `<td>${esc(r.tool)}</td>` : ''}
@@ -7957,9 +7882,7 @@ function budgetCard(sub) {
     <p class="src-note">これらは個人アカウントビューにも表示されます。ここに表示されるのは、個人アカウントが同じツールを利用しているのにシートに支払っていることが、まさに支出の課題だからです。</p></details>` : ''}
   ${obs.unlinked ? `<p class="budget-data-note">${obs.unlinked}
     device${obs.unlinked === 1 ? '' : 's'} run${obs.unlinked === 1 ? 's' : ''}
-    ${eff.length > 1 ? 'tools this licence covers' : esc(sub.tool_id)}
-    with no person attached - not counted anywhere
-    above. An identity map (Sources view) links them.</p>` : ''}
+    ${eff.length > 1 ? 'このライセンスが対象とするツール' : esc(sub.tool_id)} には人物が紐づいていません - 上記のどこにもカウントされません。IDマップ（ソースビュー）がそれらをリンクします。</p>` : ''}
   </section>
   ${ro ? '' : `<footer class="budget-card-actions">
     <div class="budget-actions-main">
@@ -7969,7 +7892,7 @@ function budgetCard(sub) {
     <button class="mini" data-act="b-unlink" data-key="${esc(bKey(sub))}">リンク解除</button>
     </div>
   <div class="budget-add-member"><span>メンバーを追加</span>
-    <input id="bm-email-${esc(bKey(sub))}" class="mfield" placeholder="add member: email" autocomplete="off">
+    <input id="bm-email-${esc(bKey(sub))}" class="mfield" placeholder="メンバーを追加: メールアドレス" autocomplete="off">
     <input id="bm-tier-${esc(bKey(sub))}" class="mfield" placeholder="seat tier">
     <button class="mini" data-act="b-madd" data-key="${esc(bKey(sub))}">追加</button>
   </div></footer>`}
@@ -7993,12 +7916,7 @@ function budgetImport() {
         <option value="">プランを選択…</option>
         ${plans.map(x => `<option value="${esc(x.plan_key || 'default')}">${esc(x.plan || x.plan_key || 'default')}</option>`).join('')}
       </select></label></div>` : ''}
-  <p class="lede">Paste the member export from the vendor's admin page
-  (ChatGPT Business: Workspace settings → Members; Claude: Organization
-  settings → Members, which exports name / email / role / status / seat
-  tier). A header row with email / name / role / seat columns is
-  understood, commas or tabs - so pasting rows straight out of Excel or
-  Numbers works - and so is a plain list of addresses.</p>
+  <p class="lede">ベンダーの管理ページからメンバーのエクスポートを貼り付けてください（ChatGPT Business：ワークスペース設定 → メンバー、Claude：組織設定 → メンバー。このエクスポートには name / email / role / status / seat tier が含まれます）。email / name / role / seat 列を含むヘッダー行を認識し、カンマまたはタブ区切りに対応しているため、ExcelやNumbersから行をそのまま貼り付けても機能します。アドレスの単純なリストも同様です。</p>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
   <div class="wcard" style="max-width:760px">
   <textarea id="b-csv" class="mfield" style="width:100%;min-height:140px;font-family:var(--monofont,monospace)"
@@ -8191,11 +8109,7 @@ function budgetReport() {
   <div class="wcard" style="margin-top:14px"><h3 style="margin-top:0">この画面の見方</h3>
   <p class="src-note" style="margin-top:0">
   支出は、組織が支払ったと記録しているものです。それ以外はすべて観測されたものです。プラットフォームは、ブラウザー、CLI、IDE、デスクトップ、ネットワーク、クラウドサインインをまたいでAIツールを検出し、それらの観測結果を各ライセンスの人物に名前で照合します。 <strong>観測済み</strong> 上の期間内に、そのライセンスが対象とする少なくとも1つのツールでその人物が確認されたことを意味します。バンドル内の1つのツールで利用されていなくても、未観測ということではありません。
-  <strong>一度も観測されていない</strong> means no surface matched them at all, which
-  is a strong hint about an unused seat and not proof: a detection source
-  that is not deployed everywhere looks exactly like absence, and someone on
-  leave looks the same as someone who never signs in. Treat these as leads to
-  check, not verdicts to bill against.</p></div>`;
+  <strong>一度も観測されていない</strong> どのサーフェスにも一致しなかったことを意味します。これは未使用シートの強いヒントであり、証拠ではありません。すべてに展開されていない検出ソースは、不在とまったく同じに見えますし、休暇中の人も、一度もサインインしない人と同じに見えます。これらは確認すべき手がかりとして扱い、請求の根拠となる判定として扱わないでください。</p></div>`;
 }
 
 async function budget() {
@@ -8219,7 +8133,7 @@ async function budget() {
   const spend = conv ? bMoney(conv.total, bPrefCur())
     : spendParts.join(' + ') || '0';
   return `<h2 data-tour="budget">予算</h2>
-  <p class="lede">What the organisation pays for AI tools, set against what is actually used: seats nobody uses, people without a seat, and personal accounts running alongside paid ones. User lists come from a vendor's admin API where one exists, or a CSV export where not; the numbers work the same either way, and each card says which.</p>
+  <p class="lede">組織がAIツールに支払っているものと、実際に使用されているものを対比したもの：誰も使っていないシート、シートを持たない人、有償アカウントと並行して使われている個人アカウント。ユーザーリストは、存在する場合はベンダーの管理APIから、存在しない場合はCSVエクスポートから取得します。数値はどちらでも同じように機能し、各カードにどちらかが示されます。</p>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
   ${(() => { const n = conv ? '' : bConversionNote(subs);
      return n ? `<p class="src-note" style="margin-bottom:10px">${n}</p>` : ''; })()}
@@ -9959,9 +9873,9 @@ async function agentic() {
     const k = a.lane.kind;
     const cls = (a.accountable ? ' ok' : '') + (a.autonomous ? '' : ' weak');
     if (k === 'continuous')
-      return `<span class="ag-cont${cls}" title="No cadence: runs while somebody is logged in"></span>`;
+      return `<span class="ag-cont${cls}" title="実行周期なし: 誰かがログインしている間だけ実行されます"></span>`;
     if (k === 'band')
-      return `<span class="ag-run${cls}" style="left:0;right:0" title="Often enough that individual runs stop meaning anything"></span>`;
+      return `<span class="ag-run${cls}" style="left:0;right:0" title="個々の実行が意味をなさなくなるほど頻繁"></span>`;
     return a.lane.marks.map(m =>
       `<span class="ag-run${cls}" style="left:${pct(m)}%;width:1.1%"></span>`).join('');
   };
@@ -10145,7 +10059,7 @@ function decorateView() {
   // page header read as a filter that each page owned, and it is not.
   meta.innerHTML = (view === 'overview' ? windowSelect('meta-chip window-pick')
       : `<span class="meta-chip window-label"
-          title="Every count on this page is for this window. Change it on the Overview, or under Settings › Display & alerting.">last ${esc(fmtWindow(hours))}</span>`)
+          title="このページのすべての件数はこの期間を対象としています。変更するには、概要または設定 › 表示とアラートで行ってください。">last ${esc(fmtWindow(hours))}</span>`)
     + (view === 'overview'
       ? `<button class="mini meta-export" type="button" data-act="evidence-print">PDFをエクスポート</button>`
       : '');
@@ -10234,7 +10148,7 @@ let DSTACK = [];
 function drawDetail() {
   const D = {device: deviceDetail, tool: toolDetail, mcp: mcpDetail};
   const drawer = document.getElementById('drawer');
-  drawer.innerHTML = '<button class="dclose" data-open="" title="close">×</button>'
+  drawer.innerHTML = '<button class="dclose" data-open="" title="閉じる">×</button>'
     + (DSTACK.length > 1 ? '<button class="back" data-dback="">‹ 戻る</button>' : '')
     + D[detail[0]](detail[1]);
   drawer.scrollTop = 0;

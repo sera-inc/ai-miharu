@@ -437,7 +437,7 @@ def test_the_first_two_steps_say_where_to_look_not_just_what_to_type():
     assert "kitchen table" not in html
     for needle in ("kubectl get ingress -A", "tailscale status",
                    "Grafana Cloud Logs", "/loki/api/v1/query_range",
-                   "advertise Loki-compatible"):
+                   "Loki 互換をうたっています"):
         assert needle in html, needle
 
 

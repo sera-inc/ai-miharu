@@ -124,7 +124,7 @@ test('only an owner is offered the field', () => {
 
 test('an activated owner can replace or remove, and a viewer sees the facts', () => {
   const owner = render(ACTIVE);
-  assert.match(owner, /Paste a renewed key to replace this one/);
+  assert.match(owner, /このキーを置き換えるには、更新されたキーを貼り付けてください/);
   assert.match(owner, /data-act="act-clear"/);
   const viewer = render(ACTIVE, {role: 'viewer'});
   assert.match(viewer, /Acme Group Ltd/);
