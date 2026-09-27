@@ -3429,6 +3429,43 @@ def enterprise_css(_=Depends(require_page_auth)):
     return FileResponse(STATIC / "enterprise.css", media_type="text/css")
 
 
+# DADS Layer 2 trial: only four fixed filenames, protected by the data authentication boundary.
+# No caller-controlled filesystem path is accepted. The CSS directory is a
+# read-only runtime mount; the published image contains no private tokens.
+def _dads_css_response(filename: str) -> FileResponse:
+    base = os.environ.get("DADS_CSS_DIR")
+    if not base:
+        raise HTTPException(status_code=404)
+    path = Path(base) / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404)
+    return FileResponse(
+        path,
+        media_type="text/css",
+        headers={"Cache-Control": "private, no-store"},
+    )
+
+
+@app.get("/digital-design-system/tokens/index.css")
+def dads_index_css(_=Depends(require_auth)):
+    return _dads_css_response("index.css")
+
+
+@app.get("/digital-design-system/tokens/dads.css")
+def dads_dads_css(_=Depends(require_auth)):
+    return _dads_css_response("dads.css")
+
+
+@app.get("/digital-design-system/tokens/brand.css")
+def dads_brand_css(_=Depends(require_auth)):
+    return _dads_css_response("brand.css")
+
+
+@app.get("/digital-design-system/tokens/semantic.css")
+def dads_semantic_css(_=Depends(require_auth)):
+    return _dads_css_response("semantic.css")
+
+
 # There is no /static route, deliberately. The UI is one self-contained file
 # plus one explicitly named stylesheet, so a route that resolved a caller-
 # supplied path under a directory would exist only to expose files.

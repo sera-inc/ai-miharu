@@ -1,0 +1,12 @@
+# Optional development overlay for the private digital-design-system token package.
+# Run with DADS_TOKENS_DIR set to an absolute path in a checked-out, pinned revision.
+# The product image remains buildable without this overlay or private credentials.
+services:
+  portal:
+    environment:
+      DADS_CSS_DIR: /run/dads/tokens
+    volumes:
+      - type: bind
+        source: ${DADS_TOKENS_DIR:?Set DADS_TOKENS_DIR to an absolute token directory}
+        target: /run/dads/tokens
+        read_only: true
