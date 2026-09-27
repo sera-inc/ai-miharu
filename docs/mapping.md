@@ -2,10 +2,11 @@
 
 **対象**: `/home/student01/jobs/shadow-ai-guard-001/source`　**生成日**: 2026-09-27　**生成**: `scripts/inventory.mjs`
 **ステータス**: DeepSeek 4.1 Flash による仮対応（人間レビュー未承認、Phase 1 未完了）
+**現行再インベントリ**: 2026-09-27、14 ファイル・352 件。AI仮対応 108、保留 208、除外 36。除外 36 件には CSS 変数参照の誤検出 3 件を含む。
 
 > この表は設計書 §6 Phase 1 の中核資産です。設計書は人間による対応トークン決定・レビューを要求します。
 > 今回は依頼者の明示指示により DeepSeek 4.1 Flash 単独で仮判定しました。人間承認を受けたものとして扱いません。
-> `保留` は用途が曖昧で値だけでは置換できず、`除外` は抽出誤検知等です。**未解決が残るため Phase 2 への一括移行は不可です。**
+> この版は 2026-09-27 に公式インベントリを再実行し、既存の DeepSeek 判定を保持したまま出現回数を更新しました。新規の CSS 変数参照 3 件は生値ではないため除外しました。`保留` は用途が曖昧で値だけでは置換できず、`除外` は抽出誤検知等です。**未解決が残るため Phase 1 / Phase 2 全体は未完了です。**
 
 ## 色
 
@@ -253,13 +254,13 @@
 | `9.5px` | 23 | --app-text-label-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: nav .count のバッジ、.ag-node b の大文字ラベルはいずれも小さな UI ラベル/バッジ用途。DADS の最小ラベルサイズ (0.75rem=12px) に寄せる。 |
 | `8.5px` | 19 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 8.5px に一致する候補トークンがない。極小ラベルや補足用だが、候補に該当サイズがない。 |
 | `8px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 8px に一致する候補トークンがない。大文字ラベルやキャプション用だが、候補に該当サイズがない。 |
-| `22px` | 9 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 22px に一致する候補トークンがない。見出しと数値表示にまたがり、20px/24px/32px の候補へ近似で寄せるのは不適切。 |
+| `22px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 22px に一致する候補トークンがない。見出しと数値表示にまたがり、20px/24px/32px の候補へ近似で寄せるのは不適切。 |
 | `14px` | 7 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: h3見出し、strong、summaryなど複数用途で使われ、body-size・heading-sm-size・label-sizeのどれに一意対応するか決められないため。 |
 | `13.5px` | 7 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: table、本文パラグラフ、タブ、注記など複数用途で使われ、table-sizeとbody-sizeの両方が考えられ一意に決められないため。 |
 | `16px` | 6 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: h2/h4見出し、数値・強調値、アイコン用フォントサイズが混在し、heading-sm-sizeやnumeric-sizeに一意対応しないため。 |
 | `17px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 数値・強調値とアイコン用フォントサイズが混在し、numeric-sizeなど候補トークンに一意対応しないため。 |
 | `19px` | 5 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: chevronアイコン、見出し、数値・金額が混在し、heading-sizeやnumeric-sizeに一意対応しないため。 |
-| `15px` | 5 | --app-text-heading-sm-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: すべてh3/h4の小見出しで用途が一致しており、候補では小見出し用トークンが対応するため。 |
+| `15px` | 6 | --app-text-heading-sm-size | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: すべてh3/h4の小見出しで用途が一致しており、候補では小見出し用トークンが対応するため。 |
 | `20px` | 4 | 除外 | 除外 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 出現箇所はいずれもmin-width、box-shadow、paddingで、フォントサイズ指定ではないため。 |
 | `26px` | 4 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: KPI/statsの数値とh2見出しが混在し、heading-lg-sizeやdisplay-sm-sizeに一意対応しないため。 |
 | `0.92em` | 3 | 保留 | 保留 | `extension/demo/index.html`。DeepSeek 判定: .muted、table、codeで用途が混在し、相対em指定で候補の固定トークンに一意対応しないため。 |
@@ -285,8 +286,8 @@
 | 実装値 | 出現回数 | 対応トークン | 状態 | 備考（代表ファイル） |
 |---|---|---|---|---|
 | `10px` | 138 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに10px相当がなく、近い8px/16pxへ置換すると余白寸法が変わるため保留。 |
-| `8px` | 114 | --app-space-2 | AI仮対応 | `extension/demo/index.html` 他4件。DeepSeek 判定: 8px は DADS の spacing-2 に一致し、提示文脈の厳密な 8px は gap/padding/top/bottom などの余白用途に使われているため。 |
-| `12px` | 113 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに12px相当がなく、近い8px/16pxとは値が異なるため保留。 |
+| `8px` | 115 | --app-space-2 | AI仮対応 | `extension/demo/index.html` 他4件。DeepSeek 判定: 8px は DADS の spacing-2 に一致し、提示文脈の厳密な 8px は gap/padding/top/bottom などの余白用途に使われているため。 |
+| `12px` | 114 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに12px相当がなく、近い8px/16pxとは値が異なるため保留。 |
 | `14px` | 109 | 保留 | 保留 | `extension/demo/index.html` 他4件。DeepSeek 判定: 候補トークンに14px相当がなく、近い16pxとは値が異なるため保留。 |
 | `6px` | 106 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに6px相当がなく、4px/8pxとは値が異なるため保留。 |
 | `16px` | 85 | --app-space-2 | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークン --app-space-2 が16pxと一致し、padding/gap等の余白用途で使われているため。 |
@@ -302,7 +303,7 @@
 | `3px` | 32 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: 候補トークンに3pxがなく、4pxや0pxとは異なる値のため。 |
 | `15px` | 32 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに15pxがなく、16pxとは値も意味も一致しないため。 |
 | `13px` | 26 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに13pxがなく、8px/16pxでは置換できないため。 |
-| `1px` | 22 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに1pxがなく、0pxとは異なる余白値のため。 |
+| `1px` | 23 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに1pxがなく、0pxとは異なる余白値のため。 |
 | `22px` | 16 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: 候補トークンに22pxがなく、24pxとは値も用途も異なるため。 |
 | `24px` | 12 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: --app-space-3と--app-gutterの両方が24pxで、ソースではgap/グリッド間隔とpadding/marginに混在し用途が一意に決められないため。 |
 | `19px` | 10 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 候補トークンに19pxがなく、16px/24pxでは値が異なるため。 |
@@ -361,6 +362,9 @@
 | `1px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: border/outline の太さやコメント中の 1px で、border-radius 値として使われていないため。 |
 | `999px` | 1 | --app-radius-full | AI仮対応 | `portal/app/static/index.html`。DeepSeek 判定: ピル状の完全な角丸で、--app-radius-full（dads-radius-full）に対応する。 |
 | `2px 4px 4px 2px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: border-radius の4値指定で角ごとに異なる非対称な角丸であり、候補トークンは単一の角丸スケールのみです。単一トークンに置き換えると意味が変わるため対応不可です。 |
+| `var(--app-radius-md)` | 7 | --app-radius-md | 除外 | `portal/app/static/dads-product.css`。公式インベントリが CSS カスタムプロパティ参照を生値と誤検出。値は既存トークンを参照している。 |
+| `var(--app-radius-sm)` | 3 | --app-radius-sm | 除外 | `portal/app/static/dads-product.css` 他1件。公式インベントリが CSS カスタムプロパティ参照を生値と誤検出。値は既存トークンを参照している。 |
+| `var(--app-radius-sm) var(--app-radius-sm` | 1 | --app-radius-sm | 除外 | `portal/app/static/dads-product.css`。公式インベントリの40文字切り取りで shorthand が途中まで抽出された誤検出。 |
 
 ## z-index
 
@@ -383,4 +387,4 @@
 
 ---
 
-検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 108、保留 208、除外 33）
+検査ファイル数: 14 / 抽出値: 352 種（AI仮対応 108、保留 208、除外 36。うち3件は CSS 変数参照の誤検出）

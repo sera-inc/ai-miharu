@@ -35,6 +35,18 @@
   --app-sg-accent-on-primary: var(--dads-color-white);
 }
 
+/* Product-specific extensions for DADS-derived controls without shared tokens. */
+:root {
+  --app-sg-inset-md: 12px;
+  --app-sg-inset-bottom-sm: 6px;
+  --app-sg-text-1rem: 1rem;
+  --app-sg-icon-lg: 24px;
+  --app-sg-optical-offset: 2px;
+  --app-sg-underline-offset: 3px;
+  --app-sg-skip-link-z: 1000;
+  --app-sg-skip-link-border-width: 2px;
+}
+
 [data-theme="dark"] {
   --app-sg-surface-canvas: var(--dads-color-black);
   --app-sg-surface-panel: var(--dads-color-solid-gray-900);
@@ -301,18 +313,18 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
 #mobile-nav {
   display: none;
   align-items: center;
-  column-gap: calc(4 / 16 * 1rem);
+  column-gap: var(--app-space-05);
   width: fit-content;
   max-width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
   border: 0;
-  border-radius: calc(6 / 16 * 1rem);
+  border-radius: var(--app-radius-sm);
   background: transparent;
-  padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem) calc(6 / 16 * 1rem) calc(12 / 16 * 1rem);
+  padding: var(--app-space-05) var(--app-sg-inset-md) var(--app-sg-inset-bottom-sm) var(--app-sg-inset-md);
   color: var(--app-sg-text-primary, var(--dads-color-solid-gray-900));
   font-weight: normal;
-  font-size: calc(16 / 16 * 1rem);
+  font-size: var(--app-sg-text-1rem);
   line-height: 1;
   font-family: var(--app-font-sans, sans-serif);
   letter-spacing: 0.02em;
@@ -320,9 +332,9 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
 }
 
 #mobile-nav .mobile-nav__icon {
-  margin-top: calc(2 / 16 * 1rem);
-  width: calc(24 / 16 * 1rem);
-  height: calc(24 / 16 * 1rem);
+  margin-top: var(--app-sg-optical-offset);
+  width: var(--app-sg-icon-lg);
+  height: var(--app-sg-icon-lg);
   flex-shrink: 0;
   color: var(--app-sg-text-primary, var(--dads-color-solid-gray-900));
   display: block;
@@ -336,15 +348,15 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
   #mobile-nav:hover {
     background-color: var(--app-sg-surface-hover, var(--dads-color-solid-gray-100));
     text-decoration: underline;
-    text-underline-offset: calc(3 / 16 * 1rem);
+    text-underline-offset: var(--app-sg-underline-offset);
   }
 }
 
 #mobile-nav:focus-visible {
-  outline: calc(4 / 16 * 1rem) solid var(--app-sg-focus-ring, var(--dads-color-blue-600));
-  outline-offset: calc(2 / 16 * 1rem);
+  outline: var(--app-focus-ring-width) solid var(--app-focus-ring);
+  outline-offset: var(--app-focus-ring-offset);
   background-color: var(--app-sg-warning-surface, var(--dads-color-yellow-100));
-  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--app-sg-warning-surface, var(--dads-color-yellow-100));
+  box-shadow: 0 0 0 var(--app-sg-optical-offset) var(--app-sg-warning-surface, var(--dads-color-yellow-100));
 }
 
 @media (max-width: 900px) {
