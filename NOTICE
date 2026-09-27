@@ -12,3 +12,11 @@ Under section 4 of the License, redistributions of this software, in source
 or binary form and whether or not modified, must retain this NOTICE file,
 the copyright notice above and the attribution notices in the source files.
 A derivative work may add its own notices; it may not remove or alter these.
+
+DADS HTML example component adaptation
+Copyright (c) 2025 デジタル庁
+Original: https://github.com/digital-go-jp/design-system-example-components-html
+The mobile navigation button styling and icon in portal/app/static/dads-product.css
+and portal/app/static/index.html are adapted from the DADS hamburger-menu-button
+example under the MIT License. Full license text: licenses/dads-html-MIT.txt.
+This derivative product is not endorsed by the Digital Agency of Japan.

@@ -970,7 +970,7 @@ a.libtn:hover{border-color:var(--pri)}
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer"></div>
 <div class="shell" id="shell">
-  <aside>
+  <aside id="app-sidebar" tabindex="-1">
     <button class="brand" id="brand-home" type="button"
       aria-label="ワークスペース概要へ移動"><img src="/sera-ai-governance-symbol.png" alt=""><span>世良AIガバナンス</span></button>
     <div class="brandline"></div>
@@ -991,8 +991,14 @@ a.libtn:hover{border-color:var(--pri)}
   </aside>
   <div>
     <div class="topbar">
-      <button class="mobile-nav" id="mobile-nav" title="ナビゲーションを開く"
-        aria-label="ナビゲーションを開く">☰</button>
+      <button class="mobile-nav" id="mobile-nav" type="button" title="ナビゲーションを開く"
+        aria-label="ナビゲーションを開く" aria-controls="app-sidebar" aria-expanded="false">
+  <svg class="mobile-nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+       aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="currentColor"/>
+  </svg>
+  <span class="mobile-nav__label">メニュー</span>
+</button>
       <span class="top-context"><b id="topctx-name">ポータル</b><span id="topctx-sub">ソースを確認中…</span></span>
       <div class="search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
@@ -9540,9 +9546,15 @@ function navGo(sectionId, id) {
   const area = NAVAREAS.find(a => a.sections.includes(sec.id));
   if (area && !area.direct && !NAVOPEN.includes(area.id)) NAVOPEN.push(area.id);
   detail = null; EXTFROM = '';
-  document.body.classList.remove('nav-open');
+  const wasMobileOpen = document.body.classList.contains('nav-open') && isMobileNav();
+  if (wasMobileOpen) {
+    closeMobileNav({ restoreFocus: false });
+  } else {
+    document.body.classList.remove('nav-open');
+  }
   history.replaceState(null, '', frag(view));
   navFlyClose(); drawNav(); render();
+  if (wasMobileOpen) focusMainContent();
 }
 function navFlyShow(btn) {
   if (!navCollapsed()) return;
@@ -10440,15 +10452,140 @@ q.addEventListener('blur', () => setTimeout(() => {
 }, 150));
 document.getElementById('refresh').onclick = () => load(true);
 const mobileNav = document.getElementById('mobile-nav');
-if (mobileNav) mobileNav.onclick = () => document.body.classList.toggle('nav-open');
+const mobileNavMq = window.matchMedia('(max-width: 900px)');
+
+function isMobileNav() {
+  return window.matchMedia('(max-width: 900px)').matches;
+}
+
+function mobileAside() {
+  if (!mobileNav) return null;
+  return document.getElementById(mobileNav.getAttribute('aria-controls') || 'app-sidebar');
+}
+
+function isVisible(el) {
+  if (!el) return false;
+  const cs = getComputedStyle(el);
+  return cs.display !== 'none' && cs.visibility !== 'hidden' && el.getClientRects().length > 0;
+}
+
+function hasOpenDialog() {
+  return Array.from(document.querySelectorAll('dialog[open], [role="dialog"], [aria-modal="true"]')).some(isVisible);
+}
+
+function focusableIn(container) {
+  if (!container) return [];
+  return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])')).filter(el => {
+    if (el.hidden || el.getAttribute('aria-hidden') === 'true') return false;
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && el.getClientRects().length > 0;
+  });
+}
+
+function setMobileNavState(open, opts = {}) {
+  if (!mobileNav) return;
+  const isMobile = isMobileNav();
+  const shouldOpen = !!(open && isMobile);
+  const aside = mobileAside();
+
+  document.body.classList.toggle('nav-open', shouldOpen);
+  mobileNav.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+
+  if (aside) {
+    if (isMobile && !shouldOpen) {
+      aside.inert = true;
+    } else {
+      aside.inert = false;
+    }
+    if (shouldOpen) {
+      requestAnimationFrame(() => aside.focus({ preventScroll: true }));
+    }
+  }
+
+  if (!shouldOpen && opts.restoreFocus && mobileNav && isMobile) {
+    mobileNav.focus({ preventScroll: true });
+  }
+}
+
+function closeMobileNav(opts = {}) {
+  setMobileNavState(false, opts);
+}
+
+function focusMainContent() {
+  const main = document.querySelector('main, [role="main"], #main, #content');
+  if (!main) return;
+  if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+  main.focus({ preventScroll: true });
+}
+
+if (mobileNav) {
+  mobileNav.onclick = () => {
+    if (!isMobileNav()) return;
+    const open = !document.body.classList.contains('nav-open');
+    setMobileNavState(open, { restoreFocus: !open });
+  };
+}
+
 // Slash-to-search is standard furniture in dense admin products. It does not
 // replace ordinary tab navigation and stands down while someone is typing.
 window.addEventListener('keydown', e => {
-  if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+  if (e.key === '/' && !hasOpenDialog() && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
     e.preventDefault(); q.focus(); q.select();
   }
-  if (e.key === 'Escape') document.body.classList.remove('nav-open');
+
+  if (e.key === 'Escape') {
+    if (hasOpenDialog()) return;
+    if (document.body.classList.contains('nav-open') && isMobileNav()) {
+      e.preventDefault();
+      closeMobileNav({ restoreFocus: true });
+    }
+    return;
+  }
+
+  if (e.key === 'Tab' && isMobileNav() && document.body.classList.contains('nav-open') && !hasOpenDialog()) {
+    const aside = mobileAside();
+    if (!aside) return;
+    const focusables = focusableIn(aside);
+    if (!focusables.length) {
+      e.preventDefault();
+      aside.focus({ preventScroll: true });
+      return;
+    }
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+    const outside = !aside.contains(active);
+    if (e.shiftKey) {
+      if (active === first || active === aside || outside) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (active === last || active === aside || outside) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
 });
+
+function syncMobileNav() {
+  if (!mobileNav) return;
+  const aside = mobileAside();
+  if (!isMobileNav()) {
+    document.body.classList.remove('nav-open');
+    mobileNav.setAttribute('aria-expanded', 'false');
+    if (aside) aside.inert = false;
+    return;
+  }
+  const open = document.body.classList.contains('nav-open');
+  mobileNav.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (aside) aside.inert = !open;
+}
+
+if (mobileNavMq.addEventListener) mobileNavMq.addEventListener('change', syncMobileNav);
+else mobileNavMq.addListener(syncMobileNav);
+syncMobileNav();
 // Theme and sidebar width are the viewer's own habits, so they live in this
 // browser rather than in a setting every operator would share.
 function setTheme(t) {

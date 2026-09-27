@@ -296,3 +296,78 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
   outline: var(--app-focus-ring-width) solid var(--app-focus-ring);
   outline-offset: var(--app-focus-ring-offset);
 }
+
+/* Derived from the DADS (Digital Agency Design System) hamburger-menu-button example. Original DADS is MIT licensed. DADS Layer1 files are not modified; this adapter belongs in dads-product.css. */
+#mobile-nav {
+  display: none;
+  align-items: center;
+  column-gap: calc(4 / 16 * 1rem);
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: calc(6 / 16 * 1rem);
+  background: transparent;
+  padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem) calc(6 / 16 * 1rem) calc(12 / 16 * 1rem);
+  color: var(--app-sg-text-primary, var(--dads-color-solid-gray-900));
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1;
+  font-family: var(--app-font-sans, sans-serif);
+  letter-spacing: 0.02em;
+  touch-action: manipulation;
+}
+
+#mobile-nav .mobile-nav__icon {
+  margin-top: calc(2 / 16 * 1rem);
+  width: calc(24 / 16 * 1rem);
+  height: calc(24 / 16 * 1rem);
+  flex-shrink: 0;
+  color: var(--app-sg-text-primary, var(--dads-color-solid-gray-900));
+  display: block;
+}
+
+#mobile-nav .mobile-nav__label {
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  #mobile-nav:hover {
+    background-color: var(--app-sg-surface-hover, var(--dads-color-solid-gray-100));
+    text-decoration: underline;
+    text-underline-offset: calc(3 / 16 * 1rem);
+  }
+}
+
+#mobile-nav:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--app-sg-focus-ring, var(--dads-color-blue-600));
+  outline-offset: calc(2 / 16 * 1rem);
+  background-color: var(--app-sg-warning-surface, var(--dads-color-yellow-100));
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--app-sg-warning-surface, var(--dads-color-yellow-100));
+}
+
+@media (max-width: 900px) {
+  #mobile-nav {
+    display: flex;
+  }
+
+  #mobile-nav .mobile-nav__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  #mobile-nav .mobile-nav__icon {
+    color: currentcolor;
+  }
+}
