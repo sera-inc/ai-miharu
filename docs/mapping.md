@@ -338,29 +338,29 @@
 |---|---|---|---|---|
 | `8px` | 26 | --app-radius-md | AI仮対応 | `extension/demo/index.html` 他2件。DeepSeek 判定: 8px は角丸の基本スケールで、--app-radius-md（DADS radius-8）に対応。ソース上でも border-radius:8px の用途がある。 |
 | `12px` | 22 | --app-radius-lg | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: dialog の border-radius:12px など角丸に使用され、--app-radius-lg（DADS radius-12）に対応。 |
-| `7px` | 20 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: border-radius:7px として角丸に使用されているが、候補に 7px 相当のトークンがない。sm=6px・md=8px に近いが値が異なるため選ばない。 |
-| `10px` | 19 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: border-radius:10px や --radius:10px として角丸に使用されているが、候補に 10px 相当のトークンがない。 |
+| `7px` | 20 | --app-radius-sm | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: ナビボタン、アバター、チップ、小アイコンボタン、ツールチップなど小〜中規模の部品で使われており、小さい角丸トークン --app-radius-sm（DADS 6px）の用途階層に対応するため。 |
+| `10px` | 19 | --app-radius-lg | AI仮対応 | `extension/demo/index.html` 他2件。DeepSeek 判定: カード、設定パネル、ドロップ領域、メニューなど大きめの面・パネルで使われており、大きい角丸トークン --app-radius-lg（DADS 12px）の用途階層に対応するため。 |
 | `4px` | 19 | --app-radius-xs | AI仮対応 | `extension/demo/index.html` 他4件。DeepSeek 判定: border-radius:4px として使用され、--app-radius-xs（DADS radius-4）に対応。 |
 | `6px` | 19 | --app-radius-sm | AI仮対応 | `extension/src/guard.js` 他3件。DeepSeek 判定: border-radius:6px として使用され、--app-radius-sm（DADS radius-6）に対応。 |
-| `9px` | 15 | 保留 | 保留 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: border-radius:9px として使用されているが、候補に 9px 相当のトークンがない。 |
+| `9px` | 15 | --app-radius-md | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: タブ、セットバー、検索結果、ノート、統計カードなど中規模の容器で使われており、中角丸トークン --app-radius-md（DADS 8px）の用途階層に対応するため。 |
 | `50%` | 14 | --app-radius-full | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: border-radius:50% は円形・完全な角丸の用途で、--app-radius-full に対応。 |
 | `99px` | 13 | --app-radius-full | AI仮対応 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: border-radius:99px はピル形状・完全な角丸の用途で、--app-radius-full に対応。 |
 | `0` | 10 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: ソース文脈が著作権表記の「2026」等であり、角丸の CSS 値として抽出された誤検知。 |
-| `5px` | 9 | 保留 | 保留 | `extension/demo/index.html` 他2件。DeepSeek 判定: border-radius:5px として使用されているが、候補に 5px 相当のトークンがない。 |
+| `5px` | 9 | --app-radius-xs | AI仮対応 | `extension/demo/index.html` 他2件。DeepSeek 判定: 入力欄、ボタン、ピル、テーブル、小さいトラックなど小さい操作要素で使われており、最小角丸トークン --app-radius-xs（DADS 4px）の用途階層に対応するため。 |
 | `3px` | 9 | 除外 | 除外 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: ソース文脈では margin/padding/box-shadow などの値で、border-radius:3px の使用が確認できず、角丸カテゴリの抽出誤検知。 |
 | `2px` | 6 | 除外 | 除外 | `portal/app/static/enterprise.css` 他1件。DeepSeek 判定: margin/padding/width/shadow/outline 内の値や 12px などの部分一致で、border-radius 値として使われていないため。 |
 | `var(--radius-sm)` | 4 | --app-radius-sm | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: border-radius に既存の small 用変数が使われており、候補の --app-radius-sm に対応する。 |
 | `11px` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: gap/font-size/margin の値で、border-radius 値として使われていないため。 |
-| `0 0 10px 10px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 下部のみ 10px の角丸で、候補トークンに一致する半径がなく、部分指定のため単純置換できない。 |
+| `0 0 10px 10px` | 2 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 下左右のみ10pxの非一様な角丸指定で、候補トークン（4/6/8/12px/full）に一致する値がなく、近い値に置換すると意味が変わるため。 |
 | `4px 4px 0 0` | 1 | --app-radius-xs | AI仮対応 | `portal/app/static/enterprise.css`。DeepSeek 判定: 上角のみ 4px の角丸で、4px は --app-radius-xs（dads-radius-4）に対応する。 |
-| `var(--radius)` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 既存の汎用 radius 変数の実値が文脈から分からず、md/lg など候補のどれに対応するか一意に決められない。 |
-| `14px!important` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 14px の角丸は候補の半径スケールに一致せず、近い lg への置換はできない。 |
-| `0!important` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: border-radius:0!important として使われる有効な値だが、0 用の候補トークンがなく対応を一意に決められない。 |
-| `0 0 7px 7px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 下部のみ 7px の角丸で、候補トークンに一致する半径がなく、部分指定のため単純置換できない。 |
-| `inherit` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: border-radius:inherit として使われる有効な値だが、継承を表す候補トークンがない。 |
+| `var(--radius)` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 既存カスタムプロパティ参照であり、解決後の半径値がソース文脈から特定できず、候補トークンに一意に対応できないため。 |
+| `14px!important` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: !importantを除いても14pxは候補トークンに存在せず、近い--app-radius-lg等に置換すると値が異なるため。 |
+| `0!important` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: !importantを除くと0は有効なborder-radius値だが、候補トークンに0相当がなく、一意に対応できないため。 |
+| `0 0 7px 7px` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: 下左右のみ7pxの非一様な角丸指定で、候補トークンに7px相当がなく、近い値に置換すると意味が変わるため。 |
+| `inherit` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。DeepSeek 判定: border-radius:inheritはCSS値だが、継承元の半径値が不明で候補トークンに一意に対応できないため。 |
 | `1px` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。DeepSeek 判定: border/outline の太さやコメント中の 1px で、border-radius 値として使われていないため。 |
 | `999px` | 1 | --app-radius-full | AI仮対応 | `portal/app/static/index.html`。DeepSeek 判定: ピル状の完全な角丸で、--app-radius-full（dads-radius-full）に対応する。 |
-| `2px 4px 4px 2px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: border-radius の4値一括指定であり、各角で異なる半径を指定している。候補トークンは単一の角丸値に対応するため一意に置換できず、2px に一致する候補トークンも存在しない。 |
+| `2px 4px 4px 2px` | 1 | 保留 | 保留 | `portal/app/static/index.html`。DeepSeek 判定: border-radius の4値指定で角ごとに異なる非対称な角丸であり、候補トークンは単一の角丸スケールのみです。単一トークンに置き換えると意味が変わるため対応不可です。 |
 
 ## z-index
 
@@ -383,4 +383,4 @@
 
 ---
 
-検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 104、保留 212、除外 33）
+検査ファイル数: 13 / 抽出値: 349 種（AI仮対応 108、保留 208、除外 33）
