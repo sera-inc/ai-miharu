@@ -290,3 +290,9 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
   color:var(--app-sg-text-primary);
   border-radius:var(--app-radius-md);
 }
+
+/* Existing bars and QR items suppress outlines in the base theme. */
+.barrow:focus-visible,.qr-item:focus-visible {
+  outline: var(--app-focus-ring-width) solid var(--app-focus-ring);
+  outline-offset: var(--app-focus-ring-offset);
+}

@@ -963,6 +963,7 @@ a.libtn:hover{border-color:var(--pri)}
 <link rel="stylesheet" href="/enterprise.css">
 <link rel="stylesheet" href="/digital-design-system/tokens/index.css">
 <link rel="stylesheet" href="/dads-product.css">
+<a class="skip-link" href="#app">Skip to main content</a>
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer"></div>
 <div class="shell" id="shell">
@@ -1033,7 +1034,7 @@ a.libtn:hover{border-color:var(--pri)}
         </div>
       </span>
     </div>
-    <main id="app"></main>
+    <main id="app" tabindex="-1"></main>
   </div>
 </div>
 <div id="tour" aria-live="polite">
@@ -1088,6 +1089,11 @@ a.libtn:hover{border-color:var(--pri)}
   </form>
 </dialog>
 <script>
+// Keep the SPA route fragment intact when keyboard users skip to the main region.
+document.querySelector('.skip-link').addEventListener('click', e => {
+  e.preventDefault();
+  document.getElementById('app').focus();
+});
 let G = {devices:{},identities:{},tools:{},bridges:{},unattributed:[],counts:{}};
 // Views that read a second endpoint, cached until refresh clears them.
 // Declared here rather than beside their views: load() clears them and let
@@ -10047,7 +10053,7 @@ function navFlyShow(btn) {
   });
   NAVFLY.innerHTML = `<span class="navfly-title">${esc(area.lbl)}</span>${entries.map(entry =>
     `<button type="button" role="menuitem" data-fly-s="${entry.sectionId}" data-fly-v="${entry.id}"
-      class="${view === entry.id ? 'on' : ''}">${esc(entry.label)}</button>`).join('')}`;
+      class="${view === entry.id ? 'on' : ''}"${view === entry.id ? ' aria-current="page"' : ''}>${esc(entry.label)}</button>`).join('')}`;
   const r = btn.getBoundingClientRect();
   NAVFLY.hidden = false;
   NAVFLY.style.left = (r.right + 8) + 'px';
@@ -10061,7 +10067,7 @@ function navChild(section, id, label, pinnedList, {pinned = false} = {}) {
   const c = id === 'personal' ? (G.personal_accounts || []).length : null;
   const isPinned = pinnedList.includes(id);
   return `<div class="nav-child-row ${pinned ? 'nav-child-pinned' : ''}">
-    <button data-s="${section.id}" data-v="${id}" class="nav-child ${view === id ? 'on' : ''}"
+    <button data-s="${section.id}" data-v="${id}" class="nav-child ${view === id ? 'on' : ''}"${view === id ? ' aria-current="page"' : ''}
       aria-label="${esc(shown)}" data-lbl="${esc(shown)}"><span class="nav-dot" aria-hidden="true"></span>
       <span class="lbl">${esc(shown)}</span>${c ? `<span class="count"
         title="${c} personal account${c === 1 ? '' : 's'} seen in this window">${c}</span>` : ''}</button>
