@@ -1,0 +1,722 @@
+{
+  "model": "deepseek-v4.1-flash:cloud",
+  "proposal_status": "unapproved",
+  "scope": "held color values only",
+  "decisions": [
+    {
+      "value": "#fff",
+      "token": "保留",
+      "reason": "ポップオーバー背景、主要ボタン背景上の文字色、暗色通知上の文字色など複数用途に使われ、単一の提案トークンに一意に対応しないため。"
+    },
+    {
+      "value": "#f5a524",
+      "token": "保留",
+      "reason": "警告系の罫線色と警告ボタン背景の両方に使われ、--app-sg-warning と --app-sg-warning-surface のどちらか一意に決められないため。"
+    },
+    {
+      "value": "#ddd",
+      "token": "保留",
+      "reason": "暗色背景上の文字色と境界線の両方に使われ、text系・border系の単一トークンに一意に対応しないため。"
+    },
+    {
+      "value": "#1f2430",
+      "token": "保留",
+      "reason": "ガード通知の暗色背景と、黄色ボタン上の文字色の両方に使われており、用途が一意でない。また提案トークンに一致する暗色 surface / 文字色トークンがないため。"
+    },
+    {
+      "value": "#555",
+      "token": "保留",
+      "reason": "枠線色として使われる箇所と、補助文字色として使われる箇所が混在しており、border 系か text 系のどちらか一意に決められないため。"
+    },
+    {
+      "value": "#55d9bd",
+      "token": "保留",
+      "reason": "アクティブ表示の背景（nav-dot）とフォーカスアウトラインの両方に使われており、accent-primary と focus-ring のどちらか一意に決められないため。"
+    },
+    {
+      "value": "rgba(255,255,255,.07)",
+      "token": "保留",
+      "reason": "ホバー背景とサイド罫線の両方に使われ、surface-hover は背景用途のみで、半透明の境界トークンもないため一意に決められない。"
+    },
+    {
+      "value": "#333",
+      "token": "保留",
+      "reason": "暗色テーマのボタン枠と入力欄枠に使われるが、border-subtle/strong のダーク値と一致せず、通常境界と入力枠で用途が複数にまたがるため保留。"
+    },
+    {
+      "value": "#1e222b",
+      "token": "保留",
+      "reason": "入力欄背景とコード背景の両方に使われ、surface-card/panel 等の用途と一意に対応しないため保留。"
+    },
+    {
+      "value": "#262a33",
+      "token": "保留",
+      "reason": "テーブル行の区切り線とレポート枠の両方に使われ、border-subtle/strong のダーク値とも一致しないため保留。"
+    },
+    {
+      "value": "#3a3f4a",
+      "token": "保留",
+      "reason": "button.copy の枠線と active 背景の両方に使われ、border-strong や surface-hover など複数用途にまたがるため保留。"
+    },
+    {
+      "value": "#e5484d",
+      "token": "保留",
+      "reason": "ブロック時の border-left 色で、danger は文字・アイコン・削除用途であり危険境界のトークンがないため一意に決められない。"
+    },
+    {
+      "value": "rgba(0,0,0,.35)",
+      "token": "--app-sg-shadow-color",
+      "reason": "box-shadow の色としてのみ使用されており、提案トークン --app-sg-shadow-color の用途（box-shadow の色）に一意に対応するため。"
+    },
+    {
+      "value": "#39bda6",
+      "token": "保留",
+      "reason": "primary ボタンの背景と境界線の両方に使用されており、単一用途に特定できない。また提案アクセントは青系で、この緑系の色に対応するトークンはないため。"
+    },
+    {
+      "value": "#1a2940",
+      "token": "保留",
+      "reason": "ダークテーマのホバー背景に使用されているが、提案の --app-sg-surface-hover のダーク値は半透明の白であり、この濃い青とは意味・値が一致しないため。"
+    },
+    {
+      "value": "#edf9f6",
+      "token": "保留",
+      "reason": "グラデーション背景の明るい緑色で、対応するグラデーションまたは success 系の提案トークンが存在しないため。"
+    },
+    {
+      "value": "#f7fbfa",
+      "token": "保留",
+      "reason": "グラデーション背景の明るい色で、対応する提案トークンが存在しないため。"
+    },
+    {
+      "value": "#123236",
+      "token": "保留",
+      "reason": "ダークテーマのグラデーション背景色で、対応する提案トークンが存在しないため。"
+    },
+    {
+      "value": "#102a36",
+      "token": "保留",
+      "reason": "ダークテーマのグラデーション中間色であり、開始・終了のいずれのトークンにも一意に対応しないため。"
+    },
+    {
+      "value": "#112138",
+      "token": "--app-sg-gradient-end",
+      "reason": "ダークテーマのグラデーション終了色として使用されており、--app-sg-gradient-end の用途（グラデーション終了色）とテーマに一致するため。"
+    },
+    {
+      "value": "#f2bd5b",
+      "token": "保留",
+      "reason": "ナビのピン固定・ホバー用の強調色であり、警告やフォーカスなど提案トークンの用途と一致しないため。"
+    },
+    {
+      "value": "#bdccda",
+      "token": "保留",
+      "reason": "固定の暗背景コンポーネント内の淡いテキスト色で、テーマ連動する --app-sg-text-secondary とはテーマ・用途が一致しないため。"
+    },
+    {
+      "value": "#e8eef3",
+      "token": "--app-sg-text-primary",
+      "reason": "[data-theme=dark] の --fg（主要前景色）として定義され、--app-sg-text-primary の用途（本文・見出し・主要テキスト）とダークテーマに一致するため。"
+    },
+    {
+      "value": "#18232f",
+      "token": "保留",
+      "reason": "ダークテーマの二次サーフェス変数 --sf2 であり、パネル・カード・レイズドのどの用途に使われるか一意に決まらないため。"
+    },
+    {
+      "value": "#95a6b6",
+      "token": "保留",
+      "reason": "ダークテーマの --mut（ミュートテキスト）だが、提案の --app-sg-text-secondary のダーク値は solid-gray-200 であり、値・色調が一致せず一意に対応しないため保留。"
+    },
+    {
+      "value": "#263340",
+      "token": "保留",
+      "reason": "ダークテーマの --bd（通常境界線）だが、提案の境界線トークンは solid-gray-500/300 であり、値・色調が一致せず一意に対応しないため保留。"
+    },
+    {
+      "value": "#7bdfc4",
+      "token": "保留",
+      "reason": "ダークテーマの --pri（プライマリ）だが、提案の --app-sg-accent-primary は blue-200 であり、値・色調が一致せず一意に対応しないため保留。"
+    },
+    {
+      "value": "rgba(0,0,0,.62)",
+      "token": "--app-sg-shadow-color",
+      "reason": "box-shadow の影色としてのみ使われ、提案の --app-sg-shadow-color の用途（box-shadow の色）に一意に対応するため。"
+    },
+    {
+      "value": "rgba(255,255,255,.1)",
+      "token": "保留",
+      "reason": "border-color と progress 背景の両方に使われる半透明白で、用途が一意でなく、対応する半透明境界/背景トークンもないため保留。"
+    },
+    {
+      "value": "rgba(255,255,255,.12)",
+      "token": "保留",
+      "reason": "hover 背景と navflyout の border の両方に使われる半透明白で、用途が一意でなく、対応する半透明トークンもないため保留。"
+    },
+    {
+      "value": "rgba(255,255,255,.06)",
+      "token": "保留",
+      "reason": "ダークテーマのボタン通常背景とナビのホバー背景の両方に使われており、用途が複数あるため一意に surface-hover へ対応させられない。"
+    },
+    {
+      "value": "rgba(20,24,28,.05)",
+      "token": "--app-sg-shadow-color",
+      "reason": "box-shadow の影色としてのみ使用されており、--app-sg-shadow-color の用途に一致する。"
+    },
+    {
+      "value": "rgba(0,0,0,.28)",
+      "token": "--app-sg-shadow-color",
+      "reason": "ダイアログの box-shadow の影色としてのみ使用されており、--app-sg-shadow-color の用途に一致する。"
+    },
+    {
+      "value": "rgba(15,18,20,.45)",
+      "token": "--app-sg-overlay",
+      "reason": "dialog の backdrop 背景色で、--app-sg-overlay のモーダル背後のオーバーレイ用途に一致する。"
+    },
+    {
+      "value": "rgba(14,110,140,0)",
+      "token": "保留",
+      "reason": "ソース文脈がなく、意味・テーマ・使用箇所を一意に判断できない。"
+    },
+    {
+      "value": "#14161c",
+      "token": "--app-sg-surface-canvas",
+      "reason": "body のアプリ全体背景色（ダークテーマ）で、--app-sg-surface-canvas の用途に一致する。"
+    },
+    {
+      "value": "#262b36",
+      "token": "保留",
+      "reason": "button.copy の背景色だが、提案トークンのカード・パネル・ポップオーバー等のサーフェス用途に一意に対応せず、ボタン背景用トークンもないため。"
+    },
+    {
+      "value": "#101318",
+      "token": "保留",
+      "reason": "#report の背景色だが、カード・パネル・キャンバスのどれに当たるか一意でなく、特定の report 面に合う提案トークンがないため。"
+    },
+    {
+      "value": "#118b80",
+      "token": "保留",
+      "reason": "--chart の汎用グラフ色で、複数の chart-series のどれかを一意に特定できず、色合いだけでは選べないため。"
+    },
+    {
+      "value": "#118b801c",
+      "token": "保留",
+      "reason": "--chart-soft の半透明グラフ用色で、対応する chart 系の半透明トークンが候補にないため。"
+    },
+    {
+      "value": "#472631",
+      "token": "保留",
+      "reason": "nav .count のバッジ背景色だが、件数バッジが危険バッジに限定されず、danger-surface に一意に対応しないため。"
+    },
+    {
+      "value": "#ffb2ba",
+      "token": "保留",
+      "reason": "nav .count の文字色だが、件数バッジの文字が常に danger 用途とは限らず、danger トークンに一意に対応しないため。"
+    },
+    {
+      "value": "#182c59",
+      "token": "--app-sg-accent-subtle",
+      "reason": "ダークテーマの --acc-soft はアクセント淡色背景であり、--app-sg-accent-subtle の用途（選択行・バッジ・情報系の薄い背景）に一意に対応する。"
+    },
+    {
+      "value": "#8a97a8",
+      "token": "保留",
+      "reason": "オフ状態ドットの背景色で、候補には中立・無効状態の背景トークンがなく、text/border/surface の用途とも一致しないため保留。"
+    },
+    {
+      "value": "#13283f",
+      "token": "--app-sg-gradient-start",
+      "reason": ".overview-posture のグラデーション開始色であり、--app-sg-gradient-start の用途（グラデーション開始色）に一意に対応する。"
+    },
+    {
+      "value": "#102034",
+      "token": "保留",
+      "reason": "装飾グラデーションの中間色（60%停止）で、対応する中間グラデーショントークンが候補にないため保留。"
+    },
+    {
+      "value": "#12283e",
+      "token": "--app-sg-gradient-end",
+      "reason": ".overview-posture のグラデーション終了色であり、--app-sg-gradient-end の用途（グラデーション終了色）に一意に対応する。"
+    },
+    {
+      "value": "#102c34",
+      "token": "--app-sg-gradient-start",
+      "reason": ".overview-posture.good のグラデーション開始色であり、--app-sg-gradient-start の用途（グラデーション開始色）に一意に対応する。"
+    },
+    {
+      "value": "#10252d",
+      "token": "保留",
+      "reason": "暗色グラデーションの中間色で、提案トークンにはグラデーション中間色や該当する暗色サーフェス用途がなく、一意に対応しないため保留。"
+    },
+    {
+      "value": "#112a34",
+      "token": "保留",
+      "reason": "暗色グラデーションの終了色だが、提案の--app-sg-gradient-endはアプリ固有グラデーション用で、このステータス用グラデーションの用途と一意に対応しないため保留。"
+    },
+    {
+      "value": "#ff9ba2",
+      "token": "--app-sg-danger",
+      "reason": "--app-sg-dangerの用途「危険文字、危険アイコン、削除操作」に一致し、暗色背景上の危険インジケータ文字色として一意に対応。"
+    },
+    {
+      "value": "#79e5c2",
+      "token": "保留",
+      "reason": "暗色背景上の成功色インジケータ文字色だが、提案トークンに成功色/成功テキスト用のトークンがなく、色合いが近いチャート系列などとも用途が異なるため保留。"
+    },
+    {
+      "value": "#8fa1b7",
+      "token": "--app-sg-text-secondary",
+      "reason": "--app-sg-text-secondaryの用途「補助文字、メタ情報、説明文」に一致し、暗色背景上の補助テキスト色として一意に対応。"
+    },
+    {
+      "value": "#aab7c8",
+      "token": "--app-sg-text-primary",
+      "reason": "--app-sg-text-primaryの用途「本文、見出し、主要テキスト」に一致し、暗色背景上の本文テキスト色として一意に対応。"
+    },
+    {
+      "value": "#94a5b9",
+      "token": "保留",
+      "reason": "暗色背景上の補助テキスト色だが、テーマ固定の text-secondary とは背景条件が一致せず、一意に決まらないため保留。"
+    },
+    {
+      "value": "#183e5e",
+      "token": "--app-sg-gradient-start",
+      "reason": "アバターの linear-gradient の開始色であり、提案トークン --app-sg-gradient-start の用途（グラデーション開始色）に一意に対応。"
+    },
+    {
+      "value": "#087b72",
+      "token": "--app-sg-gradient-end",
+      "reason": "同じ linear-gradient の終了色であり、提案トークン --app-sg-gradient-end の用途（グラデーション終了色）に一意に対応。"
+    },
+    {
+      "value": "#142a2e",
+      "token": "保留",
+      "reason": "ダークテーマの選択背景色だが、surface-hover と accent-subtle の両方に選択用途があり、色・テーマも一意でないため保留。"
+    },
+    {
+      "value": "#27504f",
+      "token": "保留",
+      "reason": "ダークテーマの選択境界色で、accent-primary や border-strong のいずれとも一意に対応しないため保留。"
+    },
+    {
+      "value": "#64748c",
+      "token": "保留",
+      "reason": "提示文脈の行中に値が現れず、用途が判別できないため保留。"
+    },
+    {
+      "value": "#fcfaf5",
+      "token": "保留",
+      "reason": "lightテーマのattention要約背景グラデーション中間色であり、単独の警告背景トークンではなく、warning-surfaceの用途・値とも一致しないため。"
+    },
+    {
+      "value": "#352b19",
+      "token": "保留",
+      "reason": "darkテーマのattention背景グラデーション用の濃茶で、warning-surface darkの透明黄色とは用途・値が異なり、対応する暗色背景トークンもないため。"
+    },
+    {
+      "value": "#29231a",
+      "token": "保留",
+      "reason": "darkテーマのattention背景グラデーション中間色であり、単独のsurfaceやwarning背景トークンに一意に対応しないため。"
+    },
+    {
+      "value": "#172134",
+      "token": "保留",
+      "reason": "darkテーマのattention背景グラデーション終端の濃紺で、gradient-start/endやsurface系トークンの用途・値と一致しないため。"
+    },
+    {
+      "value": "#101a2a",
+      "token": "保留",
+      "reason": "darkテーマのbudget-card-head背景であり、カード背景トークンsurface-cardとは用途が部分的に異なり、値も一致しないため。"
+    },
+    {
+      "value": "#111d2e",
+      "token": "保留",
+      "reason": "darkテーマのbudget-kpis背景であり、panelやcardなど複数surface用途に解釈でき、一意に対応するトークンがないため。"
+    },
+    {
+      "value": "#111c2c",
+      "token": "保留",
+      "reason": "darkテーマのnote背景だが、提案surface系のcanvas/panel/card/raised/hoverのどれに当たるか一意でなく、DADS色値とも一致しないため。"
+    },
+    {
+      "value": "#a7b5c8",
+      "token": "保留",
+      "reason": "tenant-chevのシェブロン文字色だが、提案には汎用アイコン色がなく、text-secondaryは補助文字用でテーマ・用途が一致しないため。"
+    },
+    {
+      "value": "#7d90aa",
+      "token": "保留",
+      "reason": "nav-dot背景色で、accent-primary/text-secondary/chart系など複数に解釈でき、提案トークンの使用箇所と一意に一致しないため。"
+    },
+    {
+      "value": "#172d40",
+      "token": "保留",
+      "reason": "register-score背景色だが、panel/card/chart-surfaceのどれか特定できず、テーマも不明で一意に対応しないため。"
+    },
+    {
+      "value": "#082d28",
+      "token": "保留",
+      "reason": "darkテーマのevidence-print文字色だが、提案にsuccess/print用トークンがなく、text-primaryやdanger等とも用途が一致しないため。"
+    },
+    {
+      "value": "#486fbd",
+      "token": "保留",
+      "reason": ":rootの--acc定義で、accent-primary/text-link等の複数用途に解釈でき、ソース行だけでは一意に決められないため。"
+    },
+    {
+      "value": "#17334a03",
+      "token": "--app-sg-shadow-color",
+      "reason": "半透明の影色で、box-shadow 用の shadow-color に一意に対応するため。"
+    },
+    {
+      "value": "#0b1017",
+      "token": "--app-sg-surface-canvas",
+      "reason": "ダークテーマの --bg で、アプリ全体の背景という用途に一意に対応するため。"
+    },
+    {
+      "value": "#a7b8e4",
+      "token": "保留",
+      "reason": "ダークテーマの --acc だが、リンクと主アクセントの両方に同じ値が定義され複数用途に解釈できるため。"
+    },
+    {
+      "value": "#eac078",
+      "token": "--app-sg-warning",
+      "reason": "ダークテーマの --warn で、警告アイコン・警告境界という用途に一意に対応するため。"
+    },
+    {
+      "value": "#0e141c",
+      "token": "保留",
+      "reason": "ソース文脈で値と変数名・用途を特定できず、一意に対応する提案トークンを選べないため。"
+    },
+    {
+      "value": "#1c332f",
+      "token": "保留",
+      "reason": "ソース文脈で値と変数名・用途を特定できず、一意に対応する提案トークンを選べないため。"
+    },
+    {
+      "value": "#14232b",
+      "token": "保留",
+      "reason": "カスタムテーマ変数の値だが、与えられた文脈では変数名・用途が切れており、提案トークンのいずれか一意に対応しないため保留。"
+    },
+    {
+      "value": "#34504d",
+      "token": "保留",
+      "reason": "カスタムテーマ変数の値だが、ソース上の変数名・用途を特定できず、提案トークンの意味・テーマ・使用箇所に一意対応しないため保留。"
+    },
+    {
+      "value": "#63c8b0",
+      "token": "保留",
+      "reason": "teal系のアクセントに見えるが、提案のaccent-primaryは青系で、ソース上の用途も特定できず一意対応しないため保留。"
+    },
+    {
+      "value": "#63c8b01a",
+      "token": "保留",
+      "reason": "半透明tealであり、accent-subtle等に色相・透明度が一致せず、用途も不明で一意に選べないため保留。"
+    },
+    {
+      "value": "#354756",
+      "token": "保留",
+      "reason": "濃い青灰色で、境界・文字・面背景など複数用途に解釈でき、変数名も不明なため一意対応しない。"
+    },
+    {
+      "value": "#00000013",
+      "token": "保留",
+      "reason": "黒の低不透明度でshadow-colorやoverlay等に近いが、透明度と用途が一致せず一意に選べないため保留。"
+    },
+    {
+      "value": "rgba(12,24,46,.2)",
+      "token": "--app-sg-shadow-color",
+      "reason": "ライトテーマの --pop-shadow で使われる box-shadow の影色。box-shadow の色用トークンに一意に対応。"
+    },
+    {
+      "value": "rgba(12,24,46,.1)",
+      "token": "--app-sg-shadow-color",
+      "reason": "同じ --pop-shadow の別レイヤー影色。用途は box-shadow の色であり、同トークンに一意に対応。"
+    },
+    {
+      "value": "rgba(0,0,0,.45)",
+      "token": "--app-sg-shadow-color",
+      "reason": "ダークテーマの --pop-shadow で使われる box-shadow の影色。box-shadow の色用トークンに一意に対応。"
+    },
+    {
+      "value": "rgba(255,255,255,.055)",
+      "token": "--app-sg-border-subtle",
+      "reason": "aside の border-right 色。通常の境界線・区切り線用トークンに一意に対応。"
+    },
+    {
+      "value": "rgba(255,255,255,.05)",
+      "token": "--app-sg-surface-hover",
+      "reason": "nav button:hover の背景色。ダークテーマのホバー背景用トークンに一意に対応。"
+    },
+    {
+      "value": "rgba(255,255,255,.02)",
+      "token": "保留",
+      "reason": "fold の静的な背景色。surface-hover 等はホバー・選択・一時強調用で用途が異なり、一意対応しないため保留。"
+    },
+    {
+      "value": "rgba(7,15,28,.42)",
+      "token": "--app-sg-overlay",
+      "reason": ".overlay の背景としてモーダル/ドロワー背後を覆う半透明の暗色であり、提案トークン --app-sg-overlay の用途（オーバーレイ）に一意に対応するため。"
+    },
+    {
+      "value": "rgba(70,213,158,.12)",
+      "token": "保留",
+      "reason": ".estate-dot の box-shadow リング用半透明グリーンであり、候補には chart series 等の用途しかなく、影用リングとして一意対応するトークンがないため。"
+    },
+    {
+      "value": "rgba(138,151,168,.14)",
+      "token": "保留",
+      "reason": ".estate-dot.off の box-shadow リング用半透明グレーであり、text/border 等の候補とは用途が異なるため。"
+    },
+    {
+      "value": "rgba(240,168,64,.16)",
+      "token": "保留",
+      "reason": ".estate-dot.warn の box-shadow リング用半透明オレンジであり、warning 系候補は不透明の警告色/警告背景で、影用リングとは用途が異なるため。"
+    },
+    {
+      "value": "rgba(85,217,189,.09)",
+      "token": "保留",
+      "reason": ".nav-child.on .nav-dot の box-shadow リング用半透明色であり、候補トークンに影用リングとして一意対応するものがないため。"
+    },
+    {
+      "value": "rgba(255,255,255,.025)",
+      "token": "保留",
+      "reason": "nav button.on の inset box-shadow 用半透明白であり、surface/hover 等の背景用途とは意味が異なるため。"
+    },
+    {
+      "value": "rgba(16,24,40,.015)",
+      "token": "保留",
+      "reason": "トップバー下の極薄い1px影用の半透明色で、候補の影トークンは汎用box-shadow色かつ不透明度が大きく異なるため、一意対応しない。"
+    },
+    {
+      "value": "rgba(16,24,40,.02)",
+      "token": "保留",
+      "reason": "メタチップの極薄ドロップシャドウ用の半透明色で、候補の影トークンでは不透明度・用途が一致せず、一意対応しない。"
+    },
+    {
+      "value": "rgba(11,20,36,.12)",
+      "token": "保留",
+      "reason": "暗色グラデーションカード専用のシャドウ用半透明色で、候補の--app-sg-shadow-colorとは不透明度・テーマ前提が異なり、一意対応しない。"
+    },
+    {
+      "value": "rgba(88,220,190,.12)",
+      "token": "保留",
+      "reason": "装飾リングの半透明アクセント境界色で、候補のborder/accent系トークンとは色相・用途が一致せず、対応トークンがない。"
+    },
+    {
+      "value": "rgba(88,220,190,.025)",
+      "token": "保留",
+      "reason": "装飾リングの半透明アクセントグロー用で、候補トークンに該当する意味・用途がなく一意対応しない。"
+    },
+    {
+      "value": "rgba(88,220,190,.018)",
+      "token": "保留",
+      "reason": "装飾リングの半透明アクセントグロー用で、候補トークンに該当する意味・用途がなく一意対応しない。"
+    },
+    {
+      "value": "rgba(255,164,173,.26)",
+      "token": "保留",
+      "reason": "暗背景上のステータス装飾用の半透明ピンク境界色で、候補に意味・テーマ・用途が一意に対応する危険境界トークンがないため。"
+    },
+    {
+      "value": "rgba(196,50,60,.18)",
+      "token": "保留",
+      "reason": "暗背景上のステータス装飾用の半透明赤背景で、danger-surface の一般的な危険背景とは用途が異なり、値も一致しないため。"
+    },
+    {
+      "value": "rgba(100,236,195,.2)",
+      "token": "保留",
+      "reason": "暗背景上の良好ステータス装飾用の半透明緑境界色で、候補に success 系の境界トークンがなく一意に対応しないため。"
+    },
+    {
+      "value": "rgba(49,178,138,.16)",
+      "token": "保留",
+      "reason": "暗背景上の良好ステータス装飾用の半透明緑背景で、候補に success 系背景トークンがなく一意に対応しないため。"
+    },
+    {
+      "value": "rgba(255,255,255,.15)",
+      "token": "保留",
+      "reason": "暗背景上のミニボタン境界に使う半透明白で、候補の背景・境界トークンとは用途と値が一致しないため。"
+    },
+    {
+      "value": "rgba(16,24,40,.07)",
+      "token": "保留",
+      "reason": "カードホバー用のbox-shadow色だが、--app-sg-shadow-color の light/dark 値と一致せず、ダーク表示を維持したまま一意に置換できないため。"
+    },
+    {
+      "value": "rgba(8,85,79,.18)",
+      "token": "保留",
+      "reason": "プライマリ系ボタンの半透明box-shadow色。accent系は塗り・文字・境界用で、shadow-colorは黒基調の影色のため、意味・色・用途が一意に対応しない。"
+    },
+    {
+      "value": "rgba(16,24,40,.025)",
+      "token": "保留",
+      "reason": "input/select用のごく薄いニュートラルbox-shadow色。shadow-colorのライト/ダーク値と透明度・色が一致せず、面や境界トークンの用途でもない。"
+    },
+    {
+      "value": "rgba(16,24,40,.06)",
+      "token": "保留",
+      "reason": "ステップ選択状態のニュートラルbox-shadow色。提案トークンの影色はより濃く、特定の意味・テーマ・使用箇所に一意対応しない。"
+    },
+    {
+      "value": "rgba(16,24,40,.12)",
+      "token": "保留",
+      "reason": "固定バー付近のニュートラルbox-shadow色。shadow-colorのライト/ダーク値と一致せず、overlayやborderの用途でもない。"
+    },
+    {
+      "value": "rgba(10,21,38,.18)",
+      "token": "保留",
+      "reason": "カードの強いダーク系box-shadow色。shadow-colorは黒基調でライト/ダーク値が異なり、色・テーマ・用途が一意に対応しない。"
+    },
+    {
+      "value": "rgba(104,224,199,.24)",
+      "token": "保留",
+      "reason": "tenant-switchホバー時の半透明ティール境界色。border系は灰色、accent系は青系で、色・用途が一致する提案トークンがない。"
+    },
+    {
+      "value": "rgba(79,211,184,.25)",
+      "token": "保留",
+      "reason": "プログレスバーのグロー用box-shadow色で、アクセント発光を目的としており、--app-sg-shadow-colorなどの一般的な影色トークンとは意味・用途が異なるため。"
+    },
+    {
+      "value": "rgba(255,255,255,.14)",
+      "token": "保留",
+      "reason": "ダークテーマ時の半透明ボーダー色だが、--app-sg-border-subtle/strongのダーク値は不透明なgray系で、半透明白の境界用途と一意に対応しないため。"
+    },
+    {
+      "value": "rgba(255,255,255,.11)",
+      "token": "--app-sg-surface-hover",
+      "reason": "ダークテーマ時のホバー背景用の半透明白で、--app-sg-surface-hoverのダーク値（白10%透明）と用途・テーマが一致するため。"
+    },
+    {
+      "value": "rgba(10,20,38,.22)",
+      "token": "保留",
+      "reason": "スイッチノブのbox-shadow色だが、--app-sg-shadow-colorはライト/ダークで黒18%/70%を想定しており、テーマ非依存の特定の青黒影色とは一意に対応しないため。"
+    },
+    {
+      "value": "rgba(242,189,91,.1)",
+      "token": "保留",
+      "reason": "ナビピンホバー用の半透明黄色背景で、--app-sg-surface-hoverの白/グレー系や--app-sg-warning-surfaceの警告背景とは用途・色が異なるため。"
+    },
+    {
+      "value": "rgba(2,8,20,.38)",
+      "token": "保留",
+      "reason": "ナビフライアウトのbox-shadow色だが、--app-sg-shadow-colorのライト/ダーク想定値（黒18%/70%）とはテーマ・値が一致せず、一意に対応しないため。"
+    },
+    {
+      "value": "rgba(255,255,255,.012)",
+      "token": "保留",
+      "reason": "ダークテーマ時の偶数行背景に使われる白1.2%の半透明色であり、提案トークンのsurface-hover（白10%）とは不透明度と用途が一致しないため。"
+    },
+    {
+      "value": "#0e6e8c",
+      "token": "--app-sg-accent-primary",
+      "reason": "アクセント色 --acc として定義され、提案トークンの --app-sg-accent-primary（主アクセント、light は blue-700）と用途・テーマが一意に対応するため。"
+    },
+    {
+      "value": "#e3f0f5",
+      "token": "--app-sg-accent-subtle",
+      "reason": "アクセントの淡色背景 --acc-soft として定義され、提案トークンの --app-sg-accent-subtle（light は blue-50）と用途・テーマが一意に対応するため。"
+    },
+    {
+      "value": "#0a7ea4",
+      "token": "--app-sg-chart-series-1",
+      "reason": "チャート用色 --chart として定義され、提案トークンの --app-sg-chart-series-1（light は blue-600）と用途・テーマが一意に対応するため。"
+    },
+    {
+      "value": "#0a7ea41f",
+      "token": "保留",
+      "reason": "チャート用色の半透明版 --chart-soft であり、提案トークンにチャート系列の半透明背景トークンがないため。"
+    },
+    {
+      "value": "#131b29",
+      "token": "保留",
+      "reason": "両テーマ共通の暗色サイドバー背景であり、提案トークンの surface-panel はテーマ別（light は明色）のため一致しないため。"
+    },
+    {
+      "value": "#8d99ab",
+      "token": "保留",
+      "reason": "暗色固定サイドバー上の補助テキスト色であり、テーマ対応の text-secondary ではライトテーマ時に暗背景へ適さない。サイドバー専用の補助テキストトークンは候補にないため。"
+    },
+    {
+      "value": "#7cd4e6",
+      "token": "保留",
+      "reason": "暗色固定サイドバーの選択・アクティブ文字色。accent-primary はテーマで変化し、固定ダーク背景のサイドバー用として一意に対応しないため。"
+    },
+    {
+      "value": "#14171b",
+      "token": "--app-sg-surface-canvas",
+      "reason": "ダークテーマのアプリ全体背景 --bg に対応し、surface-canvas の用途（アプリ全体の背景）とダークテーマに一意に対応するため。"
+    },
+    {
+      "value": "#2b9ec4",
+      "token": "保留",
+      "reason": "--chart はグラフ用の汎用色であり、chart-series-1..5 のどの系列か一意に決まらない。汎用チャート色トークンは候補にないため。"
+    },
+    {
+      "value": "#2b9ec42e",
+      "token": "保留",
+      "reason": "--chart-soft はグラフ用の半透明淡色で、対応するチャート淡色トークンが候補にないため。"
+    },
+    {
+      "value": "rgba(20,23,27,.20)",
+      "token": "--app-sg-shadow-color",
+      "reason": "ポップオーバーの box-shadow 色に使用され、shadow-color の用途（box-shadow の色）に一意に対応するため。"
+    },
+    {
+      "value": "rgba(20,23,27,.12)",
+      "token": "保留",
+      "reason": "box-shadow の一部レイヤーで、--app-sg-shadow-color の light 値（黒18%）とは異なり、同じ影内に複数色があるため一意に対応できない。"
+    },
+    {
+      "value": "rgba(94,199,222,.13)",
+      "token": "保留",
+      "reason": "サイドバーのアクティブ背景用の半透明アクセント色で、--app-sg-accent-subtle は青系の選択背景を想定しており、用途・色とも一意に対応しない。"
+    },
+    {
+      "value": "rgba(0,0,0,.5)",
+      "token": "保留",
+      "reason": "box-shadow の一部レイヤーで、--app-sg-shadow-color の dark 値（黒70%）とは異なり、同じ影内に複数色があるため一意に対応できない。"
+    },
+    {
+      "value": "rgba(124,212,230,.4)",
+      "token": "保留",
+      "reason": "フッターリンク hover の下線色で、候補の文字色・境界色・アクセント系トークンの用途に一意に対応しない。"
+    },
+    {
+      "value": "rgba(0,0,0,.18)",
+      "token": "--app-sg-shadow-color",
+      "reason": "box-shadow の影色として使われ、提案トークンの light 値（黒18%）と一致し、用途も box-shadow の色に一意に対応する。"
+    },
+    {
+      "value": "rgba(15,18,20,.35)",
+      "token": "--app-sg-overlay",
+      "reason": "モーダル等の背面に敷く .overlay の背景色で、提案トークンのオーバーレイ用途に一意に対応する。"
+    },
+    {
+      "value": "rgba(15,18,20,.18)",
+      "token": "--app-sg-shadow-color",
+      "reason": "box-shadow の影色として使われており、提案トークン --app-sg-shadow-color の用途（box-shadow の色）と一意に対応する。他の候補に影色用途はない。"
+    },
+    {
+      "value": "rgba(8,12,18,.62)",
+      "token": "保留",
+      "reason": "ソース文脈がなく、半透明の暗色は影・オーバーレイなどの複数用途が考えられる。候補の特定トークンに一意に対応しないため保留。"
+    },
+    {
+      "value": "rgba(8,12,18,.72)",
+      "token": "保留",
+      "reason": "ソース文脈がなく、半透明の暗色は影・オーバーレイなどの複数用途が考えられる。候補の特定トークンに一意に対応しないため保留。"
+    },
+    {
+      "value": "rgba(14,110,140,.45)",
+      "token": "保留",
+      "reason": "ソース文脈がなく、半透明の独自アクセント色と推測される。候補トークンの中に一致する用途が見いだせないため保留。"
+    },
+    {
+      "value": "rgba(8,12,18,.28)",
+      "token": "保留",
+      "reason": "ソース文脈がなく、半透明の暗色は影・オーバーレイなどの複数用途が考えられる。候補の特定トークンに一意に対応しないため保留。"
+    }
+  ]
+}
