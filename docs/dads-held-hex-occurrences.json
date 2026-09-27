@@ -1,0 +1,1111 @@
+{
+  "model": "deepseek-v4.1-flash:cloud",
+  "mode": "held-hex-occurrences",
+  "input_occurrences": 138,
+  "decisions": [
+    {
+      "id": "#00000013|portal/app/static/enterprise.css:1149:21",
+      "value": "#00000013",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "c4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "box-shadow の影色で、候補にシャドウ色トークンがないため保留"
+    },
+    {
+      "id": "#082d28|portal/app/static/enterprise.css:1055:1",
+      "value": "#082d28",
+      "before": ".evidence-actions .mini{font-size:12px;min-height:35px}",
+      "line": "[data-theme=dark] .evidence-print{color:#082d28!important}",
+      "token": "保留",
+      "reason": "印刷用の独自緑テキスト色で、標準のテキスト/ステータストークンとは用途が異なるため保留"
+    },
+    {
+      "id": "#087b72|portal/app/static/enterprise.css:318:2",
+      "value": "#087b72",
+      "before": ".topbar #who.account-button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}",
+      "line": ".account-avatar{flex:0 0 31px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(145deg,#183e5e,#087b72);color:#fff;font-weight:760}",
+      "token": "保留",
+      "reason": "アバターの装飾グラデーション用色で、候補にアクセント/グラデーション用トークンがないため保留"
+    },
+    {
+      "id": "#0a7ea4|portal/app/static/index.html:30:1",
+      "value": "#0a7ea4",
+      "before": "against their own surface, checked per mode rather than flipped. */",
+      "line": "--chart:#0a7ea4; --chart-soft:#0a7ea41f;",
+      "token": "保留",
+      "reason": "チャート用色で、候補にチャート系トークンがないため保留"
+    },
+    {
+      "id": "#0a7ea41f|portal/app/static/index.html:30:2",
+      "value": "#0a7ea41f",
+      "before": "against their own surface, checked per mode rather than flipped. */",
+      "line": "--chart:#0a7ea4; --chart-soft:#0a7ea41f;",
+      "token": "保留",
+      "reason": "チャート用の半透明色で、候補にチャート系トークンがないため保留"
+    },
+    {
+      "id": "#0b1017|portal/app/static/enterprise.css:1149:1",
+      "value": "#0b1017",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;",
+      "token": "保留",
+      "reason": "ダークテーマの背景面で、候補にダークサーフェストークンがないため保留"
+    },
+    {
+      "id": "#0e141c|portal/app/static/enterprise.css:1149:9",
+      "value": "#0e141c",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "1a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#3",
+      "token": "保留",
+      "reason": "ダークテーマのサイドバー背景で、候補にダークサーフェストークンがないため保留"
+    },
+    {
+      "id": "#0e6e8c|portal/app/static/index.html:17:1",
+      "value": "#0e6e8c",
+      "before": "--bg:#f6f6f3; --fg:#1c2024; --sf:#ffffff; --sf2:#eef0ec;",
+      "line": "--pri:#177245; --acc:#0e6e8c; --warn:#8a5b00; --dstr:#b3261e;",
+      "token": "保留",
+      "reason": "独自アクセント色で、候補にアクセント系トークンがないため保留"
+    },
+    {
+      "id": "#101318|extension/demo/index.html:45:1",
+      "value": "#101318",
+      "before": "button.copy:active { background:#3a3f4a; }",
+      "line": "#report { background:#101318; border:1px solid #262a33; border-radius:8px;",
+      "token": "保留",
+      "reason": "レポート要素の暗色背景で、候補にダークサーフェストークンがないため保留"
+    },
+    {
+      "id": "#101a2a|portal/app/static/enterprise.css:898:1",
+      "value": "#101a2a",
+      "before": ".budget-add-member .mfield+ .mfield{width:96px}",
+      "line": "[data-theme=dark] .budget-card-head{background:#101a2a}",
+      "token": "保留",
+      "reason": "ダークテーマのカードヘッダ背景で、候補にダークサーフェストークンがないため保留"
+    },
+    {
+      "id": "#102034|portal/app/static/enterprise.css:199:2",
+      "value": "#102034",
+      "before": ".tabaside{padding-bottom:8px}",
+      "line": ".overview-posture{min-height:112px;padding:20px 22px;gap:16px;border:0;border-left:0;background:linear-gradient(112deg,#13283f,#102034 60%,#12283e);box-shadow:0 12px 30px rgba(11,20,36,.12);color:#fff;border-radius:12px;position:relative;overflow:hidden}",
+      "token": "保留",
+      "reason": "概要パネルの暗色グラデーション背景で、候補に適したサーフェストークンがないため保留"
+    },
+    {
+      "id": "#10252d|portal/app/static/enterprise.css:201:2",
+      "value": "#10252d",
+      "before": ".overview-posture:after{content:\"\";position:absolute;width:300px;height:300px;right:-90px;top:-185px;border:1px solid rgba(88,220,190,.12);border-radius:50%;box",
+      "line": ".overview-posture.good{border:0;background:linear-gradient(112deg,#102c34,#10252d 60%,#112a34)}",
+      "token": "保留",
+      "reason": "良好状態パネルの暗色グラデーション背景で、候補の成功/サーフェストークンは明色用で用途が異なるため保留"
+    },
+    {
+      "id": "#102a36|portal/app/static/enterprise.css:596:1",
+      "value": "#102a36",
+      "before": "[data-theme=dark] .evidence-summary-lead{background:linear-gradient(135deg,#123236,",
+      "line": "#102a36 58%,#112138)}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .evidence-summary-lead の背景グラデーション色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#102a36|portal/app/static/enterprise.css:770:2",
+      "value": "#102a36",
+      "before": ".health-activity .health-note{margin:0;border-width:1px 0 0;border-radius:0;background:var(--sf2)}",
+      "line": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .health-summary-copy の背景グラデーション色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#102c34|portal/app/static/enterprise.css:201:1",
+      "value": "#102c34",
+      "before": ".overview-posture:after{content:\"\";position:absolute;width:300px;height:300px;right:-90px;top:-185px;border:1px solid rgba(88,220,190,.12);border-radius:50%;box",
+      "line": ".overview-posture.good{border:0;background:linear-gradient(112deg,#102c34,#10252d 60%,#112a34)}",
+      "token": "保留",
+      "reason": ".overview-posture.good の背景グラデーション色。候補に暗色背景トークンがないため保留。"
+    },
+    {
+      "id": "#111c2c|portal/app/static/enterprise.css:900:1",
+      "value": "#111c2c",
+      "before": "[data-theme=dark] .budget-kpis{background:#111d2e}",
+      "line": "[data-theme=dark] .budget-card-body>.note,[data-theme=dark] .budget-data-note{background:#111c2c}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .budget-card-body>.note 等の背景色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#111d2e|portal/app/static/enterprise.css:899:1",
+      "value": "#111d2e",
+      "before": "[data-theme=dark] .budget-card-head{background:#101a2a}",
+      "line": "[data-theme=dark] .budget-kpis{background:#111d2e}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .budget-kpis の背景色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#112138|portal/app/static/enterprise.css:596:2",
+      "value": "#112138",
+      "before": "[data-theme=dark] .evidence-summary-lead{background:linear-gradient(135deg,#123236,",
+      "line": "#102a36 58%,#112138)}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .evidence-summary-lead の背景グラデーション色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#112138|portal/app/static/enterprise.css:770:3",
+      "value": "#112138",
+      "before": ".health-activity .health-note{margin:0;border-width:1px 0 0;border-radius:0;background:var(--sf2)}",
+      "line": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "token": "保留",
+      "reason": "[data-theme=dark] .health-summary-copy の背景グラデーション色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#112a34|portal/app/static/enterprise.css:201:3",
+      "value": "#112a34",
+      "before": ".overview-posture:after{content:\"\";position:absolute;width:300px;height:300px;right:-90px;top:-185px;border:1px solid rgba(88,220,190,.12);border-radius:50%;box",
+      "line": ".overview-posture.good{border:0;background:linear-gradient(112deg,#102c34,#10252d 60%,#112a34)}",
+      "token": "保留",
+      "reason": ".overview-posture.good の背景グラデーション色。候補に暗色背景トークンがないため保留。"
+    },
+    {
+      "id": "#118b80|portal/app/static/enterprise.css:9:2",
+      "value": "#118b80",
+      "before": "truth for behaviour; this file changes visual hierarchy, not behaviour. */",
+      "line": ":root{--pop:#fff;--pop-bd:#cbd5e2;--pop-shadow:0 24px 70px rgba(12,24,46,.2),0 4px 14px rgba(12,24,46,.1);--chart:#118b80;--chart-soft:#118b801c;--radius:10px;--radius-sm:7px}",
+      "token": "保留",
+      "reason": "--chart 用の CSS カスタムプロパティ。候補にチャート色トークンがなく、別用途トークンに置換できないため保留。"
+    },
+    {
+      "id": "#118b801c|portal/app/static/enterprise.css:9:3",
+      "value": "#118b801c",
+      "before": "truth for behaviour; this file changes visual hierarchy, not behaviour. */",
+      "line": "{--pop:#fff;--pop-bd:#cbd5e2;--pop-shadow:0 24px 70px rgba(12,24,46,.2),0 4px 14px rgba(12,24,46,.1);--chart:#118b80;--chart-soft:#118b801c;--radius:10px;--radius-sm:7px}",
+      "token": "保留",
+      "reason": "--chart-soft 用の透明度付き CSS カスタムプロパティ。候補にチャート補助色トークンがないため保留。"
+    },
+    {
+      "id": "#12283e|portal/app/static/enterprise.css:199:3",
+      "value": "#12283e",
+      "before": ".tabaside{padding-bottom:8px}",
+      "line": "-posture{min-height:112px;padding:20px 22px;gap:16px;border:0;border-left:0;background:linear-gradient(112deg,#13283f,#102034 60%,#12283e);box-shadow:0 12px 30px rgba(11,20,36,.12);color:#fff;border-radius:12px;position:relative;overflow:hidden}",
+      "token": "保留",
+      "reason": ".overview-posture の背景グラデーション色。候補に暗色背景トークンがないため保留。"
+    },
+    {
+      "id": "#123236|portal/app/static/enterprise.css:595:1",
+      "value": "#123236",
+      "before": ".evidence-summary dd small{display:block;margin-top:5px;font-size:8.5px;font-weight:450;line-height:1.35;letter-spacing:0;text-transform:none}",
+      "line": "[data-theme=dark] .evidence-summary-lead{background:linear-gradient(135deg,#123236,",
+      "token": "保留",
+      "reason": "[data-theme=dark] .evidence-summary-lead の背景グラデーション開始色。候補に暗色面トークンがないため保留。"
+    },
+    {
+      "id": "#123236|portal/app/static/enterprise.css:770:1",
+      "value": "#123236",
+      "before": ".health-activity .health-note{margin:0;border-width:1px 0 0;border-radius:0;background:var(--sf2)}",
+      "line": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "token": "保留",
+      "reason": "ダークテーマ用のヘルスサマリー背景グラデーションで、候補トークンに意味が合う暗色面がないため"
+    },
+    {
+      "id": "#131b29|portal/app/static/index.html:34:1",
+      "value": "#131b29",
+      "before": "the same in both themes, so the chrome holds still while content adapts. */",
+      "line": "--side:#131b29; --side-ink:#e1e7ef; --side-mut:#8d99ab;",
+      "token": "保留",
+      "reason": "サイドバー背景色の定義で、候補にサイドバー用または暗色面トークンがないため"
+    },
+    {
+      "id": "#13283f|portal/app/static/enterprise.css:199:1",
+      "value": "#13283f",
+      "before": ".tabaside{padding-bottom:8px}",
+      "line": ".overview-posture{min-height:112px;padding:20px 22px;gap:16px;border:0;border-left:0;background:linear-gradient(112deg,#13283f,#102034 60%,#12283e);box-shadow:0 12px 30px rgba(11,20,36,.12);color:#fff;border-radius:12px;position:relative;overflow:hidden}",
+      "token": "保留",
+      "reason": "ダークテーマ用の概要カード背景グラデーションで、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#14161c|extension/demo/index.html:25:1",
+      "value": "#14161c",
+      "before": ":root { color-scheme: dark; }",
+      "line": "body { font-family: -apple-system, \"Segoe UI\", sans-serif; background:#14161c;",
+      "token": "保留",
+      "reason": "ダークテーマのbody背景色で、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#14171b|portal/app/static/index.html:38:1",
+      "value": "#14171b",
+      "before": "[data-theme=dark]{",
+      "line": "--bg:#14171b; --fg:#e8eaed; --sf:#1d2126; --sf2:#262b31;",
+      "token": "保留",
+      "reason": "ダークテーマの--bg定義で、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#14232b|portal/app/static/enterprise.css:1149:15",
+      "value": "#14232b",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "ダークテーマの--ui-tint定義で、候補に対応するUIティント用トークンがないため"
+    },
+    {
+      "id": "#142a2e|portal/app/static/enterprise.css:560:1",
+      "value": "#142a2e",
+      "before": ".widget-choice:has(input:checked){border-color:color-mix(in srgb,var(--pri) 28%,var(--bd));background:#f1faf8}",
+      "line": "[data-theme=dark] .widget-choice:has(input:checked){background:#142a2e;border-color:#27504f}",
+      "token": "--app-surface-selected",
+      "reason": "チェック済みウィジェットの選択背景であり、選択面トークン--app-surface-selectedが意味的に一致するため"
+    },
+    {
+      "id": "#172134|portal/app/static/enterprise.css:771:3",
+      "value": "#172134",
+      "before": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "line": "[data-theme=dark] .health-summary.attention .health-summary-copy{background:linear-gradient(135deg,#352b19,#29231a 63%,#172134)}",
+      "token": "保留",
+      "reason": "ダークテーマの注意状態ヘルスサマリー背景グラデーションで、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#172d40|portal/app/static/enterprise.css:1010:1",
+      "value": "#172d40",
+      "before": ".register-overview{grid-template-columns:minmax(250px,.85fr) 1.65fr}",
+      "line": ".register-score{background:#172d40;padding:22px}",
+      "token": "保留",
+      "reason": "ダークなスコア背景で、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#17334a03|portal/app/static/enterprise.css:1148:3",
+      "value": "#17334a03",
+      "before": "routes, telemetry, setup controls and configurable widgets. */",
+      "line": "-mut:#5c6c7c;--side-line:#d6dfe5;--side-on:#deeee8;--side-on-ink:#14735f;--ui-tint:#edf4f4;--ui-frame:#bdd7cd;--shadow:0 4px 20px #17334a03}",
+      "token": "保留",
+      "reason": "シャドウ色の定義で、候補にシャドウ用トークンがないため"
+    },
+    {
+      "id": "#18232f|portal/app/static/enterprise.css:1149:19",
+      "value": "#18232f",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "ダークテーマの--pop定義で、候補に対応するポップオーバー背景トークンがないため"
+    },
+    {
+      "id": "#18232f|portal/app/static/enterprise.css:1149:3",
+      "value": "#18232f",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink",
+      "token": "保留",
+      "reason": "ダークテーマの--sf2定義で、候補に対応する暗色面トークンがないため"
+    },
+    {
+      "id": "#182c59|portal/app/static/enterprise.css:160:1",
+      "value": "#182c59",
+      "before": ":root{--acc-soft:#eaf0ff;--warn-soft:#fff4dc;--dstr-soft:#feebed}",
+      "line": "[data-theme=dark]{--acc-soft:#182c59;--warn-soft:#392c13;--dstr-soft:#422229}",
+      "token": "保留",
+      "reason": "[data-theme=dark] の --acc-soft 定義。暗色テーマ用アクセント淡背景で、候補の明色系 surface/primary-bg とは意味が合わないため保留。"
+    },
+    {
+      "id": "#183e5e|portal/app/static/enterprise.css:318:1",
+      "value": "#183e5e",
+      "before": ".topbar #who.account-button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}",
+      "line": ".account-avatar{flex:0 0 31px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(145deg,#183e5e,#087b72);color:#fff;font-weight:760}",
+      "token": "保留",
+      "reason": "アバターの linear-gradient 装飾背景。単一色トークンではなく装飾グラデーションのため保留。"
+    },
+    {
+      "id": "#1a2940|portal/app/static/enterprise.css:353:1",
+      "value": "#1a2940",
+      "before": ".muted-value{color:var(--mut)}",
+      "line": "[data-theme=dark] tr[data-open]:hover td{background:#1a2940}",
+      "token": "保留",
+      "reason": "[data-theme=dark] の行 hover 背景。暗色テーマ用 hover 面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1a2940|portal/app/static/enterprise.css:704:1",
+      "value": "#1a2940",
+      "before": "[data-theme=dark] .tcard tbody tr:nth-child(even) td{background:rgba(255,255,255,.012)}",
+      "line": "[data-theme=dark] .tcard tbody tr:hover td{background:#1a2940}",
+      "token": "保留",
+      "reason": "[data-theme=dark] のテーブル行 hover 背景。暗色テーマ用 hover 面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1c332f|portal/app/static/enterprise.css:1149:13",
+      "value": "#1c332f",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "31;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;",
+      "token": "保留",
+      "reason": "ダークサイドバーの --side-on 定義。選択状態の暗色背景で、候補の selected トークンとは用途が合わないため保留。"
+    },
+    {
+      "id": "#1e222b|extension/demo/index.html:33:1",
+      "value": "#1e222b",
+      "before": ".mode a.active { color:#fff; border-color:#f5a524; }",
+      "line": "#prompt { min-height:88px; background:#1e222b; border:1px solid #333;",
+      "token": "保留",
+      "reason": "デモの #prompt 背景。暗色プロンプト面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1e222b|extension/demo/index.html:39:1",
+      "value": "#1e222b",
+      "before": "td { padding:6px 8px; border-bottom:1px solid #262a33; vertical-align:top; }",
+      "line": "code { background:#1e222b; padding:2px 6px; border-radius:4px;",
+      "token": "保留",
+      "reason": "デモの code 背景。暗色コード面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1f2430|extension/src/guard.js:285:1",
+      "value": "#1f2430",
+      "before": "\"position:fixed;top:16px;right:16px;z-index:2147483647;max-width:340px;\" +",
+      "line": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "token": "保留",
+      "reason": "guard.js の通知 background。暗色通知面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1f2430|extension/src/guard.js:308:1",
+      "value": "#1f2430",
+      "before": "\"background:#f5a524;border:0;border-radius:4px;padding:5px 10px;\" +",
+      "line": "\"color:#1f2430;font-weight:600;cursor:pointer;font:inherit;\";",
+      "token": "保留",
+      "reason": "guard.js の警告ボタン color。警告黄色ボタン上の独自テキスト色で、候補の text/warning-text とは意味が合わないため保留。"
+    },
+    {
+      "id": "#1f2430|portal/extension-src/guard.js:285:1",
+      "value": "#1f2430",
+      "before": "\"position:fixed;top:16px;right:16px;z-index:2147483647;max-width:340px;\" +",
+      "line": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "token": "保留",
+      "reason": "portal/extension-src/guard.js の通知 background。暗色通知面に合う候補トークンがないため保留。"
+    },
+    {
+      "id": "#1f2430|portal/extension-src/guard.js:308:1",
+      "value": "#1f2430",
+      "before": "\"background:#f5a524;border:0;border-radius:4px;padding:5px 10px;\" +",
+      "line": "\"color:#1f2430;font-weight:600;cursor:pointer;font:inherit;\";",
+      "token": "保留",
+      "reason": "portal/extension-src/guard.js の警告ボタン color。警告黄色ボタン上の独自テキスト色で、候補の text/warning-text とは意味が合わないため保留。"
+    },
+    {
+      "id": "#262a33|extension/demo/index.html:38:1",
+      "value": "#262a33",
+      "before": "table { border-collapse:collapse; width:100%; font-size:0.92em; }",
+      "line": "td { padding:6px 8px; border-bottom:1px solid #262a33; vertical-align:top; }",
+      "token": "保留",
+      "reason": "デモのテーブル border-bottom。暗色境界で、候補の border トークンとは明暗・用途が合わないため保留。"
+    },
+    {
+      "id": "#262a33|extension/demo/index.html:45:2",
+      "value": "#262a33",
+      "before": "button.copy:active { background:#3a3f4a; }",
+      "line": "#report { background:#101318; border:1px solid #262a33; border-radius:8px;",
+      "token": "保留",
+      "reason": "暗色背景 #101318 上の #report 境界線。暗色面向けの境界トークンが候補にないため保留。"
+    },
+    {
+      "id": "#262b36|extension/demo/index.html:41:1",
+      "value": "#262b36",
+      "before": "font-size:0.92em; word-break:break-all; }",
+      "line": "button.copy { background:#262b36; color:#ddd; border:1px solid #3a3f4a;",
+      "token": "保留",
+      "reason": "暗色 UI の button.copy 背景色。候補の surface 系は明色面向けで意味が合わないため保留。"
+    },
+    {
+      "id": "#263340|portal/app/static/enterprise.css:1149:12",
+      "value": "#263340",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f",
+      "token": "保留",
+      "reason": "ダークテーマの --side-line 用暗色境界線。明色面向けの --app-border とは用途が合わないため保留。"
+    },
+    {
+      "id": "#263340|portal/app/static/enterprise.css:1149:5",
+      "value": "#263340",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6",
+      "token": "保留",
+      "reason": "ダークテーマの --bd 用暗色境界線。明色面向けの --app-border とは用途が合わないため保留。"
+    },
+    {
+      "id": "#27504f|portal/app/static/enterprise.css:560:2",
+      "value": "#27504f",
+      "before": ".widget-choice:has(input:checked){border-color:color-mix(in srgb,var(--pri) 28%,var(--bd));background:#f1faf8}",
+      "line": "[data-theme=dark] .widget-choice:has(input:checked){background:#142a2e;border-color:#27504f}",
+      "token": "保留",
+      "reason": "ダークテーマの選択済み widget-choice 境界色。候補の primary-border とは値・用途が一致しないため保留。"
+    },
+    {
+      "id": "#29231a|portal/app/static/enterprise.css:771:2",
+      "value": "#29231a",
+      "before": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "line": "[data-theme=dark] .health-summary.attention .health-summary-copy{background:linear-gradient(135deg,#352b19,#29231a 63%,#172134)}",
+      "token": "保留",
+      "reason": "ダークテーマの attention 背景グラデーション停止色。明色の warning-bg 候補とは意味が合わないため保留。"
+    },
+    {
+      "id": "#2b9ec4|portal/app/static/index.html:49:1",
+      "value": "#2b9ec4",
+      "before": "(0.48-0.67) and every candidate that looked right by eye sat above it. */",
+      "line": "--chart:#2b9ec4; --chart-soft:#2b9ec42e;",
+      "token": "保留",
+      "reason": "--chart 用のチャート色。候補にチャート系トークンがなく、info 等他用途にも合わないため保留。"
+    },
+    {
+      "id": "#2b9ec42e|portal/app/static/index.html:49:2",
+      "value": "#2b9ec42e",
+      "before": "(0.48-0.67) and every candidate that looked right by eye sat above it. */",
+      "line": "--chart:#2b9ec4; --chart-soft:#2b9ec42e;",
+      "token": "保留",
+      "reason": "--chart-soft 用の透過チャート色。候補にチャート系・透過色トークンがなく意味が合わないため保留。"
+    },
+    {
+      "id": "#333|extension/demo/index.html:31:1",
+      "value": "#333",
+      "before": ".mode a { color:#9aa0ab; text-decoration:none; padding:3px 10px;",
+      "line": "border:1px solid #333; border-radius:5px; margin-right:6px; }",
+      "token": "保留",
+      "reason": "暗色 UI の mode リンク境界線。値は #333 だが境界用途であり、--app-text など別用途トークンは選ばないため保留。"
+    },
+    {
+      "id": "#333|extension/demo/index.html:33:2",
+      "value": "#333",
+      "before": ".mode a.active { color:#fff; border-color:#f5a524; }",
+      "line": "#prompt { min-height:88px; background:#1e222b; border:1px solid #333;",
+      "token": "保留",
+      "reason": "暗色 UI の #prompt 境界線。境界用途に合う暗色向け候補がないため保留。"
+    },
+    {
+      "id": "#34504d|portal/app/static/enterprise.css:1149:16",
+      "value": "#34504d",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "1c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "ダークテーマの --ui-frame 境界・枠色。明色面向けの境界トークンとは意味が合わないため保留。"
+    },
+    {
+      "id": "#352b19|portal/app/static/enterprise.css:771:1",
+      "value": "#352b19",
+      "before": "[data-theme=dark] .health-summary-copy{background:linear-gradient(135deg,#123236,#102a36 63%,#112138)}",
+      "line": "[data-theme=dark] .health-summary.attention .health-summary-copy{background:linear-gradient(135deg,#352b19,#29231a 63%,#172134)}",
+      "token": "保留",
+      "reason": "ダークテーマの attention 背景グラデーション停止色。明色の warning-bg 候補とは意味が合わないため保留。"
+    },
+    {
+      "id": "#354756|portal/app/static/enterprise.css:1149:20",
+      "value": "#354756",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": ":#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "暗色ポップオーバーの境界色で、候補の境界トークンは明色面向けのため意味が合わない。"
+    },
+    {
+      "id": "#39bda6|portal/app/static/enterprise.css:215:1",
+      "value": "#39bda6",
+      "before": ".posture-actions button.mini:hover{background:rgba(255,255,255,.12)}",
+      "line": ".posture-actions button.mini.pri{background:#39bda6;border-color:#39bda6;color:#071c21}",
+      "token": "--app-primary",
+      "reason": "プライマリボタンの背景色。background プロパティに該当。"
+    },
+    {
+      "id": "#39bda6|portal/app/static/enterprise.css:215:2",
+      "value": "#39bda6",
+      "before": ".posture-actions button.mini:hover{background:rgba(255,255,255,.12)}",
+      "line": ".posture-actions button.mini.pri{background:#39bda6;border-color:#39bda6;color:#071c21}",
+      "token": "--app-primary-border",
+      "reason": "プライマリボタンの境界色。border-color プロパティに該当。"
+    },
+    {
+      "id": "#3a3f4a|extension/demo/index.html:41:3",
+      "value": "#3a3f4a",
+      "before": "font-size:0.92em; word-break:break-all; }",
+      "line": "button.copy { background:#262b36; color:#ddd; border:1px solid #3a3f4a;",
+      "token": "保留",
+      "reason": "暗色ボタンの境界色で、候補の明色向け境界トークンは意味が合わない。"
+    },
+    {
+      "id": "#3a3f4a|extension/demo/index.html:44:1",
+      "value": "#3a3f4a",
+      "before": "font:inherit; font-size:0.85em; }",
+      "line": "button.copy:active { background:#3a3f4a; }",
+      "token": "保留",
+      "reason": "暗色ボタンの active 背景で、候補に暗色面用の状態トークンがない。"
+    },
+    {
+      "id": "#472631|portal/app/static/enterprise.css:27:1",
+      "value": "#472631",
+      "before": "nav button:hover{background:rgba(255,255,255,.05)}",
+      "line": "nav .count{background:#472631;color:#ffb2ba;opacity:1;border-radius:99px;padding:0 6px;min-width:20px;text-align:center;font-size:9.5px}",
+      "token": "保留",
+      "reason": "暗色ナビ上の赤系バッジ背景で、候補の danger 背景は明色面向けで意味が合わない。"
+    },
+    {
+      "id": "#486fbd|portal/app/static/enterprise.css:1148:2",
+      "value": "#486fbd",
+      "before": "routes, telemetry, setup controls and configurable widgets. */",
+      "line": "g:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b51;--warn:#8d601b;--side:#eef2f5;--side-ink:#22313e;--side-mut:#5c6c7c;--side-line:#d6dfe5;--side-on:#deeee8;--side-o",
+      "token": "保留",
+      "reason": "--acc のアクセント色で、info や link などとは用途が異なるため候補なし。"
+    },
+    {
+      "id": "#555|extension/src/guard.js:320:1",
+      "value": "#555",
+      "before": "dismiss.style.cssText =",
+      "line": "\"background:transparent;border:1px solid #555;border-radius:4px;\" +",
+      "token": "--app-border-strong",
+      "reason": "dismiss ボタンの中立な境界色。標準より強い境界トークンが意味的に適合。"
+    },
+    {
+      "id": "#555|portal/app/static/enterprise.css:819:1",
+      "value": "#555",
+      "before": "@media print{",
+      "line": ".print-head{display:block!important;margin:0 0 12px;font-size:10px;letter-spacing:.04em;color:#555!important}",
+      "token": "--app-text-muted",
+      "reason": "印刷ヘッダの補助的な文字色。muted テキストに該当。"
+    },
+    {
+      "id": "#555|portal/app/static/index.html:455:1",
+      "value": "#555",
+      "before": "dt, dd, td, th, p, li, span { color: #111 !important; }",
+      "line": ".src-note { color: #555 !important; }",
+      "token": "--app-text-muted",
+      "reason": "ソース注記の補助的な文字色。muted テキストに該当。"
+    },
+    {
+      "id": "#555|portal/extension-src/guard.js:320:1",
+      "value": "#555",
+      "before": "dismiss.style.cssText =",
+      "line": "\"background:transparent;border:1px solid #555;border-radius:4px;\" +",
+      "token": "--app-border-strong",
+      "reason": "dismiss ボタンの中立な境界色。標準より強い境界トークンが意味的に適合。"
+    },
+    {
+      "id": "#55d9bd|portal/app/static/enterprise.css:180:1",
+      "value": "#55d9bd",
+      "before": ".nav-child .nav-dot{position:absolute;width:4px;height:4px;border-radius:50%}",
+      "line": ".nav-child.on .nav-dot{background:#55d9bd;box-shadow:0 0 0 3px rgba(85,217,189,.09)}",
+      "token": "保留",
+      "reason": "ナビの active ドット用アクセント色で、候補に該当する状態/インジケータ用トークンがない。"
+    },
+    {
+      "id": "#55d9bd|portal/app/static/enterprise.css:306:1",
+      "value": "#55d9bd",
+      "before": ".tenant-switch:hover{background:rgba(255,255,255,.07);border-color:rgba(104,224,199,.24)}",
+      "line": ".tenant-switch:focus-visible{outline:2px solid #55d9bd;outline-offset:2px}",
+      "token": "--app-focus-ring",
+      "reason": ":focus-visible の outline 色で、フォーカスリングのセマンティックに一致するため。"
+    },
+    {
+      "id": "#55d9bd|portal/app/static/enterprise.css:661:1",
+      "value": "#55d9bd",
+      "before": ".brand{border:0;background:transparent;cursor:pointer;width:100%;text-align:center}",
+      "line": ".brand:focus-visible{outline:2px solid #55d9bd;outline-offset:-4px;border-radius:7px}",
+      "token": "--app-focus-ring",
+      "reason": ":focus-visible の outline 色で、フォーカスリングのセマンティックに一致するため。"
+    },
+    {
+      "id": "#63c8b0|portal/app/static/enterprise.css:1149:17",
+      "value": "#63c8b0",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "チャート系列色（--chart）であり、候補にチャート用トークンがないため。"
+    },
+    {
+      "id": "#63c8b01a|portal/app/static/enterprise.css:1149:18",
+      "value": "#63c8b01a",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #00000013}",
+      "token": "保留",
+      "reason": "チャートの淡色（--chart-soft）であり、候補にチャート用トークンがないため。"
+    },
+    {
+      "id": "#64748c|portal/app/static/enterprise.css:670:1",
+      "value": "#64748c",
+      "before": ".nav-child-row .nav-child{width:100%}",
+      "line": "x!important;width:22px!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;color:#64748c!important;font-size:12px!important;opacity:0;cursor:pointer}",
+      "token": "--app-text-muted",
+      "reason": "color プロパティでミュートされたアイコン/文字色。明色面のミュートテキストに相当するため。"
+    },
+    {
+      "id": "#79e5c2|portal/app/static/enterprise.css:203:1",
+      "value": "#79e5c2",
+      "before": ".posture-mark{width:42px;height:42px;flex-basis:42px;border:1px solid rgba(255,164,173,.26);background:rgba(196,50,60,.18);color:#ff9ba2;font-size:17px;z-index:",
+      "line": ".overview-posture.good .posture-mark{border-color:rgba(100,236,195,.2);background:rgba(49,178,138,.16);color:#79e5c2}",
+      "token": "保留",
+      "reason": "暗色面上の good ステータス文字/アイコン色。明色面向けの success 系トークンとは意味が合わないため。"
+    },
+    {
+      "id": "#7bdfc4|portal/app/static/enterprise.css:1149:14",
+      "value": "#7bdfc4",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "r:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63c8b01a;--pop:#18232f;--pop-bd:#354756;--shadow:0 8px 28px #0",
+      "token": "保留",
+      "reason": "サイドバーの選択中テキスト/アイコン色（--side-on-ink）であり、候補にサイドバー用トークンがないため。"
+    },
+    {
+      "id": "#7bdfc4|portal/app/static/enterprise.css:1149:6",
+      "value": "#7bdfc4",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#",
+      "token": "保留",
+      "reason": "ダークテーマのプライマリ色（--pri）であり、候補の --app-primary は明色面向けで暗色面の代替にならないため。"
+    },
+    {
+      "id": "#7cd4e6|portal/app/static/index.html:35:1",
+      "value": "#7cd4e6",
+      "before": "--side:#131b29; --side-ink:#e1e7ef; --side-mut:#8d99ab;",
+      "line": "--side-line:rgba(255,255,255,.08); --side-on:rgba(94,199,222,.13); --side-on-ink:#7cd4e6;",
+      "token": "保留",
+      "reason": "サイドバーの選択中テキスト/アイコン色（--side-on-ink）であり、候補にサイドバー用トークンがないため。"
+    },
+    {
+      "id": "#7d90aa|portal/app/static/enterprise.css:973:1",
+      "value": "#7d90aa",
+      "before": ".nav-area-block{padding:7px 0}",
+      "line": ".nav-child .nav-dot{background:#7d90aa}",
+      "token": "保留",
+      "reason": "ナビゲーションドットの背景色であり、候補に該当する装飾用トークンがないため。"
+    },
+    {
+      "id": "#8a97a8|portal/app/static/enterprise.css:166:1",
+      "value": "#8a97a8",
+      "before": ".estate-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#46d59e;margin-right:4px;box-shadow:0 0 0 2px rgba(70,213,158,.12)}",
+      "line": ".estate-dot.off{background:#8a97a8;box-shadow:0 0 0 2px rgba(138,151,168,.14)}",
+      "token": "保留",
+      "reason": "off ステータスドットの背景色であり、候補にステータス用トークンがないため。"
+    },
+    {
+      "id": "#8d99ab|portal/app/static/index.html:34:2",
+      "value": "#8d99ab",
+      "before": "the same in both themes, so the chrome holds still while content adapts. */",
+      "line": "--side:#131b29; --side-ink:#e1e7ef; --side-mut:#8d99ab;",
+      "token": "保留",
+      "reason": "サイドバーのミュート文字/アイコン色（--side-mut）であり、候補にサイドバー用トークンがないため。"
+    },
+    {
+      "id": "#8fa1b7|portal/app/static/enterprise.css:205:1",
+      "value": "#8fa1b7",
+      "before": ".posture-copy{z-index:1}",
+      "line": ".posture-copy span{color:#8fa1b7;font-size:8.5px}",
+      "token": "保留",
+      "reason": "暗色面上の補助テキスト色で、対応するミュート反転文字トークンがないため保留。"
+    },
+    {
+      "id": "#94a5b9|portal/app/static/enterprise.css:211:1",
+      "value": "#94a5b9",
+      "before": ".posture-fact b{font-size:17px}",
+      "line": ".posture-fact span{color:#94a5b9;font-size:8.5px}",
+      "token": "保留",
+      "reason": "暗色面上の補助テキスト色で、対応するミュート反転文字トークンがないため保留。"
+    },
+    {
+      "id": "#95a6b6|portal/app/static/enterprise.css:1149:11",
+      "value": "#95a6b6",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8b0;--chart-soft:#63",
+      "token": "保留",
+      "reason": "ダークテーマ用のサイドミュート文字色で、候補にライト用文字トークンしかないため保留。"
+    },
+    {
+      "id": "#95a6b6|portal/app/static/enterprise.css:1149:4",
+      "value": "#95a6b6",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--sid",
+      "token": "保留",
+      "reason": "ダークテーマ用のミュート文字色で、対応するダークテーマ用トークンがないため保留。"
+    },
+    {
+      "id": "#a7b5c8|portal/app/static/enterprise.css:970:1",
+      "value": "#a7b5c8",
+      "before": ".tenant-chev{font-size:0;width:10px;flex:0 0 10px}",
+      "line": ".tenant-chev::after{content:\"›\";font-size:19px;color:#a7b5c8}",
+      "token": "保留",
+      "reason": "暗色面上のシェブロンアイコン色で、対応するアイコン/ミュート色トークンがないため保留。"
+    },
+    {
+      "id": "#a7b8e4|portal/app/static/enterprise.css:1149:7",
+      "value": "#a7b8e4",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "heme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-o",
+      "token": "保留",
+      "reason": "ダークテーマ用のアクセント色で、候補に一致するアクセントトークンがないため保留。"
+    },
+    {
+      "id": "#aab7c8|portal/app/static/enterprise.css:207:1",
+      "value": "#aab7c8",
+      "before": ".posture-copy strong{font-size:16px;letter-spacing:-.015em;margin-top:4px}",
+      "line": ".posture-copy p{color:#aab7c8;font-size:10.5px;max-width:520px;margin-top:4px}",
+      "token": "保留",
+      "reason": "暗色面上の補助テキスト色で、対応するミュート反転文字トークンがないため保留。"
+    },
+    {
+      "id": "#bdccda|portal/app/static/enterprise.css:1011:1",
+      "value": "#bdccda",
+      "before": ".register-score{background:#172d40;padding:22px}",
+      "line": ".register-score-head span{font-size:11px;color:#bdccda;letter-spacing:.07em}",
+      "token": "保留",
+      "reason": "暗色背景上の補助テキスト色で、対応するミュート反転文字トークンがないため保留。"
+    },
+    {
+      "id": "#bdccda|portal/app/static/enterprise.css:1013:1",
+      "value": "#bdccda",
+      "before": ".register-score-head strong{font-size:32px;font-variant-numeric:tabular-nums}",
+      "line": ".register-score p{font-size:12px;color:#bdccda}",
+      "token": "保留",
+      "reason": "暗色背景上のテキスト色で、対応するミュート反転文字トークンがないため保留。"
+    },
+    {
+      "id": "#ddd|extension/demo/index.html:41:2",
+      "value": "#ddd",
+      "before": "font-size:0.92em; word-break:break-all; }",
+      "line": "button.copy { background:#262b36; color:#ddd; border:1px solid #3a3f4a;",
+      "token": "--app-text-inverse",
+      "reason": "暗色ボタン上の文字色で、反転文字トークンが意味的に合うため。"
+    },
+    {
+      "id": "#ddd|extension/src/guard.js:321:1",
+      "value": "#ddd",
+      "before": "\"background:transparent;border:1px solid #555;border-radius:4px;\" +",
+      "line": "\"padding:5px 10px;color:#ddd;cursor:pointer;font:inherit;\";",
+      "token": "--app-text-inverse",
+      "reason": "暗色想定のボタン文字色で、反転文字トークンが意味的に合うため。"
+    },
+    {
+      "id": "#ddd|portal/app/static/index.html:453:1",
+      "value": "#ddd",
+      "before": "a { color: #111 !important; text-decoration: none; }",
+      "line": ".stats div { border: 1px solid #ddd !important; }",
+      "token": "--app-border",
+      "reason": "1px solid の枠線色で、境界トークンが意味的に合うため。"
+    },
+    {
+      "id": "#ddd|portal/extension-src/guard.js:321:1",
+      "value": "#ddd",
+      "before": "\"background:transparent;border:1px solid #555;border-radius:4px;\" +",
+      "line": "\"padding:5px 10px;color:#ddd;cursor:pointer;font:inherit;\";",
+      "token": "保留",
+      "reason": "暗色トースト上の補助的なボタン文字色で、主要な反転文字トークンはあるが補助反転文字に対応する候補がないため。"
+    },
+    {
+      "id": "#e3f0f5|portal/app/static/index.html:19:1",
+      "value": "#e3f0f5",
+      "before": "--mut:#5c636e; --bd:#e4e5e0; --line:var(--bd);",
+      "line": "--pri-soft:#e7f3ec; --acc-soft:#e3f0f5; --warn-soft:#fdf0d3; --dstr-soft:#fbeae9;",
+      "token": "保留",
+      "reason": "アクセントの淡色背景であり、情報・成功などの意味色とは用途が異なるため。"
+    },
+    {
+      "id": "#e5484d|extension/src/guard.js:286:1",
+      "value": "#e5484d",
+      "before": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "line": "(action === \"blocked\" ? \"#e5484d\" : \"#f5a524\") + \";\" +",
+      "token": "--app-danger-border",
+      "reason": "blocked 状態を示す左境界線の色で、危険状態の境界色として意味が対応するため。"
+    },
+    {
+      "id": "#e5484d|portal/extension-src/guard.js:286:1",
+      "value": "#e5484d",
+      "before": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "line": "(action === \"blocked\" ? \"#e5484d\" : \"#f5a524\") + \";\" +",
+      "token": "--app-danger-border",
+      "reason": "blocked 状態を示す左境界線の色で、危険状態の境界色として意味が対応するため。"
+    },
+    {
+      "id": "#e8eef3|portal/app/static/enterprise.css:1149:10",
+      "value": "#e8eef3",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232b;--ui-frame:#34504d;--chart:#63c8",
+      "token": "--app-text-inverse",
+      "reason": "暗色サイドバー上の主要文字色で、反転テキストとして意味が対応するため。"
+    },
+    {
+      "id": "#e8eef3|portal/app/static/enterprise.css:1149:2",
+      "value": "#e8eef3",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "[data-theme=dark]{--bg:#0b1017;--fg:#e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac07",
+      "token": "--app-text-inverse",
+      "reason": "ダークテーマの基本文字色で、暗色面に対する反転テキストとして意味が対応するため。"
+    },
+    {
+      "id": "#eac078|portal/app/static/enterprise.css:1149:8",
+      "value": "#eac078",
+      "before": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b5",
+      "line": "e8eef3;--sf:#111a24;--sf2:#18232f;--mut:#95a6b6;--bd:#263340;--pri:#7bdfc4;--pri-soft:#153831;--acc:#a7b8e4;--dstr:#ff8e9b;--warn:#eac078;--side:#0e141c;--side-ink:#e8eef3;--side-mut:#95a6b6;--side-line:#263340;--side-on:#1c332f;--side-on-ink:#7bdfc4;--ui-tint:#14232",
+      "token": "--app-warning",
+      "reason": "ダークテーマ内の警告色で、警告の意味に対応するトークンとして選定。"
+    },
+    {
+      "id": "#edf9f6|portal/app/static/enterprise.css:577:1",
+      "value": "#edf9f6",
+      "before": ".evidence-summary{display:grid;grid-template-columns:minmax(300px,1.2fr) 1fr;margin-bottom:15px;border:1px solid var(--bd);border-radius:12px;background:var(--s",
+      "line": ".evidence-summary-lead{padding:19px 21px;background:linear-gradient(135deg,#edf9f6,",
+      "token": "保留",
+      "reason": "サマリーリードの装飾的な淡緑グラデーション背景で、成功や選択の意味色とは用途が異なるため。"
+    },
+    {
+      "id": "#edf9f6|portal/app/static/enterprise.css:730:1",
+      "value": "#edf9f6",
+      "before": ".health-summary{display:grid;grid-template-columns:minmax(290px,1.1fr) 1fr;overflow:hidden;margin:0 0 14px;border:1px solid var(--bd);border-radius:12px;backgro",
+      "line": ".health-summary-copy{padding:19px 21px;background:linear-gradient(135deg,#edf9f6,#f7fbfa 72%,var(--sf));border-right:1px solid var(--bd)}",
+      "token": "保留",
+      "reason": "ヘルスサマリーの装飾的な淡緑グラデーション背景で、成功背景や選択背景と意味が一致しないため。"
+    },
+    {
+      "id": "#f2bd5b|portal/app/static/enterprise.css:672:1",
+      "value": "#f2bd5b",
+      "before": ".nav-child-row:hover .nav-pin,.nav-pin:focus-visible,.nav-pin.pinned{opacity:1}",
+      "line": ".nav-pin.pinned{color:#f2bd5b!important}",
+      "token": "保留",
+      "reason": "ナビのピン留めアイコン色で、警告など候補トークンの意味と異なるため。"
+    },
+    {
+      "id": "#f2bd5b|portal/app/static/enterprise.css:673:1",
+      "value": "#f2bd5b",
+      "before": ".nav-pin.pinned{color:#f2bd5b!important}",
+      "line": ".nav-pin:hover{color:#f2bd5b!important;background:rgba(242,189,91,.1)!important;border-radius:5px}",
+      "token": "保留",
+      "reason": "ナビピンのホバー文字色で、ピン用の装飾色に対応する候補がないため。"
+    },
+    {
+      "id": "#f5a524|extension/demo/index.html:32:2",
+      "value": "#f5a524",
+      "before": "border:1px solid #333; border-radius:5px; margin-right:6px; }",
+      "line": ".mode a.active { color:#fff; border-color:#f5a524; }",
+      "token": "保留",
+      "reason": "デモのアクティブモード境界色で、警告やプライマリの境界色としての意味と異なるため。"
+    },
+    {
+      "id": "#f5a524|extension/src/guard.js:286:2",
+      "value": "#f5a524",
+      "before": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "line": "(action === \"blocked\" ? \"#e5484d\" : \"#f5a524\") + \";\" +",
+      "token": "--app-warning-border",
+      "reason": "border-left の警告状態を示す境界色のため。"
+    },
+    {
+      "id": "#f5a524|extension/src/guard.js:307:1",
+      "value": "#f5a524",
+      "before": "go.style.cssText =",
+      "line": "\"background:#f5a524;border:0;border-radius:4px;padding:5px 10px;\" +",
+      "token": "--app-warning",
+      "reason": "警告アクションボタンの背景色として使われているため。"
+    },
+    {
+      "id": "#f5a524|portal/extension-src/guard.js:286:2",
+      "value": "#f5a524",
+      "before": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "line": "(action === \"blocked\" ? \"#e5484d\" : \"#f5a524\") + \";\" +",
+      "token": "--app-warning-border",
+      "reason": "border-left の警告状態を示す境界色のため。"
+    },
+    {
+      "id": "#f5a524|portal/extension-src/guard.js:307:1",
+      "value": "#f5a524",
+      "before": "go.style.cssText =",
+      "line": "\"background:#f5a524;border:0;border-radius:4px;padding:5px 10px;\" +",
+      "token": "--app-warning",
+      "reason": "警告アクションボタンの背景色として使われているため。"
+    },
+    {
+      "id": "#f7fbfa|portal/app/static/enterprise.css:578:1",
+      "value": "#f7fbfa",
+      "before": ".evidence-summary-lead{padding:19px 21px;background:linear-gradient(135deg,#edf9f6,",
+      "line": "#f7fbfa 68%,var(--sf));border-right:1px solid var(--bd)}",
+      "token": "--app-surface",
+      "reason": "成功系サマリー背景グラデーションのほぼ白い面に使われているため。"
+    },
+    {
+      "id": "#f7fbfa|portal/app/static/enterprise.css:730:2",
+      "value": "#f7fbfa",
+      "before": ".health-summary{display:grid;grid-template-columns:minmax(290px,1.1fr) 1fr;overflow:hidden;margin:0 0 14px;border:1px solid var(--bd);border-radius:12px;backgro",
+      "line": ".health-summary-copy{padding:19px 21px;background:linear-gradient(135deg,#edf9f6,#f7fbfa 72%,var(--sf));border-right:1px solid var(--bd)}",
+      "token": "--app-surface",
+      "reason": "通常サマリー背景グラデーションのほぼ白い面に使われているため。"
+    },
+    {
+      "id": "#fcfaf5|portal/app/static/enterprise.css:731:1",
+      "value": "#fcfaf5",
+      "before": ".health-summary-copy{padding:19px 21px;background:linear-gradient(135deg,#edf9f6,#f7fbfa 72%,var(--sf));border-right:1px solid var(--bd)}",
+      "line": ".health-summary.attention .health-summary-copy{background:linear-gradient(135deg,#fff7e9,#fcfaf5 72%,var(--sf))}",
+      "token": "--app-surface",
+      "reason": "注意喚起サマリー背景グラデーションのほぼ白い面に使われているため。"
+    },
+    {
+      "id": "#ff9ba2|portal/app/static/enterprise.css:202:1",
+      "value": "#ff9ba2",
+      "before": ".overview-posture.good{border:0;background:linear-gradient(112deg,#102c34,#10252d 60%,#112a34)}",
+      "line": ".posture-mark{width:42px;height:42px;flex-basis:42px;border:1px solid rgba(255,164,173,.26);background:rgba(196,50,60,.18);color:#ff9ba2;font-size:17px;z-index:1}",
+      "token": "保留",
+      "reason": "暗色面上の淡い赤文字・記号色で、候補に暗色面向けの危険色トークンがないため。"
+    },
+    {
+      "id": "#ffb2ba|portal/app/static/enterprise.css:27:2",
+      "value": "#ffb2ba",
+      "before": "nav button:hover{background:rgba(255,255,255,.05)}",
+      "line": "nav .count{background:#472631;color:#ffb2ba;opacity:1;border-radius:99px;padding:0 6px;min-width:20px;text-align:center;font-size:9.5px}",
+      "token": "保留",
+      "reason": "暗色バッジ上の淡赤文字色で、候補に暗色面向けの対応トークンがないため。"
+    },
+    {
+      "id": "#fff|extension/demo/index.html:32:1",
+      "value": "#fff",
+      "before": "border:1px solid #333; border-radius:5px; margin-right:6px; }",
+      "line": ".mode a.active { color:#fff; border-color:#f5a524; }",
+      "token": "--app-text-inverse",
+      "reason": "アクティブモードリンクの文字色で、暗色面想定の白文字のため。"
+    },
+    {
+      "id": "#fff|extension/src/guard.js:285:2",
+      "value": "#fff",
+      "before": "\"position:fixed;top:16px;right:16px;z-index:2147483647;max-width:340px;\" +",
+      "line": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "token": "--app-text-inverse",
+      "reason": "暗色トースト上の文字色として使われているため。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:100:1",
+      "value": "#fff",
+      "before": "button.mini:hover{background:var(--sf2);border-color:color-mix(in srgb,var(--pri) 55%,var(--bd))}",
+      "line": "button.mini.pri{background:var(--pri);border-color:var(--pri);color:#fff}",
+      "token": "--app-primary-text",
+      "reason": "プライマリボタン上の文字色として使われているため。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:1148:1",
+      "value": "#fff",
+      "before": "routes, telemetry, setup controls and configurable widgets. */",
+      "line": ":root{--bg:#f4f6f8;--fg:#22313e;--sf:#fff;--sf2:#edf2f5;--mut:#5c6c7c;--bd:#d6dfe5;--line:var(--bd);--pri:#14735f;--pri-soft:#e1f2ed;--acc:#486fbd;--dstr:#b93b51;--warn:#8",
+      "token": "--app-surface",
+      "reason": "--sf はカード等の基底背景色を定義するサーフェス用カスタムプロパティで、白背景として --app-surface が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:199:4",
+      "value": "#fff",
+      "before": ".tabaside{padding-bottom:8px}",
+      "line": "er:0;border-left:0;background:linear-gradient(112deg,#13283f,#102034 60%,#12283e);box-shadow:0 12px 30px rgba(11,20,36,.12);color:#fff;border-radius:12px;position:relative;overflow:hidden}",
+      "token": "--app-text-inverse",
+      "reason": "暗色グラデーション背景上の文字色 #fff で、反転文字トークンが対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:318:3",
+      "value": "#fff",
+      "before": ".topbar #who.account-button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}",
+      "line": "t-avatar{flex:0 0 31px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(145deg,#183e5e,#087b72);color:#fff;font-weight:760}",
+      "token": "--app-text-inverse",
+      "reason": "アバターの暗色グラデーション背景上の白文字で、反転文字トークンが対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:328:1",
+      "value": "#fff",
+      "before": "#setupbell .bdot{display:none}",
+      "line": "ght:-5px;min-width:17px;height:17px;padding:0 4px;display:grid;place-items:center;border-radius:99px;background:var(--dstr);color:#fff;border:2px solid var(--sf);font-size:8.5px;line-height:1;font-weight:750}",
+      "token": "--app-text-inverse",
+      "reason": "危険色背景のバッジ上の白文字で、有色面上の反転文字として --app-text-inverse が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:370:1",
+      "value": "#fff",
+      "before": ".register-overview{display:grid;border:1px solid var(--bd);border-radius:12px;background:var(--sf);overflow:hidden;margin:0 0 17px;box-shadow:var(--shadow)}",
+      "line": ".register-score{color:#fff}",
+      "token": "--app-text-inverse",
+      "reason": "スコア表示の白文字で、暗色/有色背景上の反転文字として対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:563:1",
+      "value": "#fff",
+      "before": ".widget-switch{position:relative;width:32px;height:18px;margin-top:1px;border-radius:99px;background:color-mix(in srgb,var(--mut) 35%,var(--sf));box-shadow:inse",
+      "line": ".widget-switch:after{content:\"\";position:absolute;left:3px;top:3px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(10,20,38,.22);transition:transform .16s}",
+      "token": "--app-surface",
+      "reason": "スイッチのつまみの白背景で、基底サーフェス色として --app-surface が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:575:1",
+      "value": "#fff",
+      "before": ".widget-picker-foot button{flex:0 0 auto}",
+      "line": ".widget-picker-save{background:var(--pri)!important;border-color:var(--pri)!important;color:#fff!important}",
+      "token": "--app-primary-text",
+      "reason": "var(--pri) のプライマリ背景上のボタン文字色 #fff で、プライマリ文字トークンが対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:585:1",
+      "value": "#fff",
+      "before": ".evidence-download{color:var(--pri)!important;border-color:color-mix(in srgb,var(--pri) 38%,var(--bd))!important}",
+      "line": ".evidence-print{background:var(--pri)!important;border-color:var(--pri)!important;color:#fff!important}",
+      "token": "--app-primary-text",
+      "reason": "var(--pri) のプライマリ背景上の印刷ボタン文字色 #fff で、プライマリ文字トークンが対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:795:1",
+      "value": "#fff",
+      "before": ".window-pick select:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}",
+      "line": ".window-pick option{color:#111;background:#fff}",
+      "token": "--app-surface",
+      "reason": "select option の白背景で、サーフェス色として --app-surface が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:810:1",
+      "value": "#fff",
+      "before": "main#app,main#app *{color:#111!important;background:transparent!important;box-shadow:none!important;text-shadow:none!important}",
+      "line": "mary, main#app .health-card,main#app .health-summary,main#app .register-overview,main#app .tcard,main#app .budget-card{background:#fff!important;border:1px solid #bbb!important}",
+      "token": "--app-surface",
+      "reason": "印刷時等にカード類へ戻す白背景で、基底サーフェス色として --app-surface が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:983:1",
+      "value": "#fff",
+      "before": "button.mini,.btn,.back,.reg-export{font-size:12px;min-height:34px;padding:6px 11px}",
+      "line": "button.mini.pri,.mini.pri{background:var(--pri);color:#fff}",
+      "token": "--app-primary-text",
+      "reason": "var(--pri) のプライマリボタン背景上の文字色 #fff で、プライマリ文字トークンが対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/enterprise.css:9:1",
+      "value": "#fff",
+      "before": "truth for behaviour; this file changes visual hierarchy, not behaviour. */",
+      "line": ":root{--pop:#fff;--pop-bd:#cbd5e2;--pop-shadow:0 24px 70px rgba(12,24,46,.2),0 4px 14px rgba(12,24,46,.1);--chart:#118b80;--chart-soft:#118b801c;-",
+      "token": "--app-surface-raised",
+      "reason": "ポップオーバー用の --pop 背景色 #fff で、浮上面の --app-surface-raised が対応。"
+    },
+    {
+      "id": "#fff|portal/app/static/index.html:440:1",
+      "value": "#fff",
+      "before": "@page { margin: 14mm; }",
+      "line": "html, body { background: #fff !important; color: #111 !important; }",
+      "token": "--app-surface",
+      "reason": "html/body の背景色で、文書全体の白い基準サーフェスを指定しているため。"
+    },
+    {
+      "id": "#fff|portal/app/static/index.html:447:1",
+      "value": "#fff",
+      "before": "break-inside: avoid; page-break-inside: avoid;",
+      "line": "box-shadow: none !important; background: #fff !important;",
+      "token": "--app-surface",
+      "reason": "印刷時の要素背景を白にする指定で、影なしの通常サーフェスとして扱うため。"
+    },
+    {
+      "id": "#fff|portal/app/static/index.html:472:1",
+      "value": "#fff",
+      "before": ".ssstep.on .dot{border-color:var(--acc);color:var(--acc)}",
+      "line": ".ssstep.done .dot{background:var(--pri);border-color:var(--pri);color:#fff}",
+      "token": "--app-primary-text",
+      "reason": "primary 色の塗りドット上に表示する文字/記号の色で、primary 面上のテキスト色に相当するため。"
+    },
+    {
+      "id": "#fff|portal/app/static/index.html:680:1",
+      "value": "#fff",
+      "before": "#tour-card button.pri {",
+      "line": "background: var(--acc); border-color: var(--acc); color: #fff;",
+      "token": "--app-primary-text",
+      "reason": "primary ボタンの背景に対する文字色で、primary 面上のテキスト色に相当するため。"
+    },
+    {
+      "id": "#fff|portal/app/static/index.html:762:1",
+      "value": "#fff",
+      "before": ".oedit button.pri { background: var(--acc); border-color: var(--acc);",
+      "line": "color: #fff; }",
+      "token": "--app-primary-text",
+      "reason": "primary ボタンの背景に対する文字色で、primary 面上のテキスト色に相当するため。"
+    },
+    {
+      "id": "#fff|portal/extension-src/guard.js:285:2",
+      "value": "#fff",
+      "before": "\"position:fixed;top:16px;right:16px;z-index:2147483647;max-width:340px;\" +",
+      "line": "\"background:#1f2430;color:#fff;border-left:4px solid \" +",
+      "token": "--app-text-inverse",
+      "reason": "暗色背景 #1f2430 上の文字色として指定されており、反転テキスト色に相当するため。"
+    }
+  ]
+}
