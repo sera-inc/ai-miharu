@@ -277,7 +277,7 @@ function showOverlay(hits, action, onOverride) {
   const existing = document.getElementById("taag-paste-overlay");
   if (existing) existing.remove();
 
-  const labels = hits.map((h) => h.label).join(", ");
+  const labels = hits.map((h) => h.label).join("、");
   const box = document.createElement("div");
   box.id = "taag-paste-overlay";
   box.style.cssText =
@@ -293,8 +293,9 @@ function showOverlay(hits, action, onOverride) {
   box.appendChild(title);
 
   const body = document.createElement("div");
-  body.textContent = "検出: " + labels + ". This looks like something " +
-    "that should not go into an AI tool. (AI Guard)";
+  body.textContent = "検出: " + labels + "。" + (action === "blocked"
+    ? "AIツールへの貼り付けを停止しました。"
+    : "AIツールに貼り付ける前に内容を確認してください。");
   box.appendChild(body);
 
   const row = document.createElement("div");

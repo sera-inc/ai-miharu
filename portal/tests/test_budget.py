@@ -121,9 +121,9 @@ def test_the_wizard_names_the_honest_provider_set():
     # ChatGPT Business gets the guided import and the page says why - the
     # absence of an admin API on that plan is OpenAI's, and presenting it
     # as ai-guard's gap (or hiding it) would both be wrong.
-    assert "no admin API" in INDEX
-    # The roadmap note: automatic setup grows by request, on GitHub.
-    assert "github.com/AmanSK5/shadow-ai-guard/issues" in INDEX
+    assert "自動同期にはベンダーの管理 API が必要" in INDEX
+    # Requests for automatic setup now go to the Sera support address.
+    assert "mailto:info@sera-inc.co.jp" in INDEX
 
 
 # ---------------------------------------------------------- the report --
@@ -140,7 +140,7 @@ def test_the_shell_ships_the_share_view():
 def test_the_report_can_withhold_names_and_guards_the_csv():
     # The page names individuals and their personal account domains, so
     # withholding them is one control, in the page and in the export.
-    assert "BRNAMES" in INDEX and "Withhold names" in INDEX
+    assert "BRNAMES" in INDEX and "名前を伏せる" in INDEX
     assert "-anonymised.csv" in INDEX or "'-anonymised'" in INDEX
     # An exported address starting with = is a live formula in Excel.
     assert "B_FORMULA_LEAD" in INDEX and "function bCsvCell" in INDEX
@@ -208,8 +208,8 @@ def test_the_member_step_names_every_connector_and_its_plan():
     # of ones with code behind them.
     assert "The complete list of vendors" not in INDEX
     assert "plan it needs" not in INDEX
-    assert "Anything not listed" in INDEX
-    assert "under Automatic uses Import or Manual" in INDEX
+    assert "自動に一覧されていないもの" in INDEX
+    assert "インポートまたは手動を使用" in INDEX
     # The old copy spoke only about ChatGPT in the general slot.
     assert "const BPROVIDER_NONE = `ChatGPT Business" not in INDEX
 
@@ -229,14 +229,14 @@ def test_the_member_step_answers_why_a_tool_is_missing():
     the only one of the two worth opening an issue about."""
     for needle in ("member_apis", "ベンダーAPI、コネクタ未対応",
                    "シート一覧がありません", "未記載",
-                   "an admin API nobody has connected yet",
-                   "tools with a sync written"):
+                   "まだ誰も接続していない管理API",
+                   "同期が用意されている"):
         assert needle in INDEX, needle
     # A connector written from a docs page is not a connector anybody has
     # run. Being in the dropdown reads as "this works", so the ones that have
     # never touched a real tenant say so where the key gets pasted.
     assert "unverified" in INDEX
-    assert "has never been run against a real organisation" in INDEX
+    assert "実際の組織に対して実行されたことはありません" in INDEX
 
 
 def test_import_and_manual_speak_about_the_tool_being_linked():
@@ -247,10 +247,10 @@ def test_import_and_manual_speak_about_the_tool_being_linked():
     note is built from that instead of from one vendor's example."""
     assert "BPROVIDER_CHATGPT" not in INDEX
     assert "ChatGPT Business (Team) is the usual surprise" not in INDEX
-    for needle in ("can sync automatically",
-                   "vendor does expose a members API",
-                   "has no organisation or seat list to read",
-                   "does not document a members API"):
+    for needle in ("は自動で同期できます",
+                   "ベンダーはメンバーAPIを公開しています",
+                   "読み取れる組織またはシート一覧がありません",
+                   "メンバーAPIを文書化していません"):
         assert needle in INDEX, needle
 
 
@@ -261,11 +261,11 @@ def test_a_tool_you_defined_is_not_reported_as_undocumented():
     invented five minutes earlier, that its vendor documents no members API.
     Nobody had looked. "We have no record" and "we looked and there is
     nothing" are different sentences."""
-    assert "is a tool you defined" in INDEX
-    assert "there is no record here of" in INDEX
+    assert "はあなたが定義したツールです" in INDEX
+    assert "ここにはそのベンダーが提供する内容の記録はありません" in INDEX
     # And the table says which tools it is actually about.
-    assert "SHIPPED tools" in INDEX
-    assert "tools you define yourself are not in here" in INDEX
+    assert "今回のリリースに同梱されるツール" in INDEX
+    assert "自分で定義したツールはここには含まれません" in INDEX
 
 
 def test_the_budget_page_lists_providers_as_a_list_not_a_chain():

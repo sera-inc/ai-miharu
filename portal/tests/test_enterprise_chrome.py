@@ -26,6 +26,15 @@ def test_the_stylesheet_is_one_named_route_behind_page_auth():
     assert '<link rel="stylesheet" href="/enterprise.css">' in HTML
 
 
+def test_service_symbol_uses_the_page_auth_boundary():
+    route = next(r for r in main.app.routes if getattr(r, "path", "") == "/sera-ai-governance-symbol.png")
+    assert main.require_page_auth in [d.call for d in route.dependant.dependencies]
+    resp = route.endpoint()
+    assert str(resp.path) == str(main.STATIC / "sera-ai-governance-symbol.png")
+    assert resp.media_type == "image/png"
+    assert "/sera-ai-governance-symbol.png" in HTML
+
+
 def test_pinned_destinations_are_stored_as_a_string():
     """A preference value is a string on both the portal and receiver models.
     An array was accepted by the browser copy and refused by the receiver
@@ -48,8 +57,8 @@ def test_the_estate_chrome_carries_no_fixed_claim():
         assert fixed not in HTML, fixed
     assert "function showEstate()" in HTML
     assert "render();\n  showFreshness();\n  showEstate();" in HTML
-    for word in ("'Monitoring active'", "'ソースからの報告がありません'", "'データを利用できません'",
-                 "'Managed estate' : 'Standalone portal'"):
+    for word in ("'監視中'", "'ソースからの報告がありません'", "'データを利用できません'",
+                 "managed ? '管理対象環境' : '単独ポータル'"):
         assert word in HTML, word
     for cls in (".estate-dot.off", ".estate-dot.warn", ".trust-state.off", ".trust-state.warn"):
         assert cls in CSS, cls
@@ -88,11 +97,11 @@ def test_the_estate_control_takes_the_organisations_name():
     assert main.SettingsWrite.model_fields["org_name"].annotation == (str | None)
     assert "const org = ((AUTH && AUTH.org_name) || '').trim();" in HTML
     assert "const name = org || kind;" in HTML
-    assert "settingRow('org_name', '組織名', 'Acme Ltd'," in HTML
+    assert "settingRow('org_name', '組織名', '株式会社サンプル'," in HTML
     assert "function orgSettings()" in HTML
     assert "body = orgSettings() + mailSettings() + alertingSettings();" in HTML
     assert "<h4>エステートに名前を付ける</h4>" in HTML
-    assert "Sign in to ${esc(org)}." in HTML
+    assert "${esc(org)} にサインインしてください。" in HTML
     assert "if (key === 'org_name' && AUTH) { AUTH.org_name = val.trim(); showEstate(); }" in HTML
 
 
@@ -138,7 +147,7 @@ def test_the_reporting_window_is_a_control_sent_on_every_read_that_takes_one():
     assert 'class="meta-chip window-label"' in HTML
     assert "function windowSettings()" in HTML
     assert "${windowRow()}" in HTML.split("function orgSettings()", 1)[1][:700]
-    assert "[2160, '90 days']" in HTML  # the server's ceiling, le=24*90
+    assert "[2160, '90日']" in HTML  # the server's ceiling, le=24*90
 
 
 def test_the_search_box_is_a_finder_everywhere():
@@ -163,7 +172,7 @@ def test_the_posture_headline_needs_a_source_to_have_reported():
     100% coverage. It now needs the same status read the top-bar badge uses
     to show at least one source reporting."""
     assert "const silent = !S || !S.reporting;" in HTML
-    assert "silent ? '報告なし' : attention ? 'Needs attention' : 'Monitoring healthy'" in HTML
+    assert "silent ? '報告なし' : attention ? '対応が必要' : '監視は正常'" in HTML
     assert ".overview-executive.silent" in CSS
 
 
@@ -172,7 +181,7 @@ def test_every_time_label_follows_the_chosen_window():
     body = HTML.split("</style>", 1)[1]
     assert "first seen this week" not in body
     assert "from=now-7d" not in body
-    assert "'One bar per day for the last ' + fmtWindow(hoursNow())" in HTML
+    assert "'直近 ' + fmtWindow(hoursNow()) + '、1 日あたり 1 本のバーです。期間が 3 日未満の場合" in HTML
     assert "'&from=now-' + hoursNow() + 'h&to=now&kiosk'" in HTML
 
 

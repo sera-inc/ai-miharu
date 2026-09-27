@@ -475,14 +475,14 @@ def test_every_provider_says_what_plan_it_needs():
         assert p.get("plan"), name
         assert p.get("syncs"), name
         assert p.get("label"), name
-    assert "Team plans have no admin API" in budget.PROVIDERS["anthropic"]["plan"]
+    assert "Team プランには Admin API が一切ありません" in budget.PROVIDERS["anthropic"]["plan"]
     # Fireflies was first written as "verified on Enterprise, lower plans
     # untested", which was not research - it was the one plan we happened to
     # have used. Their knowledge base says API access exists at every plan
     # level, and the Business gate applies to the analytics query this
     # connector does not call.
     ff = budget.PROVIDERS["fireflies"]["plan"]
-    assert "Any plan" in ff
+    assert "任意のプラン" in ff
     assert "untested" not in ff
 
 

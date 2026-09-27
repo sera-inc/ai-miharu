@@ -109,8 +109,8 @@ def test_the_portal_never_upgrades_anything():
     for word in ("subprocess", "helm upgrade", "docker compose pull"):
         assert word not in src, word
     assert 'data-tour="updates"' in HTML
-    assert "How to upgrade on ${esc(route)}" in HTML
+    assert "${esc(route)} でのアップグレード方法" in HTML
     assert "--reuse-values" in HTML
     assert 'data-act="update-check"' in HTML
-    assert "t: 'Update available: ' + CFG.update.latest" in HTML
+    assert "t: '更新があります: ' + CFG.update.latest" in HTML
     assert "if (el.getAttribute('data-view')) {" in HTML

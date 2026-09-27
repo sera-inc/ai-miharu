@@ -50,7 +50,7 @@ test('unavailable register data is separate from zero decisions',()=>{
   const c=context({REG:null});
   assert.equal(c.uiOverviewFacts().recorded,null);
   assert.match(c.widgets.stat_row(),/AI台帳データを利用できません/);
-  assert.match(c.uiFocusRows(c.uiOverviewFacts()),/Register data is unavailable/);
+  assert.match(c.uiFocusRows(c.uiOverviewFacts()),/台帳データを利用できません/);
 });
 test('only explicit decisions for discovered tools contribute to the register metric',()=>{
   const c=context({G:{devices:{},tools:{a:{},b:{},c:{}},personal_accounts:[]},REG:{rows:[{id:'a',status_source:'governance',status:'refused'},{id:'b',status_source:'portal',status:'reviewing',days_overdue:2},{id:'c',status_source:'registry'},{id:'unobserved',status_source:'portal'}]}});
@@ -59,16 +59,16 @@ test('only explicit decisions for discovered tools contribute to the register me
 test('cloud-only tools retain zero devices alongside their separate identity count',()=>{
   const c=context();const out=c.widgets.top_tools();
   assert.match(out,/<td class="num">0<\/td><td class="num">2<\/td>/);
-  assert.match(out,/View Cloud tool details/);assert.match(out,/data-open="tool" data-key="cloud"/);
+  assert.match(out,/Cloud toolの詳細を表示/);assert.match(out,/data-open="tool" data-key="cloud"/);
 });
 test('the table contains every matching tool instead of truncating away cloud-only tools',()=>{
   const many=Object.fromEntries(Array.from({length:9},(_,i)=>['t'+i,{devices:[],identities:[],surfaces:[]}]))
   const c=context({G:{devices:{},tools:many,personal_accounts:[]}});
-  const out=c.widgets.top_tools();assert.match(out,/9 of 9 discovered tools/);assert.match(out,/data-key="t8"/);
+  const out=c.widgets.top_tools();assert.match(out,/9 \/ 9 件の検出されたツール/);assert.match(out,/data-key="t8"/);
 });
 test('the personal filter uses open lifecycle findings, not all historic personal rows',()=>{
   const c=context({PSTAT:{a:{status:'accepted'}}});vm.runInContext('UI_PERSONAL_TOOLS = true;',c);
-  const out=c.widgets.top_tools();assert.match(out,/この表示に一致するツールはありません/);assert.match(out,/0 of 1 discovered tools/);
+  const out=c.widgets.top_tools();assert.match(out,/この表示に一致するツールはありません/);assert.match(out,/0 \/ 1 件の検出されたツール/);
 });
 test('tool metadata and finding identifiers are escaped before becoming markup',()=>{
   const id='x" onclick="bad';const attack='<img src=x onerror=bad>';

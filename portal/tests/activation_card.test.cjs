@@ -41,7 +41,7 @@ test('with no key, the card says open edition and claims nothing else', () => {
   assert.match(out, /オープンエディション/);
   assert.match(out, /Apache 2\.0/);
   assert.match(out, /オフライン、外部リクエストなし/);
-  assert.doesNotMatch(out, /activated/);
+  assert.doesNotMatch(out, /有効化済み/);
 });
 
 test('a failed read is not "no subscription"', () => {
@@ -50,17 +50,17 @@ test('a failed read is not "no subscription"', () => {
   const out = render({state: 'unknown'});
   assert.match(out, /未読み取り/);
   assert.match(out, /どちらとも断定されません/);
-  assert.doesNotMatch(out, /Open source/);
-  assert.doesNotMatch(out, /Paste an activation key/);
+  assert.doesNotMatch(out, /オープンエディション/);
+  assert.doesNotMatch(out, /アクティベーション キーを貼り付け/);
 });
 
 test('an activated deployment shows what it bought, and never the key', () => {
   const out = render(ACTIVE);
   assert.match(out, /Acme Group Ltd/);
-  assert.match(out, /enterprise/);
-  assert.match(out, /up to 2500 devices/);
+  assert.match(out, /エンタープライズ/);
+  assert.match(out, /最大 2500 デバイス/);
   assert.match(out, /2027-06-30/);
-  assert.match(out, /in 300 days/);
+  assert.match(out, /300 日後/);
   assert.match(out, /58aa-0b39-7247/);
   assert.doesNotMatch(out, /nyxl_/);
 });
@@ -85,21 +85,21 @@ test('a key that names no registry gets the same command, because the command re
 test('a subscription close to its end says so before it ends', () => {
   const soon = render(Object.assign({}, ACTIVE, {days_left: 20}));
   assert.match(soon, /health-note warning/);
-  assert.match(soon, /runs out on 2027-06-30/);
+  assert.match(soon, /2027-06-30 に期限切れになります/);
   // And says plainly that nothing stops working, because nothing does.
-  assert.match(soon, /nothing stops working on the day/);
+  assert.match(soon, /当日に動作が停止することはありません/);
   assert.doesNotMatch(render(ACTIVE), /health-note warning/);
 });
 
 test('an expired key is shown as genuine and lapsed, not as a forgery', () => {
   const out = render(Object.assign({}, ACTIVE,
     {state: 'expired', expires: '2026-02-01', days_left: -29}));
-  assert.match(out, /expired/);
-  assert.match(out, /29 days ago/);
+  assert.match(out, /期限切れ/);
+  assert.match(out, /29 日前/);
   assert.match(out, /Acme Group Ltd/);
-  assert.match(out, /carries on exactly as it is/);
+  assert.match(out, /デプロイはそのまま継続します/);
   // The move needs an active key, so it is named rather than offered.
-  assert.match(out, /moving this deployment to Nyxus needs an active one/);
+  assert.match(out, /このデプロイを Nyxus に移行するには有効なキーが必要です/);
   assert.doesNotMatch(out, /aiguardctl upgrade --edition nyxus/);
 });
 
@@ -107,8 +107,10 @@ test('a key this release cannot verify says to upgrade before suspecting it', ()
   const out = render({state: 'invalid', fingerprint: 'aaaa-bbbb-cccc',
                       code: 'not_ours',
                       reason: 'this key was not issued for this software'});
-  assert.match(out, /cannot be checked/);
-  assert.match(out, /upgrade first/);
+  assert.match(out, /このリリースでは確認できません/);
+  assert.match(out, /このキーはこのソフトウェア向けに発行されていない/);
+  assert.doesNotMatch(out, /this key was not issued/);
+  assert.match(out, /まずアップグレードし/);
   assert.match(out, /aaaa-bbbb-cccc/);
   assert.match(out, /削除する/);
 });
@@ -117,7 +119,7 @@ test('only an owner is offered the field', () => {
   for (const role of ['admin', 'viewer']) {
     const out = render({state: 'none'}, {role});
     assert.doesNotMatch(out, /data-act="act-save"/);
-    assert.match(out, /An owner account activates a subscription/);
+    assert.match(out, /オーナー アカウントがサブスクリプションを有効化します/);
   }
   assert.match(render({state: 'none'}, {role: 'owner'}), /data-act="act-save"/);
 });

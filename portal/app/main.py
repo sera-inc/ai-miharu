@@ -3420,6 +3420,11 @@ def logo(_=Depends(require_page_auth)):
     return FileResponse(STATIC / "logo.png", media_type="image/png")
 
 
+@app.get("/sera-ai-governance-symbol.png")
+def sera_ai_governance_symbol(_=Depends(require_page_auth)):
+    return FileResponse(STATIC / "sera-ai-governance-symbol.png", media_type="image/png")
+
+
 # The enterprise presentation layer is named explicitly for the same reason as
 # the logo: the page has one known asset, and no caller-controlled filesystem
 # path is ever resolved. It uses the page-auth boundary too, so classic-mode

@@ -283,8 +283,8 @@ def test_the_shell_says_so_when_the_read_failed():
     assert "const dataOk = () => !loadError;" in html
     for gated in ("何も観測されていません。それも結果であり",
                   "スキャナーの検出結果があるすべてのデバイスには、コレクターからの報告もあります",
-                  "Nothing outstanding in this window",
-                  "That is a real answer for a small estate"):
+                  "この期間に未対応の項目はありません。",
+                  "小規模な環境では実際にあり得る結果"):
         before = html.split(gated)[0]
         assert "dataOk()" in before[-400:], gated
     # And it names the fix a self-hoster would otherwise have to find.
@@ -688,10 +688,10 @@ def test_the_identity_import_names_the_rows_it_drops():
     # Every dropped row carries a line number and a reason.
     assert "skipped.push({n, key, why: '人物なし'})" in html
     assert "skipped.push({n, key: bare, why: 'キーなし'})" in html
-    assert "why: 'same key as line ' + dup" in html
+    assert "why: '同じキー: 行 ' + dup" in html
     # The filled-in-but-still-commented row is surfaced rather than lost.
     assert "if (k && ident) commented.push({n, key: k, identity: ident});" in html
-    assert "remove the leading # from any you meant to keep" in html
+    assert "保存するつもりのものから先頭の # を削除してください" in html
     # The old count-only phrasing may not come back.
     assert "skipped (no key, no person, or a duplicate)" not in html
 

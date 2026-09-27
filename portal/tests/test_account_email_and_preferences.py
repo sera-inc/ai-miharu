@@ -247,7 +247,7 @@ def test_the_sso_card_says_it_is_beta():
     card = INDEX.split("<h3>シングルサインオン</h3>", 1)[1][:900]
     assert 'class="pill p-amb"' in card
     assert ">ベータ</span>" in card
-    assert "one real Entra tenant" in card
+    assert "実際の Entra テナント 1 つでのみ動作確認済み" in card
     assert "not yet run against" not in card
 
 

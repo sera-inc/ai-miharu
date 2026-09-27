@@ -109,51 +109,51 @@ function hasBulkEmails(text) {
 
 const DETECTORS = [
   // --- developer credentials ---
-  { id: "aws_access_key", label: "AWS access key",
+  { id: "aws_access_key", label: "AWS アクセスキー",
     re: /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/ },
-  { id: "private_key", label: "private key",
+  { id: "private_key", label: "秘密鍵",
     re: /-----BEGIN [A-Z ]*PRIVATE KEY-----/ },
-  { id: "gitlab_pat", label: "GitLab personal access token",
+  { id: "gitlab_pat", label: "GitLab パーソナルアクセストークン",
     re: /\bglpat-[A-Za-z0-9_-]{20,}\b/ },
-  { id: "github_token", label: "GitHub token",
+  { id: "github_token", label: "GitHub トークン",
     re: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b|\bgithub_pat_[A-Za-z0-9_]{22,}\b/ },
-  { id: "anthropic_key", label: "Anthropic API key",
+  { id: "anthropic_key", label: "Anthropic API キー",
     re: /\bsk-ant-[A-Za-z0-9-]{20,}\b/ },
-  { id: "openai_key", label: "OpenAI API key",
+  { id: "openai_key", label: "OpenAI API キー",
     re: /\bsk-[A-Za-z0-9_-]*T3BlbkFJ[A-Za-z0-9_-]{10,}\b|\bsk-[A-Za-z0-9]{48}\b/ },
-  { id: "slack_token", label: "Slack token",
+  { id: "slack_token", label: "Slack トークン",
     re: /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/ },
   { id: "jwt", label: "JWT",
     re: /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\b/ },
-  { id: "google_api_key", label: "Google API key",
+  { id: "google_api_key", label: "Google API キー",
     re: /\bAIza[0-9A-Za-z_-]{35}\b/ },
-  { id: "azure_storage_secret", label: "Azure storage secret",
+  { id: "azure_storage_secret", label: "Azure ストレージ シークレット",
     re: /\b(?:AccountKey|SharedAccessSignature)=[A-Za-z0-9+/=%]{20,}/ },
 
   // --- marketing / SaaS platform credentials ---
-  { id: "stripe_live_key", label: "Stripe live secret key",
+  { id: "stripe_live_key", label: "Stripe 本番用シークレットキー",
     re: /\b[sr]k_live_[A-Za-z0-9]{16,}\b/ },
-  { id: "mailchimp_key", label: "Mailchimp API key",
+  { id: "mailchimp_key", label: "Mailchimp API キー",
     re: /\b[0-9a-f]{32}-us\d{1,2}\b/ },
-  { id: "hubspot_token", label: "HubSpot access token",
+  { id: "hubspot_token", label: "HubSpot アクセストークン",
     re: /\bpat-(?:na|eu)\d+-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/ },
-  { id: "sendgrid_key", label: "SendGrid API key",
+  { id: "sendgrid_key", label: "SendGrid API キー",
     re: /\bSG\.[A-Za-z0-9_-]{16,32}\.[A-Za-z0-9_-]{16,64}\b/ },
-  { id: "meta_access_token", label: "Meta access token",
+  { id: "meta_access_token", label: "Meta アクセストークン",
     re: /\bEAA[A-Za-z0-9]{30,}\b/ },
 
   // --- shared credentials ---
-  { id: "password_assignment", label: "password",
+  { id: "password_assignment", label: "パスワード",
     re: /(?:password|passwd|pwd|passcode)\s*[:=]\s*\S{4,}/i },
 
   // --- personal and financial data ---
-  { id: "payment_card", label: "payment card number", test: hasPaymentCard },
-  { id: "uk_nino", label: "National Insurance number",
+  { id: "payment_card", label: "カード番号", test: hasPaymentCard },
+  { id: "uk_nino", label: "国民保険番号",
     re: /\b[A-CEGHJ-PR-TW-Z]{2}\s?\d{2}\s?\d{2}\s?\d{2}\s?[A-D]\b/ },
   { id: "iban", label: "IBAN",
     re: /\b(?:GB|IE|FR|DE|ES|IT|NL|BE|CH|PT|SE|DK|NO|PL|AT|FI|LU)\d{2}[A-Z0-9]{10,30}\b/ },
-  { id: "bulk_emails", label: "bulk email list", test: hasBulkEmails },
-  { id: "classification_marking", label: "classification marking",
+  { id: "bulk_emails", label: "大量メールリスト", test: hasBulkEmails },
+  { id: "classification_marking", label: "分類マーキング",
     test: hasClassificationMarking },
 ];
 
@@ -277,7 +277,7 @@ function showOverlay(hits, action, onOverride) {
   const existing = document.getElementById("taag-paste-overlay");
   if (existing) existing.remove();
 
-  const labels = hits.map((h) => h.label).join(", ");
+  const labels = hits.map((h) => h.label).join("、");
   const box = document.createElement("div");
   box.id = "taag-paste-overlay";
   box.style.cssText =
@@ -289,12 +289,13 @@ function showOverlay(hits, action, onOverride) {
 
   const title = document.createElement("div");
   title.style.cssText = "font-weight:600;margin-bottom:4px;";
-  title.textContent = action === "blocked" ? "Paste blocked" : "Sensitive content detected";
+  title.textContent = action === "blocked" ? "貼り付けをブロックしました" : "機密情報を検出しました";
   box.appendChild(title);
 
   const body = document.createElement("div");
-  body.textContent = "Detected: " + labels + ". This looks like something " +
-    "that should not go into an AI tool. (AI Guard)";
+  body.textContent = "検出: " + labels + "。" + (action === "blocked"
+    ? "AIツールへの貼り付けを停止しました。"
+    : "AIツールに貼り付ける前に内容を確認してください。");
   box.appendChild(body);
 
   const row = document.createElement("div");
@@ -302,7 +303,7 @@ function showOverlay(hits, action, onOverride) {
 
   if (onOverride) {
     const go = document.createElement("button");
-    go.textContent = "Paste anyway";
+    go.textContent = "それでも貼り付ける";
     go.style.cssText =
       "background:#f5a524;border:0;border-radius:4px;padding:5px 10px;" +
       "color:#1f2430;font-weight:600;cursor:pointer;font:inherit;";
@@ -315,7 +316,7 @@ function showOverlay(hits, action, onOverride) {
   }
 
   const dismiss = document.createElement("button");
-  dismiss.textContent = "Dismiss";
+  dismiss.textContent = "閉じる";
   dismiss.style.cssText =
     "background:transparent;border:1px solid #555;border-radius:4px;" +
     "padding:5px 10px;color:#ddd;cursor:pointer;font:inherit;";

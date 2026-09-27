@@ -68,69 +68,40 @@ _DEVIN_ORG = re.compile(r"^org-[A-Za-z0-9_-]{1,64}$")
 # secrets - served as-is by /admin/budget.
 PROVIDERS = {
     "anthropic": {
-        "label": "Anthropic (Claude Enterprise / Console)",
+        "label": 'Anthropic（Claude Enterprise / Console）',
         # What plan the admin API needs. Stated only where it is actually
         # known: Anthropic documents that Team has no admin keys, so that
         # one is a fact. Fireflies below does not get a guess.
-        "plan": "Enterprise, or a Console org. Team plans have no admin "
-                "API at all.",
-        "key_hint": "Scoped Admin API key with the read:members scope. The "
-                    "org's primary owner creates it at claude.ai > "
-                    "Organization settings > API (Console orgs: Settings > "
-                    "Admin keys). Select read-only scopes: this sync never "
-                    "writes. Claude Team plans do not offer admin keys - "
-                    "the API section simply is not there - so a Team "
-                    "workspace uses the Import path instead, from "
-                    "Organization settings > Members.",
-        "syncs": "members and roles. Seat tiers are not in the API - "
-                 "record them on the subscription.",
+        "plan": 'Enterprise、または Console 組織。Team プランには Admin API が一切ありません。',
+        "key_hint": 'read:members スコープが付与された Admin API キー。組織のプライマリオーナーが claude.ai > Organization settings > API で作成します（Console 組織の場合: Settings > Admin keys）。読み取り専用スコープを選択してください。この同期は書き込みを一切行いません。Claude Team プランでは Admin キーが提供されません。API セクション自体が存在しません。そのため Team ワークスペースでは代わりに インポート 経路を使用し、Organization settings > Members から実行します。',
+        "syncs": 'メンバーとロール。シートティアは API に含まれません。サブスクリプションに記録してください。',
     },
     "chatgpt": {
-        "label": "ChatGPT workspace (Enterprise or Edu)",
-        "plan": "Enterprise or Edu. Business - the plan renamed from Team in "
-                "2025 - has SSO but no SCIM, so it uses Import.",
-        "key_hint": "SCIM API token from the workspace admin console, "
-                    "Settings > Security > SCIM Provisioning. It is issued by "
-                    "OpenAI rather than by your identity provider, and this "
-                    "reads the same endpoint your IdP writes to - no IdP is "
-                    "needed to use it. Codex CLI has no member list of its "
-                    "own: tick it under \"also covers\".",
-        "syncs": "members and whether the account is active. SCIM carries no "
-                 "seat tier or usage - record tiers on the subscription.",
+        "label": 'ChatGPT ワークスペース（Enterprise または Edu）',
+        "plan": 'Enterprise または Edu。Business（2025 年に Team から名称変更されたプラン）には SSO がありますが SCIM はないため、インポート を使用します。',
+        "key_hint": 'SCIM API トークンはワークスペース管理コンソールの Settings > Security > SCIM Provisioning から取得します。これは ID プロバイダーではなく OpenAI によって発行され、IdP が書き込むのと同じエンドポイントを読み取ります。使用するのに IdP は必要ありません。Codex CLI には独自のメンバー一覧がありません。「他に対象」でチェックを入れてください。',
+        "syncs": 'メンバーとアカウントが有効かどうか。SCIM にはシートティアや使用状況が含まれません。ティアはサブスクリプションに記録してください。',
         "unverified": True,
     },
     "notion": {
-        "label": "Notion (Enterprise)",
-        "plan": "Enterprise only - Free, Plus and Business cannot mint a "
-                "SCIM token at all.",
-        "key_hint": "SCIM API token created by an organisation owner under "
-                    "Manage organization. Notion issues it, not your identity "
-                    "provider, and this reads the same endpoint an IdP would "
-                    "write to.",
-        "syncs": "members and whether the account is active. No seat tier or "
-                 "usage - record tiers on the subscription.",
+        "label": 'Notion（Enterprise）',
+        "plan": 'Enterprise のみ。Free、Plus、Business では SCIM トークンを一切発行できません。',
+        "key_hint": 'SCIM API トークンは組織のオーナーが Manage organization で作成します。発行するのは Notion であり、ID プロバイダーではありません。これは IdP が書き込むのと同じエンドポイントを読み取ります。',
+        "syncs": 'メンバーとアカウントが有効かどうか。シートティアや使用状況はありません。ティアはサブスクリプションに記録してください。',
         "unverified": True,
     },
     "grammarly": {
-        "label": "Grammarly (Pro or Enterprise)",
-        "plan": "Pro or Enterprise, and SAML SSO has to be configured first - "
-                "Grammarly will not issue the token before it is.",
-        "key_hint": "SCIM token from the Admin Panel, Settings > SSO & "
-                    "Provisioning.",
-        "syncs": "members and whether the account is active.",
+        "label": 'Grammarly（Pro または Enterprise）',
+        "plan": 'Pro または Enterprise。また、先に SAML SSO を設定する必要があります。設定するまで Grammarly はトークンを発行しません。',
+        "key_hint": 'SCIM トークンは Admin Panel の Settings > SSO & Provisioning から取得します。',
+        "syncs": 'メンバーとアカウントが有効かどうか。',
         "unverified": True,
     },
     "openai": {
-        "label": "OpenAI (API platform organisation)",
-        "plan": "Any organisation, with an Admin API key. This is the API "
-                "platform org - a ChatGPT workspace is SCIM-only and uses "
-                "Import.",
-        "key_hint": "Admin API key, created at platform.openai.com > "
-                    "Settings > Organization > Admin keys by an owner. An "
-                    "ordinary project API key will not work: admin keys are "
-                    "the only ones the organization endpoints accept.",
-        "syncs": "members and their org role. Seat tiers are not in the "
-                 "API - record them on the subscription.",
+        "label": 'OpenAI（APIプラットフォーム組織）',
+        "plan": '任意の組織（Admin APIキーが必要）。これはAPIプラットフォーム組織です。ChatGPTワークスペースはSCIM専用で、インポートを使用します。',
+        "key_hint": 'Admin APIキー。オーナーが platform.openai.com > Settings > Organization > Admin keys で作成します。通常のプロジェクトAPIキーは機能しません。組織エンドポイントが受け付けるのはAdminキーだけです。',
+        "syncs": 'メンバーとその組織ロール。シート階層はAPIには含まれません。シート階層はサブスクリプションに記録してください。',
         # Written from OpenAI's documented endpoint and NOT yet run against a
         # real organisation. The first operator to point it at one is the
         # test; a refusal here names the vendor and the status rather than
@@ -138,51 +109,33 @@ PROVIDERS = {
         "unverified": True,
     },
     "cursor": {
-        "label": "Cursor (Team or Enterprise)",
-        "plan": "Team or Enterprise - both expose it, unusually.",
-        "key_hint": "Team API key from cursor.com > Settings > Cursor "
-                    "Admin API. Sent as HTTP Basic with the key as the "
-                    "username and no password, which is what their curl "
-                    "example shows.",
-        "syncs": "members and their team role. Removed members are dropped "
-                 "rather than counted as seats.",
+        "label": 'Cursor（TeamまたはEnterprise）',
+        "plan": 'Team と Enterprise の両方で管理 API を利用できます。',
+        "key_hint": 'Team APIキー。cursor.com > Settings > Cursor Admin API で取得します。HTTP Basicとして、キーをユーザー名として、パスワードなしで送信します。これは同社のcurl例のとおりです。',
+        "syncs": 'メンバーとそのチームロール。削除済みメンバーはシートとしてカウントされず、除外されます。',
         "unverified": True,
     },
     "fireflies": {
-        "label": "Fireflies.ai",
+        "label": 'Fireflies.ai',
         # Fireflies' own knowledge base says API access is available on every
         # plan level, and neither the `users` query nor the API-key article
         # names a tier or an admin role. The "Business or higher" gate people
         # quote is on the separate `analytics` query, which this connector
         # does not use: the per-user counters it reports are fields on
         # `users` itself.
-        "plan": "Any plan. Fireflies documents API access at every plan "
-                "level, and the team-users query names no tier.",
-        "key_hint": "API key from fireflies.ai > Integrations > Fireflies "
-                    "API. A team admin's key lists the whole team.",
-        "syncs": "members, admin flag, and per-user usage (transcripts, "
-                 "minutes).",
+        "plan": '任意のプラン。FirefliesはすべてのプランレベルでAPIアクセスを文書化しており、team-usersクエリは階層を指定していません。',
+        "key_hint": 'APIキー。fireflies.ai > Integrations > Fireflies API で取得します。チーム管理者のキーはチーム全体を一覧表示します。',
+        "syncs": 'メンバー、管理者フラグ、ユーザーごとの使用量（文字起こし、分数）。',
     },
     "devin": {
-        "label": "Devin / Devin Desktop (Cognition)",
+        "label": 'Devin / Devin Desktop（Cognition）',
         # Teams genuinely reaches this - the docs give Teams its own API
         # quick start, and a Teams org admin can mint a service user. That
         # is worth stating plainly, because the assumption in this file
         # everywhere else is that a member list means Enterprise.
-        "plan": "Teams or Enterprise. Both can create a service user and "
-                "read their own org's members; Enterprise additionally "
-                "reaches the cross-org endpoints this sync does not use.",
-        "key_hint": "Service user API key (starts with cog_), plus the "
-                    "organisation id, entered as one value: "
-                    "org-xxxx:cog_xxxx. An org admin creates both in the "
-                    "same place - Settings > Service Users - where the "
-                    "org id is shown and Create service user issues the "
-                    "key. The key is shown once. Member role is enough: "
-                    "this sync only reads. Windsurf licences live here "
-                    "too, since Cognition folded Windsurf into Devin.",
-        "syncs": "members and their role names. Seat tiers and usage are "
-                 "not on this endpoint - record tiers on the "
-                 "subscription.",
+        "plan": 'TeamsまたはEnterprise。どちらもサービスユーザーを作成し、自組織のメンバーを読み取れます。Enterpriseはさらに、この同期では使用しないクロス組織エンドポイントにもアクセスできます。',
+        "key_hint": 'サービスユーザーAPIキー（cog_で始まる）と組織IDを、org-xxxx:cog_xxxx のように1つの値として入力します。組織管理者は同じ場所（Settings > Service Users）で両方を作成します。ここに組織IDが表示され、Create service user がキーを発行します。キーは一度だけ表示されます。メンバーロールで十分です。この同期は読み取りのみを行います。CognitionがWindsurfをDevinに統合したため、Windsurfライセンスもここにあります。',
+        "syncs": 'メンバーとそのロール名。シート階層と使用量はこのエンドポイントにはありません。シート階層はサブスクリプションに記録してください。',
     },
 }
 
@@ -207,53 +160,48 @@ PROVIDERS = {
 MEMBER_APIS = {
     "claude": {
         "api": "rest", "connector": "anthropic",
-        "plan": "Enterprise, or a Console org. Team plans have no admin API.",
-        "how": "Admin API, GET /v1/organizations/users.",
+        "plan": 'Enterprise、またはConsole 組織。Teamプランには管理APIがありません。',
+        "how": 'Admin API、GET /v1/organizations/users。',
     },
     "claude-code": {
         "api": "rest", "connector": "anthropic",
-        "plan": "Enterprise, or a Console org.",
-        "how": "Same Anthropic org as Claude - one licence, one member list.",
+        "plan": 'Enterprise、またはConsole 組織。',
+        "how": 'Claudeと同じAnthropic 組織です。ライセンスは1つ、メンバーリストも1つです。',
     },
     "chatgpt": {
         "api": "scim", "connector": "chatgpt",
-        "plan": "Enterprise or Edu only. Business (renamed from Team in 2025) "
-                "has SSO but not SCIM.",
-        "how": "SCIM 2.0 at api.openai.com/scim/v2. The token comes from "
-               "OpenAI's own admin console, so no IdP is involved.",
+        "plan": 'EnterpriseまたはEduのみ。Business（2025年にTeamから改称）にはSSOがありますが、SCIMはありません。',
+        "how": 'SCIM 2.0はapi.openai.com/scim/v2です。トークンはOpenAI自身の管理コンソールから発行されるため、IdPは関与しません。',
     },
     "codex-cli": {
         "api": "rest", "connector": "chatgpt",
-        "plan": "Whatever pays for it.",
-        "how": "No member list of its own - it rides the ChatGPT workspace or "
-               "the API platform org. Tick it under \"also covers\".",
+        "plan": '費用を負担しているプランであれば何でも。',
+        "how": '独自のメンバーリストはありません。ChatGPTワークスペースまたはAPI プラットフォーム組織に紐づきます。「他に対象」の項目にチェックを入れてください。',
     },
     "openai-api-platform": {
         "api": "rest", "connector": "openai",
-        "plan": "Any organisation, with an Admin API key.",
-        "how": "GET /v1/organization/users.",
+        "plan": 'Admin APIキーがあれば、どの組織でも可。',
+        "how": 'GET /v1/organization/users。',
     },
     "gemini": {
         "api": "rest",
-        "plan": "Google Workspace, Business Standard or higher for Gemini.",
-        "how": "Licences are assigned in Workspace; the Admin SDK Directory "
-               "and Enterprise License Manager APIs list who holds one.",
+        "plan": 'GeminiにはGoogle WorkspaceのBusiness Standard以上。',
+        "how": 'ライセンスはWorkspaceで割り当てられます。Admin SDK Directory APIとEnterprise License Manager APIで、誰がライセンスを保有しているかを一覧表示できます。',
     },
     "gemini-cli": {
         "api": "rest",
-        "plan": "Google Workspace, or a Google Cloud project for Code Assist.",
-        "how": "Same Workspace licence assignment as Gemini.",
+        "plan": 'Google Workspace、またはCode Assist用のGoogle Cloudプロジェクト。',
+        "how": 'Geminiと同じWorkspaceライセンス割り当てです。',
     },
     "github-copilot": {
         "api": "rest",
-        "plan": "Copilot Business or Copilot Enterprise.",
-        "how": "GET /orgs/{org}/copilot/billing/seats. Org owner, with a token "
-               "carrying manage_billing:copilot and read:org.",
+        "plan": 'Copilot BusinessまたはCopilot Enterprise。',
+        "how": 'GET /orgs/{org}/copilot/billing/seats。組織オーナーが、manage_billing:copilotとread:orgを持つトークンを使用します。',
     },
     "cursor": {
         "api": "rest", "connector": "cursor",
-        "plan": "Team or Enterprise - both, unusually.",
-        "how": "Admin API, GET /teams/members with a Team API key.",
+        "plan": 'Team と Enterprise の両方で利用できます。',
+        "how": 'Admin API、Team API キーを使用した GET /teams/members。',
     },
     "codeium": {
         "api": "rest", "connector": "devin",
@@ -262,126 +210,106 @@ MEMBER_APIS = {
         # the product onto Devin's platform: Teams has its own API quick
         # start and can mint a service user. An operator on Teams was being
         # told to go and do a CSV import they did not need.
-        "plan": "Teams or Enterprise, via Cognition's Devin API - the "
-                "licence is one and the same since the Windsurf "
-                "acquisition.",
-        "how": "GET /v3beta1/organizations/{org}/members/users with a "
-               "service-user key.",
+        "plan": 'Teams または Enterprise。Cognition の Devin API 経由で、Windsurf 買収以降ライセンスは同一です。',
+        "how": 'サービスユーザーキーを使用した GET /v3beta1/organizations/{org}/members/users。',
     },
     "tabnine": {
         "api": "rest",
-        "plan": "Enterprise, SaaS console or self-hosted.",
-        "how": "Admin APIs for teams and users, plus SCIM IdP sync.",
+        "plan": 'Enterprise、SaaS コンソールまたはセルフホスト。',
+        "how": 'チームとユーザー向けの Admin API、および SCIM IdP 同期。',
     },
     "warp": {
-        "api": "unknown", "plan": "",
-        "how": "Warp Teams and Enterprise manage members in the Warp "
-               "dashboard; no public members endpoint is documented. "
-               "Unknown rather than none - nobody has looked properly.",
+        "api": "unknown", "plan": '',
+        "how": 'Warp Teams と Enterprise では、メンバーを Warp ダッシュボードで管理します。公開されたメンバー用 API は文書化されていません。存在しないと断定できず、公開情報では未確認です。',
     },
     "cline": {
         "api": "unknown",
-        "plan": "Enterprise.",
-        "how": "Cline Enterprise manages members in its own dashboard; a "
-               "public members API is not documented.",
+        "plan": 'Enterprise。',
+        "how": 'Cline Enterprise はメンバーを独自のダッシュボードで管理します。公開されたメンバー API は文書化されていません。',
     },
     "roo-code": {
-        "api": "none", "plan": "",
-        "how": "An open-source extension on your own model keys. There is no "
-               "vendor account, so there is no seat list to read.",
+        "api": "none", "plan": '',
+        "how": '独自のモデルキーを使用するオープンソース拡張機能です。ベンダーアカウントが存在しないため、読み取れるシート一覧もありません。',
     },
     "continue": {
-        "api": "none", "plan": "",
-        "how": "An open-source extension on your own model keys. No vendor "
-               "seat list.",
+        "api": "none", "plan": '',
+        "how": '独自のモデルキーを使用するオープンソース拡張機能です。ベンダーのシート一覧はありません。',
     },
     "otter": {
         "api": "rest",
-        "plan": "Enterprise. SCIM Directory Sync additionally needs 100+ seats.",
-        "how": "The public API is Enterprise-only, bearer authenticated.",
+        "plan": 'Enterprise。SCIM Directory Sync には追加で 100 シート以上が必要です。',
+        "how": '公開 API は Enterprise 専用で、Bearer 認証です。',
     },
     "grammarly": {
         "api": "scim", "connector": "grammarly",
-        "plan": "Pro or Enterprise, and SAML SSO has to be on first.",
-        "how": "SCIM 2.0 at app.grammarly.com/scim/v2.",
+        "plan": 'Pro または Enterprise で、先に SAML SSO を有効にする必要があります。',
+        "how": 'SCIM 2.0（app.grammarly.com/scim/v2）。',
     },
     "wispr-flow": {
         "api": "scim",
-        "plan": "Enterprise.",
-        "how": "Admin portal at admin.wisprflow.ai with SCIM provisioning; the "
-               "enterprise API covers audit logs rather than a member list.",
+        "plan": 'Enterprise。',
+        "how": 'admin.wisprflow.ai の管理ポータルで SCIM プロビジョニングに対応しています。Enterprise API が対象とするのはメンバー一覧ではなく監査ログです。',
     },
     "perplexity": {
         "api": "scim",
-        "plan": "Enterprise Pro at 50+ seats, or Enterprise Max at any size.",
-        "how": "SCIM through your IdP only - there is no admin REST API, and "
-               "the SCIM token is issued during onboarding, not self-served.",
+        "plan": 'Enterprise Pro（50 シート以上）、または Enterprise Max（シート数不問）。',
+        "how": 'SCIM は IdP 経由のみです。管理用 REST API は存在せず、SCIM トークンはセルフサービスではなく、オンボーディング時に発行されます。',
     },
     "mistral": {
         "api": "rest",
-        "plan": "Enterprise. The Admin API is in preview.",
-        "how": "console.mistral.ai/api/admin, x-api-key.",
+        "plan": 'Enterprise。Admin API はプレビュー中です。',
+        "how": 'console.mistral.ai/api/admin、x-api-key。',
     },
     "grok": {
         "api": "rest",
-        "plan": "Grok Business, or an xAI organisation.",
-        "how": "Management API at management-api.x.ai with a management key.",
+        "plan": 'Grok Business、または xAI 組織。',
+        "how": 'Management API（management-api.x.ai）で management key を使用します。',
     },
     "microsoft-copilot": {
         "api": "rest",
-        "plan": "Any tenant with a Microsoft 365 admin.",
-        "how": "Microsoft Graph: subscribedSkus and per-user licenseDetails "
-               "say who holds the add-on.",
+        "plan": 'Microsoft 365 管理者がいる任意のテナント。',
+        "how": 'Microsoft Graph: subscribedSkus とユーザーごとの licenseDetails で、誰がアドオンを保有しているかを確認できます。',
     },
     "microsoft-365-copilot": {
         "api": "rest",
-        "plan": "An add-on to M365 E3/E5 or Business Standard/Premium.",
-        "how": "Microsoft Graph, the same licence assignment as any other "
-               "M365 service.",
+        "plan": 'M365 E3/E5 または Business Standard/Premium へのアドオン。',
+        "how": 'Microsoft Graph。他の M365 サービスと同じライセンス割り当てです。',
     },
     "atlassian-rovo": {
         "api": "rest",
-        "plan": "Not documented. An organisation API key is what it needs; "
-                "which plans can mint one is not stated publicly.",
-        "how": "Organizations REST API, GET /v2/orgs/{orgId}/directories/"
-               "{directoryId}/users.",
+        "plan": 'ドキュメント化されていません。必要なのは組織の API キーです。どのプランで発行できるかは公開されていません。',
+        "how": 'Organizations REST API、GET /v2/orgs/{orgId}/directories/{directoryId}/users。',
     },
     "notion-ai": {
         "api": "scim", "connector": "notion",
-        "plan": "Enterprise only - Free, Plus and Business cannot use SCIM.",
-        "how": "SCIM for provisioning; the ordinary Notion API's /v1/users "
-               "also lists workspace members with an integration token.",
+        "plan": 'Enterpriseのみ - Free、Plus、BusinessではSCIMを使用できません。',
+        "how": 'プロビジョニングにはSCIMを使用します。通常のNotion APIの /v1/users も、インテグレーショントークンを使ってワークスペースメンバーを一覧表示できます。',
     },
     "fireflies": {
         "api": "rest", "connector": "fireflies",
-        "plan": "Any plan - API access is documented at every plan level.",
-        "how": "One GraphQL query for the team's users, with per-user usage. "
-               "The separate analytics query needs Business or higher; this "
-               "does not use it.",
+        "plan": 'すべてのプラン - APIアクセスはすべてのプランレベルで文書化されています。',
+        "how": 'チームのユーザーを対象とする1つのGraphQLクエリで、ユーザーごとの使用量を取得できます。別の分析クエリにはBusiness以上が必要ですが、この方法ではそのクエリを使用しません。',
     },
     "hugging-face": {
         "api": "rest",
-        "plan": "Any organisation for the members list; SCIM needs Enterprise "
-                "Hub with SSO enabled.",
-        "how": "GET /api/organizations/{org}/members.",
+        "plan": 'メンバー一覧は任意の組織で利用できます。SCIMには、SSOを有効にしたEnterprise Hubが必要です。',
+        "how": 'GET /api/organizations/{org}/members.',
     },
     "deepseek": {
-        "api": "unknown", "plan": "",
-        "how": "The open platform issues API keys; no organisation member "
-               "endpoint is documented publicly.",
+        "api": "unknown", "plan": '',
+        "how": 'オープンプラットフォームはAPIキーを発行します。組織メンバー用のエンドポイントは公開されたドキュメントに記載されていません。',
     },
     "midjourney": {
-        "api": "none", "plan": "",
-        "how": "Individual subscriptions. There is no organisation, so there "
-               "is no seat list.",
+        "api": "none", "plan": '',
+        "how": '個人向けサブスクリプションです。組織が存在しないため、シート一覧も存在しません。',
     },
     "ollama": {
-        "api": "none", "plan": "",
-        "how": "Runs locally with no account at all - there is nobody to list.",
+        "api": "none", "plan": '',
+        "how": 'アカウントなしでローカルで実行されます - 一覧表示する対象が存在しません。',
     },
     "lm-studio": {
-        "api": "none", "plan": "",
-        "how": "A local desktop app with no account.",
+        "api": "none", "plan": '',
+        "how": 'アカウントを持たないローカルデスクトップアプリです。',
     },
 }
 

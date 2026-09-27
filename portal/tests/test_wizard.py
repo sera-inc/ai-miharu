@@ -235,7 +235,7 @@ def test_the_register_carries_the_watchlist_decisions():
     version, and Settings can reopen the wizard."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("watchlistBlock", "wl-toggle", "open-wizard",
-                   "known, not observed",
+                   "既知だが未検出",
                    "セットアップウィザードを再実行"):
         assert needle in html, needle
 
@@ -419,7 +419,7 @@ def test_the_rail_says_what_each_step_costs_to_skip():
     says so, because the moment it starts working is worth naming."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("必須", "推奨", "任意",
-                   "今すぐデプロイできます", "Start collecting", "Make it useful",
+                   "今すぐデプロイできます", "収集を開始", "活用する",
                    "すべてのアカウントが個人として扱われます",
                    "これがないとデプロイできません"):
         assert needle in html, needle

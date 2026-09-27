@@ -19,9 +19,9 @@ tools:
   # Current approval. Reads as approved, with an owner and a date.
   claude:
     status: approved
-    owner: Engineering
+    owner: 技術部門
     review_due: 2027-06-01
-    reason: Enterprise tenant, DPA in place
+    reason: エンタープライズテナント、DPA締結済み
 
   # EXPIRED approval. The stored decision is still "approved" and the register
   # shows "reviewing", "approval expired N days ago", and "was approved". This
@@ -29,22 +29,22 @@ tools:
   # evidence a tool is safe, it is evidence nobody looked.
   chatgpt:
     status: approved
-    owner: Security
+    owner: セキュリティ部門
     review_due: 2026-01-31
-    reason: Enterprise workspace, reviewed at onboarding
+    reason: エンタープライズワークスペース、導入時に確認済み
 
   # Under review.
   cursor:
     status: reviewing
-    owner: Engineering
+    owner: 技術部門
     review_due: 2027-03-15
-    reason: Waiting on the vendor's sub-processor list
+    reason: ベンダーの再委託先リストを確認中
 
   # A refusal. No review date needed.
   ollama:
     status: not_approved
-    owner: Security
-    reason: Local models, no visibility into what is loaded
+    owner: セキュリティ部門
+    reason: ローカルモデル。読み込まれる内容は未確認
 
   # A decision naming a tool the registry does not know. The register reports
   # it rather than dropping it, because that is also exactly what a typo looks
@@ -52,9 +52,9 @@ tools:
   # believes it has decided something it has not.
   some-unregistered-tool:
     status: not_approved
-    owner: Security
+    owner: セキュリティ部門
     review_due: 2027-09-30
-    reason: Seen on two machines, no vendor assessment yet
+    reason: 2台の端末で確認。ベンダー評価は未実施
 
 # ─────────────────────────────────────────────
 # Exceptions
@@ -71,9 +71,9 @@ exceptions:
   EX-001:
     tool: ollama
     scope:
-      team: Research
-    reason: Local model evaluation, no client data
-    owner: Security
+      team: 研究部門
+    reason: ローカルモデルの評価。顧客データは使用しない
+    owner: セキュリティ部門
     expires: 2027-04-30
 
   # Expired, and still shown. A record of something decided and then let lapse,
@@ -82,16 +82,16 @@ exceptions:
   EX-002:
     tool: chatgpt
     scope:
-      project: Q1 campaign
-    reason: Client campaign copy, no personal data
-    owner: Marketing
+      project: 第1四半期キャンペーン
+    reason: 顧客向けキャンペーン文面。個人データは使用しない
+    owner: マーケティング部門
     expires: 2026-03-31
 
   # Naming a tool the registry does not know, which the register flags.
   EX-003:
     tool: some-unregistered-tool
     scope:
-      team: Engineering
-    reason: Trial period pending vendor assessment
-    owner: Security
+      team: 技術部門
+    reason: ベンダー評価までの試用期間
+    owner: セキュリティ部門
     expires: 2027-01-31

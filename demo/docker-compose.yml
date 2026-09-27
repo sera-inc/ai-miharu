@@ -160,7 +160,7 @@ services:
       OWNER_USER: "gengar"
       OWNER_PASSWORD: "gengar-demo-portal"
       OWNER_EMAIL: "gengar@example.com"
-      ORG_NAME: "Pallet Town Ltd"
+      ORG_NAME: "株式会社世良（デモ環境）"
       PORTAL_URL: "http://localhost:8091"
     volumes:
       - ./seed.sh:/seed.sh:ro

@@ -250,7 +250,7 @@ def test_a_titleless_card_is_named_while_arranging():
     Without one they float in a strip attached to nothing, which reads as
     a control that has come loose rather than one belonging to the card
     under it."""
-    assert "const WIDGET_TITLES = {stat_row: 'Headline numbers'," in INDEX
+    assert "const WIDGET_TITLES = {stat_row: '主要な数値'," in INDEX
     # While arranging every card is a named placeholder, so the strip always
     # has a title beneath it; outside arranging the h3 test still decides.
     assert "const titled = editing || body.indexOf('<h3') >= 0" in DRAW
