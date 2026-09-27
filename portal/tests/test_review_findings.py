@@ -686,8 +686,8 @@ def test_the_identity_import_names_the_rows_it_drops():
     index = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html = open(os.path.join(index, "app", "static", "index.html")).read()
     # Every dropped row carries a line number and a reason.
-    assert "skipped.push({n, key, why: 'no person'})" in html
-    assert "skipped.push({n, key: bare, why: 'no key'})" in html
+    assert "skipped.push({n, key, why: '人物なし'})" in html
+    assert "skipped.push({n, key: bare, why: 'キーなし'})" in html
     assert "why: 'same key as line ' + dup" in html
     # The filled-in-but-still-commented row is surfaced rather than lost.
     assert "if (k && ident) commented.push({n, key: k, identity: ident});" in html

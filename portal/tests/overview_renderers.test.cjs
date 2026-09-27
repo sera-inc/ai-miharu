@@ -36,20 +36,20 @@ test('collector coverage counts actual signals, including a source-less observed
 test('no observed devices gives unavailable coverage rather than an invented percentage',()=>{
   const c=context({G:{devices:{},tools:{},personal_accounts:[]},S:{reporting:0,groups:[]}});
   assert.equal(c.uiOverviewFacts().coverage,null);
-  const out=c.widgets.stat_row();assert.match(out,/Nothing reporting/);assert.doesNotMatch(out,/Monitoring healthy/);
-  assert.match(c.widgets.detection_coverage(),/Collector coverage unavailable/);
+  const out=c.widgets.stat_row();assert.match(out,/報告なし/);assert.doesNotMatch(out,/Monitoring healthy/);
+  assert.match(c.widgets.detection_coverage(),/コレクターのカバレッジを利用できません/);
 });
 test('a failed findings read never presents retained counts as current data',()=>{
   const c=context({dataOk:()=>false});
-  assert.match(c.widgets.stat_row(),/Data unavailable/);
+  assert.match(c.widgets.stat_row(),/データを利用できません/);
   assert.doesNotMatch(c.widgets.stat_row(),/Monitoring healthy/);
   assert.match(c.widgets.top_tools(),/検出結果を利用できません/);
-  assert.match(c.widgets.detection_coverage(),/Collector coverage unavailable/);
+  assert.match(c.widgets.detection_coverage(),/コレクターのカバレッジを利用できません/);
 });
 test('unavailable register data is separate from zero decisions',()=>{
   const c=context({REG:null});
   assert.equal(c.uiOverviewFacts().recorded,null);
-  assert.match(c.widgets.stat_row(),/Register data unavailable/);
+  assert.match(c.widgets.stat_row(),/AI台帳データを利用できません/);
   assert.match(c.uiFocusRows(c.uiOverviewFacts()),/Register data is unavailable/);
 });
 test('only explicit decisions for discovered tools contribute to the register metric',()=>{

@@ -219,7 +219,7 @@ def test_a_tool_with_no_licence_mates_says_so():
     rendered an empty chip row and a bare "more tools..." - which reads as a
     control that failed to load rather than one with nothing to offer."""
     assert "レジストリ内に、このツールとライセンスグループまたはベンダーを共有するものはない" in INDEX
-    assert "choose from every tool" in INDEX
+    assert "すべてのツールから選択" in INDEX
 
 
 def test_the_member_step_answers_why_a_tool_is_missing():
@@ -227,8 +227,8 @@ def test_the_member_step_answers_why_a_tool_is_missing():
     twenty-eight with no answer. The step now separates "the vendor offers
     nothing" from "the vendor offers something nobody has connected", which is
     the only one of the two worth opening an issue about."""
-    for needle in ("member_apis", "Vendor API, no connector yet",
-                   "No seat list exists", "Not documented",
+    for needle in ("member_apis", "ベンダーAPI、コネクタ未対応",
+                   "シート一覧がありません", "未記載",
                    "an admin API nobody has connected yet",
                    "tools with a sync written"):
         assert needle in INDEX, needle
@@ -318,7 +318,7 @@ def test_a_headerless_paste_keeps_the_role_and_seat_it_plainly_carries():
     assert "if (spare.length === 1) iTier = spare[0];" in fn
     assert "guessed = iRole >= 0 || iTier >= 0;" in fn
     assert "&& i !== iRole && i !== iTier && !ignored.includes(i)).length" in fn
-    assert "'no header row, columns named from their values'" in html
+    assert "'ヘッダー行なし、列名は値から生成'" in html
 
 
 def test_a_subscription_record_is_collapsible_and_remembers_being_open():

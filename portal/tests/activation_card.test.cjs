@@ -37,7 +37,7 @@ const ACTIVE = {state: 'active', id: 'NYX-0001', org: 'Acme Group Ltd',
 
 test('with no key, the card says open edition and claims nothing else', () => {
   const out = render({state: 'none'});
-  assert.match(out, /open edition/);
+  assert.match(out, /オープン版/);
   assert.match(out, /オープンエディション/);
   assert.match(out, /Apache 2\.0/);
   assert.match(out, /オフライン、外部リクエストなし/);

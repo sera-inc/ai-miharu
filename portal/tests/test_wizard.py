@@ -236,7 +236,7 @@ def test_the_register_carries_the_watchlist_decisions():
     html = (main.STATIC / "index.html").read_text()
     for needle in ("watchlistBlock", "wl-toggle", "open-wizard",
                    "known, not observed",
-                   "Run the setup wizard again"):
+                   "セットアップウィザードを再実行"):
         assert needle in html, needle
 
 
@@ -362,8 +362,8 @@ def test_the_extension_setup_wears_the_rail_and_infers_the_early_steps():
     Chromium id without having packed the thing that produced it. Evidence,
     rather than a tick somebody presses to say they did it."""
     html = (main.STATIC / "index.html").read_text()
-    assert "packed - the id proves it" in html
-    assert "downloaded - the id proves it" in html
+    assert "パッケージ済み - IDがそれを証明" in html
+    assert "ダウンロード済み - IDがそれを証明" in html
     assert 'data-act="ext-page"' in html and "ssrail" in html
     # The numbered pill row is gone.
     assert "${i + 1} · ${t}" not in html
@@ -420,8 +420,8 @@ def test_the_rail_says_what_each_step_costs_to_skip():
     html = (main.STATIC / "index.html").read_text()
     for needle in ("必須", "推奨", "任意",
                    "今すぐデプロイできます", "Start collecting", "Make it useful",
-                   "every account reads as personal",
-                   "nothing can deploy without it"):
+                   "すべてのアカウントが個人として扱われます",
+                   "これがないとデプロイできません"):
         assert needle in html, needle
 
 

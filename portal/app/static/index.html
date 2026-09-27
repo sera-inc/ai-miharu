@@ -1270,8 +1270,8 @@ function chrome(on) {
   const login = AUTH && AUTH.mode === 'login';
   so.style.display = on && login ? '' : 'none';
   const label = on && login && AUTH.username ? AUTH.username : '';
-  const roleLabel = !label ? '' : AUTH.role === 'owner' ? 'Owner'
-    : AUTH.role === 'viewer' ? 'Read-only' : 'Administrator';
+  const roleLabel = !label ? '' : AUTH.role === 'owner' ? 'オーナー'
+    : AUTH.role === 'viewer' ? '読み取り専用' : '管理者';
   const displayName = label ? label.replace(/[._-]+/g, ' ')
     .replace(/\b\w/g, c => c.toUpperCase()) : '';
   const initials = displayName ? displayName.split(/\s+/).filter(Boolean)
@@ -1331,7 +1331,7 @@ function pwShow() {
   const sub = document.getElementById('pw-submit');
   if (sub) sub.hidden = false;
   const can = document.getElementById('pw-cancel');
-  if (can) can.textContent = 'Cancel';
+  if (can) can.textContent = 'キャンセル';
   const note = document.getElementById('pw-note');
   if (note) note.hidden = false;
   // Whose password this is. Hidden rather than blank when there is no
@@ -1475,12 +1475,12 @@ function showLogin(msg) {
       autocomplete="${create ? 'new-password' : 'current-password'}"></p>
     <button class="mini" style="padding:6px 16px"
       data-act="${create ? 'do-setup' : 'do-login'}">${
-      create ? 'Create account' : 'Sign in'}</button>`;
+      create ? 'アカウントを作成' : 'サインイン'}</button>`;
   app.innerHTML = `<div style="max-width:470px;margin:9vh auto 0">
     <div class="wcard licard" style="padding:28px 30px">
     <img src="/logo.png" alt="Shadow AI Guard"
       style="width:230px;max-width:100%;display:block;margin:0 auto 20px">
-    <h2>${create ? 'Create the admin account' : 'Sign in'}</h2>
+    <h2>${create ? '管理者アカウントを作成' : 'サインイン'}</h2>
     <p class="lede">${create
       ? `No admin account exists yet. The receiver printed a one-time setup
          code to its log when it started - find it with
@@ -1522,7 +1522,7 @@ async function sessionLost() {
   // Same reason sign-out re-asks: the screen this is about to draw depends
   // on fields only the server knows.
   await refreshAuth();
-  showLogin('Signed out - the session expired or was revoked. Sign in again.');
+  showLogin('サインアウトしました - セッションが期限切れまたは無効化されました。もう一度サインインしてください。');
 }
 
 async function boot() {
@@ -1747,7 +1747,7 @@ function setupOutstanding() {
   const owner = AUTH && AUTH.role === 'owner';
   const out = [];
   if (!v('receiver_public_url')) out.push({need: 'req', tab: 'connection',
-    t: 'The receiver address', w: 'Nothing can deploy without it: every '
+    t: 'レシーバーのアドレス', w: 'Nothing can deploy without it: every '
       + 'collector download bakes this in.'});
   if (!((cd.value || []).length)) out.push({need: 'req', tab: 'fleet',
     t: 'Corporate domains', w: 'Without them every account reads as a '
@@ -1761,12 +1761,12 @@ function setupOutstanding() {
       w: missed ? missed + (missed === 1 ? ' person has' : ' people have')
             + ' an account here and ' + (missed === 1 ? 'has' : 'have')
             + ' never been told.'
-        : 'Nobody can be told an account was made for them.'});
+        : '自分のアカウントが作成されたことを誰にも伝えられません。'});
   }
   // Owner-gated at the receiver, so an admin cannot act on it and must not
   // be nagged about it.
   if (owner && v('sso_enabled') !== '1') out.push({need: 'opt', tab: 'account',
-    t: 'Single sign-on', w: 'People sign in with a portal password rather '
+    t: 'シングルサインオン', w: 'People sign in with a portal password rather '
       + 'than their work account.'});
   // A newer release is not setup, but it is the same shape of thing: known,
   // outstanding, and a page away. Owners and admins see it; the portal
@@ -1802,7 +1802,7 @@ function drawSetup() {
   const TAB = {req: ['p-dstr', 'required'], rec: ['p-amb', 'recommended'],
                opt: ['p-mut', 'optional']};
   panel.innerHTML = '<h4>' + (req
-      ? 'Some of this deployment is not set up'
+      ? 'このデプロイメントの一部が未設定です'
       : 'A few things are still worth doing') + '</h4>'
     + '<p class="lede" style="font-size:12px;margin:0 0 8px">' + (req
       ? 'The required ones are not about it refusing to run. They are about '
@@ -1853,15 +1853,15 @@ function showEstate() {
   const hours = hoursNow() + 'h';
   let state, text, sub, title;
   if (loadError || !G) {
-    state = 'warn'; text = 'Data unavailable'; sub = 'Last read failed';
-    title = 'The portal could not read the estate. Open System health.';
+    state = 'warn'; text = 'データを利用できません'; sub = '最後の読み取りに失敗しました';
+    title = 'ポータルは環境を読み取れませんでした。システムヘルスを開いてください。';
   } else if (rep > 0) {
     state = 'ok'; text = 'Monitoring active';
     // Short enough for the sidebar control; the title carries the sentence.
     sub = rep + '/' + total + ' reporting';
     title = rep + ' of ' + total + ' detection sources reported within ' + hours + '.';
   } else {
-    state = 'off'; text = 'No sources reporting'; sub = 'No source has reported';
+    state = 'off'; text = 'ソースからの報告がありません'; sub = 'どのソースからも報告がありません';
     title = 'No detection source has reported within ' + hours
       + '. Open Detection sources to link one.';
   }
@@ -2373,17 +2373,17 @@ function uiFocusRows(f) {
     .map(id => esc(uiToolInfo(id).name || id)).join(' · ');
   return action('personal','accounts',f.open.length ? 'risk' : 'good',
     f.open.length ? 'Review personal AI accounts' : 'Personal accounts reviewed',
-    f.open.length ? 'Follow up on activity in accounts outside your corporate domains.' : 'No open personal-account findings in this window.',
-    `${f.open.length} open`, names || 'View findings and recorded outcomes')
+    f.open.length ? '企業ドメイン外のアカウントのアクティビティを確認してください。' : 'この期間内に未対応の個人アカウントの検出結果はありません。',
+    `${f.open.length} open`, names || '検出結果と記録された結果を表示')
     + action('coverage','coverage',f.gaps.length ? 'attention' : 'good',
-      f.gaps.length ? 'Close the collector coverage gaps' : 'Review detection coverage',
+      f.gaps.length ? 'コレクターのカバレッジ不足を解消' : 'Review detection coverage',
       `${f.gaps.length} scanner-observed device${f.gaps.length === 1 ? '' : 's'} without a collector signal.`,
-      `${f.gaps.length} gaps`, 'Verify enrollment and reporting')
-    + action('register','register','governance','Complete the AI register',
+      `${f.gaps.length} gaps`, '登録と報告を確認')
+    + action('register','register','governance','AI台帳を完成させる',
       f.undecided === null ? 'Register data is unavailable; open the register to check it.'
         : `${f.undecided} discovered tool${f.undecided === 1 ? '' : 's'} without a recorded decision.`,
-      f.overdue === null ? 'Not read' : f.overdue ? `${f.overdue} overdue review${f.overdue === 1 ? '' : 's'}`
-        : `${f.recorded.length} decisions`, 'Confirm ownership and permitted use');
+      f.overdue === null ? '未読み取り' : f.overdue ? `${f.overdue} overdue review${f.overdue === 1 ? '' : 's'}`
+        : `${f.recorded.length} decisions`, '所有権と許可された用途を確認');
 }
 function uiToolsTable(rows) {
   const f = uiOverviewFacts(), series = (G.trends || {}).tools || {};
@@ -2550,7 +2550,7 @@ const WIDGETS = {
       : `<p class="ui-widget-lede">${c.unaccountable
           ? `<b>${c.unaccountable}</b> of ${c.autonomous} answer to nobody: a credential with no
              person behind it, so revoking a sign-on does not stop them.`
-          : 'All of them run under an identity somebody can be asked about.'}</p>
+          : 'いずれも、責任を問える ID で実行されています。'}</p>
         ${loose.length ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table">
           <thead><tr><th>デバイス</th><th class="ui-col-l">実行</th><th class="ui-col-m">スケジュール</th><th class="ui-col-l">到達先</th><th>報告先</th></tr></thead>
           <tbody>${loose.slice(0, 10).map(a => `<tr>
@@ -2580,13 +2580,13 @@ const WIDGETS = {
     const mood = !f.known ? 'silent' : silent ? 'silent' : attention ? 'needs-attention' : 'healthy';
     const value = n => f.known ? n : '—';
     return `<div class="ui-estate-line"><span>資産全体をひと目で</span>
-      <span>${f.known ? `${f.devices.length} observed devices · last ${esc(fmtWindow(hoursNow()))}` : 'Findings unavailable'}</span></div>
+      <span>${f.known ? `${f.devices.length} observed devices · last ${esc(fmtWindow(hoursNow()))}` : '検出結果を利用できません'}</span></div>
     <div class="overview-executive w12 ${mood}" data-tour="stats">
       <section class="executive-posture">
         <span>${uiIcon('shield')}Overall posture</span>
-        <strong>${!f.known ? 'Data unavailable' : silent ? 'Nothing reporting' : attention ? 'Needs attention' : 'Monitoring healthy'}</strong>
-        <p>${!f.known ? 'The findings could not be read. Open System health to check the connection.' : silent
-          ? 'No detection source reported in this window. These counts are missing data, not a clean result.'
+        <strong>${!f.known ? 'データを利用できません' : silent ? '報告なし' : attention ? 'Needs attention' : 'Monitoring healthy'}</strong>
+        <p>${!f.known ? '検出結果を読み取れませんでした。システムヘルスを開いて接続を確認してください。' : silent
+          ? 'この期間に報告した検出ソースはありません。これらのカウントはデータ不足であり、問題なしという結果ではありません。'
           : `${open.length} open personal account${open.length === 1 ? '' : 's'} · ${gaps.length} coverage gap${gaps.length === 1 ? '' : 's'}`}</p>
         <div class="executive-actions">
           ${open.length && f.known ? '<button class="mini" data-nav="personal">アカウントを確認</button>' : ''}
@@ -2594,18 +2594,18 @@ const WIDGETS = {
         </div>
         <small class="ui-posture-note">${f.known
           ? `${f.people} people named in personal-account findings${f.unnamed ? ` · ${f.unnamed} unnamed devices` : ''}`
-          : 'Do not interpret unavailable data as a clean result.'}</small>
+          : '利用できないデータを問題なしと解釈しないでください。'}</small>
       </section>
       <dl class="executive-metrics">
         <div><dt${open.length ? ' class="risk"' : ''}>${value(open.length)}${f.known ? trendChip(tr.personal, true) : ''}</dt>
           <dd>個人アカウントを開く</dd><small>${f.known ? `${fresh} first seen in the last ${fmtWindow(freshH)}${
-            open.length !== f.personal.length ? ` · ${f.personal.length - open.length} accepted` : ''}` : 'Findings unavailable'}</small></div>
+            open.length !== f.personal.length ? ` · ${f.personal.length - open.length} accepted` : ''}` : '検出結果を利用できません'}</small></div>
         <div><dt>${value(f.toolIds.length)}</dt><dd>観測されたAIツール</dd>
           <small>エンドポイント、ブラウザ、クラウドの各検出ソースにわたる</small></div>
         <div><dt>${f.known && f.coverage !== null ? f.coverage + '<span class="ui-percent">%</span>' : '—'}</dt>
-          <dd>コレクターのカバレッジ</dd><small>${f.known ? `${f.collectors} of ${f.devices.length} observed devices` : 'Findings unavailable'}</small></div>
+          <dd>コレクターのカバレッジ</dd><small>${f.known ? `${f.collectors} of ${f.devices.length} observed devices` : '検出結果を利用できません'}</small></div>
         <div><dt>${f.known && f.recorded ? f.recorded.length + '<span class="ui-denominator">/ ' + f.toolIds.length + '</span>' : '—'}</dt>
-          <dd>意思決定の登録</dd><small>${!f.known || !f.recorded ? 'Register data unavailable'
+          <dd>意思決定の登録</dd><small>${!f.known || !f.recorded ? 'AI台帳データを利用できません'
             : `${f.undecided} tools without a recorded decision`}</small></div>
       </dl>
     </div>`;
@@ -2653,7 +2653,7 @@ const WIDGETS = {
           <td>${r.unobserved.length ? `<span class="ui-badge attention">${r.unobserved.length} idle</span>` : ''}${r.strangers.length
             ? ` <span class="ui-badge governance">${r.strangers.length} unseated</span>` : ''}${!r.unobserved.length && !r.strangers.length ? '<span class="ui-muted">フラグ付きの項目はありません</span>' : ''}</td></tr>`;
       }).join('')}</tbody></table></div>
-    <div class="ui-panel-footer"><span>${next ? `Next renewal: ${esc(uiToolName(next.tool_id))} ${when(next.renewal_date)}` : 'No renewal dates recorded'}<i class="ui-shown"></i>
+    <div class="ui-panel-footer"><span>${next ? `Next renewal: ${esc(uiToolName(next.tool_id))} ${when(next.renewal_date)}` : '更新日が記録されていません'}<i class="ui-shown"></i>
       ${uiMoreButton('budget_spend', shown, 'subscriptions')}</span>
       <button class="mini" data-nav="budget">Open Budget ${uiIcon('arrow')}</button></div></div>`;
   },
@@ -2676,10 +2676,10 @@ const WIDGETS = {
       ${!f.known ? '<p class="ui-empty">検出結果を利用できません。</p>' : rows.length ? (bars
         ? '<div class="ui-tool-bars">' + barRows(rows.map(([k,t]) => [k,(t.devices||[]).length, uiToolName(k)]).slice(0, shown.rows.length), 'devices', 'tool') + '</div>'
         : uiToolsTable(shown.rows)) : '<p class="ui-empty">この表示に一致するツールはありません。</p>'}
-      <div class="ui-panel-footer"><span>${f.known ? `${rows.length} of ${f.toolIds.length} discovered tools` : 'No data available'}<i class="ui-shown"></i>
+      <div class="ui-panel-footer"><span>${f.known ? `${rows.length} of ${f.toolIds.length} discovered tools` : '利用可能なデータがありません'}<i class="ui-shown"></i>
         ${uiMoreButton('top_tools', shown, 'tools')}</span>
         <button class="mini" data-nav="tools">Open discovered tools ${uiIcon('arrow')}</button></div>
-      <p class="src-note ui-table-note">${bars ? 'Observed devices per tool. Cloud-only tools may have zero associated devices.'
+      <p class="src-note ui-table-note">${bars ? 'ツールごとの観測デバイス。クラウド専用ツールでは関連デバイスが 0 台の場合があります。'
         : 'One bar per day for the last ' + fmtWindow(hoursNow()) + ', written as a total when the window holds fewer than three days. Devices and cloud identities are counted separately.'}</p>
     </div>`;
   },
@@ -2725,7 +2725,7 @@ const WIDGETS = {
     <div class="ui-panel-head"><div><h3>自社環境全体の可視性</h3><p>観測されたデバイスにおけるコレクターシグナル</p></div>${uiIcon('shield')}</div>
     <div class="ui-coverage-overview">
       <div class="ui-ring-block">
-        <div class="ui-ring" role="img" aria-label="${f.known && f.coverage !== null ? `${f.collectors} of ${f.devices.length} devices have a collector signal` : 'Collector coverage unavailable'}">
+        <div class="ui-ring" role="img" aria-label="${f.known && f.coverage !== null ? `${f.collectors} of ${f.devices.length} devices have a collector signal` : 'コレクターのカバレッジを利用できません'}">
           <svg viewBox="0 0 112 112" aria-hidden="true"><circle class="ui-ring-track" cx="56" cy="56" r="48"/>
             <circle class="ui-ring-value" cx="56" cy="56" r="48" pathLength="100" stroke-dasharray="${f.known && f.devices.length ? f.collectors / f.devices.length * 100 : 0} 100"/></svg>
           <div><strong>${f.known && f.coverage !== null ? f.coverage + '<span>%</span>' : '—'}</strong></div>
@@ -2786,7 +2786,7 @@ const WIDGETS = {
       <p>報告カバレッジに対する日次検出数</p></div></div>
     <div class="exposure-chart">${trendChart(days,
       tr.personal || days.map(() => 0), tr.devices || days.map(() => 0),
-      'personal-account detections', 'reporting devices')}</div>
+      '個人アカウントの検出', 'reporting devices')}</div>
     <p class="src-note">合成リスクスコアではなく、1日あたりの実際の検出結果です。報告デバイスは信頼性チェックを提供します。両方の線が同時に下がっている場合は、露出が改善したのではなく、デバイス群が沈黙したことを意味する可能性があります。</p></div>`;
   },
 
@@ -2836,7 +2836,7 @@ const WIDGETS = {
         ${warnMode && warned ? `<li class="attention">In block mode, ${warned} warned paste${warned === 1 ? '' : 's'} would have been stopped outright.</li>` : ''}
         <li>${live
           ? `Running on ${live} device${live === 1 ? '' : 's'}${versions > 1 ? ` across ${versions} versions` : ''}, so low numbers here genuinely mean few risky pastes.`
-          : 'No device has checked in yet, so zero here means "not deployed", not "nobody pasted anything".'}</li>
+          : 'まだチェックインしたデバイスがないため、ここでのゼロは「未展開」を意味し、「誰も何も貼り付けなかった」という意味ではありません。'}</li>
       </ul>
       ${(PG.rows || []).length ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table">
         <thead><tr><th>ペースト先</th><th class="num">警告済み</th><th class="num ui-col-m">上書き済み</th><th class="num ui-col-l">ブロック済み</th><th>検出機能</th></tr></thead>
@@ -2847,7 +2847,7 @@ const WIDGETS = {
           <td class="num ui-col-l">${num(r.blocked)}</td>
           <td>${(r.detectors || []).slice(0, 3).map(d => `<span class="ui-surface">${esc(d)}</span>`).join('')}</td>
         </tr>`).join('')}</tbody></table></div>` : ''}
-      <div class="ui-panel-footer"><span>${warned ? `${warned} warned in this window` : 'Nothing warned in this window'}<i class="ui-shown"></i></span>
+      <div class="ui-panel-footer"><span>${warned ? `${warned} warned in this window` : 'この期間に警告はありません'}<i class="ui-shown"></i></span>
         <button class="mini" data-nav="paste">Open Paste guard ${uiIcon('arrow')}</button></div></div>`;
   },
 
@@ -2861,7 +2861,7 @@ const WIDGETS = {
       <details class="ui-queue-details">
         <summary>判断と検出結果のキュー <span>${candidates.length
           ? `${candidates.length} new discover${candidates.length === 1 ? 'y' : 'ies'}`
-          : f.undecided === null ? 'Register not read' : `${f.undecided} awaiting a decision`}</span></summary>
+          : f.undecided === null ? 'AI台帳未読み取り' : `${f.undecided} awaiting a decision`}</span></summary>
         ${uiReviewQueueDetail()}
       </details></div>`;
   },
@@ -2941,22 +2941,22 @@ function overviewWidgets() {
 // in a strip attached to nothing, which reads as a control that has come
 // loose rather than one belonging to the card under it.
 const WIDGET_TITLES = {stat_row: 'Headline numbers', top_tools: 'Discovered AI tools',
-  review_queue: 'Where to focus', detection_coverage: 'Visibility across your estate',
+  review_queue: '注力すべき項目', detection_coverage: '環境全体の可視性',
   recent_personal_accounts: 'Recent personal accounts', budget_spend: 'AI spend',
   paste_guard: 'Paste guard', source_health: 'Silent sources',
-  activity_trend: 'Personal-account exposure', agentic: 'Running on its own'};
+  activity_trend: '個人アカウントの露出', agentic: 'Running on its own'};
 // One line each, for the planner: what the card is for, so the arrangement
 // can be made from names rather than by reading every widget in full.
-const WIDGET_BLURB = {stat_row: 'Posture and the four headline counts',
-  top_tools: 'Every tool observed, with devices, identities and personal accounts',
-  review_queue: 'The follow-ups, and the decision and discovery queue',
-  detection_coverage: 'Collector coverage and which sources report',
-  recent_personal_accounts: 'Latest activity in accounts outside your domains',
-  budget_spend: 'Subscriptions against observed use',
-  paste_guard: 'The browser extension, on the devices it reached',
-  source_health: 'Catalogue sources that reported nothing',
+const WIDGET_BLURB = {stat_row: '態勢と 4 つの主要件数',
+  top_tools: '観測されたすべてのツール（デバイス、ID、個人アカウントを含む）',
+  review_queue: 'フォローアップと、意思決定・検出結果のキュー',
+  detection_coverage: 'コレクターのカバレッジと報告しているソース',
+  recent_personal_accounts: 'ドメイン外のアカウントにおける最新アクティビティ',
+  budget_spend: '観測された利用に対するサブスクリプション',
+  paste_guard: '到達したデバイス上のブラウザ拡張機能',
+  source_health: '何も報告していないカタログソース',
   activity_trend: 'Daily detections against reporting coverage',
-  agentic: 'AI that starts itself, and who answers for it', grafana: 'A Grafana panel'};
+  agentic: '自ら起動するAIと、その責任の所在', grafana: 'A Grafana panel'};
 
 // Two columns. A third width squashed every table into a strip, and the
 // only widgets that survived it were the ones with nothing to show.
@@ -3054,7 +3054,7 @@ function overview() {
         : ''}${isStacked ? `<button data-act="w-unstack" data-key="${esc(k)}"
         title="このカードに再び専用の列を割り当てる"
         >スタック解除</button>` : ''}<button data-act="w-hide" data-key="${esc(k)}"
-        >${off ? 'Show' : 'Hide'}</button></span>` : ''}${shown}${editing
+        >${off ? '表示' : '非表示'}</button></span>` : ''}${shown}${editing
         ? `<div class="ov-stack-zone" aria-hidden="true">下にスタック</div>` : ''}</div>`;
   };
   // Cards not on the page, while arranging: named, draggable into place,
@@ -3062,8 +3062,8 @@ function overview() {
   const tray = !editing ? '' : (() => {
     const off = draw.filter(k => hidden.indexOf(k) >= 0);
     return `<div class="ov-tray"><span class="ov-tray-label">${off.length
-      ? 'Not on the page. Drag one into place, or add it at the end.'
-      : 'Every card is on the page.'}</span>${off.map(k =>
+      ? 'ページ上にありません。ドラッグして配置するか、末尾に追加してください。'
+      : 'すべてのカードがページ上にあります。'}</span>${off.map(k =>
       `<div class="gcard ov-chip" draggable="true" data-wk="${esc(k)}"><b>${esc(titleOf(k))}</b>
         <button data-act="w-hide" data-key="${esc(k)}">追加</button></div>`).join('')}</div>`;
   })();
@@ -3104,7 +3104,7 @@ function overview() {
   ${tray}
   <div class="grid${editing ? ' editing ov-canvas' : ''}">${cols.map(colOf).join('')}${editing
     ? `<div class="ov-drop-end${cols.length ? '' : ' empty'}">${cols.length
-        ? 'Drop here to add at the end' : 'The canvas is empty. Drag cards in from the tray.'}</div>` : ''}</div>`;
+        ? 'ここにドロップして末尾に追加' : 'キャンバスは空です。トレイからカードをドラッグして追加してください。'}</div>` : ''}</div>`;
 }
 
 function card(k, d) {
@@ -3156,14 +3156,14 @@ function identityMapPanel(unattributed) {
   const managed = CFG.managed && CFG.managed.enabled;
   if (!managed) return `<div class="wcard" style="margin-bottom:12px">
     <h3>IDマップ</h3><p class="src-note" style="margin-top:0">クラシックモード：マップは次のファイルにあります <span class="mono">IDENTITY_MAP</span>.
-    ${CFG.identity_map_configured ? 'One is configured.' : 'None is configured.'}</p></div>`;
+    ${CFG.identity_map_configured ? 'One is configured.' : '構成されていません。'}</p></div>`;
   const last = saved.map(e => e.updated_at).sort().pop() || '';
   return `<div class="wcard" style="margin-bottom:12px"><h3>IDマップ</h3>
   <p class="src-note" style="margin-top:0">Who is behind a device key or a
   local username. ${saved.length
     ? `<strong>${saved.length}</strong> ${saved.length === 1 ? 'row' : 'rows'} saved
        here${last ? `, last changed ${when(last)}` : ''}`
-    : 'Nothing saved here yet'}${CFG.identity_map_configured
+    : 'ここにはまだ何も保存されていません'}${CFG.identity_map_configured
       ? ` · a file is also mounted, and rows saved here win over it` : ''}.
   ${unattributed} device${unattributed === 1 ? '' : 's'} still ${unattributed === 1 ? 'has' : 'have'} no person attached.</p>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
@@ -3245,8 +3245,8 @@ function parseIdentityCsv(text) {
     }
     const [key, identity] = cut(bare);
     if (['key', 'device', 'local_user'].includes(key.toLowerCase())) return;
-    if (!key) { skipped.push({n, key: bare, why: 'no key'}); return; }
-    if (!identity) { skipped.push({n, key, why: 'no person'}); return; }
+    if (!key) { skipped.push({n, key: bare, why: 'キーなし'}); return; }
+    if (!identity) { skipped.push({n, key, why: '人物なし'}); return; }
     const dup = seen.get(key.toLowerCase());
     if (dup) {
       // First wins, which is worth saying outright: when the corrected row
@@ -3297,7 +3297,7 @@ function attention(k, t) {
   if (t.usage === 'installed' && devs) f.push('installed, never used');
   if ((t.surfaces || []).filter(Boolean).length >= 2) f.push('multiple surfaces');
   const fs = ((G.trends || {}).tool_first_seen || {})[k];
-  if (fs && Date.parse(fs) > Date.now() - 2 * 86400000) f.push('new in the last 2 days');
+  if (fs && Date.parse(fs) > Date.now() - 2 * 86400000) f.push('過去2日以内の新規');
   const level = (personal && devs >= 3) || personal >= 2 ? 'high'
     : personal || f.length >= 2 ? 'medium' : '';
   return {level, factors: f};
@@ -3528,7 +3528,7 @@ function govForm(r) {
   return `${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="display:flex;flex-direction:column;gap:6px">
     <select id="gov-status" class="mfield">
-      ${opt('approved', 'approved')}${opt('not_approved', 'not approved')}${opt('reviewing', 'reviewing')}
+      ${opt('approved', 'approved')}${opt('not_approved', '未承認')}${opt('reviewing', 'reviewing')}
     </select>
     <input id="gov-owner" class="mfield" placeholder="オーナー、例: セキュリティ"
       value="${esc(pre.owner ?? r.owner ?? '')}">
@@ -3580,7 +3580,7 @@ let RW = null;
 const RW_SURFACES = [
   ['Browser',      ['domains']],
   ['Desktop apps', ['app_names', 'bundle_ids', 'exe_names']],
-  ['CLI and IDE',  ['cli.binaries', 'cli.config_paths', 'extension_ids.vscode']],
+  ['CLIとIDE',  ['cli.binaries', 'cli.config_paths', 'extension_ids.vscode']],
   ['MCP',          ['mcp_identifiers', 'mcp_config_paths']],
   ['Email',        ['email_senders']],
 ];
@@ -3589,13 +3589,13 @@ const RW_FIELDLBL = {
   exe_names: 'Windows exe', 'cli.binaries': 'cli binary',
   'cli.config_paths': 'cli config path', 'extension_ids.vscode': 'vscode extension',
   mcp_identifiers: 'mcp identifier', mcp_config_paths: 'mcp config path',
-  email_senders: 'email sender domain',
+  email_senders: 'メール送信者ドメイン',
 };
 const RW_WHY = {
-  ev:      ['seen in your estate',   'ev'],
+  ev:      ['自社環境で検出',   'ev'],
   saved:   ['already saved',         'ev'],
-  derived: ['derived from the name', 'vd'],
-  me:      ['you added',             'me'],
+  derived: ['名前から推定', 'vd'],
+  me:      ['あなたが追加',             'me'],
 };
 const RW_SURFACE_OF = f =>
   (RW_SURFACES.find(x => x[1].indexOf(f) >= 0) || ['Other'])[0];
@@ -3705,10 +3705,10 @@ function rwEntry() {
 
 const RW_STEPS = () => [
   {k: 'found',
-   t: RW.evidence ? 'What we found' : RW.editing ? 'This tool' : 'Which tool',
-   d: RW.evidence ? 'Discovered on your network' : 'Name it to get proposals'},
-  {k: 'ident',  t: 'How else to spot it', d: 'Confirm what to watch for'},
-  {k: 'review', t: 'Review and save',     d: 'What the fleet will watch'},
+   t: RW.evidence ? 'What we found' : RW.editing ? 'このツール' : 'どのツール',
+   d: RW.evidence ? 'ネットワーク上で検出' : '名前を入力して候補を取得'},
+  {k: 'ident',  t: '他に識別する方法', d: '監視対象を確認'},
+  {k: 'review', t: '確認して保存',     d: 'フリートが監視する内容'},
 ];
 
 function rwRailLine(g) {
@@ -3719,13 +3719,13 @@ function rwRailLine(g) {
       ? ' · ' + ev.devices + ' device' + (ev.devices === 1 ? '' : 's') : '')};
   }
   if (g.k === 'ident') {
-    if (!RW.name) return {c: 'pend', t: 'waiting on a name'};
+    if (!RW.name) return {c: 'pend', t: '名前の入力待ち'};
     const n = rwOn().length, s = rwCovered();
     return n
       ? {c: 'val', t: n + ' confirmed across ' + s + ' surface' + (s === 1 ? '' : 's')}
-      : {c: 'pend', t: 'nothing confirmed yet'};
+      : {c: 'pend', t: 'まだ何も確認されていません'};
   }
-  return rwOn().length ? {c: 'val', t: 'ready to save'} : {c: 'pend', t: g.d};
+  return rwOn().length ? {c: 'val', t: '保存できます'} : {c: 'pend', t: g.d};
 }
 const rwReady = () => !!(RW.name && RW.vendor && (RW.editing || RW.id));
 const rwDone = g => g.k === 'found' ? rwReady()
@@ -3733,7 +3733,7 @@ const rwDone = g => g.k === 'found' ? rwReady()
 
 function rwRail() {
   const steps = RW_STEPS(), cov = rwCovered();
-  return `<div class="ssrail"><h3>${RW.editing ? 'Edit a tool' : 'Add a tool'}</h3>
+  return `<div class="ssrail"><h3>${RW.editing ? 'ツールを編集' : 'ツールを追加'}</h3>
   <ol>${steps.map((g, i) => {
     const d = rwDone(g), on = i === RW.step, ln = rwRailLine(g);
     return `<li class="ssstep ${d ? 'done' : ''} ${on ? 'on' : ''}"
@@ -3757,7 +3757,7 @@ function rwBodyFound() {
     <input id="${id}" class="mfield" style="min-width:300px"
       value="${esc(val || '')}" placeholder="${esc(ph || '')}"></dd>`;
   return `<h4>${ev ? 'What we found'
-    : RW.editing ? esc(RW.name || RW.editing) : 'Which tool'}</h4>
+    : RW.editing ? esc(RW.name || RW.editing) : 'どのツール'}</h4>
   <p>${ev
     ? `Discovery saw this on your network and the classifier read it as an AI
        service. Confirm it is what you think it is - everything after this hangs
@@ -3771,7 +3771,7 @@ function rwBodyFound() {
     <dt>${ev.kind === 'mcp_server' ? 'Server' : 'Domain'}</dt>
     <dd class="mono">${esc(ev.what)}</dd>
     <dt>確認日</dt><dd>${ev.devices} device${ev.devices === 1 ? '' : 's'}</dd>
-    ${ev.confidence ? `<dt>読み取り結果</dt><dd>${esc(ev.category || 'AI tool')}
+    ${ev.confidence ? `<dt>読み取り結果</dt><dd>${esc(ev.category || 'AIツール')}
       <span class="pill p-ok">${esc(ev.confidence)} confidence</span></dd>` : ''}
     <dt>ソース</dt><dd>検出結果の実行</dd>
   </dl></div>` : ''}
@@ -3790,12 +3790,12 @@ function rwBodyFound() {
   </dl>
   <p class="src-note" style="margin-top:10px">名前、ベンダー、ID、カテゴリはすべて必須です。これらがないエントリはAI台帳が拒否します。</p>
   <p class="src-note wnote">${RW.editing
-    ? 'The id is how every other page refers to this tool, so it cannot change.'
+    ? 'IDは他のすべてのページがこのツールを参照するためのものなので、変更できません。'
     : ev
     ? `Dismissing instead? That is the Dismiss button on the review queue - it
        records that a person decided, so the same domain does not come back
        next week.`
-    : 'The id is how every other page refers to this tool and cannot change later.'}</p>`;
+    : 'IDは他のすべてのページがこのツールを参照するためのもので、後から変更できません。'}</p>`;
 }
 
 function rwSugRow(s, i) {
@@ -3822,7 +3822,7 @@ function rwBodyIdent() {
     if (!rows.length) return '';
     const n = rows.filter(p => p[0].on).length;
     return `<div class="sgroup"><h5>${esc(sf[0])}
-      <span class="ct">${n ? n + ' confirmed' : 'none confirmed'}</span></h5>
+      <span class="ct">${n ? n + ' confirmed' : '確定なし'}</span></h5>
       ${rows.map(p => rwSugRow(p[0], p[1])).join('')}</div>`;
   }).join('')}
   <div class="sgroup"><h5>自分で追加</h5>
@@ -3860,7 +3860,7 @@ function rwBodyReview() {
   <b>監視中</b> 識別子は有効だが、まだ何も一致していないことを意味します。これは、誰もそのようには使用していないことを意味する場合もあれば、識別子が誤っていることを意味する場合もあります。ツールページでは、断定的なゼロを報告するのではなく、その内訳を可視化したままにします。</div>
   <div style="margin-bottom:10px">
     <button class="mini" data-act="reg-adv">${RADV
-      ? 'Back to the wizard' : 'Advanced: edit as JSON'}</button></div>
+      ? 'ウィザードに戻る' : 'Advanced: edit as JSON'}</button></div>
   ${RADV ? `<textarea id="re-json" class="mfield" rows="14"
       style="width:100%;font-family:ui-monospace,monospace"
       >${esc(JSON.stringify(rwEntry(), null, 2))}</textarea>` : ''}`;
@@ -3883,7 +3883,7 @@ function regForm() {
           ? `<button class="mini pri" data-act="rw-step" data-key="${RW.step + 1}"
               ${canNext ? '' : 'disabled'}>次へ</button>`
           : `<button class="mini pri" data-act="reg-save">${RW.editing
-              ? 'Save changes' : 'Save and watch'}</button>`}
+              ? '変更を保存' : '保存して監視'}</button>`}
       </div></div></div>`;
 }
 
@@ -3931,10 +3931,10 @@ function regEntryFromForm() {
 }
 
 async function registryView() {
-  const gate = managedGate('Tool registry'); if (gate) return gate;
+  const gate = managedGate('ツールレジストリ'); if (gate) return gate;
   if (!RENTRIES) {
     const r = await mfetch('/api/registry-entries');
-    if (!r.ok) return managedError(r, 'Tool registry');
+    if (!r.ok) return managedError(r, 'ツールレジストリ');
     RENTRIES = (await r.json()).entries || [];
   }
   if (!REGTOOLS) {
@@ -3990,7 +3990,7 @@ function watchlistBlock(observedIds) {
   if (!rows.length) return '';
   const yearOut = new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10);
   const LBL = {approved: ['approved', 'p-ok'],
-               not_approved: ['not approved', 'p-warn']};
+               not_approved: ['未承認', 'p-warn']};
   const undecided = rows.filter(t => !decided[t.id]).length;
   return `<details id="wl-details" style="margin-top:22px" ${WLOPEN ? 'open' : ''}>
   <summary data-act="wl-toggle" style="cursor:pointer;font-size:14px">
@@ -4077,7 +4077,7 @@ async function register() {
   // pill turning amber leaves someone wondering, and an approval nobody has
   // revisited is not evidence a tool is safe, it is evidence nobody looked.
   const PILL = {approved:'p-ok', not_approved:'p-warn', reviewing:'p-acc'};
-  const LABEL = {approved:'approved', not_approved:'not approved',
+  const LABEL = {approved:'approved', not_approved:'未承認',
                  reviewing:'reviewing'};
   // Status says what was decided, and at most one line of context. The expiry
   // used to live here too, which put four lines in one cell and made every
@@ -4337,7 +4337,7 @@ async function iso() {
   // authority this project does not have, and reproducing the standard's own
   // wording is not ours to do.
   const rows = [
-    ['Inventory and usage',
+    ['インベントリと使用状況',
      `${n(e.tools_observed)} tools in use, ${n(e.tools_watched_for)} watched for`
      + (e.tools_not_in_registry
         ? `, ${n(e.tools_not_in_registry)} not in the registry` : ''),
@@ -4354,12 +4354,12 @@ async function iso() {
      `${n(e.sources_reporting)} of ${n(e.sources_known)} expected sources reporting`,
      'setup', 'Setup'],
 
-    ['Account governance',
+    ['アカウントのガバナンス',
      `${n(e.personal_accounts)} personal accounts across `
      + `${n(e.personal_account_tools)} tools`,
      'personal', 'Personal accounts'],
 
-    ['Data protection',
+    ['データ保護',
      `${n(e.paste_events)} paste events, ${n(e.paste_overridden)} overridden. `
      + `Inspected content is not retained`,
      'paste', 'Paste guard'],
@@ -4375,7 +4375,7 @@ async function iso() {
     ['Evidence',
      `Snapshot for the window ${esc((e.window||{}).from||'').slice(0,10)} to `
      + `${esc((e.window||{}).to||'').slice(0,10)}, checksummed`,
-     null, 'This page'],
+     null, 'このページ'],
   ];
 
   // Review inputs are the only separate block, because they are things
@@ -4475,10 +4475,10 @@ function settingRow(key, label, placeholder, note, batch) {
     : s.source === 'db' ? '<span class="pill p-mut">ここに保存済み</span>'
     : s.source === 'env' ? '<span class="pill p-mut">デプロイから</span>' : '';
   const src = s.source === 'db'
-    ? (s.env ? `Saved in the portal (overriding the deployment's value; clear to fall back to it).` : 'Saved in the portal.')
+    ? (s.env ? `Saved in the portal (overriding the deployment's value; clear to fall back to it).` : 'ポータルに保存済み。')
     : s.source === 'env' ? `Currently from the deployment's environment; saving here overrides it.` : '';
   const secretNote = secret
-    ? (s.set ? 'A value is set (never shown). Leave blank and save to CLEAR it; type and save to replace it.' : 'Not set.')
+    ? (s.set ? 'A value is set (never shown). Leave blank and save to CLEAR it; type and save to replace it.' : '未設定。')
     : '';
   const more = `${esc(note)}${note ? ' ' : ''}${secretNote || src}`.trim();
   const val = secret ? '' : (s.value || '');
@@ -4544,7 +4544,7 @@ function widgetPickerRow() {
         refs.has(p.title) || refs.has(String(p.panel_id)), panelRef(p),
         `grafana:${panelRef(p)}`, 'Embedded Grafana panel', 'Grafana')).join('')}
       ${orphans.map((r, i) => box('owo-' + i, true, r,
-        `grafana:${r}`, 'Saved panel reference no longer present in the panels list',
+        `grafana:${r}`, '保存済みパネルの参照がパネル一覧に存在しなくなりました',
         'Grafana')).join('')}
     </div>
     <div class="widget-picker-foot">
@@ -4612,10 +4612,10 @@ function testNote(which) {
 function logStoreFields(withUsername, batch) {
   return settingRow('log_store_url', 'Log store base URL',
     'http://loki.<namespace>.svc.cluster.local:3100',
-    'The BASE URL. The receiver derives the push endpoint from it, so the push-vs-base mixup cannot happen here.', batch)
+    'BASE URLです。レシーバーがそこからプッシュエンドポイントを導出するため、ここでpushとbaseの取り違えは起こりません。', batch)
     + (withUsername ? settingRow('log_store_username', 'Log store username',
         'numeric instance id on Grafana Cloud', '', batch)
-      + settingRow('log_store_password', 'Log store password / token', 'paste to set', '')
+      + settingRow('log_store_password', 'ログストアのパスワード / トークン', '貼り付けて設定', '')
       : '');
 }
 
@@ -4686,21 +4686,21 @@ async function extSetup() {
   // the way the sign-on wizard treats a verified value, rather than a tick
   // somebody presses to say they did it.
   const PAGES = [
-    {t: 'Download', d: 'The pre-configured source',
-     done: !!st.id, line: st.id ? 'downloaded - the id proves it'
+    {t: 'Download', d: '事前設定済みのソース',
+     done: !!st.id, line: st.id ? 'ダウンロード済み - IDがそれを証明'
        : ready ? (ver ? 'source ' + ver + ', ready' : 'ready') : ''},
-    {t: 'Pack', d: 'And keep the key',
-     done: !!st.id, line: st.id ? 'packed - the id proves it' : ''},
-    {t: 'Identity', d: 'The Chromium extension ID',
+    {t: 'Pack', d: 'キーも保持',
+     done: !!st.id, line: st.id ? 'パッケージ済み - IDがそれを証明' : ''},
+    {t: 'Identity', d: 'Chromium拡張機能ID',
      done: !!st.id, line: st.id},
     {t: 'Host it', d: 'Where browsers fetch it',
      done: !!(st.crx && st.upd),
      line: (st.crx && st.upd) ? 'crx + updates.xml hosted'
-       : st.crx ? 'crx only - no manifest yet' : ''},
+       : st.crx ? 'crxのみ - マニフェストはまだありません' : ''},
     {t: 'Firefox', d: 'Optional', opt: true,
      done: !!(st.gecko && st.xpi),
-     line: (st.gecko && st.xpi) ? st.gecko : 'not deployed'},
-    {t: 'Behaviour', d: 'What the guard does', done: true,
+     line: (st.gecko && st.xpi) ? st.gecko : '未デプロイ'},
+    {t: 'Behaviour', d: 'ペーストガードの動作', done: true,
      line: (st.mode || 'warn') + ' mode'},
   ];
   const need = PAGES.filter(p => !p.opt);
@@ -4730,7 +4730,7 @@ async function extSetup() {
     your browsers install it from where you host it. This download is the
     extension source shipped with this portal${ver ? ` (version ${esc(ver)})` : ''},
     with its manifest already pointed at
-    <span class="mono">${esc(rx || 'your receiver')}</span> — パッキングに必要な唯一の編集です。後で保管しておく場所に解凍してください。後のリリースを再パッキングする際は、同じフォルダー名と同じキーを使用する必要があります。</p>
+    <span class="mono">${esc(rx || 'お使いのレシーバー')}</span> — パッキングに必要な唯一の編集です。後で保管しておく場所に解凍してください。後のリリースを再パッキングする際は、同じフォルダー名と同じキーを使用する必要があります。</p>
     ${ready ? dlBtn('extension-source', 'download the extension source (zip)')
       : '<div class="note">公開レシーバー URL はまだありません。マニフェストには、ブラウザーが報告先とするオリジンが組み込まれます。ウィザードのステップ 1（または設定）で URL を保存すると、このダウンロードが表示されます。</div>'}
     <p class="src-note">レシーバー URL が変わった場合は、再度ダウンロードして再パッキングしてください。拡張機能は中央設定を読み取らないため、オリジンはパッケージ内に存在します。対象の AI サイトを削減することも可能です（host_permissions と両方の content_scripts の match リストを一緒に編集します）が、既定のセットはレジストリのブラウザー対象範囲であり、ほとんどのデプロイではそのまま出荷されます。</p>`;
@@ -4782,13 +4782,13 @@ async function extSetup() {
         'The public URL of the versioned .crx. Save it first; the update manifest below is generated from it.')}
     </dl>
     <p class="lede" style="margin:10px 0 0">${st.crx && st.id
-      ? 'Download the generated update manifest and host it next to the .crx:'
+      ? '生成された更新マニフェストをダウンロードし、.crx と同じ場所にホストしてください:'
       : 'Save the .crx URL (and the id on the previous page) and the generated update manifest appears here:'}</p>
     ${st.crx && st.id ? dlBtn('extension-updates-xml', 'download updates.xml') : ''}
     <dl class="kv" style="margin-top:10px">
       ${settingRow('extension_update_url', 'Update manifest URL',
         'https://files.example.com/updates.xml',
-        'Where you put updates.xml. The install policies point every browser at this URL, and it is how future releases roll out - pack, upload, replace updates.xml, done.')}
+        'updates.xml を置く場所です。インストールポリシーはすべてのブラウザーをこの URL に向け、今後のリリースはここから展開されます - パッケージ化、アップロード、updates.xml の置き換え、以上です。')}
     </dl>
     ${st.upd ? `<div style="margin-top:8px">
       <button class="mini" data-act="run-test" data-key="extension-updates">ホストされたマニフェストをプローブする</button>
@@ -4812,10 +4812,10 @@ async function extSetup() {
     <dl class="kv">
       ${settingRow('firefox_extension_id', 'Firefox extension ID (gecko id)',
         'ai-guard@your-org.example',
-        'The id you set in the manifest. Not the 32-letter Chromium id.')}
+        'マニフェストで設定した id です。32文字の Chromium id ではありません。')}
       ${settingRow('extension_xpi_url', 'Signed .xpi URL',
         'https://files.example.com/' + xpiName,
-        'The public URL of the SIGNED file from AMO.')}
+        'AMO から取得した署名済みファイルの公開 URL です。')}
     </dl>
     ${st.gecko && st.xpi ? `<p class="lede" style="margin:10px 0 0">これをその隣に、マニフェストで指定したupdate_urlでホストします：</p>
       ${dlBtn('firefox-updates-json', 'download firefox-updates.json')}
@@ -4872,7 +4872,7 @@ async function wizard() {
   GOVDECS.forEach(d => { decided[d.tool_id] = d.status; });
   const yearOut = new Date(Date.now() + 365 * 86400000).toISOString().slice(0, 10);
   const LABEL = {approved: ['approved', 'p-ok'],
-                 not_approved: ['not approved', 'p-warn']};
+                 not_approved: ['未承認', 'p-warn']};
 
   const toolRow = t => {
     const d = decided[t.id];
@@ -4898,7 +4898,7 @@ async function wizard() {
     {t: 'Corporate domains',    need: 'req', act: 'Start collecting'},
     {t: 'Governance baseline',  need: 'opt', act: 'Make it useful'},
     {t: 'Browser extension',    need: 'opt', act: 'Make it useful'},
-    {t: 'Alerting and Grafana', need: 'opt', act: 'Make it useful'},
+    {t: 'アラートと Grafana', need: 'opt', act: 'Make it useful'},
     {t: 'Deployment downloads', need: 'out', act: 'Make it useful'},
   ];
   // A first-run wizard that only counts steps tells you how far down the page
@@ -4918,23 +4918,23 @@ async function wizard() {
   const wLine = n => {
     if (n === 1) return wv('receiver_public_url')
       ? {c: 'val', t: wv('receiver_public_url').replace(/^https?:\/\//, '')}
-      : {c: 'need', t: 'nothing can deploy without it'};
+      : {c: 'need', t: 'これがないとデプロイできません'};
     if (n === 2) return wv('log_store_url')
-      ? {c: 'val', t: 'reading from it'}
-      : {c: 'pend', t: 'findings stay in container logs'};
+      ? {c: 'val', t: 'ここから読み取り中'}
+      : {c: 'pend', t: '検出結果はコンテナログに残ります'};
     if (n === 3) return (cd.value || []).length
       ? {c: 'val', t: (cd.value || []).join(', ')}
-      : {c: 'need', t: 'every account reads as personal'};
+      : {c: 'need', t: 'すべてのアカウントが個人として扱われます'};
     if (n === 4) return (GOVDECS || []).length
       ? {c: 'val', t: (GOVDECS || []).length + ' recorded'}
-      : {c: 'pend', t: 'nothing decided yet'};
+      : {c: 'pend', t: 'まだ何も決定されていません'};
     if (n === 5) return extSettingsState().id
-      ? {c: 'val', t: 'packed and hosted'} : {c: 'pend', t: 'not set up'};
+      ? {c: 'val', t: 'パッケージ化済みでホスト済み'} : {c: 'pend', t: '未設定'};
     if (n === 6) return (wv('alertmanager_url') || wv('grafana_url'))
       ? {c: 'val', t: wv('alertmanager_url') ? 'alerting on' : 'grafana embedded'}
-      : {c: 'pend', t: 'nothing pages'};
+      : {c: 'pend', t: '何も通知されません'};
     return (CFG.managed && CFG.managed.artifacts_ready)
-      ? {c: 'val', t: 'ready'} : {c: 'pend', t: 'needs the receiver URL'};
+      ? {c: 'val', t: 'ready'} : {c: 'pend', t: 'レシーバー URL が必要です'};
   };
   // A viewer can neither finish the wizard nor skip it: both write
   // onboarding_done, and the receiver refuses the write. Pressing the only
@@ -4978,7 +4978,7 @@ async function wizard() {
   if (WIZSTEP === 1) body = `<h4>エステートに名前を付ける</h4>
   <p class="lede" style="margin-bottom:10px">任意ですが、どこにでも表示されます。ロゴの下のコントロール、サインイン画面、細いトップバーがすべてこれを表示します。後から設定 › 表示とアラートで編集できます。</p>
   <dl class="kv">
-    ${settingRow('org_name', 'Organisation name', 'Acme Ltd', '')}
+    ${settingRow('org_name', '組織名', 'Acme Ltd', '')}
   </dl>
   <h4 style="margin-top:18px">マシンがレシーバーに接続する場所</h4>
   <p class="lede" style="margin-bottom:10px">ノート PC とサーバーが検出結果を送信する先の URL です。以下のすべてのダウンロードに組み込まれるため、クラスター内からだけでなく、それらのマシンからも機能する必要があります。つまり、この名前をイングレスまたはリバースプロキシに向ける DNS レコードと証明書が必要です。ただし、Tailscale operator のようなものが両方を処理してくれる場合は除きます。</p>
@@ -5003,9 +5003,9 @@ async function wizard() {
   <span class="mono">/loki/api/v1/push</span> そしてこのポータルが読み取る元は
   <span class="mono">/loki/api/v1/query_range</span>。採用を確定する前に確認する価値があります。いくつかのログストアは Loki 互換をうたっています <i>ingest</i> 一方で、独自の言語でクエリに応答し、そのうちの1つは、送信したすべての検出結果を受け取ったうえで、空のポータルを表示します。</p>
   <div style="margin-bottom:10px">
-    ${storeBtn('self', 'self-hosted / in-cluster')}
+    ${storeBtn('self', 'セルフホスト / クラスタ内')}
     ${storeBtn('cloud', 'hosted (Grafana Cloud)')}
-    ${storeBtn('none', 'none yet')}
+    ${storeBtn('none', 'まだなし')}
   </div>
   ${WIZSTORE === 'none' ? `<p class="lede">問題ありません。検出結果はレシーバーのコンテナログに残るため、何も失われません。ここでのページは、後から設定でストアを追加するまで空のままです。</p>`
   : `${WIZSTORE === 'self' ? `<p class="lede">Lokiサービスを探す -
@@ -5050,7 +5050,7 @@ async function wizard() {
       'http://alertmanager.<namespace>.svc:9093',
       'warn findings page through this; empty means nothing pages.')}
     ${settingRow('grafana_url', 'Grafana URL',
-      'the URL a BROWSER reaches Grafana on',
+      'ブラウザーが Grafana にアクセスするための URL',
       'Saving reloads the page (the frame permission is baked into each page load). Panels and dashboard UID live under Settings; Grafana must allow embedding.')}
   </dl>`;
   if (WIZSTEP === 7) body = `<h4>デプロイ用ダウンロード</h4>
@@ -5073,8 +5073,8 @@ async function wizard() {
     <div class="ssmain">${body}
       <div class="ssfoot">
         <button class="mini" data-act="${wizRO ? 'wiz-close'
-          : canGo ? 'wiz-finish' : 'wiz-skip'}">${wizRO ? 'Close'
-          : canGo ? 'Finish setup' : 'Skip for now'}</button>
+          : canGo ? 'wiz-finish' : 'wiz-skip'}">${wizRO ? '閉じる'
+          : canGo ? 'Finish setup' : '今はスキップ'}</button>
         <span class="sp"></span>
         ${WIZSTEP > 1 ? `<button class="mini" data-act="wiz-step"
           data-key="${WIZSTEP - 1}">戻る</button>` : ''}
@@ -5082,7 +5082,7 @@ async function wizard() {
           ? `<button class="mini pri" data-act="wiz-step"
               data-key="${WIZSTEP + 1}">次へ</button>`
           : `<button class="mini pri" data-act="${wizRO ? 'wiz-close' : 'wiz-finish'}"
-              >${wizRO ? 'Close' : 'Finish setup'}</button>`}
+              >${wizRO ? '閉じる' : 'Finish setup'}</button>`}
       </div></div></div>
   <p class="src-note">後から戻れます。上記はすべて設定で編集可能なままで、設定からこのウィザードを再度開けます。</p>`;
 }
@@ -5106,11 +5106,11 @@ function fleetSettings() {
       ? `Saved in the portal, shadowing the deployment's
          <span class="mono">CORP_DOMAINS</span> (${esc(cd.env.join(', '))});
          clearing falls back to it.`
-      : 'Saved in the portal.'
+      : 'ポータルに保存済み。'
     : cd.source === 'env'
       ? `From the deployment's <span class="mono">CORP_DOMAINS</span>;
          saving here overrides it without touching the deployment.`
-      : 'Not set anywhere yet.';
+      : 'まだどこにも設定されていません。';
   return `<div class="wcard" style="margin-bottom:10px"><h3>検出とペーストガード</h3>
   <p class="lede" style="margin-bottom:10px">レシーバーに保存され、フリートによって自動的に取得されます — コレクターは次回のチェックインで変更を受け取るため、MDM経由で再プッシュする必要はありません。</p>
   <dl class="kv">
@@ -5142,7 +5142,7 @@ function connectionSettings() {
   <dl class="kv">
     ${settingRow('receiver_public_url', 'Public receiver URL',
       'https://ai-guard.your-tailnet.ts.net',
-      'The URL endpoints reach from OUTSIDE - it gets baked into every downloaded artifact. Not the internal receiver address the portal proxies to.', true)}
+      'エンドポイントが外部から到達する URL です。ダウンロードされるすべての成果物に埋め込まれます。ポータルがプロキシする内部のレシーバーアドレスではありません。', true)}
   </dl>
   <div style="margin-top:8px">
     <button class="mini" data-act="run-test" data-key="receiver-url">保存したURLをプローブ</button>
@@ -5153,8 +5153,8 @@ function connectionSettings() {
   <dl class="kv">
     ${logStoreFields(true, true)}
     ${settingRow('log_store_push_url', 'Push endpoint override',
-      'only for gateways with a non-standard push path',
-      'Advanced. Leave empty to derive it from the base URL, which is almost always right.', true)}
+      '標準以外のプッシュパスを使用するゲートウェイ専用',
+      '詳細設定。空欄のままにするとベース URL から導出されます。ほとんどの場合はこれで正しく動作します。', true)}
   </dl>${logStoreTests()}</div>`;
 }
 
@@ -5286,10 +5286,10 @@ const MAIL_ELSEWHERE = `
 // The card is what you see when you are not setting it up, which is almost
 // always. The wizard is the one time you are.
 const MAIL_STEPS = [
-  {k: 'who',    t: 'What sends your mail', d: 'Fills in what it can'},
-  {k: 'server', t: 'Where to send it',     d: 'Host, port, encryption'},
-  {k: 'from',   t: 'Who it is from',       d: 'Credentials and the address'},
-  {k: 'words',  t: 'What it says',         d: 'Add your own lines'},
+  {k: 'who',    t: 'メールを送信するもの', d: 'わかる範囲で自動入力します'},
+  {k: 'server', t: '送信先',     d: 'Host, port, encryption'},
+  {k: 'from',   t: '差出人',       d: '認証情報とアドレス'},
+  {k: 'words',  t: 'What it says',         d: '独自の行を追加'},
   {k: 'test',   t: 'Prove it works',       d: 'A real message, then done'},
 ];
 
@@ -5358,7 +5358,7 @@ async function mailSave() {
 // caret with it, which makes the box unusable to actually type in.
 function mailPreviewHtml() {
   const name = (AUTH && AUTH.username) || 'somebody';
-  const portal = (MAILW.portal || '').trim() || 'the Shadow AI Guard portal';
+  const portal = (MAILW.portal || '').trim() || 'Shadow AI Guard ポータル';
   const fill = t => (t || '').split('{username}').join(name)
                              .split('{portal_url}').join(portal);
   // The HOST, compared exactly - not a substring of the URL. A substring
@@ -5401,7 +5401,7 @@ function mailPreviewSync() {
   const rst = document.getElementById('mw-reset');
   if (rst) rst.disabled = mailIsDefault();
   const lbl = document.getElementById('mw-isdefault');
-  if (lbl) lbl.textContent = mailIsDefault() ? 'this is the default' : '';
+  if (lbl) lbl.textContent = mailIsDefault() ? 'これはデフォルトです' : '';
 }
 
 function mailBody(k) {
@@ -5449,8 +5449,8 @@ function mailBody(k) {
       value="${esc(MAILW.username)}"></p>
     <p><input id="mw-pass" class="mfield" type="password" style="min-width:340px"
       autocomplete="new-password"
-      placeholder="${MAILW.passSet ? 'Stored - leave blank to keep it'
-                                   : 'password or API key'}"></p>
+      placeholder="${MAILW.passSet ? '保存済み - 空欄のままにすると保持されます'
+                                   : 'パスワードまたはAPIキー'}"></p>
     <p><input id="mw-from" class="mfield" style="min-width:340px"
       placeholder="ai-guard@example.com" value="${esc(MAILW.from)}"></p>
     <p><input id="mw-portal" class="mfield" style="min-width:340px"
@@ -5458,7 +5458,7 @@ function mailBody(k) {
     <p class="lede" style="font-size:12.5px">最後の項目は、ユーザーがアクセスするよう案内されるアドレスです。レシーバーは、このポータルがどのホスト名でアクセスされているかを知らないため、間違ったホスト名へのリンクは、リンクがないよりも悪いです。</p>
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-save" ${busy ? 'disabled' : ''}>${busy
-        ? '<span class="ssspin"></span>Saving…' : 'Save and continue'}</button></div>`;
+        ? '<span class="ssspin"></span>Saving…' : '保存して続行'}</button></div>`;
   if (k === 'words') {
     const def = mailIsDefault();
     return `
@@ -5474,12 +5474,12 @@ function mailBody(k) {
     <div class="ssacts" style="margin-top:0">
       <button class="mini" id="mw-reset" data-act="mail-reset"
         ${def ? 'disabled' : ''}>デフォルトに戻す</button>
-      <span class="lede" id="mw-isdefault">${def ? 'this is the default' : ''}</span>
+      <span class="lede" id="mw-isdefault">${def ? 'これはデフォルトです' : ''}</span>
     </div>
     <div id="mw-preview">${mailPreviewHtml()}</div>
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-words-next" ${busy ? 'disabled' : ''}>${busy
-        ? '<span class="ssspin"></span>Saving…' : 'Save and continue'}</button></div>`;
+        ? '<span class="ssspin"></span>Saving…' : '保存して続行'}</button></div>`;
   }
   const missed = (USERS || []).filter(u => u.email && !u.invited_at).length;
   return `
@@ -5552,7 +5552,7 @@ function mailSettings() {
        plainly that nobody was emailed, rather than refusing to create
        them.`}</p>
   <p><button class="mini" data-act="mail-open">${ready
-    ? 'Review the configuration' : 'Set it up'}</button>
+    ? '設定を確認' : 'Set it up'}</button>
     ${ready ? `<button class="mini" data-act="mail-quick-test"
       style="margin-left:6px">テストを送信</button>` : ''}
     ${MAILMSG ? `<span class="lede" style="margin:0 0 0 8px;font-size:12.5px"
@@ -5562,7 +5562,7 @@ function mailSettings() {
     ${missed === 1 ? 'has' : 'have'} never been told.
     ${ready ? `<button class="mini" data-act="user-invite-all"
       style="margin-left:6px">届かなかった招待を送信</button>`
-    : 'Set email up and this becomes one button.'}</div>` : ''}
+    : 'メールを設定すると、これが1つのボタンになります。'}</div>` : ''}
   </div>`;
 }
 
@@ -5573,8 +5573,8 @@ function mailSettings() {
 function orgSettings() {
   return `<div class="wcard" style="margin-bottom:10px"><h3>表示</h3>
   <dl class="kv">
-    ${settingRow('org_name', 'Organisation name', 'Acme Ltd',
-      'Names the estate: the control beneath the logo, the top bar on narrow screens and the sign-in screen all say it. It is shown before anybody signs in, so keep it to a name. Empty means the portal says "Managed estate".')}
+    ${settingRow('org_name', '組織名', 'Acme Ltd',
+      'エステートの名前: ロゴの下のコントロール、狭い画面のトップバー、サインイン画面にすべて表示されます。誰もサインインする前に表示されるため、名前に留めてください。空の場合、ポータルは「Managed estate」と表示します。')}
     ${windowRow()}
   </dl></div>`;
 }
@@ -5584,24 +5584,24 @@ function alertingSettings() {
   <dl class="kv">
     ${settingRow('alertmanager_url', 'Alertmanager URL',
       'http://alertmanager.<namespace>.svc:9093',
-      'warn findings page through this. Empty means findings are logged and dashboarded but nothing pages.', true)}
+      '警告の検出項目はこれを通じてページ通知されます。空の場合、検出項目はログに記録されダッシュボードに表示されますが、ページ通知は行われません。', true)}
     ${settingRow('webhook_url', 'Notification webhook',
       'https://hooks.slack.com/services/…',
-      'A Slack-compatible incoming webhook. The receiver posts to it when discovery adds a NEW tool or MCP server to the review queue - once per discovery, never per finding. The weekly digest is separate: set DIGEST_WEBHOOK_URL on the portal deployment.', true)}
+      'Slack互換の受信Webhookです。レシーバーは、検出結果が新しいツールまたはMCPサーバーをレビューキューに追加したときにここへ投稿します - 検出結果ごとに1回で、検出項目ごとではありません。週次ダイジェストは別です。ポータルのデプロイで DIGEST_WEBHOOK_URL を設定してください。', true)}
     ${settingRow('grafana_url', 'Grafana URL',
-      'the URL a BROWSER reaches Grafana on',
+      'ブラウザーが Grafana にアクセスするための URL',
       'Saving reloads the page: the frame permission lives in this page\u2019s own security policy, which is fixed per load. Grafana must also allow embedding.', true)}
     ${settingRow('grafana_panels', 'Grafana panels',
       'dashboardUid:panelId:Title; semicolon separated', '', true)}
     ${settingRow('grafana_dashboard_uid', 'Grafana dashboard UID',
-      'the /d/ segment of the dashboard URL',
-      'Embeds one whole dashboard instead of panels. Pasting the full dashboard URL works: it is trimmed to the UID.', true)}
+      'ダッシュボードURLの /d/ セグメント',
+      'パネルではなくダッシュボード全体を埋め込みます。完全なダッシュボードURLを貼り付けても機能します。UIDだけに切り詰められます。', true)}
     ${settingRow('budget_currency', 'Preferred currency',
       'GBP',
       'The Budget headline converts into it at the ECB daily reference rate, naming the rate date inline; newly linked tools default to it.', true)}
     ${settingRow('working_hours', 'Working hours',
       '09:00-18:00',
-      'Shades that stretch on the Agentic AI day, so a job firing when nobody is around reads as one. Nothing here can know your hours, so nothing is shaded until you set them. A shift crossing midnight works: 22:00-06:00.', true)}
+      'Agentic AI day 上で網掛けが広がるため、誰もいないときに実行されたジョブも1件として表示されます。ここでは勤務時間を把握できないため、設定するまで何も網掛けされません。深夜をまたぐシフトにも対応します: 22:00-06:00。', true)}
     ${widgetPickerRow()}
   </dl></div>`;
 }
@@ -5623,12 +5623,12 @@ let SSOW = null;
 // was supposed to prove the configuration. Asking for it up front turns that
 // into a field to fill rather than a dead end to work backwards out of.
 const SSO_STEPS = [
-  {k:'emails',   t:'Addresses on accounts',   d:'What a sign-in is matched on'},
-  {k:'register', t:'Register an application', d:'In the Entra admin center'},
-  {k:'tenant',   t:'Your tenant',             d:'Checked against the provider'},
-  {k:'client',   t:'Application and secret',  d:'Proved before anyone signs in'},
-  {k:'redirect', t:'Where sign-ins return',   d:'Must match the registration'},
-  {k:'test',     t:'Verify and enable',       d:'A real sign-in, then enable'},
+  {k:'emails',   t:'Addresses on accounts',   d:'サインインの照合基準'},
+  {k:'register', t:'Register an application', d:'Entra管理センターで'},
+  {k:'tenant',   t:'ご利用のテナント',             d:'プロバイダーと照合されます'},
+  {k:'client',   t:'アプリケーションとシークレット',  d:'サインイン前に検証されます'},
+  {k:'redirect', t:'Where sign-ins return',   d:'登録内容と一致する必要があります'},
+  {k:'test',     t:'検証して有効化',       d:'実際のサインインを行ってから有効化します'},
 ];
 
 // Step positions by key. They were written as literals until a step was
@@ -5722,7 +5722,7 @@ async function ssoProbe(withClient) {
       // would be worse than saying what came back.
       SSOW.done.client = 'Accepted · ' + SSOW.client;
       SSOW.err = 'The tenant took the pair but refused the check: '
-        + (out.detail || 'no reason given')
+        + (out.detail || '理由は示されていません')
         + ' That can be normal. The test sign-in at the end decides.';
     }
   } else {
@@ -5760,10 +5760,10 @@ window.addEventListener('message', e => {
   if (e.origin !== location.origin || !SSOW) return;
   const d = e.data || {};
   if (d.ssoTest === 'ok') {
-    SSOW.done.test = 'Signed in as ' + (d.username || 'your account');
+    SSOW.done.test = 'Signed in as ' + (d.username || 'あなたのアカウント');
     SSOW.err = '';
   } else if (d.ssoTest === 'fail') {
-    SSOW.err = String(d.detail || 'that sign-in was refused');
+    SSOW.err = String(d.detail || 'そのサインインは拒否されました');
   } else { return; }
   SSOW.busy = ''; render();
 });
@@ -5842,13 +5842,13 @@ function ssoBody(k) {
       placeholder="Application (client) ID" value="${esc(SSOW.client)}"></p>
     <p><input id="sso-secret" class="mfield" type="password"
       style="min-width:340px" autocomplete="new-password"
-      placeholder="${SSOW.secretSet ? 'Stored - leave blank to keep it'
+      placeholder="${SSOW.secretSet ? '保存済み - 空欄のままにすると保持されます'
                                     : 'Client secret value'}"></p>
     <p class="lede" style="font-size:12.5px">作成時にシークレットをコピーしなかった場合は、新しいものを作成する必要があります。Entra では値が一度しか表示されません。ここでこれらの値を使って Microsoft にトークンを要求するため、シークレットが間違っていれば、最初にサインインしようとする人ではなく、この時点で検出されます。</p>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-client"
       ${busy ? 'disabled' : ''}>${busy
         ? '<span class="ssspin"></span>Checking with Microsoft…'
-        : 'Verify application'}</button></div>`;
+        : 'アプリケーションを検証'}</button></div>`;
   if (k === 'redirect') return `
     <h4>サインインの戻り先</h4>
     <p class="lede">誰かがサインインを完了すると、Entra はそのユーザーをここに戻します。これは、アプリ登録に設定した正確な URI である必要があります。以下に表示されているアドレスは、現在このポータルへのアクセスに使用しているものです。</p>
@@ -5858,7 +5858,7 @@ function ssoBody(k) {
     <div class="note">保存してもシングルサインオンは有効になりません。それが最後の手順であり、実際のサインインが成功した後にのみ行います。</div>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-save"
       ${SSOW.busy === 'save' ? 'disabled' : ''}>${SSOW.busy === 'save'
-        ? '<span class="ssspin"></span>Saving…' : 'Save and continue'}</button></div>`;
+        ? '<span class="ssspin"></span>Saving…' : '保存して続行'}</button></div>`;
   const saving = SSOW.busy === 'save';
   const me = ssoMe();
   return `
@@ -5866,16 +5866,16 @@ function ssoBody(k) {
     <p class="lede">設定を保存しました。シングルサインオンはまだ無効です。有効にするには、［サインインのテスト］をクリックして検証を完了してください。</p>
     <p class="lede">これにより、Microsoft が新しいタブで開きます。ここに戻ると、誰としてサインインしたか、または失敗した理由が表示されます。</p>
     <div class="note">次のユーザーとしてサインインします <b>${esc(
-      (me && me.email) || (AUTH && AUTH.username) || 'your account')}</b>、そして Entra が証明するアドレスは、そのアカウントのものでなければなりません。これが、このウィザードの最初の手順の目的です。</div>
+      (me && me.email) || (AUTH && AUTH.username) || 'あなたのアカウント')}</b>、そして Entra が証明するアドレスは、そのアカウントのものでなければなりません。これが、このウィザードの最初の手順の目的です。</div>
     ${SSOW.done.test ? `<div class="note" style="border-color:var(--pri)"
       >${esc(SSOW.done.test)}</div>` : ''}
     ${err}<div class="ssacts">
       <button class="mini" data-act="sso-try" ${busy ? 'disabled' : ''}>${busy
-        ? '<span class="ssspin"></span>Waiting for Microsoft…' : 'Test sign-in'}</button>
+        ? '<span class="ssspin"></span>Waiting for Microsoft…' : 'テストサインイン'}</button>
       <button class="mini" data-act="sso-enable"
         ${SSOW.done.test && !saving ? '' : 'disabled'}>${
         saving ? '<span class="ssspin"></span>Turning it on…'
-               : 'Turn on single sign-on'}</button>
+               : 'シングルサインオンを有効にする'}</button>
       ${SSOW.done.test ? '' : `<span class="lede" style="font-size:12.5px"
         >サインインが成功すると利用可能になります</span>`}</div>`;
 }
@@ -5938,7 +5938,7 @@ function gettingStarted() {
   <p class="src-note" style="margin:0 0 8px">セットアップウィザードは、ここに保存されている展開構成を確認します。これは確認であり、リセットではありません。</p>
   <p style="margin:0 0 20px">
     <button class="mini" style="padding:6px 14px" data-act="open-wizard">${done
-      ? 'Run the setup wizard again' : 'Finish setting up'}</button></p>
+      ? 'セットアップウィザードを再実行' : 'Finish setting up'}</button></p>
   <p class="src-note" style="margin:0 0 8px">ウォークスルーは、現在のインターフェースの簡単なオリエンテーションです。アカウントが使用できるページに沿って進むため、管理者と読み取り専用ユーザーには、それぞれに適したバージョンが表示されます。</p>
   <p style="margin:0">
     <button class="mini" style="padding:6px 14px" data-act="take-tour">ツアーをもう一度見る</button></p>
@@ -6065,7 +6065,7 @@ function accountSettings() {
       <p><button class="mini" data-act="sso-open">${
         ((SETTINGS && SETTINGS.settings && SETTINGS.settings.sso_enabled
           && SETTINGS.settings.sso_enabled.value) === '1')
-        ? 'Review the configuration' : 'Set it up'}</button></p>
+        ? '設定を確認' : 'Set it up'}</button></p>
       ${ssoEnforceBlock()}`}
   </div>`) : ''}
 `;
@@ -6100,10 +6100,10 @@ function ssoEnforceBlock() {
       <p style="margin:0 0 6px"><b style="font-size:13px">どれくらい最近にサインインしている必要があるか</b></p>
       <p class="lede">ブラウザーで Microsoft に既にサインインしていた人は、まったく操作なしでそのままここに戻されていました。リンクをクリックすると、誰がどの AI を使っているかを示すツールに入れました。現在はサインイン時に常にアカウントの選択を求め、これによって、プロバイダーが再度本人確認を求めるまで、そのサインインがどれだけ古くてもよいかが決まります。</p>
       <p><select id="sso-maxage" class="mfield" style="min-width:260px">
-        ${[['', 'Every 12 hours (the default)'], ['0', 'Every single time'],
-           ['1', 'Every hour'], ['4', 'Every 4 hours'],
-           ['8', 'Every 8 hours'], ['24', 'Every 24 hours'],
-           ['168', 'Every 7 days']].map(o => `<option value="${o[0]}"${
+        ${[['', 'Every 12 hours (the default)'], ['0', '毎回'],
+           ['1', '1時間ごと'], ['4', '4時間ごと'],
+           ['8', '8時間ごと'], ['24', '24時間ごと'],
+           ['168', '7日ごと']].map(o => `<option value="${o[0]}"${
           v('sso_max_age_hours') === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}
       </select></p>
       <p class="src-note" style="margin:0">12 時間は 1 勤務日です。昼食前に 2 回求められる人はいません。一晩開いたままのノート PC を翌朝そのまま操作することもできません。これは max_age として Microsoft に送信され、戻ってくるときに、実際にいつサインインしたかについてトークンが示す内容と照合して再確認されます。要求するだけの制御は制御ではないからです。</p>
@@ -6111,7 +6111,7 @@ function ssoEnforceBlock() {
     <p style="margin:12px 0 0"><button class="mini" data-act="sso-enforce"
       data-key="${on ? '' : '1'}"
       ${(on || (ready && bg)) ? '' : 'disabled'}>${
-      on ? 'Stop requiring it' : 'Require single sign-on'}</button>
+      on ? 'Stop requiring it' : 'シングルサインオンを必須にする'}</button>
       ${on || (ready && bg) ? '' : `<span class="lede"
         style="margin:0 0 0 8px;font-size:12.5px">まだ利用できません</span>`}</p>
   </div>`;
@@ -6138,8 +6138,8 @@ function activationCard() {
   const state = a.state === 'active' ? ['p-ok', 'activated']
     : a.state === 'expired' ? ['p-warn', 'expired']
     : a.state === 'invalid' ? ['p-warn', 'cannot be checked']
-    : a.state === 'unknown' ? ['p-mut', 'not read']
-    : ['p-mut', 'open edition'];
+    : a.state === 'unknown' ? ['p-mut', '未読み取り']
+    : ['p-mut', 'オープン版'];
   const soon = a.state === 'active' && a.days_left <= 45;
 
   // Everything the operator runs, they run themselves. The portal has no
@@ -6189,7 +6189,7 @@ function activationCard() {
     : `<p class="health-note">このデプロイはオープン版を実行しており、それは完全です。このページにも他のどのページにも、キーがないために制限されているものはありません。Nyxus は同じシステムの商用版で、同じコレクター、同じエビデンスを備え、サポート付きのサブスクリプションのもとでプライベート イメージとして配布されます。アクティベーション キーには、発行先の組織と有効期間が記載されており、ここで、このポータルがすでに保持している署名と照合して確認されます。誰にも問い合わせる必要はありません。</p>`;
 
   const form = !owner
-    ? `<p class="src-note" style="margin-top:10px">An owner account activates a subscription. ${a.state === 'none' ? 'This deployment has no key stored.' : 'The details above are read-only for your role.'}</p>`
+    ? `<p class="src-note" style="margin-top:10px">An owner account activates a subscription. ${a.state === 'none' ? 'このデプロイにはキーが保存されていません。' : '上記の詳細は、あなたのロールでは読み取り専用です。'}</p>`
     : a.state === 'none' || a.state === 'invalid'
     ? `<div class="act-entry">
         <input id="act-key" class="mfield" spellcheck="false" autocomplete="off"
@@ -6284,10 +6284,10 @@ function diagnosticsCards() {
       const d = u.deployment || {};
       const ver = (u.latest || '').replace(/^v/, '');
       const state = !u.enabled ? ['p-mut', 'check off']
-        : u.error && !u.latest ? ['p-warn', 'could not check']
+        : u.error && !u.latest ? ['p-warn', '確認できませんでした']
         : !u.comparable ? ['p-mut', 'development build']
-        : u.available === true ? ['p-warn', 'update available']
-        : u.available === false ? ['p-ok', 'up to date'] : ['p-mut', 'not checked yet'];
+        : u.available === true ? ['p-warn', '更新あり']
+        : u.available === false ? ['p-ok', '最新'] : ['p-mut', '未確認'];
       const route = u.route === 'helm' ? 'Helm' : u.route === 'kubernetes' ? 'Kubernetes'
         : u.route === 'compose' ? 'Docker Compose' : 'unknown';
       const ns = d.namespace || '<namespace>', rel = d.release || '<release>';
@@ -6306,14 +6306,14 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
       <dl class="health-facts"><div><dt>実行中</dt><dd>${esc(u.current || '—')}</dd></div>
         <div><dt>最新リリース</dt><dd>${u.latest ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.latest)}</a>${u.published_at ? ` <span>· ${esc(String(u.published_at).slice(0, 10))}</span>` : ''}` : '—'}</dd></div>
         <div><dt>デプロイ実行者</dt><dd>${esc(route)}${d.chart_version ? ` <span>· ${esc(d.chart_version)}</span>` : ''}</dd></div>
-        <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'not yet' : 'never')}</dd></div></dl>
+        <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ' : 'never')}</dd></div></dl>
       ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(u.error)}</p>` : ''}
       ${!u.enabled ? `<p class="health-note">チェックはオフになっています（<span class="mono">UPDATE_CHECK=off</span>）、そのためこのポータルは外部へのリクエストを行いません。リリースは以下に掲載されています。 <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">github.com</a>.</p>` : ''}
       ${!u.comparable && u.enabled ? `<p class="health-note">このポータルはリリース番号を報告しないため、最新リリースは表示されますが比較されません。</p>` : ''}
       ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードするとレシーバーとポータルが再起動します。保存されているものは変更されず、コレクターはそれを介して報告を続けます。</p>
       <details class="how"><summary>How to upgrade on ${esc(route)}</summary><div>
         <pre class="mono" style="white-space:pre-wrap">${esc(cmd)}</pre>
-        ${cron ? `<p class="src-note">スキャナーまたは検出結果がCronJobとして実行される場合、それらはチャートの外部にあるため、イメージタグも設定してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">もし <span class="mono">IMAGE_TAG</span> is pinned in the compose environment, change it to ${esc(ver || 'the new version')} first; a pull is a no-op until you do.</p>`}
+        ${cron ? `<p class="src-note">スキャナーまたは検出結果がCronJobとして実行される場合、それらはチャートの外部にあるため、イメージタグも設定してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">もし <span class="mono">IMAGE_TAG</span> is pinned in the compose environment, change it to ${esc(ver || '新しいバージョン')} first; a pull is a no-op until you do.</p>`}
         <p class="src-note">Afterwards this page should read ${esc(u.latest)} under Running, and Sources should show the same collectors reporting.</p>
       </div></details>
       ${u.notes ? `<details class="how"><summary>リリースノート</summary><div><pre class="mono" style="white-space:pre-wrap;max-height:320px;overflow:auto">${esc(u.notes)}</pre></div></details>` : ''}` : ''}
@@ -6401,7 +6401,7 @@ async function cliApprove() {
         <div><dt>アクション</dt><dd>このデプロイを最新リリースにアップグレードする</dd></div>
         <div><dt>実行元</dt><dd>要求者のマシン <span>・自身の kubeconfig または Docker コンテキスト</span></dd></div>
         <div><dt>要求日時</dt><dd>${when(g.requested_at)}${cliLeft(g.expires_at)}</dd></div>
-        <div><dt>クライアント</dt><dd>${esc(g.requester || 'not stated')}</dd></div>
+        <div><dt>クライアント</dt><dd>${esc(g.requester || '未記載')}</dd></div>
       </dl>
     </div>
     <p class="health-note"><b>承認すると付与されるのは</b> 45分間有効なトークン1つで、コマンドがこの実行の進行状況をここに報告できるようにします。このポータル上の他の何も開かず、クラスタやホスト上の何も開きません。アップグレード自体は要求者の認証情報で実行され、チャートまたは compose ファイルがデプロイするすべてを対象とします。</p>
@@ -6453,8 +6453,8 @@ function upgradeTracker() {
     : r.outcome === 'unverified' ? '<span class="pill p-amb">実行済み、未確認</span>'
     : `<span class="pill p-warn">${esc(r.outcome || 'finished')}</span>`;
   const note = r.status === 'stale'
-    ? 'The command stopped reporting before it confirmed the result, so this run was never closed. Running, above, says what is actually deployed.'
-    : r.outcome === 'unverified' ? 'The commands ran, but the command could not confirm the result. Running, above, says what is actually deployed.' : '';
+    ? 'コマンドは結果を確認する前に報告を停止したため、この実行は終了されませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。'
+    : r.outcome === 'unverified' ? 'コマンドは実行されましたが、結果を確認できませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。' : '';
   const stat = s => s === 'done' ? 'p-ok' : s === 'failed' ? 'p-warn' : s === 'skipped' ? 'p-mut' : 'p-amb';
   // A step is reported twice, once when it starts and once when it ends;
   // one line per step, carrying whichever report came last.
@@ -6465,7 +6465,7 @@ function upgradeTracker() {
   }
   return `<div id="upgrade-tracker" class="upgrade-run">
     <div class="upgrade-run-head"><b>Upgrade ${esc(r.from_version)} → ${esc(r.to_version)}</b> ${pill}
-      <span>${esc(r.route)} · started ${when(r.started_at)} by ${esc(r.started_by_name || 'an owner')}</span></div>
+      <span>${esc(r.route)} · started ${when(r.started_at)} by ${esc(r.started_by_name || '所有者')}</span></div>
     ${note ? `<p class="health-note warning">${note}</p>` : ''}
     <ol class="upgrade-steps">${latest.map(s => `<li><span class="pill ${stat(s.status)}">${esc(s.status)}</span> <span class="upgrade-step" title="${esc(s.step)}">${esc(s.step)}</span>${s.detail ? ` <span>· ${esc(s.detail)}</span>` : ''}</li>`).join('')
       || '<li><span class="pill p-amb">実行中</span> 最初のステップを待っています</li>'}</ol>
@@ -6626,12 +6626,12 @@ function setup() {
   <div class="tcard" style="padding-bottom:14px">
   <div class="cardhead"><h3>人とデバイスの紐付け</h3>
     <span class="pill ${CFG.identity_map_configured ? 'p-ok' : 'p-mut'}">${
-      CFG.identity_map_configured ? 'map configured' : 'no map'}</span></div>
+      CFG.identity_map_configured ? 'map configured' : 'マップなし'}</span></div>
   <p class="lede">エンドポイントの検出結果はマシンを認識していますが、ローカルユーザー名しか分かりません。クラウドの検出結果は人物を認識していますが、マシンは分かりません。この2つを結合する――「このノートPCはこの人物のもの」――には、あなただけが持つ参照情報が必要です。MDM、RMM、CMDB、またはスプレッドシートです。ポータルは、以下でそのファイルの作成を支援します。</p>
   ${CFG.identity_map_configured ? `<p class="lede">A map is configured.
   ${(() => {
     const un = ents(G.devices || {}).filter(([, d]) => !d.person);
-    if (!un.length) return 'Every device it covers has a person attached.';
+    if (!un.length) return '対象となるすべてのデバイスに担当者が紐付いています。';
     return `It does not cover <strong>${un.length}</strong> of
       ${ents(G.devices || {}).length} devices, which show as unattributed -
       a legitimate answer, and one you can shorten:
@@ -6766,7 +6766,7 @@ async function fleet() {
       // said so, and the two pages looked like they disagreed.
       const reporting = ents(G.devices || {}).length;
       return reporting ? `No devices are enrolled here, but <strong>${reporting}</strong>
-        ${reporting === 1 ? 'device is' : 'devices are'} reporting findings: they were
+        ${reporting === 1 ? '台のデバイスが' : 'devices are'} reporting findings: they were
         configured outside the enrollment-token flow, which works and gives up
         per-device revocation. Enroll them to get it back.<br><br>` : '';
     })()}No devices enrolled yet. Mint an enrollment token in
@@ -7284,15 +7284,15 @@ function bWizTotals() {
 }
 
 const BW_STEPS = [
-  {k: 1, t: 'Which tool',        d: 'And what the licence covers'},
-  {k: 2, t: 'Member list',       d: 'Where the names come from'},
-  {k: 3, t: 'Seats and pricing', d: 'What it costs a month'},
-  {k: 4, t: 'Review and link',   d: 'The whole subscription'},
+  {k: 1, t: 'どのツール',        d: 'ライセンスの対象範囲'},
+  {k: 2, t: 'Member list',       d: '名前の取得元'},
+  {k: 3, t: 'シート数と料金', d: 'What it costs a month'},
+  {k: 4, t: '確認とリンク',   d: 'サブスクリプション全体'},
 ];
 const BW_SOURCES = [
-  ['api', 'Automatic', "the vendor's admin API, synced on demand"],
-  ['csv', 'Import', "paste the member export from the vendor's admin page"],
-  ['manual', 'Manual', "add members by hand on the tool's card"],
+  ['api', 'Automatic', "ベンダーの管理API、オンデマンドで同期"],
+  ['csv', 'Import', "ベンダーの管理ページからメンバーのエクスポートを貼り付け"],
+  ['manual', 'Manual', "ツールのカードでメンバーを手動で追加"],
 ];
 const bwSrcName = s => (BW_SOURCES.find(x => x[0] === s) || [])[1] || '';
 
@@ -7311,7 +7311,7 @@ function bwRailLine(st) {
     ? {c: 'val', t: bMoney(tot.monthly, bWizCur()) + ' / month · '
         + tot.seats + ' seat' + (tot.seats === 1 ? '' : 's')}
     : {c: 'pend', t: st.d};
-  return tot.tiers.length ? {c: 'val', t: 'ready to link'} : {c: 'pend', t: st.d};
+  return tot.tiers.length ? {c: 'val', t: 'リンク準備完了'} : {c: 'pend', t: st.d};
 }
 const bToolName = id =>
   ((REGTOOLS || []).find(t => t.id === id) || {}).name || id;
@@ -7332,7 +7332,7 @@ function bwRail() {
   const w = BWIZ, tot = bWizTotals();
   const eff = 1 + (w.covers || []).length;
   return `<div class="ssrail">
-    <h3>${w.editing ? 'Edit a subscription' : 'Link a tool'}</h3>
+    <h3>${w.editing ? 'Edit a subscription' : 'ツールをリンク'}</h3>
     <ol>${BW_STEPS.map(st => {
       const d = bwDone(st), on = w.step === st.k, ln = bwRailLine(st);
       return `<li class="ssstep ${d ? 'done' : ''} ${on ? 'on' : ''}"
@@ -7422,7 +7422,7 @@ function bwBodyTool() {
       : `<div class="src-note" style="margin:6px 0 0">レジストリ内に、このツールとライセンスグループまたはベンダーを共有するものはないため、提案できるものはありません。そのライセンスが他のツールにも利用権を与える場合は、以下でそれらにチェックを入れてください。</div>`}
       ${rest.length ? `<details style="margin-top:8px"><summary
         style="font-size:12px;color:var(--mut);cursor:pointer">${suggested
-          ? 'more tools…' : 'choose from every tool…'}</summary>
+          ? 'more tools…' : 'すべてのツールから選択…'}</summary>
         <div class="covers" style="margin-top:7px">${rest.map(box).join('')}</div>
       </details>` : ''}`;
   })();
@@ -7458,9 +7458,9 @@ function bwBodySource() {
   const nameOf = id => ((REGTOOLS || []).find(t => t.id === id) || {}).name || id;
   const STATUS = {
     built:   ['Automatic, here', 'p-ok'],
-    vendor:  ['Vendor API, no connector yet', 'p-warn'],
-    none:    ['No seat list exists', 'p-mut'],
-    unknown: ['Not documented', 'p-mut'],
+    vendor:  ['ベンダーAPI、コネクタ未対応', 'p-warn'],
+    none:    ['シート一覧がありません', 'p-mut'],
+    unknown: ['未記載', 'p-mut'],
   };
   const bucket = a => a.connector ? 'built'
     : (a.api === 'rest' || a.api === 'scim') ? 'vendor'
@@ -7508,7 +7508,7 @@ function bwBodySource() {
       </select></dd>
       <dt>APIキー</dt><dd><input id="bw-key" class="mfield" type="password"
         style="min-width:300px"
-        placeholder="${w.key_set ? 'saved - paste to replace' : 'paste the vendor API key'}"
+        placeholder="${w.key_set ? '保存済み - 貼り付けて置き換え' : 'ベンダーAPIキーを貼り付け'}"
         autocomplete="off" value="${esc(w.api_key || '')}"></dd>
     </dl>
     ${((providers[w.provider] || {}).unverified)
@@ -7606,7 +7606,7 @@ function bwBodyReview() {
   <div class="rvw"><table>
     <tr><th>内容</th><th>値</th></tr>
     <tr><td class="sname">ライセンス</td><td>${esc(w.plan || '—')}
-      <div style="color:var(--mut);font-size:12px">${esc(w.vendor || 'no vendor recorded')}</div></td></tr>
+      <div style="color:var(--mut);font-size:12px">${esc(w.vendor || 'ベンダー未記録')}</div></td></tr>
     <tr><td class="sname">対象</td><td>
       ${eff.map(t => `<span class="pill p-mut">${esc(t)}</span>`).join(' ')}
       <div style="color:var(--mut);font-size:12px">1回だけカウントされます。これらのいずれかで確認されたメンバーは、観測済みとしてカウントされます。</div></td></tr>
@@ -7631,7 +7631,7 @@ function budgetWizard() {
   const body = w.step === 2 ? bwBodySource()
     : w.step === 3 ? bwBodySeats()
     : w.step === 4 ? bwBodyReview() : bwBodyTool();
-  return `<h2>${w.editing ? 'Edit ' + esc(w.tool_id) : 'Link a tool'}</h2>
+  return `<h2>${w.editing ? 'Edit ' + esc(w.tool_id) : 'ツールをリンク'}</h2>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
   <div class="ssow">${bwRail()}
     <div class="ssmain budget-wizard">${body}
@@ -7644,7 +7644,7 @@ function budgetWizard() {
           ? `<button class="mini pri" data-act="b-step" data-key="${w.step + 1}"
               ${w.tool_id ? '' : 'disabled'}>次へ</button>`
           : `<button class="mini pri" data-act="b-save">${w.editing
-              ? 'Save changes' : 'Link tool'}</button>`}
+              ? '変更を保存' : 'ツールをリンク'}</button>`}
       </div></div></div>`;
 }
 
@@ -7813,15 +7813,15 @@ function budgetCard(sub) {
   return `<details class="budget-card${reviewCount ? ' has-review' : ''}" data-bkey="${esc(bKey(sub))}"${BOPEN.has(bKey(sub)) ? ' open' : ''}>
   <summary class="budget-card-summary"><span class="budget-card-head"><span class="budget-card-identity"><span class="budget-eyebrow">${esc(sub.vendor || 'Subscription')}</span>
     <span class="budget-card-title">${esc(((REGTOOLS || []).find(t => t.id === sub.tool_id) || {}).name || sub.tool_id)}${sub.plan ? ` <span class="pill p-acc">${esc(sub.plan)}</span>` : ''}</span>
-    <span class="budget-card-copy">${eff.length > 1 ? `Covers ${eff.map(esc).join(' + ')}` : 'One tool subscription'}${sub.owner ? ` <span>·</span> Owner: ${esc(sub.owner)}` : ''}</span></span>
-    <span class="budget-card-state"><span class="pill ${reviewCount ? 'p-amb' : 'p-ok'}">${reviewCount ? reviewCount + ' review item' + (reviewCount === 1 ? '' : 's') : 'No review items'}</span>
+    <span class="budget-card-copy">${eff.length > 1 ? `Covers ${eff.map(esc).join(' + ')}` : 'ツールサブスクリプション1件'}${sub.owner ? ` <span>·</span> Owner: ${esc(sub.owner)}` : ''}</span></span>
+    <span class="budget-card-state"><span class="pill ${reviewCount ? 'p-amb' : 'p-ok'}">${reviewCount ? reviewCount + ' review item' + (reviewCount === 1 ? '' : 's') : 'レビュー項目なし'}</span>
       ${days != null ? `<span class="budget-renewal">Renews ${when(sub.renewal_date)}${days <= 30 ? ` · ${days <= 0 ? 'past due' : days + 'd'}` : ''}</span>` : ''}
       <span class="budget-disclosure">レビュー詳細 <b>⌄</b></span></span>
   </span><span class="budget-kpis">
     <span><strong>${bMoney(monthly, sub.currency)}</strong><em>月次コミットメント</em><small>${seats} paid seat${seats === 1 ? '' : 's'}</small></span>
-    <span><strong>${(sub.members || []).length}</strong><em>割り当てユーザー</em><small>${seats - (sub.members || []).length > 0 ? `${seats - (sub.members || []).length} seat${seats - (sub.members || []).length === 1 ? '' : 's'} unassigned` : 'All seats assigned'}</small></span>
+    <span><strong>${(sub.members || []).length}</strong><em>割り当てユーザー</em><small>${seats - (sub.members || []).length > 0 ? `${seats - (sub.members || []).length} seat${seats - (sub.members || []).length === 1 ? '' : 's'} unassigned` : '全シート割り当て済み'}</small></span>
     <span><strong>${matched.length}</strong><em>観測ユーザー</em><small>of ${(sub.members || []).length} on this subscription</small></span>
-    <span class="${reviewCount ? 'attention' : 'clear'}"><strong>${reviewCount}</strong><em>レビュー項目</em><small>${unobserved.length ? `${unobserved.length} idle` : 'No idle seats'}${strangers.length ? ` · ${strangers.length} unseated` : ''}${obs.personal.length ? ` · ${obs.personal.length} personal` : ''}</small></span>
+    <span class="${reviewCount ? 'attention' : 'clear'}"><strong>${reviewCount}</strong><em>レビュー項目</em><small>${unobserved.length ? `${unobserved.length} idle` : 'アイドルシートなし'}${strangers.length ? ` · ${strangers.length} unseated` : ''}${obs.personal.length ? ` · ${obs.personal.length} personal` : ''}</small></span>
   </span></summary><div class="budget-card-body">
   ${twins.length ? `<div class="note">${twins.map(o => esc(o.tool_id)).join(', ')}
     ${twins.length === 1 ? 'is' : 'are'} linked separately but
@@ -7839,7 +7839,7 @@ function budgetCard(sub) {
     — one licence, several surfaces; a member seen on any of them counts
     as observed.</p>` : ''}
   <section class="budget-tier-section"><div class="budget-section-head"><div><span>シート割り当て</span><h4>プランと割り当てシート</h4></div>
-    <span>${tiers.length ? tiers.length + ' tier' + (tiers.length === 1 ? '' : 's') : 'No tiers recorded'}</span></div>
+    <span>${tiers.length ? tiers.length + ' tier' + (tiers.length === 1 ? '' : 's') : 'ティア未記録'}</span></div>
   ${tiers.length ? `<table class="budget-tier-table${eff.length > 1 ? ' has-covers' : ''}"><tr><th>プラン</th><th class="num">支払済みシート</th><th class="num">割り当て済み</th><th class="num">シートあたりの価格</th><th class="num">月次</th>${eff.length > 1 ? '<th>対象</th>' : ''}</tr>
     ${tiers.map(t => `<tr><td>${esc(t.name)}</td><td class="num">${t.seats}</td>
       <td class="num">${tierOf[bNorm(t.name)] || 0}</td>
@@ -7848,7 +7848,7 @@ function budgetCard(sub) {
       ${eff.length > 1 ? `<td>${bTierCovers(t, eff).map(esc).join(', ')}</td>` : ''}</tr>`).join('')}</table>` : ''}
   </section>
   <section class="budget-insights"><div class="budget-section-head"><div><span>アカウントとレビューの詳細</span><h4>ユーザー、使用状況、例外</h4></div>
-    <span>${reviewCount ? reviewCount + ' item' + (reviewCount === 1 ? '' : 's') + ' to review' : 'No exceptions'}</span></div>
+    <span>${reviewCount ? reviewCount + ' item' + (reviewCount === 1 ? '' : 's') + ' to review' : '例外なし'}</span></div>
   ${tiers.length && noTier ? `<p class="budget-data-note">${noTier} user${noTier === 1 ? '' : 's'} carr${noTier === 1 ? 'ies' : 'y'} no seat tier${conn && conn.last_sync_at ? ' - the vendor API does not report tiers; a CSV import or the add-member row sets them' : ''}.</p>` : ''}
   ${ents(oddTiers).length ? `<p class="budget-data-note budget-warning">User tiers matching no tier above: ${ents(oddTiers).map(([v, n]) => `"${esc(v)}" (${n})`).join(', ')}. Rename a tier in edit, or re-import, to line them up.</p>` : ''}
   ${(sub.members || []).length ? `<details class="budget-details budget-users"><summary>Users
@@ -7930,9 +7930,9 @@ function budgetImport() {
     ${parsed.missing && parsed.missing.tier ? `<p class="src-note" style="color:var(--warn)">ヘッダーにシート/ティア列が認識されなかったため、シートティアは空でインポートされ、ティアテーブルはこれらのユーザーをシートに計上できません。</p>` : ''}
     ${parsed.map ? `<p class="src-note">Read as: ${parsed.map.delim},
     ${parsed.map.header ? 'header row found' : parsed.map.guessed
-      ? 'no header row, columns named from their values' : 'no header row'};
+      ? 'ヘッダー行なし、列名は値から生成' : 'ヘッダー行なし'};
     ${ents(parsed.map.cols).map(([f, i]) =>
-      `${f === 'tier' ? 'seat tier' : f} ${i >= 0 ? ordinal(i + 1) + ' column' : 'not found'}`)
+      `${f === 'tier' ? 'seat tier' : f} ${i >= 0 ? ordinal(i + 1) + ' column' : '見つかりません'}`)
       .join(', ')}.</p>` : ''}
     <p class="src-note">${parsed.members.length} rows understood,
     ${parsed.skipped} skipped (no address, or a duplicate). Importing
@@ -7978,9 +7978,9 @@ function budgetCsv() {
       x.m.seat_tier || (x.tier || {}).name || '', 'never observed',
       '', '', '', '', x.m.source || '']));
     strangers.forEach(n => rows.push(['unmatched_user', cov, sub.tool_id,
-      who(n), '', '', '', 'no seat matched', '', '', '', '', 'observed']));
+      who(n), '', '', '', '一致するシートなし', '', '', '', '', 'observed']));
     obs.personal.forEach(r => rows.push(['personal_account', cov, r.tool,
-      who(r.user || ''), '', '', '', 'personal account', '',
+      who(r.user || ''), '', '', '', '個人アカウント', '',
       r.account_domain || '', who(r.device_name || r.device || ''),
       (r.last_seen || '').slice(0, 10), (r.sources || []).join(' ')]));
   });
@@ -7992,7 +7992,7 @@ function budgetCsv() {
 // has never seen the portal knows what window it covers and what the
 // numbers do and do not claim.
 function budgetReport() {
-  const gate = managedGate('Budget report'); if (gate) return gate;
+  const gate = managedGate('予算レポート'); if (gate) return gate;
   const subs = BUDGET.subscriptions || [];
   const spendParts = bSpendParts(subs);
   const conv = bConverted(subs);
@@ -8049,7 +8049,7 @@ function budgetReport() {
     ${list('Paid seats never observed - downgrade candidates',
       unobserved.map(x => `${who(x.m.email)}${x.m.seat_tier ? ` <span class="pill p-mut">${esc(x.m.seat_tier)}</span>` : ''}`),
       'No detection surface matched these people to activity on ' +
-      (eff.length > 1 ? 'any tool this licence covers' : esc(sub.tool_id)) +
+      (eff.length > 1 ? 'このライセンスが対象とするすべてのツール' : esc(sub.tool_id)) +
       ' in the window. A coverage gap looks the same as absence.')}
     ${findings.map(f => list(
       f.kind === 'unused'
@@ -8058,9 +8058,9 @@ function budgetReport() {
       f.members.map(e => who(e)),
       f.kind === 'unused'
         ? esc(f.tool) + ' access is what this tier buys over the ones without it. These people still count as observed.'
-        : 'Either the tier coverage is recorded too narrowly, or these seats grant more than intended.')).join('')}
-    ${list('Observed using it, matched to no seat', strangers.map(n => who(n)),
-      'Identities seen on this licence that matched nobody on the user list. Matching is by name, so a miss is unmatched, not proof of an unlicensed user.')}
+        : '階層のカバレッジが狭すぎるか、これらのシートが意図した以上に権限を与えているかのどちらかです。')).join('')}
+    ${list('使用を観測したが、どのシートにも一致しない', strangers.map(n => who(n)),
+      'このライセンスで確認されたIDのうち、ユーザーリストの誰とも一致しなかったものです。照合は名前で行われるため、不一致は未照合を意味するだけで、ライセンス未付与ユーザーの証拠ではありません。')}
     ${obs.personal.length ? `<div class="rep-block" style="margin-top:12px">
       <strong>有料プラン併用時の個人アカウント利用</strong>
       ${BRNAMES ? `<table style="margin-top:4px"><tr><th>実行者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントドメイン</th><th>最終確認</th></tr>
@@ -8085,8 +8085,8 @@ function budgetReport() {
     <button class="mini" data-act="b-report-csv">CSVをダウンロード</button>
     <button class="mini" data-act="b-report-names">${BRNAMES ? 'Withhold names' : 'Show names'}</button>
     <span class="src-note" style="margin:0">${BRNAMES
-      ? 'Names are shown. Withhold them for wider circulation - the counts stay.'
-      : 'Names are withheld: counts only, in the page and in the CSV.'}</span>
+      ? '名前は表示されています。広く共有する場合は名前を伏せてください。カウントは保持されます。'
+      : '名前は伏せられています。ページ内とCSVにはカウントのみが表示されます。'}</span>
   </div>
   <div class="rep-head">
     <h2 style="margin-bottom:4px">AI支出とシート利用</h2>
@@ -8155,7 +8155,7 @@ async function budget() {
     // it stopped being the only notable absence a while ago, and the wizard's
     // own step says what applies to the tool being linked.
     const labels = ents((BUDGET.providers) || {}).map(([, p]) => esc(p.label));
-    if (!labels.length) return 'no vendors yet';
+    if (!labels.length) return 'ベンダーはまだありません';
     if (labels.length === 1) return labels[0];
     return labels.slice(0, -1).join(', ') + ' and ' + labels[labels.length - 1];
   })()}.
@@ -8252,7 +8252,7 @@ async function budgetAction(act, el) {
   if (act === 'b-save') {
     bStash();
     const w = BWIZ;
-    if (!w.tool_id) { BMSG = 'Pick a tool first.'; render(); return; }
+    if (!w.tool_id) { BMSG = '先にツールを選択してください。'; render(); return; }
     let r = await post('/api/budget/subscription', {
       tool_id: w.tool_id, plan_key: w.plan_key || '',
       vendor: w.vendor || '', plan: w.plan || '',
@@ -8294,7 +8294,7 @@ async function budgetAction(act, el) {
               text: '', parsed: null};
       BMSG = '';
       render(); return;
-    } else BMSG = w.editing ? 'Saved.' : 'Linked. Add users from the card.';
+    } else BMSG = w.editing ? 'Saved.' : 'リンクしました。カードからユーザーを追加してください。';
     BOPEN.add(w.tool_id + '|' + (pk || 'default'));
     BWIZ = null; BUDGET = null; render(); return;
   }
@@ -8402,7 +8402,7 @@ async function userRole(uid, role) {
 async function _refusal(r) {
   let d = r.statusText;
   try { d = (await r.json()).detail || d; } catch (e) { /* keep statusText */ }
-  return typeof d === 'string' ? d : 'check the values';
+  return typeof d === 'string' ? d : '値を確認してください';
 }
 
 // Re-read what a write just invalidated.
@@ -8440,8 +8440,8 @@ async function managedAction(act, el) {
     const r = await mfetch('/api/cli/approve', {method: 'POST',
       body: JSON.stringify({user_code: CLICODE, approve: act === 'cli-approve'})});
     if (r.status === 401) { sessionLost(); return; }
-    CLIDONE = r.ok ? (act === 'cli-approve' ? 'Approved. The command has its token and is carrying on.'
-                                            : 'Denied. The command has been told no.')
+    CLIDONE = r.ok ? (act === 'cli-approve' ? '承認しました。コマンドはトークンを取得し、続行しています。'
+                                            : '拒否しました。コマンドには拒否が通知されました。')
                    : 'Not recorded: ' + await _refusal(r);
     CLIGRANT = null; render(); return;
   }
@@ -8460,7 +8460,7 @@ async function managedAction(act, el) {
     const field = document.getElementById('act-key');
     const key = act === 'act-clear' ? '' : ((field || {}).value || '').trim();
     if (act === 'act-save' && !key) {
-      ACTMSG = {ok: false, text: 'Paste the key first.'}; render(); return;
+      ACTMSG = {ok: false, text: '先にキーを貼り付けてください。'}; render(); return;
     }
     if (act === 'act-clear'
         && !confirm('Remove the stored activation key? This deployment keeps '
@@ -8478,9 +8478,9 @@ async function managedAction(act, el) {
     }
     ACT = await r.json();
     ACTMSG = act === 'act-clear'
-      ? {ok: true, text: 'Removed. This deployment is back to the open edition.'}
+      ? {ok: true, text: '削除しました。このデプロイはオープンエディションに戻りました。'}
       : ACT.state === 'expired'
-        ? {ok: true, text: 'Stored. The key is genuine but its term has ended.'}
+        ? {ok: true, text: '保存しました。キーは正規のものですが、有効期間が終了しています。'}
         : {ok: true, text: 'Activated. ' + ACT.org + ', to ' + ACT.expires + '.'};
     // The audit trail below now has a row this page is showing state for.
     AUDITLOG = null;
@@ -8520,7 +8520,7 @@ async function managedAction(act, el) {
     if (!r.ok) { IDMSG = 'Not saved: ' + await _refusal(r); render(); return; }
     const out = await r.json();
     IDMSG = act === 'id-clear'
-      ? 'Cleared. Attribution falls back to the mounted file, if there is one.'
+      ? 'クリアしました。帰属先は、マウントされたファイルがあればそこにフォールバックします。'
       : `Saved ${out.count} rows. Every page re-derives with them now.`;
     IDPARSE = null; IDMAP = null;
     // Attribution runs through the graph, so the page must re-read it
@@ -8552,7 +8552,7 @@ async function managedAction(act, el) {
     USERR = out.invited
       ? 'Account created, and ' + esc(email) + ' has been emailed.'
       : 'Account created. Nobody was emailed: ' + (out.invite_error
-          || 'no mail server is configured') + '. Tell them yourself, or set '
+          || 'メールサーバーが設定されていません') + '. Tell them yourself, or set '
         + 'up email and send the invites that were missed.';
     USERS = null; render(); return;
   }
@@ -8620,14 +8620,14 @@ async function managedAction(act, el) {
   if (act === 'mail-words-next') {
     mailStash();
     if (await mailSave()) {
-      MAILW.done.words = (MAILW.note || '').trim() ? 'your lines added' : 'default';
+      MAILW.done.words = (MAILW.note || '').trim() ? 'あなたの文面を追加済み' : 'default';
       MAILW.step = mailIdx('test'); MAILW.err = ''; render();
     }
     return;
   }
   if (act === 'mail-try') {
     mailStash();
-    if (!MAILW.to.trim()) { MAILW.err = 'An address to send it to, first.';
+    if (!MAILW.to.trim()) { MAILW.err = 'まず送信先アドレスを入力してください。';
       render(); return; }
     MAILW.busy = 'test'; MAILW.err = ''; render();
     const r = await mfetch('/api/test/mail',
@@ -8636,7 +8636,7 @@ async function managedAction(act, el) {
     if (r.status === 401) { sessionLost(); return; }
     if (!r.ok) { MAILW.err = await _refusal(r); render(); return; }
     const out = await r.json();
-    if (out.ok) { MAILW.done.test = 'Sent. Check that inbox.'; }
+    if (out.ok) { MAILW.done.test = '送信しました。受信トレイを確認してください。'; }
     // The relay's own words. "Could not send" is undebuggable, and relays
     // say useful things here.
     else { MAILW.err = 'Not sent: ' + out.detail; }
@@ -8645,7 +8645,7 @@ async function managedAction(act, el) {
   if (act === 'mail-quick-test') {
     const to = (AUTH && (USERS || []).filter(u => u.username === AUTH.username)
       .map(u => u.email)[0]) || '';
-    if (!to) { MAILMSG = 'Your account has no address to send it to.';
+    if (!to) { MAILMSG = 'あなたのアカウントには送信先アドレスがありません。';
       render(); return; }
     MAILMSG = 'Sending…'; render();
     const r = await mfetch('/api/test/mail',
@@ -8658,7 +8658,7 @@ async function managedAction(act, el) {
   }
   if (act === 'mail-test') {
     const to = _val('mail-to').trim();
-    if (!to) { MAILMSG = 'An address to send it to, first.'; render(); return; }
+    if (!to) { MAILMSG = 'まず送信先アドレスを入力してください。'; render(); return; }
     MAILMSG = 'Sending…'; render();
     const r = await mfetch('/api/test/mail',
       {method: 'POST', body: JSON.stringify({to})});
@@ -8667,7 +8667,7 @@ async function managedAction(act, el) {
     const out = await r.json();
     // The relay's own words on failure. "Could not send" is undebuggable,
     // and relays say useful things here.
-    MAILMSG = out.ok ? 'Sent. Check that inbox.' : 'Not sent: ' + out.detail;
+    MAILMSG = out.ok ? '送信しました。受信トレイを確認してください。' : 'Not sent: ' + out.detail;
     render(); return;
   }
   if (act === 'user-invite' || act === 'user-invite-all') {
@@ -8710,7 +8710,7 @@ async function managedAction(act, el) {
       try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
     }
     el.textContent = ok ? 'Copied' : 'Selected, press Ctrl+C';
-    setTimeout(() => { el.textContent = 'Copy'; }, 2200);
+    setTimeout(() => { el.textContent = 'コピー'; }, 2200);
     return;
   }
   if (act === 'ui-expand') {
@@ -8810,7 +8810,7 @@ async function managedAction(act, el) {
     try { await navigator.clipboard.writeText(ssoRedirectGuess());
       el.textContent = 'copied';
       setTimeout(() => { el.textContent = 'copy'; }, 1400);
-    } catch (e) { el.textContent = 'select it and copy'; }
+    } catch (e) { el.textContent = '選択してコピーしてください'; }
     return;
   }
   if (act === 'sso-email-form') {
@@ -8834,7 +8834,7 @@ async function managedAction(act, el) {
     SSOW.busy = '';
     const me = ssoMe();
     if (ok && !(me && me.email)) {
-      SSOW.err = 'Your own account still has no address on it.';
+      SSOW.err = 'ご自身のアカウントにはまだメールアドレスがありません。';
     } else if (ok) {
       SSOW.step = ssoIdx('register');
     }
@@ -8848,7 +8848,7 @@ async function managedAction(act, el) {
   if (act === 'sso-check-client') {
     ssoStash();
     if (!SSOW.secret && !SSOW.secretSet) {
-      SSOW.err = 'A client secret is needed to check the pair.';
+      SSOW.err = 'ペアを確認するにはクライアントシークレットが必要です。';
       render(); return;
     }
     // With a stored secret and nothing typed there is nothing to check
@@ -8900,7 +8900,7 @@ async function managedAction(act, el) {
     const r = await mfetch('/api/users/' + el.getAttribute('data-key') + '/password',
       {method: 'POST', body: JSON.stringify({new: _val('ur-new')})});
     if (r.status === 401) { sessionLost(); return; }
-    USERR = r.ok ? 'Password set. Their old sessions are signed out.'
+    USERR = r.ok ? 'パスワードを設定しました。以前のセッションはサインアウトされています。'
                  : 'Not reset: ' + await _refusal(r);
     URFORM = null; render(); return;
   }
@@ -8957,7 +8957,7 @@ async function managedAction(act, el) {
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      GOVERR = typeof d === 'string' ? d : 'Check the review date: YYYY-MM-DD.';
+      GOVERR = typeof d === 'string' ? d : 'レビュー日を確認してください: YYYY-MM-DD。';
     }
     render(); return;
   }
@@ -9096,7 +9096,7 @@ async function managedAction(act, el) {
     // excuse every process with that name.
     const key = el.getAttribute('data-key');
     const tool = _val('cb-' + key);
-    if (!tool) { alert('Pick which tool this process belongs to.'); return; }
+    if (!tool) { alert('このプロセスが属するツールを選択してください。'); return; }
     const r = await mfetch('/api/candidates/belongs-to',
       {method: 'POST', body: JSON.stringify({key, tool_id: tool})});
     if (!r.ok) {
@@ -9155,7 +9155,7 @@ async function managedAction(act, el) {
     } else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      RERR = typeof d === 'string' ? d : 'Check the fields.';
+      RERR = typeof d === 'string' ? d : '入力項目を確認してください。';
       RPRE = entry;  // the redraw keeps what was typed
     }
     render(); return;
@@ -9199,7 +9199,7 @@ async function managedAction(act, el) {
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      GOVERR = typeof d === 'string' ? d : 'Check the fields: dates are YYYY-MM-DD.';
+      GOVERR = typeof d === 'string' ? d : '入力項目を確認してください。日付はYYYY-MM-DD形式です。';
       // The redraw prefills from GOVPRE; without this a refusal would also
       // throw away everything the operator just typed.
       GOVPRE = body.decisions[0];
@@ -9246,7 +9246,7 @@ async function managedAction(act, el) {
       // needs a render and a render redraws every field from SETTINGS -
       // which would throw away the several edits that just failed to save.
       const err = document.getElementById('setbar-err');
-      const msg = 'Not saved: ' + (typeof d === 'string' ? d : 'check the values.');
+      const msg = 'Not saved: ' + (typeof d === 'string' ? d : '値を確認してください。');
       if (err) err.textContent = msg; else { SETMSG = msg; render(); }
       return;
     }
@@ -9270,7 +9270,7 @@ async function managedAction(act, el) {
           .map(x => x.trim()).filter(Boolean);
     const r = await mfetch('/api/settings',
       {method: 'POST', body: JSON.stringify({classification_markings: marks})});
-    if (r.ok) { SETTINGS = await r.json(); SETMSG = 'Saved. Regenerate the extension artifacts to roll it out.'; }
+    if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。ロールアウトするには拡張機能のアーティファクトを再生成してください。'; }
     else if (r.status === 401) { sessionLost(); return; }
     else { let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {} SETMSG = 'Not saved: ' + d; }
     render(); return;
@@ -9292,7 +9292,7 @@ async function managedAction(act, el) {
     if (r.status === 401) { sessionLost(); return; }
     if (!r.ok) { SETMSG = 'Not saved: ' + await _refusal(r); render(); return; }
     SETTINGS = await r.json();
-    SETMSG = 'Saved. The overview draws these from now on.';
+    SETMSG = '保存しました。今後、概要にはこれらが表示されます。';
     // The overview reads the effective list from config, and a freshly
     // enabled spend tile needs its data - refetch both so the change is
     // visible on the very next click, not the next full reload.
@@ -9342,7 +9342,7 @@ async function managedAction(act, el) {
     } else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      SETMSG = 'Not saved: ' + (typeof d === 'string' ? d : 'check the value.');
+      SETMSG = 'Not saved: ' + (typeof d === 'string' ? d : '値を確認してください。');
     }
     render(); return;
   }
@@ -9402,11 +9402,11 @@ async function managedAction(act, el) {
       : {extension_id: _val('set-extid')};
     const r = await mfetch('/api/settings',
       {method: 'POST', body: JSON.stringify(body)});
-    if (r.ok) { SETTINGS = await r.json(); SETMSG = 'Saved. The fleet hears it on its next check-in.'; }
+    if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。フリートは次回のチェックイン時にこれを受け取ります。'; }
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      SETMSG = 'Not saved: ' + (typeof d === 'string' ? d : 'check the values.');
+      SETMSG = 'Not saved: ' + (typeof d === 'string' ? d : '値を確認してください。');
     }
     render(); return;
   }
@@ -9428,7 +9428,7 @@ async function managedAction(act, el) {
     // copy: a mismatch is a typo in one of the two, and the round trip would
     // report it as whichever one was sent being wrong.
     if (nw !== _val('set-confpass')) {
-      say('The two new passwords do not match.', false);
+      say('新しいパスワードが一致しません。', false);
       const f = document.getElementById('set-confpass');
       if (f) { f.focus(); f.select(); }
       return;
@@ -9441,13 +9441,13 @@ async function managedAction(act, el) {
       const sub = document.getElementById('pw-submit');
       if (sub) sub.hidden = true;
       const can = document.getElementById('pw-cancel');
-      if (can) can.textContent = 'Done';
+      if (can) can.textContent = '完了';
       // The note says what WILL happen. The message below now says it
       // happened, and the two together read as a warning about a change
       // that is already made.
       const note = document.getElementById('pw-note');
       if (note) note.hidden = true;
-      say('Password changed. Every other session was signed out.', true);
+      say('パスワードを変更しました。他のすべてのセッションはサインアウトされました。', true);
       return;
     }
     let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
@@ -9457,7 +9457,7 @@ async function managedAction(act, el) {
       sessionLost(); return;
     }
     say('Password unchanged: ' + (typeof d === 'string' ? d
-      : 'the new password needs 12 characters or more.'), false);
+      : '新しいパスワードは12文字以上である必要があります。'), false);
     return;
   }
   if (act === 'dismiss-minted') { MINTED = null; render(); return; }
@@ -9481,7 +9481,7 @@ async function managedAction(act, el) {
   }
   if (act === 'revoke-token' || act === 'revoke-device') {
     const id = el.getAttribute('data-key');
-    const what = act === 'revoke-token' ? 'enrollment token' : 'device credential';
+    const what = act === 'revoke-token' ? 'enrollment token' : 'デバイス資格情報';
     if (!confirm('Revoke ' + what + ' ' + id + '? This cannot be undone. A '
                  + (act === 'revoke-token'
                     ? 'revoked token stops minting devices immediately.'
@@ -9738,7 +9738,7 @@ function overviewTools() {
   const hidden = overviewWidgets().hidden.length;
   return `${hidden ? `<button class="mini" data-act="ov-showall"
     >Restore ${hidden} hidden ${hidden === 1 ? 'widget' : 'widgets'}</button>` : ''}
-    <button class="mini ui-density" data-act="ui-density" aria-pressed="${pref('display.compact', '0') === '1'}">${pref('display.compact', '0') === '1' ? 'Comfortable view' : 'Compact view'}</button>
+    <button class="mini ui-density" data-act="ui-density" aria-pressed="${pref('display.compact', '0') === '1'}">${pref('display.compact', '0') === '1' ? 'ゆったり表示' : 'コンパクト表示'}</button>
     <button class="mini" data-act="ov-edit">ウィジェットを編集</button>`;
 }
 
@@ -9812,7 +9812,7 @@ async function agentic() {
       sc.capable
         ? `<b>${sc.capable}</b> of ${sc.devices_reporting} device${
             sc.devices_reporting === 1 ? '' : 's'} run a collector that reads schedulers,
-           so for ${sc.capable === 1 ? 'that one' : 'those'} this is an answer rather than
+           so for ${sc.capable === 1 ? 'その1つ' : 'those'} this is an answer rather than
            a gap.${sc.unknown ? ` The other ${sc.unknown} report a version older than
            ${esc(sc.min_version)}, which may never have looked.` : ''}`
         : `No device reports a collector at ${esc(sc.min_version)} or newer, so
@@ -9834,11 +9834,11 @@ async function agentic() {
     // it, and there is nothing to revoke when somebody leaves.
     const who = a.accountable
       ? `<div class="ag-node ag-held"><b>誰が承認したか</b><i>${esc(a.account || a.user)}</i>
-         <s>${esc(a.identity || 'account seen')}</s></div>`
+         <s>${esc(a.identity || 'アカウント確認済み')}</s></div>`
       : `<div class="ag-node ag-gap"><b>誰が承認したか</b><i>${
-          a.identity === 'machine' ? '— a key, not a person'
-          : a.identity === 'none' ? '— nothing signed in'
-          : '— not established'}</i></div>`;
+          a.identity === 'machine' ? '— 人ではなくキー'
+          : a.identity === 'none' ? '— サインインなし'
+          : '— 未確立'}</i></div>`;
     const runs = a.process
       ? `<div class="ag-node ag-gap"><b>実行</b><i>— 既知のツールはありません</i>
          <s>${esc(a.process)}</s></div>`
@@ -9854,7 +9854,7 @@ async function agentic() {
       : (a.process ? `<span class="pill p-mut">モデルAPIに直接</span>`
                    : `<span class="pill p-mut">何も設定されていません</span>`);
     return `<div class="ag-link">
-      <div class="ag-node"><b>開始</b><i>${esc(a.trigger || 'not established')}</i>
+      <div class="ag-node"><b>開始</b><i>${esc(a.trigger || '未確立')}</i>
         <s>${esc(a.os || '')}</s></div>
       <div class="ag-rail"></div>${who}<div class="ag-rail"></div>${runs}
       <div class="ag-rail"></div>
@@ -9915,7 +9915,7 @@ async function agentic() {
   const chains = A.map(a => `<div class="ag-chain">
     <div class="ag-head">
       <span class="ag-who">${esc(label(a.device, G.devices[a.device] || {}))}
-        <span>${esc(a.user || 'no owner on record')}</span></span>
+        <span>${esc(a.user || '所有者の記録なし')}</span></span>
       ${a.accountable
         ? '<span class="pill p-acc">タイマーで実行されるが、帰属先あり</span>'
         : a.process
@@ -10003,7 +10003,7 @@ async function renderView() {
     // it fetches for itself rather than assuming someone came via Budget.
     if (!BUDGET) {
       const r = await mfetch('/api/budget');
-      if (!r.ok) { app.innerHTML = await managedError(r, 'Budget report'); return; }
+      if (!r.ok) { app.innerHTML = await managedError(r, '予算レポート'); return; }
       BUDGET = await r.json();
     }
     await bFetchFx();
@@ -10508,7 +10508,7 @@ function qResults() {
   const box = document.getElementById('qresults');
   if (!box) return;
   if (!filter.trim()) { box.hidden = true; box.innerHTML = ''; return; }
-  const name = (navEntry(view) || {}).label || NAVNAMES[view] || 'This page';
+  const name = (navEntry(view) || {}).label || NAVNAMES[view] || 'このページ';
   const filtering = FILTERED_VIEWS.includes(view);
   const found = qMatches();
   box.innerHTML = `<div class="qr-head">${esc(filtering
@@ -10615,7 +10615,7 @@ document.getElementById('signout').onclick = async () => {
   // single sign-on is REQUIRED, that left a password form nobody but the
   // break-glass account could use.
   await refreshAuth();
-  showLogin('Signed out.');
+  showLogin('サインアウトしました。');
 };
 
 // Keep account actions together in the account menu. The original sign-out
@@ -10659,7 +10659,7 @@ window.addEventListener('pageshow', async e => {
   if (!e.persisted) return;
   await refreshAuth();
   if (AUTH && AUTH.mode === 'login' && !AUTH.authenticated) {
-    showLogin('That session has ended. Sign in again.');
+    showLogin('セッションが終了しました。もう一度サインインしてください。');
   }
 });
 // ---- the guided tour -------------------------------------------------
@@ -10682,33 +10682,33 @@ const TOUR_VERSION = '2';
 //   no    - label for the leave button, same reason
 const TOURS = {
   admin: [
-    {title: 'Welcome to Shadow AI Guard',
+    {title: 'Shadow AI Guardへようこそ',
      body: 'A quick walk through the portal. It takes about two minutes, '
          + 'and you can leave at any point.',
      ok: 'Start'},
     {view: 'overview', sel: '[data-area="discovery"]',
-     title: 'Finding your way around',
+     title: '画面の使い方',
      body: 'Pages are grouped in the sidebar. You can keep more than one '
          + 'group open, and pin the pages you use most so they sit at the '
          + 'top.'},
     {view: 'overview', sel: '#who', when: () => !!(AUTH && AUTH.mode === 'login' && AUTH.username),
-     title: 'Your account',
+     title: 'アカウント',
      body: 'Change your password or sign out from here. The theme switch '
          + 'is next to it, and while setup is unfinished a bell shows what '
          + 'is left.'},
     {view: 'overview', sel: '[data-tour="stats"]',
-     title: 'The overview',
+     title: '概要',
      body: 'The headline numbers: personal accounts to review, people '
          + 'affected, tools seen and how much of the fleet is reporting. '
          + 'Everything is for the time window chosen at the top right, not '
          + 'all time.'},
     {view: 'overview', sel: '[data-act="ov-edit"]',
-     title: 'Make the overview yours',
+     title: '概要を自分好みに',
      body: 'Edit lets you show, hide, reorder and resize the cards, or stack '
          + 'two side by side. The layout is saved to your account, so it is '
          + 'the same at your next sign-in.'},
     {view: 'setup', sel: '[data-tour="source-overview"]',
-     title: 'Check what is reporting first',
+     title: 'まず何が報告されているか確認',
      body: 'This page shows which detection sources are sending data. Look '
          + 'here before reading a low count as good news: a source that is '
          + 'silent cannot see anything.'},
@@ -10723,7 +10723,7 @@ const TOURS = {
          + 'have approved. Record what you did about each one here; that '
          + 'is what clears it from the overview.'},
     {view: 'register', sel: '.register-overview',
-     title: 'The AI register',
+     title: 'AI台帳',
      body: 'Your decision on each tool: who owns it, whether it is '
          + 'approved, and when to review it. Tools that have been seen but '
          + 'have no decision yet are listed so they are not forgotten.'},
@@ -10756,33 +10756,33 @@ const TOURS = {
          + 'the data is.'},
   ],
   viewer: [
-    {title: 'Welcome to Shadow AI Guard',
+    {title: 'Shadow AI Guardへようこそ',
      body: 'A quick walk through the portal. This account can see '
          + 'everything but change nothing, which suits an auditor or a '
          + 'reviewer.',
      ok: 'Start'},
     {view: 'overview', sel: '[data-area="discovery"]',
-     title: 'Finding your way around',
+     title: '画面の使い方',
      body: 'Pages are grouped in the sidebar. You can keep more than one '
          + 'group open, and pin the pages you use most so they sit at the '
          + 'top.'},
     {view: 'overview', sel: '#who', when: () => !!(AUTH && AUTH.mode === 'login' && AUTH.username),
-     title: 'Your account',
+     title: 'アカウント',
      body: 'Change your password or sign out from here. The theme switch '
          + 'is next to it.'},
     {view: 'overview', sel: '[data-tour="stats"]',
-     title: 'The overview',
+     title: '概要',
      body: 'The headline numbers: personal accounts to review, people '
          + 'affected, tools seen and how much of the fleet is reporting. '
          + 'Everything is for the time window chosen at the top right, not '
          + 'all time.'},
     {view: 'overview', sel: '[data-act="ov-edit"]',
-     title: 'Make the overview yours',
+     title: '概要を自分好みに',
      body: 'Edit lets you show, hide, reorder and resize the cards, or stack '
          + 'two side by side. The layout is saved to your account, so it is '
          + 'the same at your next sign-in.'},
     {view: 'setup', sel: '[data-tour="source-overview"]',
-     title: 'Check what is reporting first',
+     title: 'まず何が報告されているか確認',
      body: 'This page shows which detection sources are sending data. Look '
          + 'here before reading a low count as good news: a source that is '
          + 'silent cannot see anything.'},
@@ -10797,7 +10797,7 @@ const TOURS = {
          + 'tools. Approving a tool does not clear these; an admin records '
          + 'what was done about each one.'},
     {view: 'register', sel: '.register-overview',
-     title: 'The AI register',
+     title: 'AI台帳',
      body: 'The owner, status and review date for each tool. Tools seen '
          + 'with no decision yet stay listed so an admin can pick them up.'},
     {view: 'iso', sel: '.evidence-summary',
@@ -10840,32 +10840,32 @@ const TOURS = {
 // becomes useful - but somebody who has just worked through nine settings
 // has earned a question rather than another overlay springing open.
 const TOUR_AFTER_WIZARD = {
-  title: "That's the setup done",
+  title: "これでセットアップは完了です",
   body: 'A short walkthrough covers what each page shows and where the '
       + 'numbers come from - including which of them depend on what you '
       + 'just configured. It stays in Settings, so not now does not mean '
       + 'never.',
-  ok: 'Show me around', no: 'Not now'};
+  ok: 'Show me around', no: '今はしない'};
 
 // Shown instead of a welcome to somebody who has taken the other role's
 // tour already: they know the pages, and what they need is the delta.
 const TOUR_ROLE_CHANGED = {
   admin: {
-    title: 'You are an admin now',
+    title: 'あなたは管理者になりました',
     body: 'Someone changed this account from viewer to admin. The pages you '
         + 'have been reading are now ones you can change - settings, tool '
         + 'decisions, accounts, and device enrolment. A short walkthrough '
         + 'covers where those live; it is in Settings if you would rather '
         + 'not now.',
-    ok: 'Show me', no: 'No thanks'},
+    ok: 'Show me', no: 'いいえ、結構です'},
   viewer: {
-    title: 'This account is read-only now',
+    title: 'このアカウントは読み取り専用になりました',
     body: 'Someone changed it from admin to viewer. Every page still works '
         + 'and nothing is hidden - saving is the part that stops, and it '
         + 'refuses with a line saying so rather than failing quietly. A '
         + 'short walkthrough covers what you can still do and who to ask '
         + 'for the rest.',
-    ok: 'Show me', no: 'No thanks'},
+    ok: 'Show me', no: 'いいえ、結構です'},
 };
 
 let TOUR = null;
@@ -11098,7 +11098,7 @@ function tourPaint(el, st) {
       <button class="ghost" data-tour-act="skip">${esc(st.no || 'End tour')}</button>
       ${TOUR.i > 0 ? '<button data-tour-act="back">戻る</button>' : ''}
       <button class="${st.click ? '' : 'pri'}" data-tour-act="next">${
-        esc(st.ok || (last ? 'Done' : 'Next'))}</button>
+        esc(st.ok || (last ? '完了' : '次へ'))}</button>
     </div>`;
   // The enter animation only after a page change, where the card was
   // faded out and has somewhere to arrive from. It moves; opacity is the

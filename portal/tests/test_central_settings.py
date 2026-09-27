@@ -341,7 +341,7 @@ def test_the_new_password_is_typed_twice():
     html = (main.STATIC / "index.html").read_text()
     assert 'id="set-confpass"' in html
     assert "if (nw !== _val('set-confpass'))" in html
-    assert "The two new passwords do not match." in html
+    assert "新しいパスワードが一致しません。" in html
 
 
 def test_the_primary_button_submits_the_form_and_carries_no_act():

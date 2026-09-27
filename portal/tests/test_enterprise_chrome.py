@@ -48,7 +48,7 @@ def test_the_estate_chrome_carries_no_fixed_claim():
         assert fixed not in HTML, fixed
     assert "function showEstate()" in HTML
     assert "render();\n  showFreshness();\n  showEstate();" in HTML
-    for word in ("'Monitoring active'", "'No sources reporting'", "'Data unavailable'",
+    for word in ("'Monitoring active'", "'ソースからの報告がありません'", "'データを利用できません'",
                  "'Managed estate' : 'Standalone portal'"):
         assert word in HTML, word
     for cls in (".estate-dot.off", ".estate-dot.warn", ".trust-state.off", ".trust-state.warn"):
@@ -88,7 +88,7 @@ def test_the_estate_control_takes_the_organisations_name():
     assert main.SettingsWrite.model_fields["org_name"].annotation == (str | None)
     assert "const org = ((AUTH && AUTH.org_name) || '').trim();" in HTML
     assert "const name = org || kind;" in HTML
-    assert "settingRow('org_name', 'Organisation name', 'Acme Ltd'," in HTML
+    assert "settingRow('org_name', '組織名', 'Acme Ltd'," in HTML
     assert "function orgSettings()" in HTML
     assert "body = orgSettings() + mailSettings() + alertingSettings();" in HTML
     assert "<h4>エステートに名前を付ける</h4>" in HTML
@@ -163,7 +163,7 @@ def test_the_posture_headline_needs_a_source_to_have_reported():
     100% coverage. It now needs the same status read the top-bar badge uses
     to show at least one source reporting."""
     assert "const silent = !S || !S.reporting;" in HTML
-    assert "silent ? 'Nothing reporting' : attention ? 'Needs attention' : 'Monitoring healthy'" in HTML
+    assert "silent ? '報告なし' : attention ? 'Needs attention' : 'Monitoring healthy'" in HTML
     assert ".overview-executive.silent" in CSS
 
 
