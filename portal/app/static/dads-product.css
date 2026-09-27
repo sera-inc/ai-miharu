@@ -1,0 +1,292 @@
+/* Shadow AI Guard product adapter for sera-inc/digital-design-system. */
+/* DeepSeek v4.1 Flash mapping, pilot; preserve original functionality and dark mode. */
+/* DADS Layer 2 拡張案。未承認・未配布。semantic.css への適用前にレビューする。 */
+:root {
+  --app-sg-surface-canvas: var(--dads-color-white);
+  --app-sg-surface-panel: var(--dads-color-solid-gray-50);
+  --app-sg-surface-card: var(--dads-color-white);
+  --app-sg-surface-raised: var(--dads-color-white);
+  --app-sg-surface-hover: var(--dads-color-solid-gray-100);
+  --app-sg-border-subtle: var(--dads-color-solid-gray-200);
+  --app-sg-border-strong: var(--dads-color-solid-gray-536);
+  --app-sg-text-primary: var(--dads-color-solid-gray-900);
+  --app-sg-text-secondary: var(--dads-color-solid-gray-600);
+  --app-sg-text-link: var(--dads-color-blue-700);
+  --app-sg-accent-primary: var(--dads-color-blue-700);
+  --app-sg-accent-primary-hover: var(--dads-color-blue-800);
+  --app-sg-accent-subtle: var(--dads-color-blue-50);
+  --app-sg-focus-ring: var(--dads-color-blue-600);
+  --app-sg-danger: var(--dads-color-red-1000);
+  --app-sg-danger-surface: var(--dads-color-red-50);
+  --app-sg-warning: var(--dads-color-yellow-1000);
+  --app-sg-warning-surface: var(--dads-color-yellow-100);
+  --app-sg-chart-series-1: var(--dads-color-blue-600);
+  --app-sg-chart-series-2: var(--dads-color-green-600);
+  --app-sg-chart-series-3: var(--dads-color-yellow-800);
+  --app-sg-chart-series-4: var(--dads-color-red-600);
+  --app-sg-chart-series-5: var(--dads-color-solid-gray-600);
+  --app-sg-chart-axis: var(--dads-color-solid-gray-600);
+  --app-sg-chart-grid: var(--dads-color-solid-gray-200);
+  --app-sg-chart-surface: var(--dads-color-white);
+  --app-sg-gradient-start: var(--dads-color-blue-800);
+  --app-sg-gradient-end: var(--dads-color-green-800);
+  --app-sg-overlay: color-mix(in srgb, var(--dads-color-black) 40%, transparent);
+  --app-sg-shadow-color: color-mix(in srgb, var(--dads-color-black) 18%, transparent);
+  --app-sg-accent-on-primary: var(--dads-color-white);
+}
+
+[data-theme="dark"] {
+  --app-sg-surface-canvas: var(--dads-color-black);
+  --app-sg-surface-panel: var(--dads-color-solid-gray-900);
+  --app-sg-surface-card: var(--dads-color-solid-gray-800);
+  --app-sg-surface-raised: var(--dads-color-solid-gray-700);
+  --app-sg-surface-hover: color-mix(in srgb, var(--dads-color-white) 10%, transparent);
+  --app-sg-border-subtle: var(--dads-color-solid-gray-500);
+  --app-sg-border-strong: var(--dads-color-solid-gray-300);
+  --app-sg-text-primary: var(--dads-color-solid-gray-50);
+  --app-sg-text-secondary: var(--dads-color-solid-gray-200);
+  --app-sg-text-link: var(--dads-color-blue-200);
+  --app-sg-accent-primary: var(--dads-color-blue-200);
+  --app-sg-accent-primary-hover: var(--dads-color-blue-100);
+  --app-sg-accent-subtle: color-mix(in srgb, var(--dads-color-blue-500) 20%, transparent);
+  --app-sg-focus-ring: var(--dads-color-blue-300);
+  --app-sg-danger: var(--dads-color-red-200);
+  --app-sg-danger-surface: color-mix(in srgb, var(--dads-color-red-500) 18%, transparent);
+  --app-sg-warning: var(--dads-color-yellow-300);
+  --app-sg-warning-surface: color-mix(in srgb, var(--dads-color-yellow-500) 20%, transparent);
+  --app-sg-chart-series-1: var(--dads-color-blue-400);
+  --app-sg-chart-series-2: var(--dads-color-green-300);
+  --app-sg-chart-series-3: var(--dads-color-yellow-300);
+  --app-sg-chart-series-4: var(--dads-color-red-300);
+  --app-sg-chart-series-5: var(--dads-color-solid-gray-300);
+  --app-sg-chart-axis: var(--dads-color-solid-gray-400);
+  --app-sg-chart-grid: color-mix(in srgb, var(--dads-color-white) 12%, transparent);
+  --app-sg-chart-surface: var(--dads-color-solid-gray-900);
+  --app-sg-gradient-start: var(--dads-color-blue-900);
+  --app-sg-gradient-end: var(--dads-color-green-900);
+  --app-sg-overlay: color-mix(in srgb, var(--dads-color-black) 60%, transparent);
+  --app-sg-shadow-color: color-mix(in srgb, var(--dads-color-black) 70%, transparent);
+  --app-sg-accent-on-primary: var(--dads-color-solid-gray-900);
+}
+
+/* Legacy variable bridge: existing view renderers keep their variable names. */
+:root {
+  --bg: var(--app-sg-surface-canvas);
+  --fg: var(--app-sg-text-primary);
+  --sf: var(--app-sg-surface-card);
+  --sf2: var(--app-sg-surface-panel);
+  --pri: var(--app-sg-accent-primary);
+  --acc: var(--app-sg-text-link);
+  --warn: var(--app-sg-warning);
+  --dstr: var(--app-sg-danger);
+  --mut: var(--app-sg-text-secondary);
+  --bd: var(--app-sg-border-subtle);
+  --line: var(--app-sg-border-subtle);
+  --pri-soft: var(--app-sg-accent-subtle);
+  --acc-soft: var(--app-sg-accent-subtle);
+  --warn-soft: var(--app-sg-warning-surface);
+  --dstr-soft: var(--app-sg-danger-surface);
+  --pop: var(--app-sg-surface-raised);
+  --pop-bd: var(--app-sg-border-strong);
+  --pop-shadow: var(--app-shadow-overlay);
+  --chart: var(--app-sg-chart-series-1);
+  --shadow: var(--app-shadow-raised);
+  --side: var(--app-sg-gradient-start);
+  --side-ink: var(--app-text-inverse);
+  --side-mut: var(--app-text-inverse);
+  --side-line: var(--app-sg-border-subtle);
+  --side-on: var(--app-sg-accent-subtle);
+  --side-on-ink: var(--app-text-inverse);
+  --radius: var(--app-radius-md);
+  --radius-sm: var(--app-radius-sm);
+}
+[data-theme="dark"] {
+  --bg: var(--app-sg-surface-canvas);
+  --fg: var(--app-sg-text-primary);
+  --sf: var(--app-sg-surface-card);
+  --sf2: var(--app-sg-surface-panel);
+  --pri: var(--app-sg-accent-primary);
+  --acc: var(--app-sg-text-link);
+  --warn: var(--app-sg-warning);
+  --dstr: var(--app-sg-danger);
+  --mut: var(--app-sg-text-secondary);
+  --bd: var(--app-sg-border-subtle);
+  --line: var(--app-sg-border-subtle);
+  --pri-soft: var(--app-sg-accent-subtle);
+  --acc-soft: var(--app-sg-accent-subtle);
+  --warn-soft: var(--app-sg-warning-surface);
+  --dstr-soft: var(--app-sg-danger-surface);
+  --pop: var(--app-sg-surface-raised);
+  --pop-bd: var(--app-sg-border-strong);
+  --pop-shadow: var(--app-shadow-overlay);
+  --chart: var(--app-sg-chart-series-1);
+  --shadow: var(--app-shadow-raised);
+  --side: var(--app-sg-gradient-start);
+  --side-ink: var(--app-text-inverse);
+  --side-mut: var(--app-text-inverse);
+  --side-line: var(--app-sg-border-subtle);
+  --side-on: var(--app-sg-accent-subtle);
+  --side-on-ink: var(--app-text-inverse);
+}
+
+/* Focus, typography, and component surfaces without changing interaction rules. */
+body {
+  color: var(--app-sg-text-primary);
+  font-family: var(--app-font-sans);
+  line-height: var(--app-text-body-leading);
+}
+aside {
+  background: var(--app-sg-gradient-start);
+  color: var(--app-text-inverse);
+}
+.topbar {
+  height: var(--app-header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--app-space-3);
+  background: var(--app-sg-surface-card);
+  border-bottom: 1px solid var(--app-sg-border-subtle);
+  color: var(--app-sg-text-primary);
+}
+main {
+  color: var(--app-sg-text-primary);
+  max-width: var(--app-content-max);
+  margin: 0 auto;
+}
+.card {
+  background: var(--app-sg-surface-card);
+  border: 1px solid var(--app-sg-border-subtle);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-raised);
+  color: var(--app-sg-text-primary);
+}
+input {
+  background: var(--app-sg-surface-card);
+  color: var(--app-sg-text-primary);
+  border: 1px solid var(--app-sg-border-strong);
+  border-radius: var(--app-radius-sm);
+  font-family: var(--app-font-sans);
+  font-size: var(--app-text-body-size);
+}
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+  outline: var(--app-focus-ring-width) solid var(--app-focus-ring);
+  outline-offset: var(--app-focus-ring-offset);
+}
+
+/* DeepSeek component pass: visual properties only; layout and actions stay in the source UI. */
+[data-theme="dark"] { --bg: var(--app-sg-surface-panel); }
+nav button:hover {
+  background:color-mix(in srgb,var(--app-text-inverse) 8%, transparent);
+  color:var(--app-text-inverse);
+}
+nav button.on {
+  background:color-mix(in srgb,var(--app-text-inverse) 12%, transparent);
+  color:var(--app-text-inverse);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--app-text-inverse) 14%, transparent);
+}
+nav button.on:before {
+  background:var(--app-text-inverse);
+}
+.nav-child.on .nav-dot {
+  background:var(--app-text-inverse);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--app-text-inverse) 10%, transparent);
+}
+.tabs button.on {
+  color:var(--app-sg-text-primary);
+}
+.tabs button.on:after {
+  background:var(--app-sg-accent-primary);
+  border-radius:var(--app-radius-sm) var(--app-radius-sm) 0 0;
+}
+.wcard,.card,.tcard,.ag-card,.ag-cov,.ag-limit {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+  border-radius:var(--app-radius-md);
+  box-shadow:var(--app-shadow-raised);
+  font-family:var(--app-font-sans);
+}
+.wcard h3,.tcard>h3,.card h3 {
+  color:var(--app-sg-text-primary);
+  font-family:var(--app-font-sans);
+  font-weight:650;
+}
+.gcard>.stats {
+  background:var(--app-sg-surface-raised);
+  border-color:var(--app-sg-border-subtle);
+  border-radius:var(--app-radius-md);
+  box-shadow:var(--app-shadow-raised);
+}
+.gcard>.stats>div {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+}
+.gcard>.stats dt {
+  color:var(--app-sg-text-primary);
+  font-family:var(--app-font-sans);
+  font-weight:730;
+}
+.gcard>.stats dd {
+  color:var(--app-sg-text-secondary);
+  font-family:var(--app-font-sans);
+}
+th {
+  background:var(--app-sg-surface-raised);
+  color:var(--app-sg-text-secondary);
+  border-bottom-color:var(--app-sg-border-subtle);
+  font-family:var(--app-font-sans);
+  font-weight:630;
+}
+td {
+  border-bottom-color:var(--app-sg-border-subtle);
+  color:var(--app-sg-text-primary);
+}
+tr[data-open]:hover td,[data-theme=dark] tr[data-open]:hover td {
+  background:color-mix(in srgb,var(--app-sg-accent-subtle) 38%,var(--app-sg-surface-card));
+}
+button.mini {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+  color:var(--app-sg-text-primary);
+  border-radius:var(--app-radius-md);
+  font-family:var(--app-font-sans);
+}
+button.mini:hover {
+  background:var(--app-sg-surface-hover);
+  border-color:var(--app-sg-border-strong);
+  color:var(--app-sg-text-primary);
+}
+button.mini.pri {
+  background:var(--app-sg-accent-primary);
+  border-color:var(--app-sg-accent-primary);
+  color:var(--app-sg-accent-on-primary);
+  box-shadow:var(--app-shadow-raised);
+}
+.btn,.back {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+  color:var(--app-sg-text-primary);
+  border-radius:var(--app-radius-md);
+  font-family:var(--app-font-sans);
+}
+input,select,.mfield {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+  color:var(--app-sg-text-primary);
+  border-radius:var(--app-radius-md);
+  font-family:var(--app-font-sans);
+}
+input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus-visible,.btn:focus-visible,.back:focus-visible,nav button:focus-visible,.tabs button:focus-visible {
+  outline:var(--app-focus-ring-width) solid var(--app-focus-ring);
+  outline-offset:var(--app-focus-ring-offset);
+}
+.drawer {
+  background:var(--app-sg-surface-panel);
+  border-left-color:var(--app-sg-border-subtle);
+  box-shadow:var(--app-shadow-overlay);
+}
+.search {
+  background:var(--app-sg-surface-card);
+  border-color:var(--app-sg-border-subtle);
+  color:var(--app-sg-text-primary);
+  border-radius:var(--app-radius-md);
+}

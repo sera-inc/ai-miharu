@@ -21,3 +21,7 @@ node --test portal/tests/overview_renderers.test.cjs portal/tests/activation_car
 ```
 
 変更後はテスト結果を記録し、サンプルデータ入りデモの主要画面をブラウザで確認する。
+
+## 2026-09-27 管理者試験の例外
+
+管理者の明示指示で、Phase 1 の保留解消前に DeepSeek の `dads-product.css` を**試験デモだけ**に適用した。`DADS_CSS_DIR` がない通常起動は従来スキンへ戻る。これは全画面移行・標準レビュー承認・Layer 2 正式採用ではない。続きは製品 UI の機能と視覚差分を先に検証する。詳細は `docs/dads-runtime-mount.md`。

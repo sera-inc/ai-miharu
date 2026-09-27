@@ -1,26 +1,29 @@
-# DADS トークンの暫定ランタイム参照
+# DADS 製品適用の管理者試験
 
-**状態**: Phase 1 の準備。Ollama Cloud `deepseek-v4.1-flash:cloud` の配布経路案に基づく。DADS 設計書 U-03 の正式なパッケージ配布方式は未決、ダークトークンのドラフト PR #2 は未承認。製品 UI はまだ DADS を参照しない。
+**状態**: 2026-09-27、`deepseek-v4.1-flash:cloud` の出力を使い、製品ブランチに共通画面の色・面・文字・境界・フォーカスの暫定アダプターを実装した。DADS Phase 1 の 349 値の完全な対応、全画面の移行、アクセシビリティ承認は未完了。管理者から製品への即時適用が指示されたため、未承認の `--app-sg-*` 案を試験環境で先行利用している。
 
-## 狙い
+## 構成
 
-公開元ソースと Docker image に private な `digital-design-system` のファイルや認証情報を含めず、管理者の試験環境だけで DADS の CSS を読み込めるように準備する。CSS を直接コピーしたり `--app-*` / `--dads-*` を製品側で上書きしない。
+- `portal/app/static/index.html` は既存 `enterprise.css` の後に、DADS `tokens/index.css` と `dads-product.css` を読み込む。既存 DOM・JavaScript・旧変数名を保ち、アダプター CSS が色と共通部品の見た目を変更する。
+- `dads-product.css` の `--app-sg-*` はこの製品の試験候補。`digital-design-system` の Layer 1 `tokens/dads.css` や Layer 2 正典を変更していない。ダーク表示は維持する。
+- CSS の URL は固定パスのみ。DADS の4ファイルは `DADS_CSS_DIR` の読み取り専用マウントから配信し、製品ソースと Docker image に private デザインシステムの原本・認証情報をコピーしない。
+- ページと CSS は同じ `require_page_auth` 境界。管理モードではログインページも CSS を取得できる。表示用 CSS はブラウザへ公開されるが、API や利用者データは従来どおり `require_auth` で保護する。
+- `DADS_CSS_DIR` が無い場合、DADS トークンと製品アダプターは 404 となり、既存の `enterprise.css` で表示する。CSS の 404 がコンソールに出るため、正式移行時は依存の配布と条件付き読み込みを整える。
 
-## 管理者試験
+## 試験起動
 
-1. 権限のあるアカウントで `sera-inc/digital-design-system` を別途 clone し、採用する Git commit/tag を固定する。Layer 1 の `tokens/dads.css` を手編集しない。
-2. `DADS_TOKENS_DIR` にその clone の `tokens/` の**絶対パス**を指定する。
-3. `docker compose -f demo/docker-compose.yml -f demo/docker-compose.dads.yml config --quiet` でマウント設定を検証する。起動時にも両方の `-f` を指定する。通常の `docker compose -f demo/docker-compose.yml up` は private repo 無しで起動する。
-4. 認証済みの Portal から `/digital-design-system/tokens/index.css` と相対 `dads.css`、`brand.css`、`semantic.css` を取得できる。各 URL は固定ルートで `require_auth` を通す。認証済みでも未設定/ファイル不在なら 404。未認証なら先に 401。
+権限のある管理者が `sera-inc/digital-design-system` を別途 clone し、採用する Git commit を固定する。製品リポジトリ直下から:
 
-管理モードでは `require_page_auth` がログイン前ページを公開するため、DADS 固定ルートには使わない。未ログインの CSS 取得は 401 とし、ログイン画面は既存の CSS だけで表示する。
+```bash
+DADS_TOKENS_DIR=/absolute/path/to/digital-design-system/tokens \
+  docker compose -f demo/docker-compose.yml -f demo/docker-compose.dads.yml up -d --build
+```
 
-この段階では `index.html` や `enterprise.css` に import を追加していない。ドラフト PR #2 の承認、正式な配布方式、対応表の保留値解消を経てから CSS 参照とコンポーネント移行を行う。
+`demo/docker-compose.dads.yml` は読み取り専用 bind mount。ログイン後にライト・ダークの切替、概要、検出ソース、チャート、フォーム、モーダルを確認する。
 
-## 検証
+## 現時点の検証と残件
 
-- 4 固定ルートの認証依存、FileResponse、`Cache-Control: private, no-store`、未設定 404、未知の動的 CSS ルート無しを unit test で確認。
-- `PYTHONPATH=portal PORTAL_AUTH=none ../.venv/bin/pytest portal/ -q` を実行。`PORTAL_AUTH=none` はテスト設定であり、デプロイの無認証化を意味しない。
-- Compose overlay は読み取り専用 bind mount。`docker compose config` と実行環境内の CSS 応答を別に確認する。
-
-正式配布へ切り替える際は、この暫定マウントの撤去、DADS バージョン固定、認証・キャッシュ境界、ブラウザ表示・機能テストを一つの変更としてレビューする。
+- 固定 CSS ルート、未設定時の404、ページ認証境界をテスト。サンプルデータの管理モードで CSS 200、概要と検出ソースへの遷移、ライト・ダーク切替、表・棒グラフ切替を実画面で確認した。
+- Python Portal 全テスト、Node の既存テストが通過した。これは全画面の視覚回帰・機能同等性・WCAG 合格を示すものではない。
+- `docs/mapping.md` は 108 仮対応／208 保留／33 除外のまま。未解決を0と偽らない。生値が残る既存 CSS と他画面・拡張機能は段階移行が必要。
+- デザインシステム側のドラフト PR #2 は、製品適用優先の指示で閉じた。Layer 2 の正式承認や配布方式の決定とは別の管理者試験である。

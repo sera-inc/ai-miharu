@@ -45,15 +45,15 @@ def test_fixed_css_routes_registered():
 
 def test_no_unknown_css_route_registered():
     registered = {route.path for route in _css_routes()}
-    assert registered == set(ROUTES) | {"/enterprise.css"}
+    assert registered == set(ROUTES) | {"/enterprise.css", "/dads-product.css"}
 
 
-def test_each_route_depends_on_data_auth():
+def test_each_route_uses_page_auth():
     for path in ROUTES:
         route = _route(path)
         calls = [dep.call for dep in route.dependant.dependencies]
-        assert main.require_auth in calls
-        assert main.require_page_auth not in calls
+        assert main.require_page_auth in calls
+        assert main.require_auth not in calls
 
 
 def test_file_response_for_each_fixed_file(css_dir):
@@ -87,3 +87,26 @@ def test_missing_file_returns_404(tmp_path, monkeypatch):
         with pytest.raises(HTTPException) as excinfo:
             _route(path).endpoint()
         assert excinfo.value.status_code == 404
+
+
+def test_product_adapter_is_served_with_page_auth(css_dir):
+    route = _route("/dads-product.css")
+    assert main.require_page_auth in [dep.call for dep in route.dependant.dependencies]
+    response = route.endpoint()
+    assert isinstance(response, FileResponse)
+    assert Path(response.path) == main.STATIC / "dads-product.css"
+    assert response.headers["cache-control"] == "private, no-store"
+
+
+def test_product_adapter_is_off_without_token_mount(monkeypatch):
+    monkeypatch.delenv("DADS_CSS_DIR", raising=False)
+    with pytest.raises(HTTPException) as excinfo:
+        _route("/dads-product.css").endpoint()
+    assert excinfo.value.status_code == 404
+
+
+def test_product_adapter_is_off_with_incomplete_token_mount(tmp_path, monkeypatch):
+    monkeypatch.setenv("DADS_CSS_DIR", str(tmp_path))
+    with pytest.raises(HTTPException) as excinfo:
+        _route("/dads-product.css").endpoint()
+    assert excinfo.value.status_code == 404
