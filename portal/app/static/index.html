@@ -963,22 +963,22 @@ a.libtn:hover{border-color:var(--pri)}
 <link rel="stylesheet" href="/enterprise.css">
 <link rel="stylesheet" href="/digital-design-system/tokens/index.css">
 <link rel="stylesheet" href="/dads-product.css">
-<a class="skip-link" href="#app">Skip to main content</a>
+<a class="skip-link" href="#app">メインコンテンツへスキップ</a>
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer"></div>
 <div class="shell" id="shell">
   <aside>
     <button class="brand" id="brand-home" type="button"
-      aria-label="Go to Workspace overview"><img src="/logo.png" alt="Shadow AI Guard"></button>
+      aria-label="ワークスペース概要へ移動"><img src="/logo.png" alt="Shadow AI Guard"></button>
     <div class="brandline"></div>
     <button class="tenant-switch" id="estate-status" type="button"
-      aria-label="Open System health">
+      aria-label="システム検出状況を開く">
       <span class="tenant-avatar" id="estate-avatar">·</span>
-      <span class="tenant-copy"><b id="estate-name">Portal</b><span id="estate-sub"><i class="estate-dot off"></i> Checking sources…</span></span>
-      <span class="tenant-chev" aria-hidden="true">System health</span>
+      <span class="tenant-copy"><b id="estate-name">ポータル</b><span id="estate-sub"><i class="estate-dot off"></i> ソースを確認中…</span></span>
+      <span class="tenant-chev" aria-hidden="true">システム検出状況</span>
     </button>
     <nav id="nav"></nav>
-    <button class="fold" id="fold" title="collapse sidebar">«</button>
+    <button class="fold" id="fold" title="サイドバーを折りたたむ">«</button>
     <div class="foot"><span class="txt">
       <div class="mono" id="footver">v</div>
       <div>by Aman Karir</div>
@@ -987,31 +987,31 @@ a.libtn:hover{border-color:var(--pri)}
   </aside>
   <div>
     <div class="topbar">
-      <button class="mobile-nav" id="mobile-nav" title="open navigation"
-        aria-label="Open navigation">☰</button>
-      <span class="top-context"><b id="topctx-name">Portal</b><span id="topctx-sub">Checking sources…</span></span>
+      <button class="mobile-nav" id="mobile-nav" title="ナビゲーションを開く"
+        aria-label="ナビゲーションを開く">☰</button>
+      <span class="top-context"><b id="topctx-name">ポータル</b><span id="topctx-sub">ソースを確認中…</span></span>
       <div class="search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
-        <input id="q" placeholder="Search this view, or jump to a page, tool or device…"
-          autocomplete="off" aria-label="Search tools, devices and pages"
+        <input id="q" placeholder="このビューを検索、またはページ、ツール、端末へ移動…"
+          autocomplete="off" aria-label="ツール、端末、ページを検索"
           aria-autocomplete="list" aria-controls="qresults">
         <span class="search-key" aria-hidden="true">/</span>
         <div id="qresults" role="listbox" hidden></div>
       </div>
       <span class="live-state"><span id="freshness" class="mono"></span></span>
-      <button id="refresh" class="back" style="margin:0">Refresh</button>
-      <span class="trust-state off" id="trust-state" title="Checking which detection sources have reported">
+      <button id="refresh" class="back" style="margin:0">更新</button>
+      <span class="trust-state off" id="trust-state" title="どの検出ソースが報告済みか確認中">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" aria-hidden="true"><path
           d="M12 3l8 3v5.5c0 4.7-3.2 8.2-8 10-4.8-1.8-8-5.3-8-10V6l8-3z"/>
-          <path d="m8.5 12 2.2 2.2 4.8-5"/></svg><span id="trust-text">Checking sources…</span>
+          <path d="m8.5 12 2.2 2.2 4.8-5"/></svg><span id="trust-text">ソースを確認中…</span>
       </span>
-      <button id="signout" class="back" style="margin:0;display:none">Sign out</button>
-      <button id="themebtn" class="back" style="margin:0" title="light / dark">◐</button>
+      <button id="signout" class="back" style="margin:0;display:none">サインアウト</button>
+      <button id="themebtn" class="back" style="margin:0" title="ライト / ダーク">◐</button>
       <span id="setupwrap" style="position:relative">
         <button id="setupbell" class="back" style="margin:0;display:none"
           aria-haspopup="true" aria-expanded="false"
-          aria-label="Outstanding setup" title="Outstanding setup">
+          aria-label="未完了のセットアップ" title="未完了のセットアップ">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0
@@ -1022,15 +1022,15 @@ a.libtn:hover{border-color:var(--pri)}
       </span>
       <span id="whowrap" class="account-wrap">
         <button id="who" class="account-button" style="display:none"
-          aria-label="Account menu" aria-haspopup="true" aria-expanded="false">
+          aria-label="アカウントメニュー" aria-haspopup="true" aria-expanded="false">
           <span class="account-avatar" id="who-avatar" aria-hidden="true"></span>
           <span class="account-copy"><b id="who-name"></b><span id="who-role"></span></span>
           <span class="account-chevron" aria-hidden="true">⌄</span>
         </button>
         <div id="usermenu" hidden>
           <div class="umhead" id="um-who"></div>
-          <button class="umitem" data-act="open-password">Change password</button>
-          <button class="umitem" id="signout-menu">Sign out</button>
+          <button class="umitem" data-act="open-password">パスワードを変更</button>
+          <button class="umitem" id="signout-menu">サインアウト</button>
         </div>
       </span>
     </div>
@@ -1109,10 +1109,10 @@ let SETTAB = 'fleet';
 // was renamed because "Fleet" also names a whole nav section (enrolled devices
 // and enrollment tokens), and two different things called Fleet in one product
 // is a coin toss every time somebody says it.
-const STABS = [['fleet', 'Detection & paste guard'],
-               ['connection', 'Receiver & log store'],
-               ['alerting', 'Display & alerting'], ['account', 'Account'],
-               ['start', 'Getting started']];
+const STABS = [['fleet', '検出とペーストガード'],
+               ['connection', 'レシーバーとログストア'],
+               ['alerting', '表示とアラート'], ['account', 'アカウント'],
+               ['start', 'はじめに']];
 const SETTABS = STABS.map(([id]) => id);
 let DIAG = null;
 let REG = null;
@@ -1896,17 +1896,17 @@ const app = document.getElementById('app'), q = document.getElementById('q');
 // become tabs inside the page. Every view keeps its id, so old fragment
 // links keep working.
 const NAV = [
-  {id:'home',      lbl:'Overview',   items:[['overview','Overview'],['dashboard','Grafana']]},
-  {id:'inventory', lbl:'Inventory',  items:[['tools','Tools'],['people','People'],
-                                            ['devices','Devices'],['personal','Personal accounts'],
-                                            ['mcp','MCP servers']]},
-  {id:'governance',lbl:'Governance', items:[['register','AI register'],['registry','Tool registry'],
-                                            ['paste','Paste guard'],['iso','ISO 42001 evidence']]},
-  {id:'spend',     lbl:'Budget',     items:[['budget','Budget']]},
-  {id:'agentic',   lbl:'Agentic AI', items:[['agentic','What runs on its own']]},
-  {id:'health',    lbl:'Health',     items:[['setup','Sources'],['coverage','Uncovered devices']]},
-  {id:'managed',   lbl:'Fleet',      items:[['fleet','Devices'],['tokens','Enrollment tokens']]},
-  {id:'system',    lbl:'Settings',   items:[['settings','Settings']]},
+  {id:'home',      lbl:'概要',   items:[['overview','概要'],['dashboard','Grafana']]},
+  {id:'inventory', lbl:'資産一覧',  items:[['tools','ツール'],['people','ユーザー'],
+                                            ['devices','デバイス'],['personal','個人アカウント'],
+                                            ['mcp','MCPサーバー']]},
+  {id:'governance',lbl:'ガバナンス', items:[['register','AI台帳'],['registry','ツールレジストリ'],
+                                            ['paste','ペーストガード'],['iso','ISO 42001エビデンス']]},
+  {id:'spend',     lbl:'予算',     items:[['budget','予算']]},
+  {id:'agentic',   lbl:'エージェント型AI', items:[['agentic','自律AIの活動']]},
+  {id:'health',    lbl:'検出カバレッジ',     items:[['setup','検出元'],['coverage','検出対象外端末']]},
+  {id:'managed',   lbl:'端末管理',      items:[['fleet','デバイス'],['tokens','登録トークン']]},
+  {id:'system',    lbl:'設定',   items:[['settings','設定']]},
 ];
 const NAVICONS = {
   home:'<path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/>',
@@ -1919,11 +1919,11 @@ const NAVICONS = {
   system:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.1 2.1m10 10l2.1 2.1M19.1 4.9l-2.1 2.1m-10 10l-2.1 2.1"/>',
 };
 const NAVAREAS = [
-  {id:'overview', lbl:'Overview', icon:'home', sections:['home']},
-  {id:'discovery', lbl:'Discovery', icon:'inventory', sections:['inventory']},
-  {id:'governance', lbl:'Governance', icon:'governance', sections:['governance','spend']},
-  {id:'operations', lbl:'Operations', icon:'health', sections:['agentic','health','managed']},
-  {id:'administration', lbl:'Settings', icon:'system', sections:['system'], direct:'settings'},
+  {id:'overview', lbl:'概要', icon:'home', sections:['home']},
+  {id:'discovery', lbl:'検出結果', icon:'inventory', sections:['inventory']},
+  {id:'governance', lbl:'ガバナンス', icon:'governance', sections:['governance','spend']},
+  {id:'operations', lbl:'運用', icon:'health', sections:['agentic','health','managed']},
+  {id:'administration', lbl:'設定', icon:'system', sections:['system'], direct:'settings'},
 ];
 
 // Derived from NAV rather than written out beside it. Kept as a second list,
@@ -9962,10 +9962,10 @@ const sectionOf = v => NAV.find(s => s.items.some(([id]) => id === v));
 let NAVOPEN = [];
 const NAV_PIN_KEY = 'navigation.pins';
 const NAVNAMES = {
-  overview:'Workspace overview', dashboard:'Grafana dashboard', personal:'Personal accounts',
-  register:'AI register', registry:'Tool registry', paste:'Paste guard',
-  iso:'Evidence centre', agentic:'Agentic AI', setup:'Detection sources',
-  coverage:'Coverage gaps', fleet:'Enrolled devices', tokens:'Enrollment tokens',
+  overview:'ワークスペース概要', dashboard:'Grafana ダッシュボード', personal:'個人アカウント',
+  register:'AI台帳', registry:'ツールレジストリ', paste:'ペーストガード',
+  iso:'エビデンスセンター', agentic:'エージェント型AI', setup:'検出ソース',
+  coverage:'検出漏れ', fleet:'登録済み端末', tokens:'登録トークン',
 };
 const navEntry = id => {
   for (const sec of NAV) {

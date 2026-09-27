@@ -112,7 +112,7 @@ def test_classic_mode_refuses_and_names_the_fix(monkeypatch):
 def test_the_shell_ships_the_budget_view():
     # The nav entry, the view function, and the fragment round trip: a view
     # reachable only by typing its fragment is a view nobody finds.
-    assert "['budget','Budget']" in INDEX
+    assert "['budget','予算']" in INDEX
     assert "async function budget()" in INDEX
     assert "view === 'budget'" in INDEX
 

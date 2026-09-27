@@ -177,8 +177,8 @@ def test_every_time_label_follows_the_chosen_window():
 
 
 def test_system_health_is_called_that_everywhere_a_person_reads():
-    assert '<span class="tenant-chev" aria-hidden="true">System health</span>' in HTML
-    assert 'aria-label="Open System health">' in HTML
+    assert '<span class="tenant-chev" aria-hidden="true">システム検出状況</span>' in HTML
+    assert 'aria-label="システム検出状況を開く">' in HTML
     assert "managed-estate switcher" not in HTML
 
 

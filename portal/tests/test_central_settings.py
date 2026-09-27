@@ -268,7 +268,7 @@ def test_getting_started_has_its_own_tab():
     accounts. The first UX pass found the tour re-entry 1,002 pixels down an
     1,105-pixel page."""
     html = (main.STATIC / "index.html").read_text()
-    assert "['start', 'Getting started']" in html
+    assert "['start', 'はじめに']" in html
     assert "function gettingStarted()" in html
     assert "else if (SETTAB === 'start') body = gettingStarted();" in html
 
@@ -280,7 +280,7 @@ def test_the_fleet_tab_is_renamed_but_keeps_its_id():
     #settings/fleet links still land. The orientation tour is intentionally
     separate now: it teaches the work-area model rather than each setting."""
     html = (main.STATIC / "index.html").read_text()
-    assert "['fleet', 'Detection & paste guard']" in html
+    assert "['fleet', '検出とペーストガード']" in html
     assert "const SETTABS = STABS.map(([id]) => id);" in html
 
 
