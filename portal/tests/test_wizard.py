@@ -235,7 +235,7 @@ def test_the_register_carries_the_watchlist_decisions():
     version, and Settings can reopen the wizard."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("watchlistBlock", "wl-toggle", "open-wizard",
-                   "既知だが未検出",
+                   "登録済みだが未検出",
                    "セットアップウィザードを再実行"):
         assert needle in html, needle
 
@@ -324,7 +324,7 @@ def test_every_setup_doc_reference_is_a_real_file():
 
 def test_the_page_carries_the_review_queue():
     html = (main.STATIC / "index.html").read_text()
-    for needle in ("review_queue", "判断待ち", "今日の新規",
+    for needle in ("review_queue", "判断待ち", "本日新規",
                    "docUrl", "github.com/AmanSK5/shadow-ai-guard/blob/"):
         assert needle in html, needle
 

@@ -2568,7 +2568,7 @@ function uiReviewQueueDetail() {
                 + `<button class="mini" data-act="cand-noattr"
                   data-key="${esc(c.key)}" title="このシグナルがどのプログラムにも当てはまらないことを記録します。">該当ツールなし</button>` : ''}
               <button class="mini pri" data-act="cand-add" data-key="${esc(c.key)}">レジストリに追加</button>
-              <button class="mini" data-act="cand-dismiss" data-key="${esc(c.key)}">無視</button>
+              <button class="mini" data-act="cand-dismiss" data-key="${esc(c.key)}">対象外にする</button>
             </div>
           </article>`).join('')}</div>
         ${cands.length > 6 ? `<p class="src-note">さらに ${cands.length - 6} 件がキューにあります。</p>` : ''}
@@ -3635,24 +3635,24 @@ const _uncsv = id => _val(id).split(',').map(x => x.trim()).filter(Boolean);
 let RW = null;
 
 const RW_SURFACES = [
-  ['ブラウザ',      ['domains']],
+  ['ブラウザー',      ['domains']],
   ['デスクトップアプリ', ['app_names', 'bundle_ids', 'exe_names']],
-  ['コマンドラインと統合開発環境',  ['cli.binaries', 'cli.config_paths', 'extension_ids.vscode']],
-  ['モデルコンテキストプロトコル', ['mcp_identifiers', 'mcp_config_paths']],
+  ['CLI・IDE',  ['cli.binaries', 'cli.config_paths', 'extension_ids.vscode']],
+  ['MCP', ['mcp_identifiers', 'mcp_config_paths']],
   ['メール',        ['email_senders']],
 ];
 const RW_FIELDLBL = {
-  domains: 'ブラウザドメイン', app_names: 'macOSアプリ', bundle_ids: 'macOSバンドルID',
-  exe_names: 'Windows実行ファイル', 'cli.binaries': 'コマンドライン実行ファイル',
-  'cli.config_paths': 'コマンドライン設定パス', 'extension_ids.vscode': 'VS Code拡張機能',
-  mcp_identifiers: 'モデルコンテキストプロトコル識別子', mcp_config_paths: 'モデルコンテキストプロトコル設定パス',
-  email_senders: 'メール送信者ドメイン',
+  domains: 'ブラウザーで開くドメイン', app_names: 'macOSアプリ名', bundle_ids: 'macOSバンドルID',
+  exe_names: 'Windows実行ファイル名', 'cli.binaries': 'CLIの実行ファイル名',
+  'cli.config_paths': 'CLIの設定ファイルパス', 'extension_ids.vscode': 'VS Code拡張機能ID',
+  mcp_identifiers: 'MCPサーバー名', mcp_config_paths: 'MCPの設定ファイルパス',
+  email_senders: 'メールの送信元ドメイン',
 };
 const RW_WHY = {
   ev:      ['自社環境で検出',   'ev'],
   saved:   ['保存済み',         'ev'],
   derived: ['名前から推定', 'vd'],
-  me:      ['あなたが追加',             'me'],
+  me:      ['手動で追加',             'me'],
 };
 const RW_SURFACE_OF = f =>
   (RW_SURFACES.find(x => x[1].indexOf(f) >= 0) || ['その他'])[0];
@@ -3762,10 +3762,10 @@ function rwEntry() {
 
 const RW_STEPS = () => [
   {k: 'found',
-   t: RW.evidence ? '検出結果' : RW.editing ? 'このツール' : 'どのツール',
-   d: RW.evidence ? 'ネットワーク上で検出' : '名前を入力して候補を取得'},
-  {k: 'ident',  t: '他に識別する方法', d: '監視対象を確認'},
-  {k: 'review', t: '確認して保存',     d: '端末群が監視する内容'},
+   t: RW.evidence ? '見つかったもの' : RW.editing ? 'このツール' : 'ツールの指定',
+   d: RW.evidence ? 'ネットワーク上で検出' : '名前を入力すると識別子の候補を表示'},
+  {k: 'ident',  t: '識別子の確認', d: '検出に使う識別子を選ぶ'},
+  {k: 'review', t: '確認して保存',     d: '各端末で検出する内容'},
 ];
 
 function rwRailLine(g) {
@@ -3779,8 +3779,8 @@ function rwRailLine(g) {
     if (!RW.name) return {c: 'pend', t: '名前の入力待ち'};
     const n = rwOn().length, s = rwCovered();
     return n
-      ? {c: 'val', t: n + ' 件が ' + s + ' 利用環境で確認されました'}
-      : {c: 'pend', t: 'まだ何も確認されていません'};
+      ? {c: 'val', t: s + ' 種類の利用環境で ' + n + ' 件を選択済み'}
+      : {c: 'pend', t: '識別子がまだ選ばれていません'};
   }
   return rwOn().length ? {c: 'val', t: '保存できます'} : {c: 'pend', t: g.d};
 }
@@ -3800,11 +3800,10 @@ function rwRail() {
       <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
   }).join('')}</ol>
   <div class="sssum">
-    <div class="lede" style="font-size:11.5px">${cov} / ${RW_SURFACES.length}
-      対応済み利用環境</div>
+    <div class="lede" style="font-size:11.5px">利用環境 ${RW_SURFACES.length} 種類中 ${cov} 種類に識別子あり</div>
     <div class="barwrap"><div class="bar"
       style="width:${cov / RW_SURFACES.length * 100}%"></div></div>
-    <div class="lede" style="font-size:11.5px">識別子のない利用環境は、自社環境の抜けではありません。そこは、このツールが見えないままになる場所です。</div>
+    <div class="lede" style="font-size:11.5px">識別子がない利用環境は、自社環境の不備ではありません。その利用環境ではこのツールを検出できない、という意味です。</div>
   </div></div>`;
 }
 
@@ -3813,22 +3812,20 @@ function rwBodyFound() {
   const row = (id, label, val, ph) => `<dt>${label}</dt><dd>
     <input id="${id}" class="mfield" style="min-width:300px"
       value="${esc(val || '')}" placeholder="${esc(ph || '')}"></dd>`;
-  return `<h4>${ev ? '検出結果'
-    : RW.editing ? esc(RW.name || RW.editing) : 'どのツール'}</h4>
+  return `<h4>${ev ? '見つかったもの'
+    : RW.editing ? esc(RW.name || RW.editing) : '登録するツール'}</h4>
   <p>${ev
-    ? `検出処理がネットワーク上でこれを検出し、分類器がAIサービスと判定しました。想定どおりか確認してください。以降の設定は名称に基づいて処理されます。`
+    ? `検出処理がネットワーク上でこの通信を見つけ、分類器がAIサービスと判定しました。想定どおりのツールか確認してください。以降の手順はすべてこの名前をもとに進みます。`
     : RW.editing
-    ? `このツールはすでにAI台帳に登録されています。必要な箇所をここで変更してください。その
-       識別子は次のステップにあります。`
-    : `ツールに名前を付けると、その識別子が提案されます。確認するまで
-       何も保存されません。`}</p>
-  ${ev ? `<div class="eviq"><h5>証跡</h5><dl>
+    ? `このツールはすでにレジストリに登録されています。必要な項目をここで変更してください。識別子は次の手順で編集できます。`
+    : `ツール名を入力すると、識別子の候補を提案します。確認するまで何も保存されません。`}</p>
+  ${ev ? `<div class="eviq"><h5>検出の根拠</h5><dl>
     <dt>${ev.kind === 'mcp_server' ? 'サーバー' : 'ドメイン'}</dt>
     <dd class="mono">${esc(ev.what)}</dd>
-    <dt>確認日</dt><dd>${ev.devices} デバイス</dd>
-    ${ev.confidence ? `<dt>読み取り結果</dt><dd>${esc(ev.category || 'AIツール')}
-      <span class="pill p-ok">${esc(uiTerm(ev.confidence))} 信頼度</span></dd>` : ''}
-    <dt>ソース</dt><dd>検出結果の実行</dd>
+    <dt>検出端末</dt><dd>${ev.devices} 台</dd>
+    ${ev.confidence ? `<dt>判定</dt><dd>${esc(uiTerm(ev.category || 'AIツール'))}
+      <span class="pill p-ok">信頼度 ${esc(uiTerm(ev.confidence))}</span></dd>` : ''}
+    <dt>検出元</dt><dd>検出処理（Discovery）の実行結果</dd>
   </dl></div>` : ''}
   <dl class="kv">
     ${row('rw-name', '名前', RW.name, 'ツール名（例：業務AIアシスタント）')}
@@ -3837,17 +3834,17 @@ function rwBodyFound() {
       ? `<dt>識別子</dt><dd class="mono">${esc(RW.editing)}</dd>`
       : row('rw-id', '識別子', RW.id, '英小文字とハイフン、例：sera-assistant')}
     <dt>カテゴリ</dt><dd><select id="rw-category" class="mfield">
-      ${REG_CATEGORIES.map(c => `<option${RW.category === c ? ' selected' : ''}
-        >${esc(c)}</option>`).join('')}</select></dd>
+      ${REG_CATEGORIES.map(c => `<option value="${esc(c)}"${RW.category === c ? ' selected' : ''}
+        >${esc(uiTerm(c))}</option>`).join('')}</select></dd>
     <dt>リスク区分</dt><dd><select id="rw-risk" class="mfield">
       ${[['high', '高'], ['medium', '中'], ['low', '低']].map(([r, label]) => `<option${RW.risk === r ? ' selected' : ''} value="${r}">${label}</option>`).join('')}</select></dd>
   </dl>
-  <p class="src-note" style="margin-top:10px">名前、提供元、識別子、カテゴリはすべて必須です。未入力の項目があるとAI台帳に登録できません。</p>
+  <p class="src-note" style="margin-top:10px">名前、提供元、識別子、カテゴリはすべて必須です。未入力の項目があるとレジストリに登録できません。</p>
   <p class="src-note wnote">${RW.editing
-    ? '識別子は他のすべてのページがこのツールを参照するために使うため、変更できません。'
+    ? '識別子は、ほかのすべての画面でこのツールを指すために使うため、変更できません。'
     : ev
-    ? `代わりに却下しますか？それはレビューキューの「却下」ボタンです。人が判断したことが記録されるため、同じドメインが来週再び表示されることはありません。`
-    : '識別子は他のすべてのページがこのツールを参照するために使うため、後から変更できません。'}</p>`;
+    ? `登録せずに除外する場合は、判断待ちキューの「対象外にする」ボタンを使います。人が判断したことが記録されるため、同じドメインが翌週また表示されることはありません。`
+    : '識別子は、ほかのすべての画面でこのツールを指すために使うため、後から変更できません。'}</p>`;
 }
 
 function rwSugRow(s, i) {
@@ -3857,37 +3854,37 @@ function rwSugRow(s, i) {
     <span class="idf">${esc(s.v)}</span>
     <span class="fld">${esc(RW_FIELDLBL[s.f] || s.f)}</span>
     ${s.why === 'derived'
-      ? `<span class="pill p-warn">${esc(s.conf)} 信頼度</span>` : ''}
+      ? `<span class="pill p-warn">信頼度 ${esc(uiTerm(s.conf))}</span>` : ''}
     <span class="why ${why[1]}">${esc(why[0])}</span></label>`;
 }
 
 function rwBodyIdent() {
-  if (!RW.name) return `<h4>他に見つける方法</h4>
-    <p>最初のステップでツールに名前を付けると、ここに提案が表示されます。</p>`;
+  if (!RW.name) return `<h4>識別子の確認</h4>
+    <p>最初の手順でツール名を入力すると、ここに識別子の候補が表示されます。</p>`;
   const anyEv = RW.sugs.some(s => s.why === 'ev' || s.why === 'saved');
-  return `<h4>他に見つける方法</h4>
-  <p>すでに検出されているものにはチェックが入っています。それ以外は名前から導き出された提案で、チェックは外されたままラベルが付いています。誤った識別子は欠落している識別子より悪いためです。空欄のままにすると、このツールはある利用環境上で見えないままになりますが、誤った識別子は他人の検出結果をこのツールに紐づけてしまいます。認識できるものだけにチェックを入れてください。</p>
-  ${anyEv ? '' : `<div class="note">あなたの環境ではまだ何も検出されていません。何かがこのツールを検出する前に定義しているため、検出結果が一致するまで、以下の各行は推測です。</div>`}
+  return `<h4>識別子の確認</h4>
+  <p>すでに検出されている識別子にはチェックが入っています。それ以外は名前から推定した候補で、チェックを外した状態で表示しています。誤った識別子は、識別子がないよりも問題になるためです。空欄なら、その利用環境でこのツールが検出されないだけですが、誤った識別子は別のツールの検出結果をこのツールに結び付けてしまいます。確かだと分かるものだけにチェックを入れてください。</p>
+  ${anyEv ? '' : `<div class="note">この環境ではまだ何も検出されていません。検出される前にツールを定義しているため、検出結果と一致するまでは、以下の識別子はすべて推測です。</div>`}
   ${RW_SURFACES.map(sf => {
     const rows = RW.sugs.map((x, i) => [x, i])
       .filter(p => RW_SURFACE_OF(p[0].f) === sf[0]);
     if (!rows.length) return '';
     const n = rows.filter(p => p[0].on).length;
     return `<div class="sgroup"><h5>${esc(sf[0])}
-      <span class="ct">${n ? n + ' 件確定' : '確定なし'}</span></h5>
+      <span class="ct">${n ? n + ' 件を選択' : '未選択'}</span></h5>
       ${rows.map(p => rwSugRow(p[0], p[1])).join('')}</div>`;
   }).join('')}
-  <div class="sgroup"><h5>自分で追加</h5>
+  <div class="sgroup"><h5>識別子を追加</h5>
     <div class="addrow">
       <input id="rw-newv" class="mfield" style="min-width:230px"
-        placeholder="既知の識別子、例: Acme.app">
+        placeholder="分かっている識別子（例: Acme.app）">
       <select id="rw-newf" class="mfield" style="min-width:180px">
         ${Object.keys(RW_FIELDLBL).map(f =>
           `<option value="${esc(f)}">${esc(RW_FIELDLBL[f])}</option>`).join('')}
       </select>
       <button class="mini" data-act="rw-add">追加</button>
     </div></div>
-  <p class="src-note wnote">確認済みの識別子も、何かが一致するまでは単なる推測です。次のステップで、どれがどれかが示されます。</p>`;
+  <p class="src-note wnote">選択した識別子も、検出結果と一致するまでは推測にすぎません。一致しているかどうかは次の手順で確認できます。</p>`;
 }
 
 function rwBodyReview() {
@@ -3898,18 +3895,17 @@ function rwBodyReview() {
       <td>${c.length ? c.map(x => `<div class="mono"
         style="font-size:12px">${esc(x.v)}</div>`).join('')
         : '<span style="color:var(--mut)">照合対象なし</span>'}</td>
-      <td>${!c.length ? '<span class="pill p-mut">未検出</span>'
-        : seen ? '<span class="pill p-ok">一致済み</span>'
-               : '<span class="pill p-warn">監視中</span>'}</td></tr>`;
+      <td>${!c.length ? '<span class="pill p-mut">検出できない</span>'
+        : seen ? '<span class="pill p-ok">一致あり</span>'
+               : '<span class="pill p-warn">一致待ち</span>'}</td></tr>`;
   }).join('');
   return `<h4>確認して保存</h4>
   <p>次回の報告時に、この内容が各端末へ反映されます。リポジトリの再ビルドや、MDMからの再配布は不要です。</p>
   ${RERR ? `<div class="note">${esc(RERR)}</div>` : ''}
   <div class="rvw"><table>
-    <tr><th>利用環境</th><th>識別子</th><th>ステータス</th></tr>${rows}
+    <tr><th>利用環境</th><th>識別子</th><th>状態</th></tr>${rows}
   </table></div>
-  <div class="callout"><b>一致済み</b> 今日時点でそれに対する検出結果が存在することを意味します。
-  <b>監視中</b> 識別子は有効だが、まだ何も一致していないことを意味します。これは、誰もそのようには使用していないことを意味する場合もあれば、識別子が誤っていることを意味する場合もあります。ツールページでは、断定的なゼロを報告するのではなく、その内訳を可視化したままにします。</div>
+  <div class="callout"><b>一致あり</b>は、現在その識別子に一致する検出結果があることを示します。<b>一致待ち</b>は、識別子は有効ですが、まだ一致する検出結果がないことを示します。そのような使い方をしている人がいないのか、識別子が誤っているのかは、この時点では区別できません。ツールの画面では、0件と断定せずにこの内訳を表示し続けます。</div>
   <div style="margin-bottom:10px">
     <button class="mini" data-act="reg-adv">${RADV
       ? 'ウィザードに戻る' : '詳細: JSON で編集'}</button></div>
@@ -3935,7 +3931,7 @@ function regForm() {
           ? `<button class="mini pri" data-act="rw-step" data-key="${RW.step + 1}"
               ${canNext ? '' : 'disabled'}>次へ</button>`
           : `<button class="mini pri" data-act="reg-save">${RW.editing
-              ? '変更を保存' : '保存して監視'}</button>`}
+              ? '変更を保存' : '保存して検出を開始'}</button>`}
       </div></div></div>`;
 }
 
@@ -3998,12 +3994,12 @@ async function registryView() {
   <p class="lede">ここで定義したAIツールは、端末から次回の報告が届いた時点で検出結果に反映されます。収集エージェントの再構築や再配布は不要です。利用の承認状況はAI台帳で管理します。</p>
 
   ${REDIT !== null ? regForm() : `<div style="margin-bottom:14px">
-    <button class="mini" style="padding:6px 14px" data-act="reg-add">ツールを定義</button>
+    <button class="mini" style="padding:6px 14px" data-act="reg-add">ツールを追加</button>
   </div>`}
 
-  <h2 style="font-size:16px">あなたのツール (${RENTRIES.length})</h2>
+  <h2 style="font-size:16px">この環境で追加したツール（${RENTRIES.length}）</h2>
   ${RENTRIES.length ? `<table>
-  <tr><th>内部識別子</th><th>名前</th><th>ベンダー</th><th>ベンダー識別子</th><th>更新日時</th><th></th></tr>
+  <tr><th>識別子</th><th>名前</th><th>提供元</th><th>検出用識別子の数</th><th>更新日時</th><th></th></tr>
   ${RENTRIES.map(x => {
     const e = x.entry;
     const n = (e.domains || []).length + (e.app_names || []).length
@@ -4011,18 +4007,18 @@ async function registryView() {
       + ((e.cli || {}).config_paths || []).length;
     return `<tr>
     <td class="mono">${esc(x.tool_id)}${x.shadowed
-      ? ' <span class="pill p-warn">リリースによって上書きされています - このコピーを削除</span>' : ''}</td>
+      ? ' <span class="pill p-warn">同梱版と重複しています（この定義は削除してください）</span>' : ''}</td>
     <td>${esc(e.name || '')}</td><td>${esc(e.vendor || '')}</td>
     <td>${n}</td>
     <td>${when(x.updated_at)} <span style="color:var(--mut)">${esc(x.updated_by || '')}</span></td>
     <td><button class="mini" data-act="reg-edit" data-key="${esc(x.tool_id)}">編集</button>
         <button class="mini" data-act="reg-delete" data-key="${esc(x.tool_id)}">削除</button></td>
   </tr>`; }).join('')}</table>`
-  : `<p class="lede">まだありません。AI台帳で観測されたツールをレジストリが認識していない場合、そのツールには「レジストリに追加」ボタンがあります。または、ツールが表示される前にここで定義することもできます。</p>`}
+  : `<p class="lede">まだありません。AI台帳に表示されたツールがレジストリ未登録の場合は、そのツールの「レジストリに追加」ボタンから登録できます。検出される前に、ここで定義しておくこともできます。</p>`}
 
   <details style="margin-top:22px">
-  <summary style="cursor:pointer;font-size:14px">同梱レジストリ (${shipped.length}) — 読み取り専用、リリースに合わせて更新</summary>
-  <table style="margin-top:10px"><tr><th>識別子</th><th>名前</th><th>ベンダー</th></tr>
+  <summary style="cursor:pointer;font-size:14px">製品に同梱のツール定義（${shipped.length}）— 読み取り専用・リリースごとに更新</summary>
+  <table style="margin-top:10px"><tr><th>識別子</th><th>名前</th><th>提供元</th></tr>
   ${shipped.map(t => `<tr><td class="mono">${esc(t.id)}</td>
     <td>${esc(uiRegistryToolName(t))}</td><td style="color:var(--mut)">${esc(t.vendor)}</td></tr>`).join('')}
   </table></details>`;
@@ -4046,28 +4042,28 @@ function watchlistBlock(observedIds) {
   const undecided = rows.filter(t => !decided[t.id]).length;
   return `<details id="wl-details" style="margin-top:22px" ${WLOPEN ? 'open' : ''}>
   <summary data-act="wl-toggle" style="cursor:pointer;font-size:14px">
-    ウォッチリスト — 既知だが未検出 (${rows.length}${undecided
-      ? `, ${undecided} は未判断` : ''})</summary>
-  <p class="lede" style="margin-top:10px">ここに記録された決定は、ツールが最初に表示された時点で適用されます。承認には、以下のレビュー日が付きます。</p>
+    登録済みだが未検出のツール（${rows.length} 件${undecided
+      ? `、うち判断なし ${undecided} 件` : ''}）</summary>
+  <p class="lede" style="margin-top:10px">ここで記録した判断は、ツールが初めて検出された時点から適用されます。承認には下のレビュー期限が設定されます。</p>
   ${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="margin-bottom:10px">
     <input id="wiz-owner" class="mfield" value="${esc(WIZOWNER)}"
-      placeholder="これらの決定のオーナー、例: セキュリティ">
+      placeholder="これらの判断の責任者（例: 情報セキュリティ部）">
     <input id="wiz-review" class="mfield" style="min-width:170px"
       value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
-  <table><tr><th>ツール</th><th>ベンダー</th><th>決定</th><th></th></tr>
+  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th></th></tr>
   ${rows.map(t => {
     const d = decided[t.id];
     const state = d && LBL[d]
       ? `<span class="pill ${LBL[d][1]}">${LBL[d][0]}</span>`
       : d ? `<span class="pill p-acc">${esc(d)}</span>`
-      : '<span class="none">決定なし</span>';
+      : '<span class="none">判断なし</span>';
     return `<tr><td>${esc(uiRegistryToolName(t))}</td>
       <td style="color:var(--mut)">${esc(t.vendor)}</td>
       <td>${state}</td>
-      <td><button class="mini" data-act="wiz-approve" data-key="${esc(t.id)}">承認</button>
-          <button class="mini" data-act="wiz-notapprove" data-key="${esc(t.id)}">未承認</button></td>
+      <td><button class="mini" data-act="wiz-approve" data-key="${esc(t.id)}">承認する</button>
+          <button class="mini" data-act="wiz-notapprove" data-key="${esc(t.id)}">承認しない</button></td>
     </tr>`;
   }).join('')}</table></details>`;
 }
@@ -4082,11 +4078,11 @@ async function register() {
         // page of "undefined" instead of the reason.
         let d = r.statusText;
         try { d = (await r.json()).detail || d; } catch (e2) { /* keep */ }
-        return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(uiErrorText(d, r.status))}</div>`;
+        return `<h2>AI台帳</h2><div class="note">AI台帳を作成できませんでした: ${esc(uiErrorText(d, r.status))}</div>`;
       }
       REG = await r.json();
     }
-    catch (e) { return `<h2>AI台帳</h2><div class="note">AI台帳を構築できませんでした: ${esc(uiErrorText(String(e.message || e), 0))}</div>`; }
+    catch (e) { return `<h2>AI台帳</h2><div class="note">AI台帳を作成できませんでした: ${esc(uiErrorText(String(e.message || e), 0))}</div>`; }
   }
   if (CFG.managed && CFG.managed.enabled) {
     if (!REGTOOLS) {
@@ -4166,13 +4162,13 @@ async function register() {
     // Not in the registry at all is the row worth acting on: something is in
     // use that governance has never considered.
     if (!r.in_registry) {
-      return wrap('<span class="pill p-warn">AI台帳に未登録</span>');
+      return wrap('<span class="pill p-warn">レジストリ未登録</span>');
     }
 
     if (r.status_source === 'governance' || r.status_source === 'portal') {
       let out = `<span class="pill ${PILL[r.status]||'p-mut'}">${LABEL[r.status]||'不明'}</span>`;
       if (r.status_reason === 'approval_expired') {
-        out += `<span class="gov-sub">以前は ${LABEL[r.stored_status]||''}</span>`;
+        out += `<span class="gov-sub">期限切れ前: ${LABEL[r.stored_status]||''}</span>`;
       }
       // A decision recorded in the portal says so: a reader auditing the
       // governance file should not go hunting for a record that lives in
@@ -4191,12 +4187,12 @@ async function register() {
     // red pill.
     if (r.approved === true) {
       return wrap('<span class="pill p-ok">承認済み</span>'
-        + '<span class="gov-sub">レジストリから</span>');
+        + '<span class="gov-sub">レジストリの設定</span>');
     }
     // Quieter than the other three. When half an estate has no decision, an
     // outlined pill on every card repeats until it reads as a status somebody
     // chose. It is the absence of one, and should look like it.
-    return wrap('<span class="none">決定なし</span>');
+    return wrap('<span class="none">判断なし</span>');
   };
 
   // Review: the date, and how it stands relative to today. Overdue in the
@@ -4208,8 +4204,8 @@ async function register() {
     const days = Math.round(
       (Date.parse(r.review_due + 'T00:00:00Z') - Date.now()) / 86400000);
     const sub = r.days_overdue
-      ? `<span class="gov-sub over">${r.days_overdue}日超過</span>`
-      : (days >= 0 ? `<span class="gov-sub">あと ${days}日</span>` : '');
+      ? `<span class="gov-sub over">期限を${r.days_overdue}日超過</span>`
+      : (days >= 0 ? `<span class="gov-sub">あと${days}日</span>` : '');
     return `<div class="gov">
       <span class="nw"${r.days_overdue ? ' style="color:var(--dstr)"' : ''}>${esc(r.review_due)}</span>
       ${sub}</div>`;
@@ -4227,45 +4223,45 @@ async function register() {
 
   return `<h2>AI台帳</h2>
   ${truncNote(REG.findings_truncated)}
-  <p class="lede">実際に使用中のAIツール（直近 ${esc(win)} の検出結果）。監視対象でも使用が確認されていないツールは、件数のみを示し、この一覧には表示しません。使用中でもレジストリが把握していないツールにはフラグを付けています。これらのツールが対応対象です。</p>
+  <p class="lede">直近${esc(win)}の検出結果から、実際に使われているAIツールを表示します。レジストリに登録済みでも利用が確認されていないツールは、一覧に出さず下の件数だけを示します。使われているのにレジストリに未登録のツールには印を付けています。優先して対応すべきなのはこれらのツールです。</p>
 
   <div class="register-overview">
-    <section class="register-score" aria-label="ガバナンス決定カバレッジ">
-      <div class="register-score-head"><span>決定カバレッジ</span>
+    <section class="register-score" aria-label="判断の記録率">
+      <div class="register-score-head"><span>判断の記録率</span>
         <strong>${decisionCoverage}%</strong></div>
       <div class="register-progress"><i style="width:${decisionCoverage}%"></i></div>
-      <p>${decidedCount}件（${allRows.length}件の検出済みツール中）で、ガバナンス判断が記録されています。</p>
+      <p>検出済みツール ${allRows.length} 件のうち ${decidedCount} 件で判断を記録済みです。</p>
     </section>
     <dl class="register-metrics">
-      <div class="attention"><dt>${undecidedCount}</dt><dd>決定待ち</dd></div>
+      <div class="attention"><dt>${undecidedCount}</dt><dd>判断待ち</dd></div>
       <div><dt>${approvedCount}</dt><dd>承認済み</dd></div>
       <div><dt>${reviewingCount}</dt><dd>レビュー中</dd></div>
       <div class="${overdueCount ? 'risk' : ''}"><dt>${overdueCount}</dt><dd>レビュー期限超過</dd></div>
-      <div class="${REG.observed_not_in_registry ? 'risk' : ''}"><dt>${REG.observed_not_in_registry}</dt><dd>AI台帳に未登録</dd></div>
+      <div class="${REG.observed_not_in_registry ? 'risk' : ''}"><dt>${REG.observed_not_in_registry}</dt><dd>レジストリ未登録</dd></div>
       <div class="${personalToolCount ? 'risk' : ''}"><dt>${personalToolCount}</dt><dd>個人アカウントを使用中</dd></div>
     </dl>
   </div>
 
   ${!REG.governance_configured ? (CFG.managed && CFG.managed.enabled
-    ? `<p class="lede">まだ決定が記録されていないため、すべてのツールにはレジストリの出荷時既定値（未承認）が表示されます。これは既定値であり、誰かが下した決定ではありません。実際の決定を記録するには、任意のカードで <b>編集</b> をクリックしてください。</p>`
-    : `<p class="lede">ガバナンスファイルが設定されていないため、すべてのツールにはレジストリの出荷時既定値（未承認）が表示されます。これは既定値であり、誰かが下した決定ではありません。承認、所有者、レビュー日を記録するには、 <span class="mono">GOVERNANCE_PATH</span> を設定してください。</p>`) : ''}
+    ? `<p class="lede">まだ判断が記録されていないため、すべてのツールにレジストリの初期値（未承認）を表示しています。これは初期値で、誰かが判断した結果ではありません。判断を記録するには、各カードの<b>判断を編集</b>を押してください。</p>`
+    : `<p class="lede">ガバナンスファイルが設定されていないため、すべてのツールにレジストリの初期値（未承認）を表示しています。これは初期値で、誰かが判断した結果ではありません。承認・責任者・レビュー期限を記録するには <span class="mono">GOVERNANCE_PATH</span> を設定してください。</p>`) : ''}
 
   ${((REG.governance_unmatched || []).length
      || (REG.exceptions_unmatched || []).length) ? `<div class="note">
     ${(() => {
       const d = REG.governance_unmatched || [], x = REG.exceptions_unmatched || [];
       const names = [...new Set([...d, ...x])];
-      const what = d.length && x.length ? '記録' : (d.length ? '決定' : '例外');
+      const what = d.length && x.length ? '記録' : (d.length ? '判断' : '例外');
       const n = d.length + x.length;
-      return `<b>台帳にないツールを指定した${what}が${n}件あります：</b>
+      return `<b>レジストリにないツールを指定した${what}が${n}件あります：</b>
         ${names.map(t => `<span class="pill p-warn">${esc(uiToolName(t))}</span>`).join('')}`;
     })()}
-    <div style="margin-top:6px">ツールを登録する前に決定を記録している場合は問題ありませんが、タイプミスのようにも見えます。いずれにしても、この記録は現在何にも適用されていません。</div>
+    <div style="margin-top:6px">ツールをレジストリに登録する前に判断を記録したのであれば問題ありません。ただし、入力ミスの可能性もあります。いずれの場合も、この記録は現在どのツールにも適用されていません。</div>
   </div>` : ''}
 
   <div class="register-toolbar">
-    <div><strong>ガバナンスキュー</strong><span>${rows.length}件（${allRows.length}件の検出済みツール中）· 未判断のツールが先に表示されます</span></div>
-    <span class="register-legend"><i class="queue"></i>決定が必要</span>
+    <div><strong>ツールごとの判断</strong><span>検出済みツール ${allRows.length} 件中 ${rows.length} 件 · 判断が未記録のツールを先に表示</span></div>
+    <span class="register-legend"><i class="queue"></i>判断が必要</span>
     <a class="reg-export" href="/api/register?fmt=csv${hq('&')}">CSVをダウンロード</a>
   </div>
 
@@ -4274,72 +4270,71 @@ async function register() {
     <div class="register-primary">
       <span class="register-tool-mark" aria-hidden="true">${esc(String(r.name || r.id).trim().charAt(0).toUpperCase())}</span>
       <div class="register-identity">
-        <strong>${esc(uiRegistryToolName(r))} ${_newToday(r) ? '<span class="pill p-acc">今日の新規</span>' : ''}</strong>
-        <span>${r.vendor ? esc(r.vendor) : '開発元未設定'}</span>
+        <strong>${esc(uiRegistryToolName(r))} ${_newToday(r) ? '<span class="pill p-acc">本日新規</span>' : ''}</strong>
+        <span>${r.vendor ? esc(r.vendor) : '提供元未設定'}</span>
       </div>
-      <div class="register-cell"><span>決定</span>${status(r)}</div>
-      <div class="register-cell"><span>露出</span><b>${r.devices} デバイス</b><small>${r.users} ユーザー</small></div>
+      <div class="register-cell"><span>判断</span>${status(r)}</div>
+      <div class="register-cell"><span>利用規模</span><b>${r.devices} 台</b><small>${r.users} 人</small></div>
       <div class="register-cell"><span>個人アカウント</span>${r.personal_accounts
         ? `<b class="register-risk-value">${r.personal_accounts}</b>`
         : '<b class="register-zero">0</b>'}</div>
       <div class="register-cell"><span>リスク区分</span>${risk(r.risk_tier)}</div>
       <div class="register-cell"><span>レビュー</span>${review(r)}</div>
-      <div class="register-cell register-owner"><span>所有者</span><b>${r.owner ? esc(r.owner) : '未割り当て'}</b></div>
+      <div class="register-cell register-owner"><span>責任者</span><b>${r.owner ? esc(r.owner) : '未設定'}</b></div>
     </div>
     <div class="register-secondary">
       <span><b>利用環境</b>${r.surfaces.length ? esc(r.surfaces.map(uiTerm).join('、')) : '—'}</span>
-      <span><b>アカウント</b>${num(r.corporate_accounts)} 法人 · ${num(r.personal_accounts)} 個人</span>
+      <span><b>アカウント</b>会社 ${num(r.corporate_accounts)} · 個人 ${num(r.personal_accounts)}</span>
       <span><b>カテゴリ</b>${r.category ? esc(uiTerm(r.category)) : '—'}</span>
       <span><b>最終確認日時</b>${when(r.last_seen)}</span>
       ${CFG.managed && CFG.managed.enabled && GOVEDIT !== r.id ? `<span class="register-actions">
-        <button class="mini" data-act="gov-edit" data-key="${esc(r.id)}">決定を編集</button>
+        <button class="mini" data-act="gov-edit" data-key="${esc(r.id)}">判断を編集</button>
         ${r.status_source === 'portal' ? `<button class="mini" data-act="gov-clear"
-          data-key="${esc(r.id)}">決定をクリア</button>` : ''}
+          data-key="${esc(r.id)}">判断を取り消す</button>` : ''}
         ${!r.in_registry ? `<button class="mini" data-act="reg-suggest"
-          data-key="${esc(r.id)}">AI台帳に追加</button>` : ''}</span>` : ''}
+          data-key="${esc(r.id)}">レジストリに追加</button>` : ''}</span>` : ''}
     </div>
-    ${GOVEDIT === r.id ? `<div class="register-editor"><div><strong>ガバナンス決定を記録</strong><span>結果、責任者、次回レビューを設定します。</span></div>${govForm(r)}</div>` : ''}
+    ${GOVEDIT === r.id ? `<div class="register-editor"><div><strong>判断を記録</strong><span>判断の内容、責任者、次回のレビュー期限を設定します。</span></div>${govForm(r)}</div>` : ''}
     ${exceptionBlock(r)}
   </article>`).join('')}
-  </div>` : !dataOk() ? `<p class="lede">表示するAIツールがありません: 検出結果を読み取れませんでした。これは空の環境ではありません。</p>` : `<p class="lede">過去 ${esc(win)} の間に AI ツールは検出されませんでした。
-  小規模な環境では実際にあり得る結果ですが、収集エージェントが配備されていない端末群も同じように見えます。クリーンな結果と判断する前にセットアップを確認してください。</p>`}
+  </div>` : !dataOk() ? `<p class="lede">検出結果を読み込めなかったため、表示できるAIツールがありません。AIツールが存在しないという意味ではありません。</p>` : `<p class="lede">過去${esc(win)}にAIツールは検出されませんでした。小規模な環境では実際にあり得る結果ですが、収集エージェントを導入していない場合も同じ表示になります。問題なしと判断する前に「検出ソース」画面を確認してください。</p>`}
   ${watchlistBlock(new Set((REG.rows || []).map(r => r.id)))}`;
 }
 
 async function paste() {
   if (!PG) {
     try { PG = await (await fetch('/api/paste-guard' + hq())).json(); }
-    catch (e) { return `<h2>ペーストガード</h2><div class="note">ペーストガードのアクティビティを読み取れませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
+    catch (e) { return `<h2>貼り付けガード</h2><div class="note">貼り付けガードの記録を読み込めませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
   }
   const rows = (PG.rows || []).filter(r => match(r.tool));
 
   return `<h2>ペーストガード</h2>
-  <p class="lede">この画面では、ペーストガードが停止または警告した内容、対象ツール、発生件数を確認できます。保存されるのは検出結果などのメタデータのみです。ガードは端末上のクリップボード内容を検査して検出理由を報告しますが、貼り付けた文章そのものは送信も保存もされません。警告に従って貼り付けを中止した記録も確認できます。「警告後の続行」は、警告を確認した利用者が貼り付けを続けた件数です。</p>
+  <p class="lede">貼り付けガードが止めた内容、対象のツール、件数を確認できます。保存するのはメタデータだけです。ガードは端末上でクリップボードの内容を検査し、どの検出ルールに一致したかだけを報告するため、貼り付けた文章そのものは送信も保存もされません。警告を見て貼り付けをやめた場合は、ガードが役割を果たしたことを示します。「警告後に続行」は警告を見たうえで貼り付けた件数で、フォローアップが必要なのはこの行です。</p>
 
   <dl class="stats">
     <div><dt${(PG.guard_devices || 0) ? '' : ' style="color:var(--dstr)"'}>${PG.guard_devices || 0}</dt>
-      <dd>ペーストガードを実行しているデバイス</dd></div>
-    <div><dt>${PG.warned || 0}</dt><dd>警告表示数</dd></div>
-    <div><dt style="color:var(--dstr)">${PG.overridden || 0}</dt><dd>警告後の続行数</dd></div>
-    <div><dt>${PG.blocked || 0}</dt><dd>ブロック済み</dd></div>
-    <div><dt>${PG.devices || 0}</dt><dd>イベントのあったデバイス</dd></div>
+      <dd>貼り付けガードが動作中の端末</dd></div>
+    <div><dt>${PG.warned || 0}</dt><dd>警告</dd></div>
+    <div><dt style="color:var(--dstr)">${PG.overridden || 0}</dt><dd>警告後に続行</dd></div>
+    <div><dt>${PG.blocked || 0}</dt><dd>ブロック</dd></div>
+    <div><dt>${PG.devices || 0}</dt><dd>記録があった端末</dd></div>
   </dl>
 
-  ${(PG.guard_versions || []).length ? `<p class="lede">${PG.guard_versions.map(v => `<span class="pill p-mut">バージョン ${esc(v.version)}（${v.devices} 台）</span>`).join('')} を ${PG.guard_modes.map(m => `<span class="pill ${m.mode === 'block' ? 'p-ok' : 'p-acc'}">${esc(uiTerm(m.mode))}（${m.devices} 台）</span>`).join('')} で実行中です。端末群内でバージョンが混在している場合、更新が行き渡っていない可能性があります。ブロックモードを設定していても、警告モードで動作中の端末では貼り付けを停止できません。この状態はブロック件数には含まれません。</p>` : ''}
+  ${(PG.guard_versions || []).length ? `<p class="lede">動作状況: ${PG.guard_versions.map(v => `<span class="pill p-mut">バージョン ${esc(v.version)}（${v.devices} 台）</span>`).join('')} ${PG.guard_modes.map(m => `<span class="pill ${m.mode === 'block' ? 'p-ok' : 'p-acc'}">${esc(uiTerm(m.mode))}モード（${m.devices} 台）</span>`).join('')}。端末間でバージョンが混在している場合は、更新の展開が止まっている可能性があります。また、ポリシーでブロックを指定しているのに警告モードで動作している端末では、そのポリシーが効いていません。どちらも、止めた件数には表れません。</p>` : ''}
 
   ${(PG.guard_modes || []).some(m => m.mode === 'warn') && (PG.warned || 0) ? `
-  <div class="wcard" style="margin-bottom:14px"><h3>ブロックモードがオンだった場合</h3>
-    <p class="lede" style="margin-bottom:10px">警告が表示された貼り付けは、ブロックモードでは確認を求めずに停止されます。この表示は、同じイベントにブロックモードを適用した場合の推定です。警告を無視して続行した件数は「警告後の続行」列で確認できます。ブロックモードでは、そのまま貼り付ける選択肢はありません。</p>
+  <div class="wcard" style="margin-bottom:14px"><h3>ブロックモードにした場合</h3>
+    <p class="lede" style="margin-bottom:10px">この期間に警告した貼り付けは、ブロックモードなら確認を求めずにすべて止められていました。同じ記録にブロックモードを当てはめた試算です。警告モードで止められないのは「警告後に続行」の件数で、ブロックモードには「そのまま貼り付ける」選択肢がありません。</p>
     ${(PG.rows || []).filter(r => r.warned).map(r =>
       `<div class="covrow" style="grid-template-columns:140px auto 1fr">
         <span>${esc(uiToolName(r.tool))}</span>
-        <b>${r.warned} 停止${r.overridden ? ` + ${r.overridden} 件の警告後の続行を防止` : ''}</b>
+        <b>${r.warned} 件を停止${r.overridden ? `（うち警告後の続行 ${r.overridden} 件を防止）` : ''}</b>
         <span></span></div>`).join('')}
     <p class="src-note">設定 → 検出とペーストガードでモードを切り替えてください。端末へ反映するにはポリシー配布ファイルを再生成してください。</p></div>` : ''}
 
   ${rows.length ? `<div class="tcard"><table>
-  <thead><tr><th>AIツール</th><th class="n">警告表示数</th><th class="n">警告後の続行数</th>
-  <th class="n">ブロック済み</th><th class="n">デバイス</th><th>検出機能</th>
+  <thead><tr><th>AIツール</th><th class="n">警告</th><th class="n">警告後に続行</th>
+  <th class="n">ブロック</th><th class="n">端末数</th><th>検出ルール</th>
   <th>最終確認日時</th></tr></thead>
   ${rows.map(r => `<tr>
     <td>${uiToolChip(r.tool)}</td>
@@ -4351,13 +4346,13 @@ async function paste() {
     <td>${r.detectors.map(d => `<span class="pill p-mut">${esc(uiTerm(d))}</span>`).join('')}</td>
     <td class="nowrap">${when(r.last_seen)}</td>
   </tr>`).join('')}
-  </table></div>` : `<p class="lede">この期間にペーストイベントはありません。これは実際の回答であり、拡張機能が展開されていない環境も同じように見えます。誰も試していないと解釈する前に、セットアップを確認してください。</p>`}`;
+  </table></div>` : `<p class="lede">この期間に貼り付けの記録はありません。本当に記録がない場合もありますが、拡張機能を導入していない環境でも同じ表示になります。誰も貼り付けていないと判断する前に「検出ソース」画面を確認してください。</p>`}`;
 }
 
 async function iso() {
   if (!EV) {
     try { EV = await (await fetch('/api/evidence' + hq())).json(); }
-    catch (e) { return `<h2>ISO/IEC 42001証跡</h2><div class="note">証跡インデックスを構築できませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
+    catch (e) { return `<h2>ISO/IEC 42001 証跡</h2><div class="note">証跡の一覧を作成できませんでした: ${esc(uiErrorText(e && e.message ? e.message : e))}</div>`; }
   }
   const e = EV;
   const n = v => `<b>${v}</b>`;
@@ -4375,7 +4370,7 @@ async function iso() {
     ['ツールの利用状況',
      `利用が確認されたツールは ${n(e.tools_observed)} 件、検知対象に登録されたツールは ${n(e.tools_watched_for)} 件`
      + (e.tools_not_in_registry
-        ? `、${n(e.tools_not_in_registry)} 件が台帳に登録されていません` : ''),
+        ? `、${n(e.tools_not_in_registry)} 件はレジストリ未登録` : ''),
      'register', 'AI台帳'],
 
     ['ガバナンス',
@@ -4385,13 +4380,13 @@ async function iso() {
      + (e.active_exceptions ? `、現在有効な例外が${n(e.active_exceptions)}件` : ''),
      'register', 'AI台帳'],
 
-    ['検出元の報告状況',
-     `想定される検出元は ${n(e.sources_known)} 件あり、そのうち ${n(e.sources_reporting)} 件から報告があります`,
-     'setup', '初期設定'],
+    ['検出ソースの報告状況',
+     `想定される検出ソース ${n(e.sources_known)} 件のうち、${n(e.sources_reporting)} 件から報告があります`,
+     'setup', '検出ソース'],
 
     ['個人アカウントの利用状況',
-     `${n(e.personal_accounts)}件の個人アカウントを確認。対象ツールは `
-     + `${n(e.personal_account_tools)} 件です`,
+     `個人アカウント ${n(e.personal_accounts)} 件を確認（対象ツール `
+     + `${n(e.personal_account_tools)} 件）`,
      'personal', '個人アカウント'],
 
     ['データ保護',
@@ -4399,12 +4394,12 @@ async function iso() {
      + `確認した内容は保存されません`,
      'paste', '貼り付けガード'],
 
-    ['統合',
-     `${n(e.mcp_servers)}件のMCPサーバーを確認`,
+    ['外部連携',
+     `MCPサーバー ${n(e.mcp_servers)} 件を確認`,
      'mcp', 'MCPサーバー'],
 
-    ['外部サービス',
-     `利用中のAIツールで ${n(e.providers)} 件の提供元が確認されました`,
+    ['外部の提供元',
+     `利用中のAIツールの提供元 ${n(e.providers)} 社を確認`,
      'register', 'AI台帳'],
 
     ['証跡',
@@ -4420,12 +4415,12 @@ async function iso() {
   const inputs = [
     [e.approvals_expired, `${e.approvals_expired}件の承認が期限切れ`, 'register'],
     [e.tools_without_decision, `${e.tools_without_decision}件の利用中ツールに利用判断が記録されていません`, 'register'],
-    [e.tools_not_in_registry, `${e.tools_not_in_registry}件の利用中ツールがAI台帳に登録されていません`, 'register'],
-    [e.tools_without_owner, `所有者のいない決定が${e.tools_without_owner}件あります`, 'register'],
+    [e.tools_not_in_registry, `利用中のツール ${e.tools_not_in_registry} 件がレジストリに未登録です`, 'register'],
+    [e.tools_without_owner, `責任者が未設定の判断が ${e.tools_without_owner} 件あります`, 'register'],
     [e.reviews_due_soon, `${e.reviews_due_soon}件のレビューが${e.reviews_due_soon_days}日以内に期限を迎えます`, 'register'],
     [e.personal_accounts, `${e.personal_accounts}件の個人アカウントを検出`, 'personal'],
     [Math.max(0, (e.sources_known||0) - (e.sources_reporting||0)),
-     `${Math.max(0, (e.sources_known||0) - (e.sources_reporting||0))}件の検出元から報告がありません`, 'setup'],
+     `想定される検出ソースのうち ${Math.max(0, (e.sources_known||0) - (e.sources_reporting||0))} 件から報告がありません`, 'setup'],
     [e.paste_overridden, `${e.paste_overridden}件で警告後も貼り付けが続行されました`, 'paste'],
     [e.mcp_findings, `${e.mcp_findings}件のMCP関連の検出結果`, 'mcp'],
   ].filter(([count]) => count > 0);
@@ -4435,7 +4430,7 @@ async function iso() {
   const coverage = e.sources_known
     ? Math.round((e.sources_reporting || 0) / e.sources_known * 100) : 0;
 
-  return `<h2>ISO/IEC 42001の記録</h2>
+  return `<h2>ISO/IEC 42001 証跡</h2>
   <p class="lede">世良AIガバナンスが提示できる記録と保管場所の一覧です。適合状況の点数化や規格条項との対応付けは行わず、管理策が満たされているかを判断するものでもありません。</p>
 
   <section class="evidence-summary" aria-label="証跡の概要">
@@ -4449,7 +4444,7 @@ async function iso() {
     </div>
     <dl>
       <div><dt>${rows.length}</dt><dd>記録の分類数</dd></div>
-      <div><dt>${coverage}%</dt><dd>検出元の報告率<small>${e.sources_reporting} / ${e.sources_known} 件が報告中</small></dd></div>
+      <div><dt>${coverage}%</dt><dd>検出ソースの報告率<small>${e.sources_known} 件中 ${e.sources_reporting} 件が報告中</small></dd></div>
       <div class="${inputs.length ? 'attention' : 'clear'}"><dt>${inputs.length}</dt><dd>確認が必要な項目<small>人による確認が必要</small></dd></div>
     </dl>
   </section>
@@ -4475,12 +4470,12 @@ async function iso() {
     <div class="evidence-review-items">
       ${inputs.length ? inputs.map(([, text, target]) =>
         `<a href="#${target}"><span class="review-marker"></span>${esc(text)}<span aria-hidden="true">→</span></a>`).join('')
-      : !dataOk() ? `<p>検出結果を読み取れなかったため、クリーンな状態という結論は表示されません。</p>`
-      : `<p>この期間に未対応の項目はありません。想定される検出元 ${e.sources_known} 件のうち ${e.sources_reporting} 件が報告中です。報告がゼロでも、問題がない環境とは判断できません。</p>`}
+      : !dataOk() ? `<p>検出結果を読み込めなかったため、「問題なし」とは判断していません。</p>`
+      : `<p>この期間に未対応の項目はありません。想定される検出ソース ${e.sources_known} 件のうち ${e.sources_reporting} 件が報告中です。報告が0件の状態を「問題なし」とは扱いません。</p>`}
     </div>
   </section>
 
-  <div class="evidence-footnote"><strong>この期間の記録について</strong><p>JSONには、AI台帳とガバナンスファイルを識別するハッシュ値が含まれます。ログの保存期間を変更すると、同じ記録を再生成できない場合があります。このハッシュ値は偶発的な変更を検出するためのもので、意図的な改変を防ぐものではありません。</p></div>`;
+  <div class="evidence-footnote"><strong>この期間の記録について</strong><p>JSONには、レジストリとガバナンスファイルを識別するハッシュ値が含まれます。ログの保存期間を変更すると、同じ記録を再生成できない場合があります。このハッシュ値は偶発的な変更を検出するためのもので、意図的な改変を防ぐものではありません。</p></div>`;
 }
 
 // One string setting as an editable row: input, save, and where the value
@@ -4506,13 +4501,13 @@ function settingRow(key, label, placeholder, note, batch) {
   const batched = batch && !secret;
   const state = secret
     ? (s.set ? '<span class="pill p-ok">設定済み</span>' : '')
-    : s.source === 'db' ? '<span class="pill p-mut">ここに保存済み</span>'
-    : s.source === 'env' ? '<span class="pill p-mut">環境変数から</span>' : '';
+    : s.source === 'db' ? '<span class="pill p-mut">ポータルに保存済み</span>'
+    : s.source === 'env' ? '<span class="pill p-mut">環境変数の値</span>' : '';
   const src = s.source === 'db'
-    ? (s.env ? `ポータルに保存済み（環境変数の値を上書きしています。クリアすると環境変数の値に戻ります）。` : 'ポータルに保存済み。')
-    : s.source === 'env' ? `現在は環境変数から取得されています。ここで保存すると、その値を上書きします。` : '';
+    ? (s.env ? `ポータルに保存した値を使っています（環境変数の値より優先）。値を消して保存すると環境変数の値に戻ります。` : 'ポータルに保存した値を使っています。')
+    : s.source === 'env' ? `現在は環境変数の値を使っています。ここで保存すると、保存した値が優先されます。` : '';
   const secretNote = secret
-    ? (s.set ? '値が設定されています（表示されません）。消去するには空欄のまま保存し、置き換えるには入力して保存してください。' : '未設定です。')
+    ? (s.set ? '値は設定済みです（画面には表示しません）。空欄のまま保存すると値が削除されます。変更する場合は新しい値を入力して保存してください。' : '未設定です。')
     : '';
   const more = `${esc(note)}${note ? ' ' : ''}${secretNote || src}`.trim();
   const val = secret ? '' : (s.value || '');
@@ -4548,7 +4543,7 @@ function widgetPickerRow() {
     && w.kind !== 'error').map(w => w.kind));
   const refs = new Set(eff.filter(w => w.kind === 'grafana')
     .map(w => String(w.ref)));
-  const WIDGET_JA = {"stat_row":{"title":"主要数値","desc":"環境全体の主要件数"},"top_tools":{"title":"上位ツール","desc":"デバイス数別のツール"},"recent_personal_accounts":{"title":"最近の個人アカウント","desc":"最近確認された個人アカウント"},"detection_coverage":{"title":"検出カバレッジ","desc":"各利用環境のレポート率"},"source_health":{"title":"ソース健全性","desc":"レポート中のソースと停止中のソース"},"paste_guard":{"title":"ペーストガード","desc":"警告表示、警告後の続行、ブロックされた貼り付け"},"review_queue":{"title":"レビューキュー","desc":"ガバナンス判断待ちの観測ツール"},"budget_spend":{"title":"予算支出","desc":"観測された使用量に対する追跡AI支出（管理モード）"},"activity_trend":{"title":"アクティビティ推移","desc":"期間内の日別個人アカウント数とデバイス数"},"agentic":{"title":"エージェント型","desc":"人の介在なしに実行されるもの"}};
+  const WIDGET_JA = {"stat_row":{"title":"主要な数値","desc":"全体状況と4つの主要件数"},"top_tools":{"title":"検出されたAIツール","desc":"観測したすべてのツール（端末数・ID・個人アカウント）"},"recent_personal_accounts":{"title":"最近の個人アカウント","desc":"企業ドメイン以外のアカウントでの最近の利用"},"detection_coverage":{"title":"環境全体の可視化状況","desc":"収集エージェントのカバー率と、報告中の検出ソース"},"source_health":{"title":"報告のない検出ソース","desc":"一覧のうち、この期間に報告がなかった検出ソース"},"paste_guard":{"title":"貼り付けガード","desc":"警告、警告後の続行、ブロックした貼り付け"},"review_queue":{"title":"優先して確認すること","desc":"対応事項と、判断・検出結果のキュー"},"budget_spend":{"title":"AI支出","desc":"契約と実際の利用状況の比較（管理モードのみ）"},"activity_trend":{"title":"個人アカウントの利用推移","desc":"1日ごとの検出件数と報告した端末数"},"agentic":{"title":"自律的に動作中のAI","desc":"人の操作なしに起動するAIと、その責任者"}};
   const box = (id, checked, ref, token, desc, source = 'Native') => {
     const rawTitle = token.replace(/^grafana:/, '').replaceAll('_', ' ')
       .replace(/\b\w/g, c => c.toUpperCase());
@@ -4556,7 +4551,7 @@ function widgetPickerRow() {
     const panelName = token.startsWith('grafana:') ? token.slice(8) : '';
     const title = widgetText ? widgetText.title : (UI_GRAFANA_PANEL_NAMES[panelName] || rawTitle);
     const displayDesc = widgetText ? widgetText.desc : desc;
-    const sourceLabel = source === 'Native' ? '標準' : source;
+    const sourceLabel = source === 'Native' ? '標準の' : source + ' の';
     return `<label class="widget-choice">
       <input type="checkbox" id="${id}" ${ref ? `data-ref="${esc(ref)}"` : ''}
         ${checked ? 'checked' : ''}>
@@ -4564,7 +4559,7 @@ function widgetPickerRow() {
       <span class="widget-choice-copy">
         <span class="widget-choice-title">${esc(title)}</span>
         <span class="widget-choice-desc">${esc(displayDesc || '')}</span>
-        <span class="widget-choice-meta">${esc(sourceLabel)}${ref ? ' パネル' : 'ウィジェット'}</span>
+        <span class="widget-choice-meta">${esc(sourceLabel)}${ref ? 'パネル' : 'カード'}</span>
       </span>
     </label>`;
   };
@@ -4573,24 +4568,24 @@ function widgetPickerRow() {
   const orphans = [...refs].filter(r =>
     !panels.some(p => r === p.title || r === String(p.panel_id)));
   const hidden = overviewWidgets().hidden.length;
-  return `<dt>概要ウィジェット${INFO}</dt><dd class="widget-picker">
+  return `<dt>概要のカード${INFO}</dt><dd class="widget-picker">
     <div class="widget-picker-head">
-      <div><strong>概要カタログ</strong><span>この環境のユーザーが利用できるモジュールを選択します。</span></div>
+      <div><strong>概要に配置できるカード</strong><span>この環境の利用者が概要に配置できるカードを選びます。</span></div>
       <span class="widget-enabled-count">${on.size + refs.size} 件が有効</span>
     </div>
     <div class="widget-choice-grid">
       ${ents(catalog).map(([k, d]) => box('ow-' + k, on.has(k), '', k, d)).join('')}
       ${panels.map((p, i) => box('owg-' + i,
         refs.has(p.title) || refs.has(String(p.panel_id)), panelRef(p),
-        `grafana:${panelRef(p)}`, '埋め込み Grafana パネル', 'Grafana')).join('')}
+        `grafana:${panelRef(p)}`, 'Grafana パネルを埋め込み表示', 'Grafana')).join('')}
       ${orphans.map((r, i) => box('owo-' + i, true, r,
         `grafana:${r}`, '保存済みパネルの参照がパネル一覧に存在しなくなりました',
         'Grafana')).join('')}
     </div>
     <div class="widget-picker-foot">
-      <div><strong>デプロイ時の利用可否</strong><span>ユーザーは概要 → 編集でこれらのモジュールを並べ替えたり非表示にしたりできます。</span></div>
-      ${hidden ? `<button class="mini" data-act="ov-showall">${hidden} 件の非表示 ウィジェット を復元</button>` : ''}
-      <button class="mini widget-picker-save" data-act="save-widgets">カタログを保存</button>
+      <div><strong>この環境で提供するカード</strong><span>利用者は「概要 → 編集」で、これらのカードを並べ替えたり非表示にしたりできます。</span></div>
+      ${hidden ? `<button class="mini" data-act="ov-showall">非表示にしたカード ${hidden} 件を再表示</button>` : ''}
+      <button class="mini widget-picker-save" data-act="save-widgets">カードの設定を保存</button>
     </div>
   </dd>`;
 }
@@ -4605,20 +4600,20 @@ function pasteGuardBehaviourFields(batch) {
     <dt>貼り付けガードモード${INFO}</dt><dd>
       <select id="set-paste_guard_mode" class="mfield"
         ${batch ? `data-sfield="paste_guard_mode" data-sinit="${esc(mode)}"` : ''}>
-        <option value=""${mode ? '' : ' selected'}>警告（デフォルト）</option>
+        <option value=""${mode ? '' : ' selected'}>警告（既定）</option>
         ${opt('off', 'オフ')}${opt('warn', '警告')}${opt('block', 'ブロック')}
       </select>
       ${batch ? '' : '<button class="mini" data-act="save-setting" data-key="paste_guard_mode">保存</button>'}
-      <div class="src-note fnote">AIツールにマークされたコンテンツを貼り付けたときの動作: 警告は最初にユーザーに確認し、ブロックはそれを停止します。ポリシーのダウンロードに組み込まれます。</div></dd>
-    <dt>分類マーキング${INFO}</dt><dd>
+      <div class="src-note fnote">機密表示のある内容をAIツールに貼り付けたときの動作です。「警告」は貼り付ける前に本人に確認し、「ブロック」は貼り付けを止めます。設定はポリシーのダウンロードファイルに組み込まれます。</div></dd>
+    <dt>機密表示の文言${INFO}</dt><dd>
       <textarea id="set-classification_markings" class="mfield" rows="4"
         style="min-width:340px;resize:vertical;font-family:inherit"
         ${batch ? `data-sfield="classification_markings" data-slist="lines"
           data-sinit="${marks === null ? '' : esc(marks.join('\n'))}"` : ''}
-        placeholder="1行に1つのマーキング（空欄 = 既定のセット）">${marks === null ? '' : esc(marks.join('\n'))}</textarea>
+        placeholder="1行に1つ入力（未設定の場合は既定の文言）">${marks === null ? '' : esc(marks.join('\n'))}</textarea>
       ${batch ? '' : '<button class="mini" data-act="save-markings">保存</button>'}
-      ${marksSet ? '<button class="mini" data-act="clear-markings">クリア（デフォルトセット）</button>' : ''}
-      <div class="src-note fnote">ガードがペースト内で探す文書フレーズを1行に1つずつ入力します。マークなしにするには空欄を保存し、デフォルトの5つに戻すにはクリアします。ユーザーが貼り付けた内容がデバイスから出ることはなく、一致した検出器だけが報告されます。</div></dd>`;
+      ${marksSet ? '<button class="mini" data-act="clear-markings">既定の文言に戻す</button>' : ''}
+      <div class="src-note fnote">貼り付けた内容に含まれていたら検出する文言（「社外秘」など）を1行に1つずつ入力します。空欄で保存すると機密表示の検出を行いません。「既定の文言に戻す」で既定の5つに戻ります。貼り付けた内容が端末の外に送られることはなく、一致した検出ルールだけが報告されます。</div></dd>`;
 }
 
 // Settings shows the paste guard under its one Save changes bar. The
@@ -4969,8 +4964,8 @@ async function wizard() {
     return `<tr><td>${esc(t.name)}</td>
       <td style="color:var(--mut)">${esc(t.vendor)}</td>
       <td>${state}</td>
-      <td><button class="mini" data-act="wiz-approve" data-key="${esc(t.id)}">承認</button>
-          <button class="mini" data-act="wiz-notapprove" data-key="${esc(t.id)}">未承認</button></td>
+      <td><button class="mini" data-act="wiz-approve" data-key="${esc(t.id)}">承認する</button>
+          <button class="mini" data-act="wiz-notapprove" data-key="${esc(t.id)}">承認しない</button></td>
     </tr>`;
   };
 
@@ -5118,11 +5113,11 @@ async function wizard() {
   ${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="margin-bottom:10px">
     <input id="wiz-owner" class="mfield" value="${esc(WIZOWNER)}"
-      placeholder="これらの決定のオーナー、例: セキュリティ">
+      placeholder="これらの判断の責任者（例: 情報セキュリティ部）">
     <input id="wiz-review" class="mfield" style="min-width:170px"
       value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
-  <table><tr><th>ツール</th><th>ベンダー</th><th>決定</th><th></th></tr>
+  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th></th></tr>
   ${REGTOOLS.map(toolRow).join('')}</table>`;
   if (WIZSTEP === 5) body = `<h4>ブラウザ拡張機能とペーストガード</h4>
   <p class="lede" style="margin-bottom:10px">1つの拡張機能で、AIサイトへのサインインに使われたアカウントを報告し、危険な貼り付けを警告またはブロックします。一度パッケージ化して配布先に置けば利用できます。ガイド付きセットアップが手順を1つずつ案内します。ここから設定済みのソースをダウンロードでき、リポジトリからコードを取得する必要はありません。保存した値はすべて、ステップ7でダウンロードできる設定済みポリシーに含まれます。最初はスキップして、後から設定することもできます。</p>
