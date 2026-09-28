@@ -972,13 +972,13 @@ a.libtn:hover{border-color:var(--pri)}
 <div class="shell" id="shell">
   <aside id="app-sidebar" tabindex="-1">
     <button class="brand" id="brand-home" type="button"
-      aria-label="ワークスペース概要へ移動"><img src="/sera-ai-governance-symbol.png" alt=""><span>世良AIガバナンス</span></button>
+      aria-label="概要へ移動"><img src="/sera-ai-governance-symbol.png" alt=""><span>世良AIガバナンス</span></button>
     <div class="brandline"></div>
     <button class="tenant-switch" id="estate-status" type="button"
-      aria-label="システム検出状況を開く">
+      aria-label="システム状態を開く">
       <span class="tenant-avatar" id="estate-avatar">·</span>
-      <span class="tenant-copy"><b id="estate-name">ポータル</b><span id="estate-sub"><i class="estate-dot off"></i> ソースを確認中…</span></span>
-      <span class="tenant-chev" aria-hidden="true">システム検出状況</span>
+      <span class="tenant-copy"><b id="estate-name">ポータル</b><span id="estate-sub"><i class="estate-dot off"></i> 検出ソースを確認中…</span></span>
+      <span class="tenant-chev" aria-hidden="true">システム状態</span>
     </button>
     <nav id="nav"></nav>
     <button class="fold" id="fold" title="サイドバーを折りたたむ">«</button>
@@ -1000,10 +1000,10 @@ a.libtn:hover{border-color:var(--pri)}
   </svg>
   <span class="mobile-nav__label">メニュー</span>
 </button>
-      <span class="top-context"><b id="topctx-name">ポータル</b><span id="topctx-sub">ソースを確認中…</span></span>
+      <span class="top-context"><b id="topctx-name">ポータル</b><span id="topctx-sub">検出ソースを確認中…</span></span>
       <div class="search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
-        <input id="q" placeholder="このビューを検索、またはページ、ツール、端末へ移動…"
+        <input id="q" placeholder="この画面内を検索、またはページ・ツール・端末へ移動…"
           autocomplete="off" aria-label="ツール、端末、ページを検索"
           aria-autocomplete="list" aria-controls="qresults">
         <span class="search-key" aria-hidden="true">/</span>
@@ -1011,14 +1011,14 @@ a.libtn:hover{border-color:var(--pri)}
       </div>
       <span class="live-state"><span id="freshness" class="mono"></span></span>
       <button id="refresh" class="back" style="margin:0">更新</button>
-      <span class="trust-state off" id="trust-state" title="どの検出ソースが報告済みか確認中">
+      <span class="trust-state off" id="trust-state" title="報告済みの検出ソースを確認しています">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" aria-hidden="true"><path
           d="M12 3l8 3v5.5c0 4.7-3.2 8.2-8 10-4.8-1.8-8-5.3-8-10V6l8-3z"/>
-          <path d="m8.5 12 2.2 2.2 4.8-5"/></svg><span id="trust-text">ソースを確認中…</span>
+          <path d="m8.5 12 2.2 2.2 4.8-5"/></svg><span id="trust-text">検出ソースを確認中…</span>
       </span>
       <button id="signout" class="back" style="margin:0;display:none">サインアウト</button>
-      <button id="themebtn" class="back" style="margin:0" title="ライト / ダーク">◐</button>
+      <button id="themebtn" class="back" style="margin:0" title="ライト / ダーク表示を切り替え" aria-label="ライト / ダーク表示を切り替え">◐</button>
       <span id="setupwrap" style="position:relative">
         <button id="setupbell" class="back" style="margin:0;display:none"
           aria-haspopup="true" aria-expanded="false"
@@ -1055,18 +1055,16 @@ a.libtn:hover{border-color:var(--pri)}
 </div>
 <dialog id="tourdlg" aria-labelledby="tourdlg-title">
   <h3 id="tourdlg-title">ツアーが終了しました</h3>
-  <p class="skipbody">いつでも、次の場所からもう一度実行できます:
-  <strong>設定 › はじめに</strong> — セットアップウィザードと併せて</p>
+  <p class="skipbody">ツアーは<strong>設定 › はじめに</strong>からいつでも再開できます。セットアップウィザードも同じ場所にあります。</p>
   <div class="pwfoot">
     <button class="mini pri" data-act="tour-notice-close">了解</button>
   </div>
 </dialog>
 <dialog id="skipdlg" aria-labelledby="skip-title">
   <h3 id="skip-title">セットアップを今はスキップしますか？</h3>
-  <p class="pwsub">2つの項目が設定されるまで、何も収集されません。</p>
-  <p class="skipbody">収集エージェントのダウンロードに組み込まれるのは受信サービスアドレスだけであり、企業ドメインが設定されていないと、すべてのアカウントが個人用として認識されます。そのため、概要の見出し、個人アカウント、ISO証跡はいずれも、何も報告しないのではなく、誤った内容を報告することになります。</p>
-  <p class="skipbody">いつでも、次の場所から再開できます:
-  <strong>設定 › はじめに</strong>.</p>
+  <p class="pwsub">次の2項目を設定するまで、検出結果は正しく集まりません。</p>
+  <p class="skipbody">収集エージェントのダウンロードには受信サービスのアドレスが埋め込まれます。また、企業ドメインが未設定だと、すべてのアカウントが個人アカウントとして扱われます。その結果、概要の見出し・個人アカウント・ISO/IEC 42001 の証跡は「何も表示しない」のではなく、誤った内容を表示します。</p>
+  <p class="skipbody"><strong>設定 › はじめに</strong>からいつでも再開できます。</p>
   <div class="pwfoot">
     <button class="mini pri" data-act="skip-cancel">セットアップを続ける</button>
     <button class="back" style="margin:0" data-act="skip-confirm">今はスキップ</button>
@@ -1086,7 +1084,7 @@ a.libtn:hover{border-color:var(--pri)}
     <input id="set-confpass" class="mfield" type="password"
       autocomplete="new-password">
     <div id="pw-msg" class="pwmsg" hidden></div>
-    <p id="pw-note" class="src-note" style="margin:0 0 15px">他のすべてのセッションは古いパスワードでサインアウトされ、このセッションは維持されます。</p>
+    <p id="pw-note" class="src-note" style="margin:0 0 15px">ほかの端末やブラウザーのセッションはすべてサインアウトされます。この画面のセッションはそのまま使えます。</p>
     <div class="pwfoot">
       <button id="pw-submit" class="mini pri" type="submit">パスワードを変更</button>
       <button id="pw-cancel" class="back" type="button" style="margin:0"
@@ -1501,21 +1499,17 @@ function showLogin(msg) {
     <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img src="/sera-ai-governance-symbol.png" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">世良AIガバナンス</strong></div>
     <h2>${create ? '管理者アカウントを作成' : 'サインイン'}</h2>
     <p class="lede">${create
-      ? `管理者アカウントがまだ存在しません。受信サービスは起動時に1回限りのセットアップ
-         コードをログに出力しました - 次のコマンドで確認できます:
-         <code>kubectl logs deploy/&lt;release&gt;-ai-guard | grep setup_code</code>
-         または <code>docker compose logs receiver</code>。コードは1回のみ有効です。
-         紛失した場合は、受信サービスを再起動して新しいコードを発行してください。`
+      ? `管理者アカウントはまだありません。受信サービスが起動時に1回限りのセットアップコードをログへ出力しています。<code>kubectl logs deploy/&lt;release&gt;-ai-guard | grep setup_code</code> または <code>docker compose logs receiver</code> で確認してください。コードは1回だけ使えます。分からなくなった場合は、受信サービスを再起動すると新しいコードが発行されます。`
       : forced ? (org ? `${esc(org)} に仕事用アカウントでサインインしてください。`
                       : `仕事用アカウントでサインインしてください。`)
       : org ? `${esc(org)} にサインインしてください。` : `アカウントでサインインしてください。`}</p>
     ${msg ? `<div class="note">${esc(msg)}</div>` : ''}
     ${forced ? `
       <p style="margin:0 0 10px">${ssoButton()}</p>
-      <p class="src-note" style="margin:0 0 4px">職場のメールアドレスを使用します。</p>
+      <p class="src-note" style="margin:0 0 4px">仕事用のメールアドレスでサインインします。</p>
       <details class="how"><summary>パスワードでサインイン</summary>
         <div>
-          <p style="margin:8px 0 0">ここではシングルサインオンが必須のため、パスワードは緊急用アカウント（この環境のセットアップに使用したアカウント）でのみ使えます。IDプロバイダーに接続できない場合の復旧手段です。</p>
+          <p style="margin:8px 0 0">この環境ではシングルサインオンが必須です。パスワードでサインインできるのは、セットアップ時に作成した緊急用アカウントだけです。IDプロバイダーに接続できないときの復旧用に使います。</p>
           ${passwordFields}
         </div></details>` : `
       ${create ? `<p><input id="li-code" class="mfield" style="width:100%"
@@ -1524,7 +1518,7 @@ function showLogin(msg) {
       ${!create && AUTH && AUTH.sso ? `
         <div class="lidiv"><span>または</span></div>
         <p style="margin:0">${ssoButton()}</p>
-        <p class="src-note" style="margin-top:10px">職場のメールアドレスを使用します。</p>` : ''}`}
+        <p class="src-note" style="margin-top:10px">仕事用のメールアドレスでサインインします。</p>` : ''}`}
   </div>
   <p class="src-note" style="text-align:center;margin-top:14px">株式会社世良 ·
     <a href="mailto:info@sera-inc.co.jp" style="color:inherit">お問い合わせ</a> ·
@@ -1544,7 +1538,7 @@ async function sessionLost() {
   // Same reason sign-out re-asks: the screen this is about to draw depends
   // on fields only the server knows.
   await refreshAuth();
-  showLogin('サインアウトしました - セッションが期限切れまたは無効化されました。もう一度サインインしてください。');
+  showLogin('セッションの有効期限が切れたか、無効になったためサインアウトしました。もう一度サインインしてください。');
 }
 
 async function boot() {
@@ -1751,10 +1745,9 @@ async function checkSettingsChanged() {
 function settingsChangedNote() {
   if (!SETCHANGE) return '';
   const mins = Math.max(1, Math.round((Date.now() - SETCHANGE.at) / 60000));
-  return `<div class="note" style="margin-bottom:10px">設定を変更したユーザー:
-    <b>${esc(SETCHANGE.by)}</b> ${mins} 分前。このページはそれより前に読み込まれたため、表示内容が古い可能性があります。 <button class="mini" data-act="setup-reload"
+  return `<div class="note" style="margin-bottom:10px"><b>${esc(SETCHANGE.by)}</b> さんが ${mins} 分前に設定を変更しました。このページはそれより前に読み込まれたため、表示が古い可能性があります。 <button class="mini" data-act="setup-reload"
     style="margin-left:6px">再読み込み</button>
-    <div class="src-note" style="margin:6px 0 0">ここで保存すると、編集したフィールドだけが変更されるため、他のユーザーの変更を誤って上書きすることはありません。</div></div>`;
+    <div class="src-note" style="margin:6px 0 0">ここで保存して変更されるのは、編集した項目だけです。ほかの人の変更を誤って上書きすることはありません。</div></div>`;
 }
 
 // ---- outstanding setup ------------------------------------------------
@@ -1775,30 +1768,30 @@ function setupOutstanding() {
   const owner = AUTH && AUTH.role === 'owner';
   const out = [];
   if (!v('receiver_public_url')) out.push({need: 'req', tab: 'connection',
-    t: '受信サービスのアドレス', w: 'これがないと何もデプロイできません。どの '
-      + '収集エージェントのダウンロードにもこれが組み込まれます。'});
+    t: '受信サービスのアドレス', w: '未設定だと何も展開できません。収集エージェントのダウンロードには'
+      + '必ずこのアドレスが埋め込まれます。'});
   if (!((cd.value || []).length)) out.push({need: 'req', tab: 'fleet',
-    t: '企業ドメイン', w: 'これらがないと、すべてのアカウントが '
-      + '個人アカウントとして扱われ、概要の見出しもそれを引き継ぎます。'});
+    t: '企業ドメイン', w: '未設定だと、すべてのアカウントが個人アカウントとして'
+      + '扱われ、概要の見出しもその前提で表示されます。'});
   if (!v('log_store_url')) out.push({need: 'rec', tab: 'connection',
-    t: 'ログ保存先', w: '検出結果はコンテナログに残るため、ここにあるどのページでも '
-      + 'それらを数えられます。'});
+    t: 'ログ保存先', w: '未設定だと検出結果はコンテナのログに残るだけで、'
+      + 'このポータルのどのページでも集計できません。'});
   if (v('smtp_ready') !== '1') {
     const missed = (USERS || []).filter(u => u.email && !u.invited_at).length;
     out.push({need: 'rec', tab: 'alerting', t: 'メール',
-      w: missed ? missed + ' 人がここにアカウントを持っており、まだ通知されていません。'
-        : '自分のアカウントが作成されたことを誰にも伝えられません。'});
+      w: missed ? 'アカウントを作成済みで、まだ案内メールを受け取っていない人が ' + missed + ' 人います。'
+        : 'アカウントを作成しても、本人に案内メールを送れません。'});
   }
   // 受信サービス側でオーナー限定のため、管理者は操作できず、通知も不要です。
   if (owner && v('sso_enabled') !== '1') out.push({need: 'opt', tab: 'account',
-    t: 'シングルサインオン', w: 'ユーザーはポータルのパスワードでサインインしており、 '
-      + '職場のアカウントではありません。'});
+    t: 'シングルサインオン', w: '利用者は仕事用アカウントではなく、このポータル専用の'
+      + 'パスワードでサインインしています。'});
   // 新しいリリースはセットアップではありませんが、同じ性質です: 既知で、
   // 未対応で、あと1ページです。オーナーと管理者には見えますが、ポータルは
   // 決して適用しません。
   if (CFG.update && CFG.update.available === true) out.push({need: 'opt',
-    view: 'diagnostics', t: '更新があります: ' + CFG.update.latest,
-    w: 'システム状態には、リリースノートと、このデプロイメント用のコマンドがあります。', act: '方法を見る'});
+    view: 'diagnostics', t: '新しいリリースがあります: ' + CFG.update.latest,
+    w: 'リリースノートと、この環境向けの更新コマンドをシステム状態で確認できます。', act: '確認する'});
   return out;
 }
 function drawSetup() {
@@ -1825,11 +1818,11 @@ function drawSetup() {
   const TAB = {req: ['p-dstr', '必須'], rec: ['p-amb', '推奨'],
                opt: ['p-mut', '任意']};
   panel.innerHTML = '<h4>' + (req
-      ? 'このデプロイメントの一部が未設定です'
-      : 'まだいくつか対処すべき点があります') + '</h4>'
+      ? 'この環境には未設定の項目があります'
+      : '設定しておくとよい項目があります') + '</h4>'
     + '<p class="lede" style="font-size:12px;margin:0 0 8px">' + (req
-      ? '必須項目は、動作を拒否することではなく、正しく<b>動作する</b>ことに関係します。'
-      : 'ここに壊れているものはありません。まだ十分に活用されていない部分です。') + '</p>'
+      ? '必須項目が未設定でも動作は止まりません。ただし、<b>誤った結果</b>を表示します。'
+      : '不具合ではありません。設定すると、まだ使っていない機能が役立つようになります。') + '</p>'
     + items.map(i => '<div class="si"><b>' + esc(i.t)
         + ' <span class="pill ' + TAB[i.need][0] + '">' + TAB[i.need][1]
         + '</span></b><span>' + i.w + '</span>'
@@ -1837,7 +1830,7 @@ function drawSetup() {
         + ' data-key="' + (i.tab || '') + '"'
         + (i.view ? ' data-view="' + i.view + '"' : '')
         + '>' + (i.act || '設定する') + '</button></div>').join('')
-    + '<p class="src-note" style="margin-bottom:0">設定がスキップされたか、一部のみ完了したため表示されています。何もブロックしません。</p>';
+    + '<p class="src-note" style="margin-bottom:0">セットアップをスキップしたか、途中で終えたため表示しています。操作が制限されることはありません。</p>';
 }
 
 // The graph is cached, and a cache you cannot see is indistinguishable from a
@@ -2450,7 +2443,7 @@ function uiIcon(name) {
     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.arrow}</svg>`;
 }
 function uiFocusRows(f) {
-  if (!f.known) return '<p class="ui-empty">検出結果を利用できません。これらの数値を解釈する前に、システム正常性を確認してください。</p>';
+  if (!f.known) return '<p class="ui-empty">検出結果を取得できません。数値を判断する前に、システム状態を確認してください。</p>';
   const action = (route, icon, mood, title, text, badge, note) => `
     <button class="ui-action" data-nav="${route}">
       <span class="ui-action-icon ${mood}">${uiIcon(icon)}</span>
@@ -2460,24 +2453,24 @@ function uiFocusRows(f) {
     .map(id => esc(uiToolName(id))).join(' · ');
   return action('personal','accounts',f.open.length ? 'risk' : 'good',
     f.open.length ? '個人AIアカウントを確認' : '個人AIアカウントは確認済み',
-    f.open.length ? '企業ドメイン外のアカウントのアクティビティを確認してください。' : 'この期間内に未対応の個人アカウントの検出結果はありません。',
-    `${f.open.length}件未対応`, names || '検出結果と記録された結果を表示')
+    f.open.length ? '企業ドメイン以外のアカウントでの利用を確認してください。' : 'この期間内に未対応の個人アカウントの検出結果はありません。',
+    `未解決 ${f.open.length} 件`, names || '検出結果と対応記録を見る')
     + action('coverage','coverage',f.gaps.length ? 'attention' : 'good',
-      f.gaps.length ? '収集エージェントの確認率を改善' : '検出カバレッジを確認',
-      `${f.gaps.length}台のスキャナで観測されたデバイス（コレクタ信号なし）。`,
-      `${f.gaps.length}件のギャップ`, '登録と報告を確認')
-    + action('register','register','governance','AI台帳を完成させる',
-      f.undecided === null ? '台帳データを利用できません。台帳を開いて確認してください。'
-        : `${f.undecided}件の検出されたツール（記録された決定なし）。`,
-      f.overdue === null ? '未読み取り' : f.overdue ? `${f.overdue}件の期限超過レビュー`
-        : `${f.recorded.length}件の決定`, '所有権と許可された用途を確認');
+      f.gaps.length ? '収集エージェント未導入の端末を解消' : '検出カバレッジを確認',
+      `スキャナーでは観測されたものの、収集エージェントから報告がない端末が ${f.gaps.length} 台あります。`,
+      `未導入 ${f.gaps.length} 台`, '端末の登録と報告状況を確認')
+    + action('register','register','governance','AI台帳に判断を記録',
+      f.undecided === null ? 'AI台帳のデータを取得できません。AI台帳を開いて確認してください。'
+        : `判断が未記録の検出ツールが ${f.undecided} 件あります。`,
+      f.overdue === null ? '未取得' : f.overdue ? `レビュー期限超過 ${f.overdue} 件`
+        : `判断記録 ${f.recorded.length} 件`, '責任者と利用範囲を確認');
 }
 function uiToolsTable(rows) {
   const f = uiOverviewFacts(), series = (G.trends || {}).tools || {};
   return `<div class="ui-table-scroll" tabindex="0" role="region" aria-label="検出されたツールの表">
-    <table class="ui-inventory"><thead><tr><th>AIツール</th><th>観測された利用環境</th>
-      <th class="num" aria-sort="descending">デバイス ↓</th><th class="num">クラウドID</th>
-      <th>個人アカウント</th><th>アクティビティ</th><th><span class="sr-only">詳細</span></th></tr></thead>
+    <table class="ui-inventory"><thead><tr><th>AIツール</th><th>利用環境</th>
+      <th class="num" aria-sort="descending">端末数 ↓</th><th class="num">クラウドID</th>
+      <th>個人アカウント</th><th>検出件数</th><th><span class="sr-only">詳細</span></th></tr></thead>
     <tbody>${rows.map(([id,t]) => {
       const info = uiToolInfo(id), name = uiToolName(id);
       const n = f.open.filter(r => r.tool === id).length;
@@ -2487,9 +2480,9 @@ function uiToolsTable(rows) {
           <span><strong>${esc(name)}</strong><small>${esc(uiVendorLabel(id))}</small></span></button></td>
         <td>${(t.surfaces || []).map(x => `<span class="ui-surface">${esc(uiTerm(x))}</span>`).join('')}</td>
         <td class="num">${(t.devices || []).length}</td><td class="num">${(t.identities || []).length}</td>
-        <td>${n ? `<span class="ui-badge risk">${n}件未対応</span>` : '<span class="ui-muted">観測なし</span>'}</td>
+        <td>${n ? `<span class="ui-badge risk">未解決 ${n} 件</span>` : '<span class="ui-muted">なし</span>'}</td>
         <td>${uiActivity(series[id], name)}</td>
-        <td><button class="ui-row-open" data-open="tool" data-key="${esc(id)}" aria-label="${esc(name)}を検査">${uiIcon('arrow')}</button></td>
+        <td><button class="ui-row-open" data-open="tool" data-key="${esc(id)}" aria-label="${esc(name)}の詳細を開く">${uiIcon('arrow')}</button></td>
       </tr>`;
     }).join('')}</tbody></table></div>
     ${uiToolsList(rows)}`;
@@ -2507,9 +2500,9 @@ function uiToolsList(rows) {
       <span class="ui-tool-initial" aria-hidden="true">${esc(name.slice(0,1).toUpperCase())}</span>
       <span class="ui-tool-main"><strong>${esc(name)}</strong>
         <small>${esc(uiVendorLabel(id))}${(t.surfaces || []).length ? ' · ' + esc((t.surfaces || []).map(uiTerm).join('、')) : ''}${total ? ` · ${total} 件（${esc(fmtWindow(hoursNow()))}）` : ''}</small></span>
-      <span class="ui-tool-nums"><b>${(t.devices || []).length}</b><i>デバイス</i></span>
-      <span class="ui-tool-nums ui-tool-cloud"><b>${(t.identities || []).length}</b><i>クラウド</i></span>
-      <span class="ui-tool-flag">${n ? `<span class="ui-badge risk">${n} 件未対応</span>` : ''}</span>
+      <span class="ui-tool-nums"><b>${(t.devices || []).length}</b><i>端末</i></span>
+      <span class="ui-tool-nums ui-tool-cloud"><b>${(t.identities || []).length}</b><i>クラウドID</i></span>
+      <span class="ui-tool-flag">${n ? `<span class="ui-badge risk">未解決 ${n} 件</span>` : ''}</span>
       ${uiIcon('arrow')}</button></li>`;
   }).join('')}</ul>`;
 }
@@ -2573,8 +2566,8 @@ function uiReviewQueueDetail() {
                   data-key="${esc(c.key)}">リンク</button></span>`
                 : `<span class="src-note" title="レジストリのツール一覧が読み込まれませんでした。ページを更新してください。">ツール一覧を利用できません</span>`)
                 + `<button class="mini" data-act="cand-noattr"
-                  data-key="${esc(c.key)}" title="このシグナルがどのプログラムも特定しないことを記録します。">何も特定しない</button>` : ''}
-              <button class="mini pri" data-act="cand-add" data-key="${esc(c.key)}">AI台帳に追加</button>
+                  data-key="${esc(c.key)}" title="このシグナルがどのプログラムにも当てはまらないことを記録します。">該当ツールなし</button>` : ''}
+              <button class="mini pri" data-act="cand-add" data-key="${esc(c.key)}">レジストリに追加</button>
               <button class="mini" data-act="cand-dismiss" data-key="${esc(c.key)}">無視</button>
             </div>
           </article>`).join('')}</div>
@@ -2594,22 +2587,22 @@ function uiReviewQueueDetail() {
               esc(x.label) + ' ' + ago(x.last_seen)).join(', ') + '.' : ''}</p></div>`;
     }
     return `<div class="wcard w6 decision-widget"><div class="decision-widget-head">
-      <div><h3>判断待ち</h3><p>まだオーナーが必要な検出結果とガバナンス作業。</p></div>
+      <div><h3>判断待ち</h3><p>担当者の判断がまだ必要な検出結果とガバナンス作業です。</p></div>
       <span class="count">${undecided.length + cands.length}</span>
       </div>
     ${candBlock}
     ${!undecided.length ? '' : `
     <section class="decision-section undecided-section">
-      <div class="decision-section-head"><div><strong>観測済み、意思決定は未記録</strong>
-        <span>明示的な結果が記録されていない、現在使用中の既知のツール</span></div>
+      <div class="decision-section-head"><div><strong>利用を確認済み・判断は未記録</strong>
+        <span>利用中の既知のツールのうち、判断が記録されていないもの</span></div>
         <span class="count">${undecided.length}</span></div>
       <div class="undecided-list">${undecided.slice(0, 6).map(r => `<a href="#register">
         <strong>${esc(uiRegistryToolName(r))}</strong><span>${!r.in_registry
-          ? '<span class="pill p-warn">AI台帳に未登録</span>' : ''}${
-          isNew(r) ? '<span class="pill p-acc">今日の新規</span>' : ''}</span>
+          ? '<span class="pill p-warn">レジストリ未登録</span>' : ''}${
+          isNew(r) ? '<span class="pill p-acc">本日新規</span>' : ''}</span>
         <time>${esc((r.first_seen || '').slice(0, 10))}</time></a>`).join('')}</div>
     </section>`}
-    <div class="decision-footer"><span>意思決定を記録すると、ツールはこのキューから削除されます。</span>
+    <div class="decision-footer"><span>判断を記録すると、このキューから外れます。</span>
       <a href="#register">AI台帳を開く</a></div></div>`;
 }
 
@@ -2622,37 +2615,35 @@ const WIDGETS = {
     const head = (n) => `<div class="ui-panel-head"><div><h3>自律的に動作中${n === undefined ? '' : ` <span class="count">${n}</span>`}</h3>
       <p>自ら起動するAIと、その責任者</p></div><span class="ui-eyebrow">エージェント型</span></div>`;
     if (!AGENTIC) return `<div class="wcard w6 ui-widget ui-agentic-card">${head()}
-      <p class="ui-empty">未読です。エージェント型AIを開いてください。</p>
-      <div class="ui-panel-footer"><span></span><button class="mini" data-nav="agentic">エージェント型AI ${uiIcon('arrow')} を開く</button></div></div>`;
+      <p class="ui-empty">まだ読み込んでいません。「エージェント型AI」を開いてください。</p>
+      <div class="ui-panel-footer"><span></span><button class="mini" data-nav="agentic">エージェント型AIを開く ${uiIcon('arrow')}</button></div></div>`;
     const c = AGENTIC.counts || {};
     // Every run that reported starting itself, the unaccountable ones
     // first: the count above is all of them, so the table is too.
     const loose = (AGENTIC.agents || []).filter(a => a.autonomous)
       .sort((a, b) => (a.accountable ? 1 : 0) - (b.accountable ? 1 : 0));
     const body = !c.autonomous
-      ? `<p class="ui-empty">自己起動したという報告はありません。${
-        c.unrecognised ? `${c.unrecognised} 件のプロセス
-        が未認識のモデルに到達しました。これは別の問題です。` : ''} それは、
-        本当であるか、収集側が確認するように更新されていないかのどちらかです。システム状態がどちらかを示します。</p>`
+      ? `<p class="ui-empty">自動で起動するAIの報告はありません。${
+        c.unrecognised ? `未登録のプロセス ${c.unrecognised} 件がモデルに接続していますが、これは別の確認事項です。` : ''}本当に存在しないのか、収集エージェントがまだ確認に対応していないのかは、システム状態で確認できます。</p>`
       : `<p class="ui-widget-lede">${c.unaccountable
-          ? `<b>${c.unaccountable}</b>（${c.autonomous} 中）は誰にも説明責任を負いません。背後に人がいない資格情報のため、サインオンを取り消しても止められません。`
-          : 'いずれも、責任を問える ID で実行されています。'}</p>
+          ? `全 ${c.autonomous} 件のうち <b>${c.unaccountable}</b> 件は責任者がいません。人に紐づかない認証情報で動くため、誰かのサインオンを取り消しても止まりません。`
+          : 'すべて、責任者を確認できるIDで実行されています。'}</p>
         ${loose.length ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table">
-          <thead><tr><th>デバイス</th><th class="ui-col-l">実行</th><th class="ui-col-m">スケジュール</th><th class="ui-col-l">到達先</th><th>報告先</th></tr></thead>
+          <thead><tr><th>端末</th><th class="ui-col-l">実行内容</th><th class="ui-col-m">スケジュール</th><th class="ui-col-l">接続先</th><th>責任者</th></tr></thead>
           <tbody>${loose.slice(0, 10).map(a => `<tr>
             <td><strong>${esc(label(a.device, G.devices[a.device] || {}))}</strong>${a.os ? `<small class="ui-col-s">${esc(a.os)}</small>` : ''}</td>
             <td class="ui-col-l">${a.tool ? esc(uiToolName(a.tool)) : a.process ? `<span class="mono">${esc(a.process)}</span>` : '<span class="ui-muted">—</span>'}</td>
             <td class="ui-col-m ui-muted">${esc(uiEvidence(uiTerm(a.trigger || a.evidence || '')))}</td>
-            <td class="ui-col-l">${(a.reach || []).length ? (a.reach || []).slice(0, 3).map(x => `<span class="ui-surface">${esc(uiTerm(x))}</span>`).join('') + ((a.reach || []).length > 3 ? ` <span class="ui-muted">+${a.reach.length - 3}</span>` : '') : '<span class="ui-muted">何も設定されていません</span>'}</td>
+            <td class="ui-col-l">${(a.reach || []).length ? (a.reach || []).slice(0, 3).map(x => `<span class="ui-surface">${esc(uiTerm(x))}</span>`).join('') + ((a.reach || []).length > 3 ? ` <span class="ui-muted">+${a.reach.length - 3}</span>` : '') : '<span class="ui-muted">設定なし</span>'}</td>
             <td>${a.process
-              ? '<span class="ui-badge risk">既知のツールはありません</span>'
-              : a.accountable ? '<span class="ui-badge good">' + esc(a.user || a.identity || 'ある人物') + '</span>'
-              : '<span class="ui-badge risk">' + esc(a.identity || '未帰属') + '</span>'}</td>
+              ? '<span class="ui-badge risk">既知のツールなし</span>'
+              : a.accountable ? '<span class="ui-badge good">' + esc(a.user || a.identity || '担当者あり') + '</span>'
+              : '<span class="ui-badge risk">' + esc(a.identity || '責任者不明') + '</span>'}</td>
           </tr>`).join('')}</tbody></table></div>` : ''}`;
     return `<div class="wcard w6 ui-widget ui-agentic-card">${head(c.autonomous || 0)}
       ${body}
-      <div class="ui-panel-footer"><span>${c.unrecognised ? `${c.unrecognised} 件の未認識プロセスがモデルに到達` : ''}<i class="ui-shown"></i></span>
-        <button class="mini" data-nav="agentic">エージェント型AI ${uiIcon('arrow')} を開く</button></div>
+      <div class="ui-panel-footer"><span>${c.unrecognised ? `未登録のプロセス ${c.unrecognised} 件がモデルに接続` : ''}<i class="ui-shown"></i></span>
+        <button class="mini" data-nav="agentic">エージェント型AIを開く ${uiIcon('arrow')}</button></div>
     </div>`;
   },
 
@@ -2665,34 +2656,34 @@ const WIDGETS = {
     const silent = !S || !S.reporting;
     const mood = !f.known ? 'silent' : silent ? 'silent' : attention ? 'needs-attention' : 'healthy';
     const value = n => f.known ? n : '—';
-    return `<div class="ui-estate-line"><span>資産全体をひと目で</span>
-      <span>${f.known ? `${f.devices.length} 台の観測済みデバイス · 最終 ${esc(fmtWindow(hoursNow()))}` : '検出結果を利用できません'}</span></div>
+    return `<div class="ui-estate-line"><span>環境全体の概況</span>
+      <span>${f.known ? `観測した端末 ${f.devices.length} 台 · 過去 ${esc(fmtWindow(hoursNow()))}` : '検出結果を取得できません'}</span></div>
     <div class="overview-executive w12 ${mood}" data-tour="stats">
       <section class="executive-posture">
         <span>${uiIcon('shield')}全体状況</span>
-        <strong>${!f.known ? 'データを利用できません' : silent ? '報告なし' : attention ? '対応が必要' : '監視は正常'}</strong>
+        <strong>${!f.known ? 'データを取得できません' : silent ? '報告なし' : attention ? '対応が必要' : '監視は正常'}</strong>
         <p>${!f.known ? '検出結果を読み取れませんでした。システム状態を開いて接続を確認してください。' : silent
-          ? 'この期間に報告した検出ソースはありません。これらのカウントはデータ不足であり、問題なしという結果ではありません。'
-          : `${open.length} 件の未対応の個人アカウント · ${gaps.length} 件のカバレッジギャップ`}</p>
+          ? 'この期間に報告した検出ソースはありません。件数が0なのはデータがないためで、問題がないという意味ではありません。'
+          : `未解決の個人アカウント ${open.length} 件 · 収集エージェント未導入の端末 ${gaps.length} 台`}</p>
         <div class="executive-actions">
           ${open.length && f.known ? '<button class="mini" data-nav="personal">アカウントを確認</button>' : ''}
           <button class="mini" data-nav="coverage">カバレッジを確認</button>
         </div>
         <small class="ui-posture-note">${f.known
-          ? `個人アカウントの検出記録がある利用者 ${f.people} 名${f.unnamed ? ` · ${f.unnamed} 台の名称不明デバイス` : ''}`
-          : '利用できないデータを問題なしと解釈しないでください。'}</small>
+          ? `個人アカウントで検出された利用者 ${f.people} 名${f.unnamed ? ` · 利用者名が不明な端末 ${f.unnamed} 台` : ''}`
+          : '取得できないデータを「問題なし」と見なさないでください。'}</small>
       </section>
       <dl class="executive-metrics">
         <div><dt${open.length ? ' class="risk"' : ''}>${value(open.length)}${f.known ? trendChip(tr.personal, true) : ''}</dt>
-          <dd>個人アカウントを開く</dd><small>${f.known ? `${fresh} 件が過去 ${fmtWindow(freshH)}${
-            open.length !== f.personal.length ? ` · ${f.personal.length - open.length} 件が承認済み` : ''} 以内に初検出` : '検出結果を利用できません'}</small></div>
+          <dd>未解決の個人アカウント</dd><small>${f.known ? `過去 ${fmtWindow(freshH)} の初検出 ${fresh} 件${
+            open.length !== f.personal.length ? ` · 許容済み ${f.personal.length - open.length} 件` : ''}` : '検出結果を取得できません'}</small></div>
         <div><dt>${value(f.toolIds.length)}</dt><dd>観測されたAIツール</dd>
           <small>端末、ブラウザー、クラウドの各検出ソースから集計</small></div>
         <div><dt>${f.known && f.coverage !== null ? f.coverage + '<span class="ui-percent">%</span>' : '—'}</dt>
-          <dd>収集エージェントの確認率</dd><small>${f.known ? `${f.collectors} / ${f.devices.length} 台の観測デバイス` : '検出結果を利用できません'}</small></div>
+          <dd>収集エージェントのカバー率</dd><small>${f.known ? `観測した端末 ${f.devices.length} 台中 ${f.collectors} 台` : '検出結果を取得できません'}</small></div>
         <div><dt>${f.known && f.recorded ? f.recorded.length + '<span class="ui-denominator">/ ' + f.toolIds.length + '</span>' : '—'}</dt>
-          <dd>判断の記録</dd><small>${!f.known || !f.recorded ? 'AI台帳データを利用できません'
-            : `${f.undecided} 件の判断が記録されていないツール`}</small></div>
+          <dd>AI台帳の判断記録</dd><small>${!f.known || !f.recorded ? 'AI台帳のデータを取得できません'
+            : `判断が未記録のツール ${f.undecided} 件`}</small></div>
       </dl>
     </div>`;
   },
@@ -2707,7 +2698,7 @@ const WIDGETS = {
       <span class="ui-eyebrow">予算</span></div>`;
     if (!subs.length) {
       return `<div class="wcard w6 ui-widget ui-spend-card">${head}
-      <p class="ui-empty">まだ何もリンクされていません。予算ビューでは、各AIツールのコストを記録し、観測された利用状況と突き合わせます。</p>
+      <p class="ui-empty">まだ契約が登録されていません。予算画面で各AIツールの費用を登録すると、実際の利用状況と照合できます。</p>
       <div class="ui-panel-footer"><span></span><button class="mini" data-nav="budget">予算を開く ${uiIcon('arrow')}</button></div></div>`;
     }
     const next = subs.filter(s => s.renewal_date)
@@ -2719,13 +2710,13 @@ const WIDGETS = {
     return `<div class="wcard w6 ui-widget ui-spend-card${shown.open ? ' ui-open' : ''}">${head}
     <dl class="ui-tiles">
       <div><dt>${conv ? bMoney(conv.total, bPrefCur()) : bSpendParts(subs).join(' + ')}</dt>
-        <dd>毎月追跡${conv ? ` <span title="${esc(bSpendParts(subs).join(' + '))}">· ECB ${esc(conv.date)}</span>` : ''}</dd></div>
+        <dd>月額合計${conv ? ` <span title="${esc(bSpendParts(subs).join(' + '))}">· ECB ${esc(conv.date)}</span>` : ''}</dd></div>
       <div><dt>${subs.length}</dt><dd>登録済み契約</dd></div>
-      <div><dt${unob ? ' class="attention"' : ''}>${unob}</dt><dd>一度も観測されていない有償ライセンス</dd></div>
+      <div><dt${unob ? ' class="attention"' : ''}>${unob}</dt><dd>利用が確認されていない有償シート</dd></div>
     </dl>
     <div class="ui-table-scroll"><table class="ui-inventory ui-widget-table ui-spend-table">
       <thead><tr><th>契約</th><th class="ui-col-l">プラン</th><th class="num ui-col-m">月額</th>
-        <th class="num ui-col-m">使用中のシート</th><th class="num ui-col-l">観測済み</th><th class="ui-col-l">更新日</th><th>レビュー</th></tr></thead>
+        <th class="num ui-col-m">使用中のシート</th><th class="num ui-col-l">観測済み</th><th class="ui-col-l">更新日</th><th>要確認</th></tr></thead>
       <tbody>${shown.rows.map(sub => {
         const r = bReconcile(sub);
         const seats = (sub.seat_tiers || []).reduce((x, t) => x + (t.seats || 0), 0);
@@ -2736,8 +2727,8 @@ const WIDGETS = {
           <td class="num ui-col-m">${r.matched.length}／${seats}</td>
           <td class="num ui-col-l">${r.matched.length + r.strangers.length}</td>
           <td class="ui-col-l ui-muted">${sub.renewal_date ? esc(sub.renewal_date) : '—'}</td>
-          <td>${r.unobserved.length ? `<span class="ui-badge attention">${r.unobserved.length}人が利用未確認状態</span>` : ''}${r.strangers.length
-            ? ` <span class="ui-badge governance">${r.strangers.length} 未割り当て</span>` : ''}${!r.unobserved.length && !r.strangers.length ? '<span class="ui-muted">フラグ付きの項目はありません</span>' : ''}</td></tr>`;
+          <td>${r.unobserved.length ? `<span class="ui-badge attention">未使用 ${r.unobserved.length} 席</span>` : ''}${r.strangers.length
+            ? ` <span class="ui-badge governance">シート外の利用 ${r.strangers.length} 人</span>` : ''}${!r.unobserved.length && !r.strangers.length ? '<span class="ui-muted">指摘なし</span>' : ''}</td></tr>`;
       }).join('')}</tbody></table></div>
     <div class="ui-panel-footer"><span>${next ? `次回更新: ${esc(uiToolName(next.tool_id))} ${when(next.renewal_date)}` : '更新日が記録されていません'}<i class="ui-shown"></i>
       ${uiMoreButton('budget_spend', shown, 'subscriptions')}</span>
@@ -2759,14 +2750,14 @@ const WIDGETS = {
           <button class="${!UI_PERSONAL_TOOLS ? 'on' : ''}" data-act="ui-tools-filter" data-filter="all" aria-pressed="${!UI_PERSONAL_TOOLS}">すべてのツール</button>
           <button class="${UI_PERSONAL_TOOLS ? 'on' : ''}" data-act="ui-tools-filter" data-filter="personal" aria-pressed="${UI_PERSONAL_TOOLS}">個人アカウント</button>
         </div></div>
-      ${!f.known ? '<p class="ui-empty">検出結果を利用できません。</p>' : rows.length ? (bars
+      ${!f.known ? '<p class="ui-empty">検出結果を取得できません。</p>' : rows.length ? (bars
         ? '<div class="ui-tool-bars">' + barRows(rows.map(([k,t]) => [k,(t.devices||[]).length, uiToolName(k)]).slice(0, shown.rows.length), 'devices', 'tool') + '</div>'
-        : uiToolsTable(shown.rows)) : '<p class="ui-empty">この表示に一致するツールはありません。</p>'}
-      <div class="ui-panel-footer"><span>${f.known ? `${rows.length} / ${f.toolIds.length} 件の検出されたツール` : '利用可能なデータがありません'}<i class="ui-shown"></i>
+        : uiToolsTable(shown.rows)) : '<p class="ui-empty">この条件に一致するツールはありません。</p>'}
+      <div class="ui-panel-footer"><span>${f.known ? `検出ツール ${f.toolIds.length} 件中 ${rows.length} 件` : 'データがありません'}<i class="ui-shown"></i>
         ${uiMoreButton('top_tools', shown, 'tools')}</span>
         <button class="mini" data-nav="tools">検出されたツールを開く ${uiIcon('arrow')}</button></div>
-      <p class="src-note ui-table-note">${bars ? 'ツールごとの観測デバイス。クラウド専用ツールでは関連デバイスが 0 台の場合があります。'
-        : '直近 ' + fmtWindow(hoursNow()) + '、1 日あたり 1 本のバーです。期間が 3 日未満の場合は合計で表示されます。デバイスとクラウド ID は別々にカウントされます。'}</p>
+      <p class="src-note ui-table-note">${bars ? 'ツールごとの観測端末数です。クラウドだけで使われるツールは、端末数が0台になることがあります。'
+        : '過去' + fmtWindow(hoursNow()) + 'の件数を1日1本の棒で示します（期間が3日未満の場合は合計を表示）。端末とクラウドIDは別々に数えています。'}</p>
     </div>`;
   },
 
@@ -2776,8 +2767,8 @@ const WIDGETS = {
     const shown = uiRows('recent_personal_accounts', G.personal_accounts || [], 6);
     const pa = shown.rows;
     const body = pa.length ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table ui-people-table">
-      <thead><tr><th>人物</th><th>アカウント</th><th class="ui-col-m">AIツール</th><th class="ui-col-l">デバイス</th>
-        <th class="ui-col-l">利用環境</th><th class="ui-col-l">ソース</th><th>最終確認日時</th></tr></thead>
+      <thead><tr><th>利用者</th><th>アカウント</th><th class="ui-col-m">AIツール</th><th class="ui-col-l">端末</th>
+        <th class="ui-col-l">利用環境</th><th class="ui-col-l">検出ソース</th><th>最終確認日時</th></tr></thead>
       <tbody>${pa.map(r => `<tr>
         <td><strong>${esc(r.user || r.device_name || r.device)}</strong></td>
         <td><span class="ui-badge risk">${esc(r.account_domain)}</span></td>
@@ -2788,45 +2779,45 @@ const WIDGETS = {
         <td class="ui-muted">${esc((r.last_seen || '').slice(0, 10))}</td>
       </tr>`).join('')}</tbody></table></div>`
       : dataOk()
-        ? '<p class="ui-empty">何も観測されていません。それも結果であり、結果がないわけではありません。</p>'
+        ? '<p class="ui-empty">個人アカウントの利用は観測されていません。データを取得できたうえでの結果です。</p>'
         : '<p class="ui-empty">表示できるものはありません。検出結果を読み取れませんでした。</p>';
     return `<div class="wcard w6 ui-widget ui-people-card${shown.open ? ' ui-open' : ''}">
       <div class="ui-panel-head"><div><h3>最近の個人アカウント</h3>
-        <p>企業ドメイン外のアカウントにおける最新のアクティビティ</p></div>
+        <p>企業ドメイン以外のアカウントでの最近の利用</p></div>
         <span class="ui-eyebrow">過去 ${esc(fmtWindow(hoursNow()))}</span></div>
       ${body}
-      <div class="ui-panel-footer"><span>${pa.length ? `この期間内の ${shown.all}` : ''}<i class="ui-shown"></i>
+      <div class="ui-panel-footer"><span>${pa.length ? `この期間に ${shown.all} 件` : ''}<i class="ui-shown"></i>
         ${uiMoreButton('recent_personal_accounts', shown, 'accounts')}</span>
         <button class="mini" data-nav="personal">個人アカウントを開く ${uiIcon('arrow')}</button></div>
     </div>`;
   },
 
   detection_coverage: () => {
-    if (!S) return '<div class="wcard w4"><h3>検出カバレッジ</h3><p class="lede">利用可能なステータスがありません。</p></div>';
+    if (!S) return '<div class="wcard w4"><h3>検出カバレッジ</h3><p class="lede">状態を取得できません。</p></div>';
     // One square per source, filled when it reports: 1/5 should look like
     // four dark squares, not a bar length to squint at.
     const meter = widgetForm('detection_coverage') === 'meter';
     const f = uiOverviewFacts();
     return `<div class="wcard w6 ui-visibility-card">
-    <div class="ui-panel-head"><div><h3>自社環境全体の可視性</h3><p>観測されたデバイスにおける収集エージェントからの報告</p></div>${uiIcon('shield')}</div>
+    <div class="ui-panel-head"><div><h3>環境全体の可視化状況</h3><p>観測した端末のうち、収集エージェントが報告している割合</p></div>${uiIcon('shield')}</div>
     <div class="ui-coverage-overview">
       <div class="ui-ring-block">
-        <div class="ui-ring" role="img" aria-label="${f.known && f.coverage !== null ? `${f.collectors}／${f.devices.length} 台のデバイスに収集エージェントからの報告があります` : '収集エージェントの確認状況を表示できません'}">
+        <div class="ui-ring" role="img" aria-label="${f.known && f.coverage !== null ? `観測した端末 ${f.devices.length} 台中 ${f.collectors} 台で収集エージェントが報告しています` : '収集エージェントのカバー率を表示できません'}">
           <svg viewBox="0 0 112 112" aria-hidden="true"><circle class="ui-ring-track" cx="56" cy="56" r="48"/>
             <circle class="ui-ring-value" cx="56" cy="56" r="48" pathLength="100" stroke-dasharray="${f.known && f.devices.length ? f.collectors / f.devices.length * 100 : 0} 100"/></svg>
           <div><strong>${f.known && f.coverage !== null ? f.coverage + '<span>%</span>' : '—'}</strong></div>
         </div>
-        <small class="ui-ring-caption">収集エージェントの確認率</small>
+        <small class="ui-ring-caption">収集エージェントのカバー率</small>
       </div>
       <div class="ui-coverage-legend"><p><i></i>収集エージェントから報告あり <b>${f.known ? f.collectors : '—'}</b></p>
         <p><i class="gap"></i>収集エージェントからの報告なし <b>${f.known ? f.devices.length - f.collectors : '—'}</b></p>
-        <small>この期間にいずれかのソースで観測されたデバイスの内訳です。</small></div>
+        <small>この期間にいずれかの検出ソースで観測された端末の内訳です。</small></div>
     </div>
-    <div class="ui-source-heading"><h4>検出ソース</h4><span>${S.reporting || 0}/${(S.groups || []).reduce((n,g) => n + g.total, 0)} レポート中</span>${formToggle('detection_coverage')}</div>
+    <div class="ui-source-heading"><h4>検出ソース</h4><span>${S.reporting || 0}/${(S.groups || []).reduce((n,g) => n + g.total, 0)} 報告中</span>${formToggle('detection_coverage')}</div>
     <div class="ui-source-grid">
     ${meter ? (S.groups||[]).map(g => `<div class="meterrow"
-        data-ctip="${esc(uiTerm(g.group) + ' · ' + g.reporting + '／' + g.total
-                         + ' の専用ソースがレポート中')}">
+        data-ctip="${esc(uiTerm(g.group) + '：専用の検出ソース ' + g.total
+                         + ' 件中 ' + g.reporting + ' 件が報告中')}">
         <span>${esc(uiTerm(g.group))}</span>
         <span class="track"><span class="fill" style="width:${
           g.total ? Math.round(g.reporting / g.total * 100) : 0}%"></span></span>
@@ -2841,11 +2832,11 @@ const WIDGETS = {
       // the dedicated mcp scanner is not deployed, and "mcp 0/1" read
       // as "we have no MCP visibility" when the product was showing
       // eight servers two views away.
-      return `<div class="covrow" title="${esc(uiTerm(g.group))} 利用環境について報告している専用ソースです。他のソースもこの利用環境の検出事項を生成できます。">
+      return `<div class="covrow" title="${esc(uiTerm(g.group))}専用の検出ソースのうち、報告しているものです。ほかの検出ソースからも、この利用環境の検出結果が届くことがあります。">
         <span>${esc(uiTerm(g.group))}</span>${dots}
         <b>${g.reporting}/${g.total}</b></div>`;
     }).join('')}</div>
-    <div class="ui-source-heading ui-latest-heading"><h4>利用環境別の最新レポート</h4><span>検出結果 · この期間内のデバイス</span></div>
+    <div class="ui-source-heading ui-latest-heading"><h4>利用環境ごとの最新の報告</h4><span>検出件数 · この期間の端末数</span></div>
     <div class="ui-table-scroll ui-latest"><table class="ui-inventory ui-widget-table"><tbody>${(S.groups||[]).map(g => {
       const srcs = (g.sources || []).filter(x => x.last_seen).sort((a, b) => a.last_seen < b.last_seen ? 1 : -1);
       const last = srcs[0];
@@ -2855,8 +2846,8 @@ const WIDGETS = {
         <td>${last ? `${esc(uiSourceLabel(last.source))} <span class="ui-muted">· ${esc(uiAgo(last.last_seen))}</span>` : '<span class="ui-muted">まだありません</span>'}</td>
         <td class="num">${findings}<span class="ui-muted"> · ${devices}</span></td></tr>`;
     }).join('')}</tbody></table></div>
-    <div class="ui-panel-footer"><span>ソースカタログであり、設定済みの統合ではありません</span><button class="mini" data-nav="setup">ソースを確認 ${uiIcon('arrow')}</button></div>
-    <details class="ui-coverage-note"><summary>カバレッジの読み方</summary><p class="src-note">収集エージェントカバレッジは、全社のデバイス群ではなく、いずれかのソースによって観測されたデバイスを使用します。観測されていないソースは、未設定または適用対象外である可能性があります。これらは利用環境ごとの専用ソースです。他のソースもその利用環境の検出結果を生成できます。</p></details></div>`;
+    <div class="ui-panel-footer"><span>検出ソースの一覧です（設定済みの連携とは限りません）</span><button class="mini" data-nav="setup">検出ソースを確認 ${uiIcon('arrow')}</button></div>
+    <details class="ui-coverage-note"><summary>カバレッジの読み方</summary><p class="src-note">収集エージェントのカバー率は、全社のすべての端末ではなく、いずれかの検出ソースで観測された端末を母数にしています。報告のない検出ソースは、未設定か、この環境では使わないものかもしれません。表示しているのは利用環境ごとの専用ソースで、ほかのソースからもその利用環境の検出結果が届くことがあります。</p></details></div>`;
   },
 
   // The change dimension, which the estate has had all along and shown
@@ -2865,11 +2856,11 @@ const WIDGETS = {
   // whether it was 12 last week or 40.
   activity_trend: () => {
     const tr = G.trends || {}, days = tr.days || [];
-    if (days.length < 2) return `<div class="wcard w6 exposure-trend-card"><h3>個人アカウントの露出</h3>
-      <p class="lede">この期間には、まだ傾向を描くのに十分な日数がありません。</p></div>`;
+    if (days.length < 2) return `<div class="wcard w6 exposure-trend-card"><h3>個人アカウントの利用推移</h3>
+      <p class="lede">推移を表示するには、期間内の日数が足りません。</p></div>`;
     return `<div class="wcard w6 exposure-trend-card">
-    <div class="trend-heading"><div><h3>個人アカウントの露出</h3>
-      <p>報告カバレッジに対する日次検出数</p></div></div>
+    <div class="trend-heading"><div><h3>個人アカウントの利用推移</h3>
+      <p>1日ごとの検出件数と、報告した端末数</p></div></div>
     <div class="exposure-chart">${trendChart(days,
       tr.personal || days.map(() => 0), tr.devices || days.map(() => 0),
       '個人アカウントの検出', '報告端末')}</div>
@@ -2882,17 +2873,17 @@ const WIDGETS = {
       silent: (g.sources || []).filter(r => !r.reporting)})).filter(g => g.silent.length);
     const silent = groups.reduce((n, g) => n + g.silent.length, 0);
     return `<div class="wcard w4 ui-widget ui-silent-card">
-      <div class="ui-panel-head"><div><h3>沈黙しているソース <span class="count">${silent}</span></h3>
-        <p>カタログ内で、この期間に報告がなかったもの</p></div></div>
+      <div class="ui-panel-head"><div><h3>報告のない検出ソース <span class="count">${silent}</span></h3>
+        <p>一覧にある検出ソースのうち、この期間に報告がなかったもの</p></div></div>
       ${silent ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table ui-silent-table">
-        <thead><tr><th>利用環境</th><th class="num">沈黙</th><th>ソース</th></tr></thead>
+        <thead><tr><th>利用環境</th><th class="num">報告なし</th><th>検出ソース</th></tr></thead>
         <tbody>${groups.map(g => `<tr>
           <td><strong>${esc(uiTerm(g.group))}</strong></td>
           <td class="num">${g.silent.length} / ${g.total}</td>
-          <td>${g.silent.map(r => `<span title="${esc(uiSourceLabel(r.source))}">${esc(uiSourceLabel(r.source))}<em>${r.last_seen ? esc(uiAgo(r.last_seen)) : '未確認'}</em></span>`).join('<i>·</i>')}</td>
+          <td>${g.silent.map(r => `<span title="${esc(uiSourceLabel(r.source))}">${esc(uiSourceLabel(r.source))}<em>${r.last_seen ? esc(uiAgo(r.last_seen)) : '報告実績なし'}</em></span>`).join('<i>·</i>')}</td>
         </tr>`).join('')}</tbody></table></div>`
         : '<p class="ui-empty">一覧にあるすべてのソースが報告しています。</p>'}
-      <div class="ui-panel-footer"><span>未設定または適用対象外であり、必ずしも故障しているわけではありません</span>
+      <div class="ui-panel-footer"><span>未設定か、この環境では使わないソースです。故障とは限りません</span>
         <button class="mini" data-nav="setup">検出ソースを確認 ${uiIcon('arrow')}</button></div>
     </div>`;
   },
@@ -2906,7 +2897,7 @@ const WIDGETS = {
     // Two numbers, not four. The overview is a glance: is the guard running,
     // and did somebody ignore it. Warned and blocked are the detail behind
     // that, and they have a page.
-    const head = `<div class="ui-panel-head"><div><h3>ペーストガード</h3><p>ブラウザ拡張機能、到達したデバイス上で</p></div></div>`;
+    const head = `<div class="ui-panel-head"><div><h3>ペーストガード</h3><p>ブラウザー拡張機能を導入した端末での記録</p></div></div>`;
     if (!PG) return `<div class="wcard w4 ui-widget ui-paste-card">${head}
       <p class="ui-empty">ペーストガードのデータがありません。</p></div>`;
     const over = PG.overridden || 0, live = PG.guard_devices || 0;
@@ -2915,17 +2906,17 @@ const WIDGETS = {
     const warnMode = (PG.guard_modes || []).some(m => m.mode === 'warn');
     return `<div class="wcard w4 ui-widget ui-paste-card">${head}
       <dl class="ui-tiles ui-tiles-2">
-        <div><dt${live ? '' : ' class="risk"'}>${live}</dt><dd>ペーストガードを実行しているデバイス</dd></div>
+        <div><dt${live ? '' : ' class="risk"'}>${live}</dt><dd>貼り付けガードが動作中の端末</dd></div>
         <div><dt${over ? ' class="risk"' : ''}>${over}</dt><dd>警告後の続行</dd></div>
       </dl>
       <ul class="ui-notes">
-        ${warnMode && warned ? `<li class="attention">ブロックモードでは、${warned} 件の警告が表示された貼り付けは、ブロックモードではすべて停止されたはずです。</li>` : ''}
+        ${warnMode && warned ? `<li class="attention">ブロックモードであれば、警告を表示した ${warned} 件の貼り付けはすべて止められていました。</li>` : ''}
         <li>${live
-          ? `${live} 台のデバイスで${versions > 1 ? `、${versions} バージョンにわたって` : ''}実行中です。この件数だけでは、他の端末を含む全体の状況は判断できません。`
-          : 'まだ報告があったデバイスがないため、ここでのゼロは「未展開」を意味し、「誰も何も貼り付けなかった」という意味ではありません。'}</li>
+          ? `${live} 台の端末で動作しています${versions > 1 ? `（${versions} 種類のバージョン）` : ''}。件数が少ないのは、これらの端末で危険な貼り付けが実際に少ないことを示します。`
+          : 'まだ報告した端末がないため、0件は「未導入」を意味します。「誰も貼り付けていない」という意味ではありません。'}</li>
       </ul>
       ${(PG.rows || []).length ? `<div class="ui-table-scroll"><table class="ui-inventory ui-widget-table">
-        <thead><tr><th>ペースト先</th><th class="num">警告表示数</th><th class="num ui-col-m">警告後の続行数</th><th class="num ui-col-l">ブロック数</th><th>検出機能</th></tr></thead>
+        <thead><tr><th>貼り付け先</th><th class="num">警告</th><th class="num ui-col-m">警告後に続行</th><th class="num ui-col-l">ブロック</th><th>検出ルール</th></tr></thead>
         <tbody>${(PG.rows || []).slice(0, 30).map(r => `<tr>
           <td><strong>${esc(uiToolName(r.tool))}</strong></td>
           <td class="num">${num(r.warned)}</td>
@@ -2941,13 +2932,13 @@ const WIDGETS = {
     const f = uiOverviewFacts();
     const candidates = (CAND || []).filter(c => !c.resolved && !c.dismissed_at);
     return `<div class="wcard w6 ui-focus-card"><div class="ui-panel-head">
-      <div><h3>注目すべきポイント</h3><p>AI資産全体にわたるフォローアップ</p></div>
-      <span class="ui-eyebrow">アクションキュー</span></div>
+      <div><h3>優先して確認すること</h3><p>AI利用全体で対応が必要な事項</p></div>
+      <span class="ui-eyebrow">対応キュー</span></div>
       ${uiFocusRows(f)}
       <details class="ui-queue-details">
         <summary>判断と検出結果のキュー <span>${candidates.length
           ? `${candidates.length} 件の新規検出`
-          : f.undecided === null ? 'AI台帳未読み取り' : `${f.undecided} 件が判定待ち`}</span></summary>
+          : f.undecided === null ? 'AI台帳を取得できません' : `判断待ち ${f.undecided} 件`}</span></summary>
         ${uiReviewQueueDetail()}
       </details></div>`;
   },
@@ -2955,12 +2946,10 @@ const WIDGETS = {
   grafana: (w) => {
     const base = CFG.grafana_url;
     if (!base) return `<div class="wcard w4"><h3>${esc(w.ref)}</h3>
-      <p class="lede">Grafanaが構成されていません。</p></div>`;
+      <p class="lede">Grafana が設定されていません。</p></div>`;
     const p = (CFG.grafana_panels||[]).find(x => (x.title||'') === w.ref || String(x.panel_id) === w.ref);
     if (!p) return `<div class="wcard w4"><h3>${esc(w.ref)}</h3>
-      <div class="note" style="margin:0">GRAFANA_PANELS 内に
-      "${esc(w.ref)}" と一致するパネルはありません。ここで名前は挙がっていますが、そこで定義されていないため、
-      描画するものがありません。</div></div>`;
+      <div class="note" style="margin:0">GRAFANA_PANELS に「${esc(w.ref)}」と一致するパネルがありません。概要のウィジェットとして指定されていますが、パネルが定義されていないため表示できません。</div></div>`;
     const q = 'orgId=1&theme=' + (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
     + '&from=now-' + hoursNow() + 'h&to=now&kiosk';
     // No heading of our own. The panel draws its own, from the dashboard, so a
@@ -2973,16 +2962,15 @@ const WIDGETS = {
         title="${esc(UI_GRAFANA_PANEL_NAMES[p.title] || p.title || 'Grafanaパネル')}"></iframe></div>`;
   },
 
-  error: (w) => `<div class="wcard w12"><h3>ウィジェットが描画されていません</h3>
+  error: (w) => `<div class="wcard w12"><h3>ウィジェットを表示できませんでした</h3>
     <div class="note" style="margin:0">${esc(uiErrorText(w.error, 0))}</div>
-    <p class="src-note">このウィジェットが失敗したことを知らせるために表示しています。何も表示されずに黙って消えるのを避けるためです。</p></div>`,
+    <p class="src-note">表示に失敗したことが分かるよう、このカードを残しています。</p></div>`,
 };
 
 // The truncation banner (issue #104): a Loki read that stopped at the
 // safety cap means every count on screen is a floor. Saying so beats a
 // smaller number pretending to be the total.
-const truncNote = flag => flag ? `<div class="note">この期間内の最新の検出結果のみを取得しました（読み取りが安全上限に達しました）。ここに表示される件数はすべて下限値であり、合計ではありません。対象期間を短くするか、上限を引き上げてください
-  <span class="mono">LOKI_MAX_FINDINGS</span>.</div>` : '';
+const truncNote = flag => flag ? `<div class="note">読み込み件数が安全上限に達したため、この期間の新しい検出結果だけを取得しました。表示している件数は下限値で、実際はこれより多い可能性があります。期間を短くするか、<span class="mono">LOKI_MAX_FINDINGS</span> の上限を引き上げてください。</div>` : '';
 
 // ---- arranging the overview -----------------------------------------
 // Which cards this person wants, in what order. The deployment's own
@@ -3027,27 +3015,27 @@ function overviewWidgets() {
 // in a strip attached to nothing, which reads as a control that has come
 // loose rather than one belonging to the card under it.
 const WIDGET_TITLES = {stat_row: '主要な数値', top_tools: '検出されたAIツール',
-  review_queue: '注力すべき項目', detection_coverage: '環境全体の可視性',
+  review_queue: '優先して確認すること', detection_coverage: '環境全体の可視化状況',
   recent_personal_accounts: '最近の個人アカウント', budget_spend: 'AI支出',
-  paste_guard: '貼り付けガード', source_health: '無報告のソース',
-  activity_trend: '個人アカウントの露出', agentic: '自律的に動作'};
+  paste_guard: '貼り付けガード', source_health: '報告のない検出ソース',
+  activity_trend: '個人アカウントの利用推移', agentic: '自律的に動作中のAI'};
 // One line each, for the planner: what the card is for, so the arrangement
 // can be made from names rather than by reading every widget in full.
-const WIDGET_BLURB = {stat_row: '態勢と 4 つの主要件数',
+const WIDGET_BLURB = {stat_row: '全体状況と4つの主要件数',
   top_tools: '観測されたすべてのツール（デバイス、ID、個人アカウントを含む）',
-  review_queue: 'フォローアップと、意思決定・検出結果のキュー',
-  detection_coverage: '収集エージェントの確認率と報告しているソース',
-  recent_personal_accounts: 'ドメイン外のアカウントにおける最新アクティビティ',
-  budget_spend: '観測された利用に対する契約',
-  paste_guard: '到達したデバイス上のブラウザ拡張機能',
-  source_health: '何も報告していないカタログソース',
-  activity_trend: '日次検出数と報告カバレッジ',
+  review_queue: '対応事項と、判断・検出結果のキュー',
+  detection_coverage: '収集エージェントのカバー率と、報告中の検出ソース',
+  recent_personal_accounts: '企業ドメイン以外のアカウントでの最近の利用',
+  budget_spend: '契約と実際の利用状況の比較',
+  paste_guard: 'ブラウザー拡張機能を導入した端末での記録',
+  source_health: '一覧のうち報告のない検出ソース',
+  activity_trend: '1日ごとの検出件数と報告した端末数',
   agentic: '自ら起動するAIと、その責任の所在', grafana: 'Grafanaパネル'};
 
 // Two columns. A third width squashed every table into a strip, and the
 // only widgets that survived it were the ones with nothing to show.
 const SIZES = ['w6', 'w12'];
-const SIZE_LABEL = {w6: '半分', w12: '全体'};
+const SIZE_LABEL = {w6: '半幅', w12: '全幅'};
 const SIZE_NAME = {w6: '半幅', w12: '全幅'};
 const WIDGET_SIZES = {
   // Half or full for every card. The stat row and the tool inventory make
@@ -3094,7 +3082,7 @@ function overview() {
     const w = by.get(k);
     return [k, WIDGETS[w.kind]
       ? WIDGETS[w.kind](w)
-      : WIDGETS.error({error: 'レンダラーがありません: ' + w.kind})];
+      : WIDGETS.error({error: 'このカードの表示方法が定義されていません: ' + w.kind})];
   }));
 
   // Columns. A card marked stacked joins the column before it; anything
@@ -3138,18 +3126,18 @@ function overview() {
               data-key="${esc(k)}" data-size="${z}"
               title="${SIZE_NAME[z]}">${SIZE_LABEL[z]}</button>`).join('')
         : ''}${isStacked ? `<button data-act="w-unstack" data-key="${esc(k)}"
-        title="このカードに再び専用の列を割り当てる"
-        >スタック解除</button>` : ''}<button data-act="w-hide" data-key="${esc(k)}"
+        title="このカードを独立した列に戻します"
+        >重ねを解除</button>` : ''}<button data-act="w-hide" data-key="${esc(k)}"
         >${off ? '表示' : '非表示'}</button></span>` : ''}${shown}${editing
-        ? `<div class="ov-stack-zone" aria-hidden="true">下にスタック</div>` : ''}</div>`;
+        ? `<div class="ov-stack-zone" aria-hidden="true">この下に重ねる</div>` : ''}</div>`;
   };
   // Cards not on the page, while arranging: named, draggable into place,
   // or added at the end with a click.
   const tray = !editing ? '' : (() => {
     const off = draw.filter(k => hidden.indexOf(k) >= 0);
     return `<div class="ov-tray"><span class="ov-tray-label">${off.length
-      ? 'ページ上にありません。ドラッグして配置するか、末尾に追加してください。'
-      : 'すべてのカードがページ上にあります。'}</span>${off.map(k =>
+      ? '表示していないカードです。ドラッグして配置するか、「追加」で末尾に置けます。'
+      : 'すべてのカードを表示しています。'}</span>${off.map(k =>
       `<div class="gcard ov-chip" draggable="true" data-wk="${esc(k)}"><b>${esc(titleOf(k))}</b>
         <button data-act="w-hide" data-key="${esc(k)}">追加</button></div>`).join('')}</div>`;
   })();
@@ -3164,23 +3152,20 @@ function overview() {
       col.map(k => cardOf(k)).join('')}</div>`;
   };
 
-  return `<h2>概要</h2><p class="lede">あなたのAI利用。検出状況、対象範囲、次の対応。</p>
+  return `<h2>概要</h2><p class="lede">組織内のAI利用状況、検出できている範囲、次に行う対応をまとめて確認できます。</p>
   ${truncNote(G.findings_truncated)}
   ${editing ? `<div class="oedit">
-    <span>各カードは名前とサイズで表示されます。ドラッグして移動できます。
-    移動先は線で示されます。別のカードの下の帯にドロップすると、
-    2つを1列に重ねて表示できます。ページ上にないカードは
-    下のトレイで待機します。これはあなた自身のビューであり、他の誰にも何も変更しません${
+    <span>各カードは名前とサイズで表示されます。ドラッグで移動でき、移動先は線で示されます。別のカードの下の帯にドロップすると、2枚を1列に重ねられます。表示していないカードは下のトレイにあります。この配置はあなた専用で、ほかの利用者の表示は変わりません${
       AUTH && AUTH.role !== 'viewer'
-        ? ' - デプロイで提供されるウィジェットは設定で構成されます' : ''}。</span>
+        ? '（表示できるカードの種類は「設定」で決まります）' : ''}。</span>
     <span class="sp"></span>
-    <button class="ghost" data-act="ov-clear" title="すべてのカードをトレイに移動し、何もない状態から開始する">キャンバスをクリア</button>
-    <button class="ghost" data-act="ov-reset">デフォルトにリセット</button>
+    <button class="ghost" data-act="ov-clear" title="すべてのカードをトレイに戻し、空の状態から配置します">すべて外す</button>
+    <button class="ghost" data-act="ov-reset">既定の配置に戻す</button>
     <button class="ghost" data-act="ov-cancel">キャンセル</button>
     <button class="ghost" data-act="ov-preview">プレビュー</button>
     <button class="pri" data-act="ov-save">保存</button>
   </div>` : drafting ? `<div class="oedit ov-previewing">
-    <span><b>配置をプレビューしています。</b> 今日のデータでは、ページはこのように表示されます。保存を指示するまで、何も保存されません。</span>
+    <span><b>配置をプレビュー中です。</b>現在のデータで表示するとこのようになります。「保存」を押すまで変更は保存されません。</span>
     <span class="sp"></span>
     <button class="ghost" data-act="ov-plan">配置に戻る</button>
     <button class="ghost" data-act="ov-cancel">キャンセル</button>
@@ -3189,7 +3174,7 @@ function overview() {
   ${tray}
   <div class="grid${editing ? ' editing ov-canvas' : ''}">${cols.map(colOf).join('')}${editing
     ? `<div class="ov-drop-end${cols.length ? '' : ' empty'}">${cols.length
-        ? 'ここにドロップして末尾に追加' : 'キャンバスは空です。トレイからカードをドラッグして追加してください。'}</div>` : ''}</div>`;
+        ? 'ここにドロップして末尾に追加' : 'カードがありません。トレイからカードをドラッグして追加してください。'}</div>` : ''}</div>`;
 }
 
 function card(k, d) {
@@ -3210,20 +3195,20 @@ function devices() {
   const personal = rows.filter(([,d]) => (d.personal_accounts||[]).length).length;
   const unattributed = rows.filter(([,d]) => !d.person).length;
   const observedTools = new Set(rows.flatMap(([,d]) => d.tools || [])).size;
-  return `<h2>デバイス</h2><p class="lede">この期間内の ${rows.length} 台のデバイス。各デバイスは、ソースが取得できた最も安定した識別子（通常はシリアル）でキー付けされています。1つをクリックすると詳細が表示されます。</p>
-  <div class="inventory-summary" data-tour="device-summary" aria-label="デバイスインベントリの概要">
-    <span><b>${rows.length}</b> デバイス</span>
-    <span><b>${observedTools}</b> 観測されたAIツール</span>
-    <span class="${personal ? 'risk' : ''}"><b>${personal}</b>件の個人利用あり</span>
-    <span class="${unattributed ? 'attention' : ''}"><b>${unattributed}</b> 未紐付け</span>
+  return `<h2>端末</h2><p class="lede">この期間に観測した端末は ${rows.length} 台です。端末は、検出ソースが取得できた最も安定した識別子（通常はシリアル番号）で区別しています。行をクリックすると詳細を表示します。</p>
+  <div class="inventory-summary" data-tour="device-summary" aria-label="端末一覧の概要">
+    <span><b>${rows.length}</b> 台の端末</span>
+    <span><b>${observedTools}</b> 種類のAIツール</span>
+    <span class="${personal ? 'risk' : ''}"><b>${personal}</b> 台で個人アカウントを利用</span>
+    <span class="${unattributed ? 'attention' : ''}"><b>${unattributed}</b> 台は利用者が未登録</span>
   </div>
   <div class="tcard device-inventory"><table>
-    <thead><tr><th>デバイス</th><th>人物</th><th>AIツール</th>
-      <th>個人アカウント</th><th>ローカルユーザー</th></tr></thead>
+    <thead><tr><th>端末</th><th>利用者</th><th>AIツール</th>
+      <th>個人アカウント</th><th>端末内のユーザー</th></tr></thead>
     <tbody>${rows.map(([k,d]) => `<tr data-open="device" data-key="${esc(k)}">
       <td><strong>${esc(label(k,d))}</strong>${label(k,d) === k ? '' : `<br><span class="mono row-key">${esc(k)}</span>`}</td>
-      <td>${d.person ? `<span class="pill p-ok">${esc(d.person)}</span>` : '<span class="muted-value">未紐付け</span>'}</td>
-      <td><div class="cell-tags">${uiChipRun(d.tools||[], 6, '<span class="muted-value">観測なし</span>')}</div></td>
+      <td>${d.person ? `<span class="pill p-ok">${esc(d.person)}</span>` : '<span class="muted-value">未登録</span>'}</td>
+      <td><div class="cell-tags">${uiChipRun(d.tools||[], 6, '<span class="muted-value">なし</span>')}</div></td>
       <td><div class="cell-tags">${(d.personal_accounts||[]).map(a=>`<span class="ui-badge risk">${esc(a)}</span>`).join('') || '<span class="muted-value">なし</span>'}</div></td>
       <td><div class="cell-tags">${(d.local_users||[]).map(u=>`<span class="pill p-mut">${esc(u)}</span>`).join('') || '<span class="muted-value">—</span>'}</div></td>
     </tr>`).join('')}</tbody>
@@ -3240,8 +3225,7 @@ function identityMapPanel(unattributed) {
   const saved = (IDMAP && IDMAP.entries) || [];
   const managed = CFG.managed && CFG.managed.enabled;
   if (!managed) return `<div class="wcard" style="margin-bottom:12px">
-    <h3>利用者対応表</h3><p class="src-note" style="margin-top:0">クラシックモード：対応表は次のファイルにあります <span class="mono">IDENTITY_MAP</span>。
-    ${CFG.identity_map_configured ? '構成されています。' : '構成されていません。'}</p></div>`;
+    <h3>利用者対応表</h3><p class="src-note" style="margin-top:0">クラシックモードでは、<span class="mono">IDENTITY_MAP</span> で指定したファイルが対応表になります。${CFG.identity_map_configured ? '設定済みです。' : '未設定です。'}</p></div>`;
   const last = saved.map(e => e.updated_at).sort().pop() || '';
   return `<div class="wcard" style="margin-bottom:12px"><h3>利用者対応表</h3>
   <p class="src-note" style="margin-top:0">デバイスキーまたは端末内のユーザー名が、誰に対応するのかを登録します。
@@ -3249,17 +3233,17 @@ function identityMapPanel(unattributed) {
     ? `<strong>${saved.length}</strong> 行を保存済み${last ? `、最終更新 ${when(last)}` : ''}`
     : 'ここにはまだ何も保存されていません'}${CFG.identity_map_configured
       ? ` · ファイルもマウントされており、ここで保存された行が優先されます` : ''}。
-  ${unattributed} 台のデバイスにはまだ誰も紐付いていません。</p>
+  利用者が未登録の端末が ${unattributed} 台あります。</p>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
     <button class="mini" data-act="id-export">使用中の対応表をダウンロード（CSV）</button>
     ${ro ? '' : `<button class="mini" data-act="id-open">${IDPARSE ? '編集中…' : '対応表をアップロードまたは貼り付け'}</button>`}
-    ${!ro && saved.length ? `<button class="mini" data-act="id-clear">保存された対応表をクリア</button>` : ''}
+    ${!ro && saved.length ? `<button class="mini" data-act="id-clear">保存した対応表を削除</button>` : ''}
   </div>
   ${IDMSG ? `<div class="note">${esc(IDMSG)}</div>` : ''}
   <p class="src-note" style="margin-top:0">ダウンロードした作業用ファイルには、現在有効な対応情報に続けて、利用者が未登録の端末がコメント行で記載されています。端末内のユーザー名や端末名から候補を推定できる場合は、その名前を入力しています。推定できない場合は空欄です。正しいと確認できた候補だけコメント解除し、不要な候補を削除してからアップロードしてください。提案は名前の一致に基づくもので、自動では適用されません。誤った対応付けを防ぐため、管理者が確認して登録します。</p>
   ${IDPARSE ? identityMapEditor() : ''}
-  ${saved.length ? `<details style="margin-top:8px"><summary>保存された行 (${saved.length})</summary>
-    <table><tr><th>キー</th><th>人物</th><th>変更</th><th>実行者</th></tr>
+  ${saved.length ? `<details style="margin-top:8px"><summary>保存した行（${saved.length}）</summary>
+    <table><tr><th>キー</th><th>利用者</th><th>変更日時</th><th>変更者</th></tr>
     ${saved.slice(0, 200).map(e => `<tr><td class="mono">${esc(e.key)}</td>
       <td>${esc(e.identity)}</td><td>${when(e.updated_at)}</td>
       <td style="color:var(--mut)">${esc(e.updated_by || '')}</td></tr>`).join('')}
@@ -3275,30 +3259,27 @@ function identityMapEditor() {
   const unknown = (p.rows || []).filter(r => !known.has(r.key));
   return `<div style="border-top:1px solid var(--bd);padding-top:10px;margin-top:6px">
     <textarea id="id-csv" class="mfield" style="width:100%;min-height:130px;font-family:ui-monospace,monospace"
-      placeholder="キー,人物&#10;C02XXXX,taro.yamada&#10;taro.yamada,山田太郎">${esc(p.text || '')}</textarea>
+      placeholder="key,identity&#10;C02XXXX,taro.yamada&#10;taro.yamada,山田太郎">${esc(p.text || '')}</textarea>
     <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <input type="file" id="id-file" accept=".csv,text/csv,text/plain" class="mfield" style="min-width:0">
       <button class="mini" data-act="id-parse">プレビュー</button>
       <button class="mini" data-act="id-cancel">キャンセル</button>
       ${(p.rows || []).length ? `<button class="mini" data-act="id-save">${p.rows.length} 行を保存</button>` : ''}
     </div>
-    ${p.rows ? `<p class="src-note">${p.rows.length} 行を認識しました${
-      (p.skipped || []).length ? '、' + p.skipped.length + ' 件をスキップ' : ''}。
-      保存すると、ここに保存された対応表が置き換えられます。マウントされたファイルは変更されません。
-      ${unknown.length ? `<span style="color:var(--warn)">${unknown.length}
-        件のキーは現在の対象期間に含まれるデバイスやローカルユーザーと一致しません - 後でマシンが報告する場合に備えて保持されます。</span>` : ''}</p>
+    ${p.rows ? `<p class="src-note">${p.rows.length} 行を読み取りました${
+      (p.skipped || []).length ? '（' + p.skipped.length + ' 行は対象外）' : ''}。保存すると、ポータルに保存済みの対応表を<b>すべて置き換えます</b>。マウントしたファイルは変更されません。
+      ${unknown.length ? `<span style="color:var(--warn)">${unknown.length} 件のキーは、この期間に観測した端末や端末内のユーザーと一致しません。あとで報告される可能性があるため、そのまま保存します。</span>` : ''}</p>
       ${(p.skipped || []).length ? `<p class="src-note" style="color:var(--warn)">
         未保存：${p.skipped.map(s =>
           `${s.n} 行目 <span class="mono">${esc(s.key)}</span> (${esc(s.why)})`)
           .join('、')}。</p>` : ''}
       ${(p.commented || []).length ? `<p class="src-note">
-        ${p.commented.length} 行にコメントアウトされた名前が含まれており、保存されません。ダウンロードでは
-        提案と空白がコメントアウトされて書き出されるため、保存するつもりのものから先頭の # を削除してください:
+        ${p.commented.length} 行はコメント行のため保存されません（名前は入っています）。ダウンロードしたファイルでは候補と空欄がコメント行になっているので、残したい行は先頭の # を削除してください：
         ${p.commented.slice(0, 6).map(c => `${c.n} 行目 <span class="mono">${esc(c.key)}</span>`).join('、')}${
           p.commented.length > 6 ? '、ほか ' + (p.commented.length - 6) + ' 件' : ''}。</p>` : ''}
-      ${p.rows.length ? `<table><tr><th>キー</th><th>人物</th><th></th></tr>
+      ${p.rows.length ? `<table><tr><th>キー</th><th>利用者</th><th></th></tr>
       ${p.rows.slice(0, 8).map(r => `<tr><td class="mono">${esc(r.key)}</td><td>${esc(r.identity)}</td>
-        <td>${known.has(r.key) ? '<span class="pill p-ok">一致</span>' : '<span class="pill p-mut">まだ検出されていません</span>'}</td></tr>`).join('')}
+        <td>${known.has(r.key) ? '<span class="pill p-ok">観測あり</span>' : '<span class="pill p-mut">未観測</span>'}</td></tr>`).join('')}
       ${p.rows.length > 8 ? `<tr><td colspan="3" style="color:var(--mut)">… ほか ${p.rows.length - 8} 件</td></tr>` : ''}</table>` : ''}` : ''}
   </div>`;
 }
@@ -3328,12 +3309,12 @@ function parseIdentityCsv(text) {
     const [key, identity] = cut(bare);
     if (['key', 'device', 'local_user'].includes(key.toLowerCase())) return;
     if (!key) { skipped.push({n, key: bare, why: 'キーなし'}); return; }
-    if (!identity) { skipped.push({n, key, why: '人物なし'}); return; }
+    if (!identity) { skipped.push({n, key, why: '利用者名なし'}); return; }
     const dup = seen.get(key.toLowerCase());
     if (dup) {
       // First wins, which is worth saying outright: when the corrected row
       // is the lower one, the edit is the half that gets dropped.
-      skipped.push({n, key, why: '同じキー: 行 ' + dup});
+      skipped.push({n, key, why: dup + ' 行目と同じキー'});
       return;
     }
     seen.set(key.toLowerCase(), n);
@@ -3351,14 +3332,14 @@ async function people() {
   const rows = ents(G.identities).filter(([k]) => match(k))
     .sort((a,b) => (b[1].tools||[]).length - (a[1].tools||[]).length);
   const unattributed = ents(G.devices).filter(([,d]) => !d.person).length;
-  return `<h2>人物</h2><p class="lede">この一覧には、クラウドの検出ソースが特定したユーザーを表示します。クラウドソースはユーザーアカウントを検出し、端末は利用者対応表で紐づいた場合に表示されます。</p>
+  return `<h2>利用者</h2><p class="lede">クラウドの検出ソースが特定した利用者を表示します。クラウドのソースは端末ではなくアカウントを検出するため、端末は利用者対応表で紐付けた場合にだけ表示されます。</p>
   ${identityMapPanel(unattributed)}
-  <div class="tcard"><table class="ui-page-table"><thead><tr><th>利用者識別子</th><th>AIツール</th><th>デバイス</th></tr></thead>
+  <div class="tcard"><table class="ui-page-table"><thead><tr><th>利用者</th><th>AIツール</th><th>端末</th></tr></thead>
   ${rows.map(([k,i]) => `<tr><td><strong>${esc(k)}</strong>${(i.aliases||[]).length
     ? `<br><span class="src-note" style="font-style:normal">別名:
        ${(i.aliases).map(a => esc(a)).join(', ')}</span>` : ''}</td>
     <td><div class="cell-tags">${(i.tools||[]).map(t=>uiToolChip(t)).join('')}</div></td>
-    <td><div class="cell-tags">${(i.devices||[]).map(d=>`<span class="pill p-acc">${esc(d)}</span>`).join('') || '<span class="muted-value">未紐付け</span>'}</div></td></tr>`).join('')}
+    <td><div class="cell-tags">${(i.devices||[]).map(d=>`<span class="pill p-acc">${esc(d)}</span>`).join('') || '<span class="muted-value">端末の紐付けなし</span>'}</div></td></tr>`).join('')}
   </table></div>`;
 }
 
@@ -3374,12 +3355,12 @@ function attention(k, t) {
   // to look like an AI rollout.
   const used = (t.devices_active || []).length;
   const f = [];
-  if (personal) f.push(`${personal}件の個人利用`);
-  if (used >= 5) f.push(`広く拡散 (${used} デバイス)`);
-  if (t.usage === 'installed' && devs) f.push('インストール済みだが未使用');
+  if (personal) f.push(`個人アカウント ${personal} 件`);
+  if (used >= 5) f.push(`利用が広い（${used} 台）`);
+  if (t.usage === 'installed' && devs) f.push('インストール済み・利用の形跡なし');
   if ((t.surfaces || []).filter(Boolean).length >= 2) f.push('複数の利用環境');
   const fs = ((G.trends || {}).tool_first_seen || {})[k];
-  if (fs && Date.parse(fs) > Date.now() - 2 * 86400000) f.push('過去2日以内の新規');
+  if (fs && Date.parse(fs) > Date.now() - 2 * 86400000) f.push('直近2日以内に初検出');
   const level = (personal && devs >= 3) || personal >= 2 ? 'high'
     : personal || f.length >= 2 ? 'medium' : '';
   return {level, factors: f};
@@ -3387,7 +3368,7 @@ function attention(k, t) {
 const attnPill = a => a.level === 'high'
   ? `<span class="pill p-warn" title="${esc(a.factors.join(' · '))}">要注意</span>`
   : a.level === 'medium'
-  ? `<span class="pill p-amb" title="${esc(a.factors.join(' · '))}">監視</span>`
+  ? `<span class="pill p-amb" title="${esc(a.factors.join(' · '))}">要観察</span>`
   : '';
 
 function tools() {
@@ -3397,27 +3378,27 @@ function tools() {
       const rank = x => x[2].level === 'high' ? 2 : x[2].level === 'medium' ? 1 : 0;
       return rank(b) - rank(a) || (b[1].devices||[]).length - (a[1].devices||[]).length;
     });
-  return `<h2>ツール</h2><p class="lede">同じツールをブラウザー、デスクトップアプリ、コマンドラインなど複数の利用環境で使う場合は、利用環境ごとに表示されます。確認が必要なツールは一覧の上位に並びます。「要注意」は複数の懸念が重なっている場合、「監視」は確認すべき要因がある場合に表示されます。各ツールを開くと詳しい要因を確認できます。CursorやWindsurfなどAI機能を組み込んだエディターは、モデルの実行が確認されるまでは「インストール済みのみ」と表示されます。「検出元が特定した人数」は検出ソースが直接特定した人数です。AI台帳にはデバイス情報から利用者を紐づけた人数も含まれるため、数値が異なる場合があります。</p>
-  <div class="tcard"><table class="ui-page-table"><thead><tr><th>AIツール</th><th>ステータス</th><th>デバイス</th>
-    <th title="検出ソースがこのツールについて特定した人物。クラウドのサインインは人物を伴い、エンドポイントの検出結果はマシンを伴います。その背後にいる人物は利用者対応表から取得されるため、エンドポイントで検出されたツールでは、これはAI台帳のユーザー数より少なくなります。">検出元が特定した人数</th>
+  return `<h2>ツール</h2><p class="lede">同じツールをブラウザー、デスクトップアプリ、コマンドラインなど複数の利用環境で使う場合は、利用環境ごとに表示されます。確認が必要なツールは一覧の上位に並びます。「要注意」は複数の懸念が重なっている場合、「要観察」は確認すべき要因がある場合に表示されます。各ツールを開くと詳しい要因を確認できます。CursorやWindsurfなどAI機能を組み込んだエディターは、モデルの実行が確認されるまでは「インストール済みのみ」と表示されます。「検出元が特定した人数」は検出ソースが直接特定した人数です。AI台帳には端末から利用者を紐付けた人数も含まれるため、数値が異なる場合があります。</p>
+  <div class="tcard"><table class="ui-page-table"><thead><tr><th>AIツール</th><th>状態</th><th>端末数</th>
+    <th title="検出ソースがこのツールについて直接特定した利用者の数です。クラウドのサインインには利用者の情報が含まれますが、端末での検出結果には端末の情報しか含まれません。端末の利用者は利用者対応表から求めるため、端末で検出されたツールでは、この数がAI台帳の利用者数より少なくなります。">検出元が特定した人数</th>
     <th>利用環境別</th></tr></thead>
   <tbody>${rows.map(([k,t,a]) => `<tr data-open="tool" data-key="${esc(k)}" style="cursor:pointer">
     <td><strong>${esc(uiToolName(k))}</strong><span class="ui-id">${esc(uiToolInfo(k).vendor ? uiToolInfo(k).vendor + ' · ' : '')}${esc(k)}</span></td><td>${attnPill(a)}${t.usage === 'installed'
-      ? `<span class="pill p-mut" title="インストール済みとして検出されましたが、モデルが実際に動作していることを示すものはありません - アカウントもサインインも、コード補完サービスへの通信もありません。AI機能を組み込んだエディター（Cursor、Windsurf/Devin Desktop）は、AIが実際に動作していなくても一日中役立ちます。">インストール済みのみ</span>`
+      ? `<span class="pill p-mut" title="インストールは検出されましたが、AIモデルが実際に使われた形跡（アカウント、サインイン、AIサービスへの通信）はありません。AI機能を内蔵したエディター（Cursor、Windsurf／Devinデスクトップ版）は、AIを使わなくてもエディターとして日常的に使われます。">インストール済みのみ</span>`
       : ''}</td>
     <td>${(t.devices||[]).length}${(t.devices_active||[]).length < (t.devices||[]).length
-      ? ` <span class="src-note" style="font-style:normal" title="このツールが検出されたデバイスのうち、AIが実際に使用されていることを示すものはいくつありますか。">${(t.devices_active||[]).length} 使用中</span>`
+      ? ` <span class="src-note" style="font-style:normal" title="このツールが検出された端末のうち、AIが実際に使われた形跡がある端末の数です。">うち ${(t.devices_active||[]).length} 台で利用</span>`
       : ''}</td><td>${(t.identities||[]).length}</td>
     <td>${ents(t.devices_by_surface||{}).sort((a2,b2)=>b2[1].length-a2[1].length)
       .map(([s,v])=>`<span class="pill p-acc">${esc(uiTerm(s||'None'))} ${v.length}</span>`).join('')
       || (t.surfaces||[]).filter(Boolean).map(s2 =>
         `<span class="pill p-mut">${esc(uiTerm(s2))}</span>`).join('')
-      || '<span class="src-note">クラウドのサインインでのみ検出 - デバイスへの紐づけなし</span>'}</td>
+      || '<span class="src-note">クラウドのサインインでのみ検出（端末との紐付けなし）</span>'}</td>
   </tr>`).join('')}</tbody></table></div>
   ${ents(G.bridges||{}).length ? `<div class="tcard">
   <div class="cardhead"><h3>AIツールの接続先</h3></div>
   <p class="lede">ツール一覧ではなく、AIツールから接続された先の一覧です。ユーザーがインストールした製品ではなく、接続先のサービスを表示します。</p>
-  <table class="ui-page-table"><thead><tr><th>接続先のサービス</th><th>デバイス</th></tr></thead>
+  <table class="ui-page-table"><thead><tr><th>接続先のサービス</th><th>端末数</th></tr></thead>
   ${ents(G.bridges).sort((a,b)=>b[1].devices.length-a[1].devices.length)
     .map(([k,b])=>`<tr><td>${esc(k)}</td><td>${b.devices.length}</td></tr>`).join('')}
   </table></div>` : ''}`;
@@ -3425,29 +3406,27 @@ function tools() {
 
 function coverage() {
   const gaps = ents(G.devices).filter(([,d]) => d.scanner_seen && !d.collector_seen);
-  return `<h2>カバレッジ</h2><p class="lede">インベントリまたはテレメトリのソースが把握しているものの、エンドポイント収集エージェントから報告がないマシン。通常、そこにはまだ収集エージェントがインストールされていません。</p>
-  ${gaps.length ? `<div class="tcard"><table class="ui-page-table"><thead><tr><th>デバイス</th><th>検出元</th><th>検出されたAIツール</th></tr></thead>
+  return `<h2>収集エージェント未導入の端末</h2><p class="lede">資産管理やテレメトリの検出ソースでは把握されているものの、収集エージェントから報告がない端末です。多くの場合、その端末にはまだ収集エージェントが導入されていません。</p>
+  ${gaps.length ? `<div class="tcard"><table class="ui-page-table"><thead><tr><th>端末</th><th>検出したソース</th><th>AIツール数</th></tr></thead>
   ${gaps.map(([k,d])=>`<tr><td><strong>${esc(label(k,d))}</strong></td>
     <td><div class="cell-tags">${(d.sources||[]).map(x => uiSourceChip(x)).join('')}</div></td>
     <td>${(d.tools||[]).length}</td></tr>`).join('')}</table></div>`
   : dataOk()
-    ? '<p class="lede">スキャナーの検出結果があるすべてのデバイスには、収集エージェントからの報告もあります。</p>'
-    : '<p class="lede">比較できるものがありません: 検出結果を読み取れませんでした。</p>'}`;
+    ? '<p class="lede">スキャナーで検出されたすべての端末から、収集エージェントの報告も届いています。</p>'
+    : '<p class="lede">検出結果を読み込めなかったため、比較できません。</p>'}`;
 }
 
 function deviceDetail(k) {
   const d = G.devices[k]; if (!d) return '<p>見つかりません</p>';
   const bridges = ents(G.bridges||{}).filter(([,b]) => (b.devices||[]).includes(k)).map(([n])=>n);
   return `<h2>${esc(label(k,d))}</h2>
-  <p class="lede">${esc(k)} · ${esc((d.os||[]).join(', ')) || 'OS不明'} · ${d.findings} の検出結果</p>
-  ${(d.aliases||[]).length ? `<p class="src-note" style="margin-top:-6px">また、
-    ${(d.aliases).map(a => `<span class="mono">${esc(a)}</span>`).join(', ')} としても報告されています
-    — ソースによって識別方法が異なるため、ここでは1台のマシンとして統合されています。</p>` : ''}
+  <p class="lede">${esc(k)} · ${esc((d.os||[]).join(', ')) || 'OS不明'} · 検出結果 ${d.findings} 件</p>
+  ${(d.aliases||[]).length ? `<p class="src-note" style="margin-top:-6px">別の識別子 ${(d.aliases).map(a => `<span class="mono">${esc(a)}</span>`).join('、')} でも報告されています。検出ソースによって識別子が異なるため、1台の端末としてまとめて表示しています。</p>` : ''}
   <table>
-    <tr><th>人物</th><td>${d.person ? esc(d.person) : '<span class="pill p-mut">未紐付け</span>'}</td></tr>
-    <tr><th>ローカルユーザー</th><td>${esc((d.local_users||[]).join(', ')) || '—'}</td></tr>
+    <tr><th>利用者</th><td>${d.person ? esc(d.person) : '<span class="pill p-mut">未登録</span>'}</td></tr>
+    <tr><th>端末内のユーザー</th><td>${esc((d.local_users||[]).join(', ')) || '—'}</td></tr>
     <tr><th>利用環境</th><td>${esc((d.surfaces||[]).filter(Boolean).map(uiTerm).join('、'))}</td></tr>
-    <tr><th>ソース</th><td>${esc((d.sources||[]).join(', ')) || '—'}</td></tr>
+    <tr><th>検出ソース</th><td>${(d.sources||[]).map(x => uiSourceChip(x)).join('') || '—'}</td></tr>
     <tr><th>アカウント</th><td>${(d.accounts||[]).map(a =>
       `<span class="pill ${(d.personal_accounts||[]).includes(a)?'p-warn':'p-ok'}">${esc(a)}</span>`).join('') || '—'}</td></tr>
     <tr><th>ツールとアカウント</th><td>${ents(d.tool_accounts||{}).length
@@ -3465,22 +3444,22 @@ function toolDetail(k) {
   const t = G.tools[k]; if (!t) return '<p>見つかりません</p>';
   const a = attention(k, t);
   const series = ((G.trends || {}).tools || {})[k];
-  return `<h2>${esc(k)}</h2>
-  <p class="lede">${(t.devices||[]).length} デバイス · ${(t.identities||[]).length} アイデンティティ · ${t.findings} 検出結果</p>
+  return `<h2>${esc(uiToolName(k))}</h2>
+  <p class="lede">端末 ${(t.devices||[]).length} 台 · ID ${(t.identities||[]).length} 件 · 検出結果 ${t.findings} 件 · <span class="mono">${esc(k)}</span></p>
   ${series && series.some(v => v) ? `<div style="margin:0 0 12px">${spark(series)}
-    <div class="src-note" style="margin-top:2px">日次のアクティビティ、古いものから新しいものへ</div></div>` : ''}
+    <div class="src-note" style="margin-top:2px">1日ごとの検出件数（左が古い日付）</div></div>` : ''}
   ${a.level ? `<p class="lede" style="color:var(--${a.level === 'high' ? 'dstr' : 'warn'})">
-    ${a.level === 'high' ? '対応が必要' : '注視が必要'}:
-    ${esc(a.factors.join(' · '))}.</p>` : ''}
+    ${a.level === 'high' ? '要注意' : '要観察'}：
+    ${esc(a.factors.join(' · '))}</p>` : ''}
   <table><tr><th>利用環境別</th><td>${ents(t.devices_by_surface||{})
     .sort((a,b)=>b[1].length-a[1].length)
     .map(([s,v])=>`<span class="pill p-acc">${esc(uiTerm(s||'None'))} ${v.length}</span>`).join('')}</td></tr>
-  <tr><th title="インストール済みは、製品がマシン上にあることを示します。使用は、モデルが実行された証拠があることを示します：アカウント、サインイン、モデルコンテキストプロトコル設定、またはエディターが起動時にいずれにせよ接続する更新ホストやテレメトリホストではなく、コード補完サービスへの通信です。">インストール済み vs 使用済み</th>
-    <td>${(t.devices||[]).length} インストール済み · ${(t.devices_active||[]).length} AIが実行された場所${
+  <tr><th title="「インストール済み」は製品が端末にあることを示します。「AIの利用あり」は、アカウント、サインイン、MCP設定、AIサービスへの通信など、モデルが実際に動いた証拠があることを示します（エディターが起動時に行う更新確認やテレメトリ通信は含みません）。">インストールと利用</th>
+    <td>インストール済み ${(t.devices||[]).length} 台 · AIの利用あり ${(t.devices_active||[]).length} 台${
       t.usage === 'installed' && (t.devices||[]).length
-        ? ' <span class="src-note" style="font-style:normal">これがAIツールとして使用されていることを示すものはありません</span>' : ''}</td></tr>
+        ? ' <span class="src-note" style="font-style:normal">AIツールとして使われた形跡はありません</span>' : ''}</td></tr>
   <tr><th>アカウント</th><td>${esc((t.accounts||[]).join(', ')) || '—'}</td></tr></table>
-  <h2 style="margin-top:22px;font-size:16px">デバイス</h2>
+  <h2 style="margin-top:22px;font-size:16px">検出された端末</h2>
   ${(t.devices||[]).map(dk => G.devices[dk] ? card(dk, G.devices[dk]) : '').join('')}`;
 }
 
@@ -3490,17 +3469,17 @@ function mcp() {
     (r.device_names||[]).some(match) || (r.devices||[]).some(match));
   const tools = ents(G.tools).filter(([,t]) => (t.surfaces||[]).includes('mcp'));
   const devs = new Set(rows.flatMap(r => r.devices || []));
-  return `<h2>モデルコンテキストプロトコルサーバー</h2>
-  <p class="lede">AIツールが使用するように設定されている統合。それぞれが独自の認証情報を保持し、設定したツールが閉じられていても、指定された先に到達できます。そのため、これらには専用のページがあります。</p>
+  return `<h2>MCPサーバー</h2>
+  <p class="lede">MCP（Model Context Protocol）サーバーは、AIツールが外部のサービスやデータに接続するために設定する連携です。それぞれが独自の認証情報を持ち、設定したツールを閉じていても接続先にアクセスできます。そのため専用の画面で確認します。</p>
 
   <dl class="stats">
     <div><dt>${rows.length}</dt><dd>サーバー</dd></div>
-    <div><dt>${devs.size}</dt><dd>デバイス</dd></div>
+    <div><dt>${devs.size}</dt><dd>端末</dd></div>
     <div><dt>${tools.length}</dt><dd>設定しているツール</dd></div>
   </dl>
 
   ${rows.length ? `<div class="tcard"><table class="ui-page-table">
-  <thead><tr><th>サーバー</th><th>デバイス</th><th>設定元</th>
+  <thead><tr><th>サーバー</th><th>端末数</th><th>設定したツール</th>
   <th>初回検出</th><th>最終確認日時</th></tr></thead>
   ${rows.map(r => `<tr data-open="mcp" data-key="${esc(r.server)}" style="cursor:pointer">
     <td><strong>${esc(r.server)}</strong></td>
@@ -3509,8 +3488,8 @@ function mcp() {
     <td class="ui-muted">${esc((r.first_seen||'').slice(0,10) || '—')}</td>
     <td class="ui-muted">${esc((r.last_seen||'').slice(0,10) || '—')}</td>
   </tr>`).join('')}</table>
-  <p class="src-note" style="margin-bottom:8px">サーバーをクリックすると、どのマシンに設定されているかを確認できます。到達範囲が最も広いものから表示されます。</p></div>`
-  : `<p class="lede">モデルコンテキストプロトコルサーバーが見つかりません。まずセットアップページを確認してください。モデルコンテキストプロトコルの検出結果はエンドポイント収集エージェントから送られるため、収集エージェントが報告していなければ、このページでも何も表示できません。</p>`}`;
+  <p class="src-note" style="margin-bottom:8px">サーバーをクリックすると、設定されている端末を確認できます。設定端末の多い順に表示しています。</p></div>`
+  : `<p class="lede">MCPサーバーは見つかりませんでした。先に「検出ソース」画面を確認してください。MCPの検出結果は収集エージェントから届くため、収集エージェントが報告していなければ、この画面にも表示されません。</p>`}`;
 }
 
 function mcpDetail(k) {
@@ -3518,16 +3497,13 @@ function mcpDetail(k) {
   if (!r) return '<p>見つかりません</p>';
   const devs = (r.devices || []);
   return `<h2>${esc(r.server)}</h2>
-  <p class="lede">${devs.length} デバイス ·
-  設定者: ${esc((r.tools||[]).join(', '))} ·
-  初回検出: ${esc((r.first_seen||'').slice(0,10) || 'unknown')} ·
-  最終検出: ${esc((r.last_seen||'').slice(0,10) || 'unknown')}</p>
-  <p class="lede">このサーバーの接続先は、設定ツールを開いていなくても、これらのマシンから到達可能です。そこで実際にできることは、サーバーが保持する認証情報に依存しており、ここからは見えません。</p>
+  <p class="lede">端末 ${devs.length} 台 · 設定したツール: ${esc((r.tools||[]).map(uiToolName).join('、'))} · 初回検出: ${esc((r.first_seen||'').slice(0,10) || '不明')} · 最終検出: ${esc((r.last_seen||'').slice(0,10) || '不明')}</p>
+  <p class="lede">このサーバーの接続先には、設定したツールを開いていなくても、これらの端末からアクセスできます。接続先で何ができるかはサーバーが持つ認証情報によって決まり、この画面からは確認できません。</p>
   ${devs.length ? devs.map(dk => G.devices[dk]
       ? card(dk, G.devices[dk])
       : `<div class="card" style="cursor:default"><h3>${esc(dk)}</h3>
-         <div class="sub">この期間内にこのデバイスからの他の検出結果はないため、これについて他に表示できるものはありません。</div></div>`).join('')
-    : '<p class="lede">これに紐づくデバイスは記録されていません。</p>'}`;
+         <div class="sub">この期間、この端末からほかの検出結果はありません。</div></div>`).join('')
+    : '<p class="lede">このサーバーが設定された端末は記録されていません。</p>'}`;
 }
 
 // A personal-account row's identity, as the opaque key the receiver stores
@@ -3539,21 +3515,21 @@ const paStatus = r => (PSTAT || {})[paKey(r)] || null;
 function paActions(r) {
   const st = paStatus(r);
   const key = esc(paKey(r));
-  if (st) return `<button class="mini" data-act="pa-reopen" data-key="${key}">再オープン</button>`;
+  if (st) return `<button class="mini" data-act="pa-reopen" data-key="${key}">未解決に戻す</button>`;
   if (PAFORM === paKey(r)) return `
     <input id="pa-reason" class="mfield" style="min-width:180px"
-      placeholder="これが許容される理由" autocomplete="off">
-    <button class="mini" data-act="pa-accept" data-key="${key}">承認</button>
+      placeholder="許容する理由" autocomplete="off">
+    <button class="mini" data-act="pa-accept" data-key="${key}">許容する</button>
     <button class="mini" data-act="pa-cancel">キャンセル</button>`;
   return `<button class="mini" data-act="pa-ack" data-key="${key}"
-      title="声かけ済み - 表示されたまま、新規ではなくなります">確認</button>
+      title="本人に確認済みにします。表示は残り、新規扱いではなくなります">確認済みにする</button>
     <button class="mini" data-act="pa-accept-form" data-key="${key}"
-      title="理由付きで承認済み - オープン件数から外れます">承認…</button>`;
+      title="理由を記録して許容します。未解決の件数から外れます">許容…</button>`;
 }
 
 const paChip = st => !st ? ''
   : st.status === 'accepted'
-    ? `<span class="pill p-ok" title="${esc(st.reason || '')} — ${esc(st.actor)} ${esc((st.at||'').slice(0,10))}">承認済み</span>`
+    ? `<span class="pill p-ok" title="${esc(st.reason || '')} — ${esc(st.actor)} ${esc((st.at||'').slice(0,10))}">許容済み</span>`
     : `<span class="pill p-acc" title="${esc(st.actor)} ${esc((st.at||'').slice(0,10))}">確認済み</span>`;
 
 function personal() {
@@ -3569,23 +3545,23 @@ function personal() {
   const nTools = new Set(all.map(r => r.tool)).size;
   const nPeople = new Set(all.filter(r => r.user).map(r => r.user)).size;
   const summary = !all.length ? '' : `<div class="inventory-summary" aria-label="個人アカウントの概要">
-    <span class="${nOpen ? 'risk' : ''}"><b>${nOpen}</b> オープン</span>
-    ${lifecycle ? `<span><b>${nAck}</b> 確認済み</span><span><b>${nAcc}</b> 承認済み</span>` : ''}
-    <span><b>${nPeople}</b> 名前が記録された人物</span>
-    <span><b>${nTools}</b> AIツールが関与</span>
+    <span class="${nOpen ? 'risk' : ''}"><b>${nOpen}</b> 件が未解決</span>
+    ${lifecycle ? `<span><b>${nAck}</b> 件を確認済み</span><span><b>${nAcc}</b> 件を許容済み</span>` : ''}
+    <span><b>${nPeople}</b> 名の利用者</span>
+    <span><b>${nTools}</b> 種類のAIツール</span>
   </div>`;
   return `<h2>個人アカウント</h2>
-  <p class="lede" data-tour="personal">AIツールに個人アカウントでサインインした利用者を表示します。会社が承認したツールでも、個人アカウントでは会社データが管理外に渡り、退職後もアクセス権が残る可能性があります。ここでいう個人アカウントは、ドメインが会社のドメイン一覧に含まれないアカウントです。検出結果は判断の結論ではなく、確認すべき手がかりとして扱ってください${lifecycle ? `。対応状況を記録できます。確認済みの項目は表示に残ります。承認する場合は理由が必要で、承認済みの項目は未対応件数に含まれません` : ''}。</p>
+  <p class="lede" data-tour="personal">AIツールに個人アカウントでサインインした利用者を表示します。会社が承認したツールでも、個人アカウントでは会社データが管理外に渡り、退職後もアクセス権が残る可能性があります。ここでいう個人アカウントは、ドメインが会社のドメイン一覧に含まれないアカウントです。検出結果は判断の結論ではなく、確認すべき手がかりとして扱ってください${lifecycle ? `。対応状況も記録できます。「確認済み」にした項目は表示に残ります。「許容」するには理由が必要で、許容済みの項目は未解決の件数に含まれません` : ''}。</p>
   ${summary}
   ${rows.length ? `<div class="tcard"><table class="ui-page-table">
-  <thead><tr><th>人物</th><th>アカウント</th><th>AIツール</th><th>デバイス</th>
-  <th>利用環境</th><th>初回検出</th><th>最終確認日時</th><th>ソース</th>
-  ${lifecycle ? '<th>ステータス</th>' : ''}</tr></thead>
+  <thead><tr><th>利用者</th><th>アカウント</th><th>AIツール</th><th>端末</th>
+  <th>利用環境</th><th>初回検出</th><th>最終確認日時</th><th>検出ソース</th>
+  ${lifecycle ? '<th>対応状況</th>' : ''}</tr></thead>
   <tbody>${rows.map(r => `<tr${paStatus(r) ? ' class="ui-settled"' : ''}>
     <td>${r.user
       ? esc(r.user) + (r.user_via === 'device'
-        ? ' <span class="pill p-mut" title="このソースはアカウント名を報告していません。人物は、利用者対応表がこのマシンに紐付ける人物です。">デバイス経由</span>' : '')
-      : '<span class="pill p-mut">識別情報なし</span>'}</td>
+        ? ' <span class="pill p-mut" title="この検出ソースはアカウント名を報告していません。表示している利用者は、利用者対応表でこの端末に紐付けた人です。">端末から推定</span>' : '')
+      : '<span class="pill p-mut">利用者不明</span>'}</td>
     <td><span class="ui-badge risk">${esc(r.account_domain)}</span></td>
     <td>${uiToolChip(r.tool)}</td>
     <td>${esc(r.device_name || r.device || '—')}</td>
@@ -3595,8 +3571,7 @@ function personal() {
     <td>${(r.sources||[]).map(x => uiSourceChip(x)).join('') || '<span class="ui-muted">—</span>'}</td>
     ${lifecycle ? `<td class="nw ui-row-actions">${paChip(paStatus(r))} ${paActions(r)}</td>` : ''}
   </tr>`).join('')}</tbody></table></div>`
-  : `<p class="lede">過去 ${hoursNow()} 時間に検出はありません。
-  セットアップページのソースが報告している場合にのみ信頼できます。</p>`}`;
+  : `<p class="lede">過去 ${hoursNow()} 時間に検出はありません。この結果は、「検出ソース」画面で各ソースが報告していることを確認したうえで判断してください。</p>`}`;
 }
 
 
@@ -3612,9 +3587,9 @@ function govForm(r) {
     <select id="gov-status" class="mfield">
       ${opt('approved', '承認済み')}${opt('not_approved', '未承認')}${opt('reviewing', 'レビュー中')}
     </select>
-    <input id="gov-owner" class="mfield" placeholder="オーナー、例: セキュリティ"
+    <input id="gov-owner" class="mfield" placeholder="責任者（例: 情報セキュリティ部）"
       value="${esc(pre.owner ?? r.owner ?? '')}">
-    <input id="gov-review" class="mfield" placeholder="レビュー期限 (YYYY-MM-DD、承認済みの場合は必須)"
+    <input id="gov-review" class="mfield" placeholder="レビュー期限（YYYY-MM-DD、承認済みの場合は必須）"
       value="${esc(pre.review_due ?? r.review_due ?? '')}">
     <input id="gov-reason" class="mfield" placeholder="理由（任意）"
       value="${esc(pre.reason ?? '')}">

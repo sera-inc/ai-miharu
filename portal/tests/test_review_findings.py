@@ -281,8 +281,8 @@ def test_the_shell_says_so_when_the_read_failed():
     assert "const tb = tabbar() + loadBanner();" in html
     # The confident lines are gated on the read having worked.
     assert "const dataOk = () => !loadError;" in html
-    for gated in ("何も観測されていません。それも結果であり",
-                  "スキャナーの検出結果があるすべてのデバイスには、収集エージェントからの報告もあります",
+    for gated in ("個人アカウントの利用は観測されていません。データを取得できたうえでの結果です",
+                  "スキャナーで検出されたすべての端末から、収集エージェントの報告も届いています",
                   "この期間に未対応の項目はありません。",
                   "小規模な環境では実際にあり得る結果"):
         before = html.split(gated)[0]
@@ -686,12 +686,12 @@ def test_the_identity_import_names_the_rows_it_drops():
     index = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html = open(os.path.join(index, "app", "static", "index.html")).read()
     # Every dropped row carries a line number and a reason.
-    assert "skipped.push({n, key, why: '人物なし'})" in html
+    assert "skipped.push({n, key, why: '利用者名なし'})" in html
     assert "skipped.push({n, key: bare, why: 'キーなし'})" in html
-    assert "why: '同じキー: 行 ' + dup" in html
+    assert "why: dup + ' 行目と同じキー'" in html
     # The filled-in-but-still-commented row is surfaced rather than lost.
     assert "if (k && ident) commented.push({n, key: k, identity: ident});" in html
-    assert "保存するつもりのものから先頭の # を削除してください" in html
+    assert "残したい行は先頭の # を削除してください" in html
     # The old count-only phrasing may not come back.
     assert "skipped (no key, no person, or a duplicate)" not in html
 

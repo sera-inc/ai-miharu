@@ -112,5 +112,5 @@ def test_the_portal_never_upgrades_anything():
     assert "${esc(route)} でのアップグレード方法" in HTML
     assert "--reuse-values" in HTML
     assert 'data-act="update-check"' in HTML
-    assert "t: '更新があります: ' + CFG.update.latest" in HTML
+    assert "t: '新しいリリースがあります: ' + CFG.update.latest" in HTML
     assert "if (el.getAttribute('data-view')) {" in HTML

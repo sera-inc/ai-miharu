@@ -181,13 +181,17 @@ def test_every_time_label_follows_the_chosen_window():
     body = HTML.split("</style>", 1)[1]
     assert "first seen this week" not in body
     assert "from=now-7d" not in body
-    assert "'直近 ' + fmtWindow(hoursNow()) + '、1 日あたり 1 本のバーです。期間が 3 日未満の場合" in HTML
+    assert "'過去' + fmtWindow(hoursNow()) + 'の件数を1日1本の棒で示します（期間が3日未満の場合は合計を表示）" in HTML
     assert "'&from=now-' + hoursNow() + 'h&to=now&kiosk'" in HTML
 
 
 def test_system_health_is_called_that_everywhere_a_person_reads():
-    assert '<span class="tenant-chev" aria-hidden="true">システム検出状況</span>' in HTML
-    assert 'aria-label="システム検出状況を開く">' in HTML
+    assert '<span class="tenant-chev" aria-hidden="true">システム状態</span>' in HTML
+    assert 'aria-label="システム状態を開く">' in HTML
+    # One name for one page: the sidebar, the chips and the empty states
+    # used three different ones for the same view.
+    assert "システム検出状況" not in HTML
+    assert "システム正常性" not in HTML
     assert "managed-estate switcher" not in HTML
 
 

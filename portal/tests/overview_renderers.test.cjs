@@ -37,20 +37,20 @@ test('no observed devices gives unavailable coverage rather than an invented per
   const c=context({G:{devices:{},tools:{},personal_accounts:[]},S:{reporting:0,groups:[]}});
   assert.equal(c.uiOverviewFacts().coverage,null);
   const out=c.widgets.stat_row();assert.match(out,/報告なし/);assert.doesNotMatch(out,/Monitoring healthy/);
-  assert.match(c.widgets.detection_coverage(),/収集エージェントの確認状況を表示できません/);
+  assert.match(c.widgets.detection_coverage(),/収集エージェントのカバー率を表示できません/);
 });
 test('a failed findings read never presents retained counts as current data',()=>{
   const c=context({dataOk:()=>false});
-  assert.match(c.widgets.stat_row(),/データを利用できません/);
+  assert.match(c.widgets.stat_row(),/データを取得できません/);
   assert.doesNotMatch(c.widgets.stat_row(),/Monitoring healthy/);
-  assert.match(c.widgets.top_tools(),/検出結果を利用できません/);
-  assert.match(c.widgets.detection_coverage(),/収集エージェントの確認状況を表示できません/);
+  assert.match(c.widgets.top_tools(),/検出結果を取得できません/);
+  assert.match(c.widgets.detection_coverage(),/収集エージェントのカバー率を表示できません/);
 });
 test('unavailable register data is separate from zero decisions',()=>{
   const c=context({REG:null});
   assert.equal(c.uiOverviewFacts().recorded,null);
-  assert.match(c.widgets.stat_row(),/AI台帳データを利用できません/);
-  assert.match(c.uiFocusRows(c.uiOverviewFacts()),/台帳データを利用できません/);
+  assert.match(c.widgets.stat_row(),/AI台帳のデータを取得できません/);
+  assert.match(c.uiFocusRows(c.uiOverviewFacts()),/AI台帳のデータを取得できません/);
 });
 test('only explicit decisions for discovered tools contribute to the register metric',()=>{
   const c=context({G:{devices:{},tools:{a:{},b:{},c:{}},personal_accounts:[]},REG:{rows:[{id:'a',status_source:'governance',status:'refused'},{id:'b',status_source:'portal',status:'reviewing',days_overdue:2},{id:'c',status_source:'registry'},{id:'unobserved',status_source:'portal'}]}});
@@ -64,11 +64,11 @@ test('cloud-only tools retain zero devices alongside their separate identity cou
 test('the table contains every matching tool instead of truncating away cloud-only tools',()=>{
   const many=Object.fromEntries(Array.from({length:9},(_,i)=>['t'+i,{devices:[],identities:[],surfaces:[]}]))
   const c=context({G:{devices:{},tools:many,personal_accounts:[]}});
-  const out=c.widgets.top_tools();assert.match(out,/9 \/ 9 件の検出されたツール/);assert.match(out,/data-key="t8"/);
+  const out=c.widgets.top_tools();assert.match(out,/検出ツール 9 件中 9 件/);assert.match(out,/data-key="t8"/);
 });
 test('the personal filter uses open lifecycle findings, not all historic personal rows',()=>{
   const c=context({PSTAT:{a:{status:'accepted'}}});vm.runInContext('UI_PERSONAL_TOOLS = true;',c);
-  const out=c.widgets.top_tools();assert.match(out,/この表示に一致するツールはありません/);assert.match(out,/0 \/ 1 件の検出されたツール/);
+  const out=c.widgets.top_tools();assert.match(out,/この条件に一致するツールはありません/);assert.match(out,/検出ツール 1 件中 0 件/);
 });
 test('tool metadata and finding identifiers are escaped before becoming markup',()=>{
   const id='x" onclick="bad';const attack='<img src=x onerror=bad>';
