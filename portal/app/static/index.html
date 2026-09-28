@@ -1630,12 +1630,20 @@ async function load(force) {
         if (ar.ok) AGENTIC = await ar.json();
       } catch (e) { /* the tile says it has not been read */ }
     }
-    // Same again for the review queue: it draws from the register, and in
-    // managed mode from the discovery candidates queue too.
-    if ((CFG.overview_widgets || []).some(w => w.kind === 'review_queue')) {
+    // The stat_row tiles count "judgement records" straight out of the
+    // register, and review_queue draws from it too - so either widget means the
+    // overview needs REG. Previously only review_queue pulled it, which left a
+    // stat_row-only overview (the docker-compose default) rendering
+    // "AI台帳データを利用できません" until some other screen fetched it.
+    const ovWidgets = CFG.overview_widgets || [];
+    const needsReg = ovWidgets.some(w => w.kind === 'stat_row' || w.kind === 'review_queue');
+    const hasQueue = ovWidgets.some(w => w.kind === 'review_queue');
+    if (needsReg) {
       const rr = await fetch('/api/register' + hq());
       if (rr.ok) REG = await rr.json();
-      if (CFG.managed && CFG.managed.enabled && AUTH && AUTH.mode === 'login') {
+      // Candidates and registry tools belong to the queue widget specifically;
+      // a stat_row-only overview has no "belongs to" picker to populate.
+      if (hasQueue && CFG.managed && CFG.managed.enabled && AUTH && AUTH.mode === 'login') {
         const cq = await mfetch('/api/candidates');
         if (cq.ok) CAND = (await cq.json()).candidates || [];
         // The queue's "belongs to" picker offers registry tools, and every
