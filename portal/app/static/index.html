@@ -10052,7 +10052,13 @@ async function agentic() {
   </div></div>`;
 }
 
-async function renderView() {
+let RENDER_REV = 0;
+async function renderView(rev) {
+  const commit = html => {
+    if (rev !== RENDER_REV) return false;
+    app.innerHTML = html;
+    return true;
+  };
   const sec = sectionOf(view);
   if (sec) SECTAB[sec.id] = view;
   drawNav();
@@ -10060,34 +10066,37 @@ async function renderView() {
   if (!detail) { DSTACK = []; document.body.classList.remove('open'); }
   const tb = tabbar() + loadBanner();
   // settings and register each read a second endpoint, so they are async.
-  if (view === 'settings') { app.innerHTML = tb + await settings(); return; }
-  if (view === 'diagnostics') { app.innerHTML = await diagnostics(); upgradeWatch(); return; }
-  if (view === 'cli-approve') { app.innerHTML = await cliApprove(); return; }
-  if (view === 'register') { app.innerHTML = tb + await register(); return; }
-  if (view === 'paste') { app.innerHTML = tb + await paste(); return; }
-  if (view === 'agentic') { app.innerHTML = tb + await agentic(); return; }
-  if (view === 'iso') { app.innerHTML = tb + await iso(); return; }
-  if (view === 'fleet') { app.innerHTML = tb + await fleet(); return; }
-  if (view === 'tokens') { app.innerHTML = tb + await tokens(); return; }
-  if (view === 'wizard') { app.innerHTML = await wizard(); return; }
-  if (view === 'extsetup') { app.innerHTML = await extSetup(); return; }
-  if (view === 'registry') { app.innerHTML = tb + await registryView(); return; }
-  if (view === 'budget') { app.innerHTML = tb + await budget(); return; }
+  if (view === 'settings') { const html = tb + await settings(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'diagnostics') { const html = await diagnostics(); if (rev !== RENDER_REV) return; commit(html); upgradeWatch(); return; }
+  if (view === 'cli-approve') { const html = await cliApprove(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'register') { const html = tb + await register(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'paste') { const html = tb + await paste(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'agentic') { const html = tb + await agentic(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'iso') { const html = tb + await iso(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'fleet') { const html = tb + await fleet(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'tokens') { const html = tb + await tokens(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'wizard') { const html = await wizard(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'extsetup') { const html = await extSetup(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'registry') { const html = tb + await registryView(); if (rev !== RENDER_REV) return; commit(html); return; }
+  if (view === 'budget') { const html = tb + await budget(); if (rev !== RENDER_REV) return; commit(html); return; }
   if (view === 'budget-report') {
     // The report needs the same data the page does, and is linkable, so
     // it fetches for itself rather than assuming someone came via Budget.
     if (!BUDGET) {
       const r = await mfetch('/api/budget');
-      if (!r.ok) { app.innerHTML = await managedError(r, '予算レポート'); return; }
+      if (rev !== RENDER_REV) return;
+      if (!r.ok) { const html = await managedError(r, '予算レポート'); if (rev !== RENDER_REV) return; commit(html); return; }
       BUDGET = await r.json();
+      if (rev !== RENDER_REV) return;
     }
     await bFetchFx();
-    app.innerHTML = budgetReport();
+    if (rev !== RENDER_REV) return;
+    commit(budgetReport());
     return;
   }
-  if (view === 'people') { app.innerHTML = tb + await people(); return; }
-  app.innerHTML = tb + ({setup, overview, devices, tools, coverage,
-                         dashboard, personal, mcp})[view]();
+  if (view === 'people') { const html = tb + await people(); if (rev !== RENDER_REV) return; commit(html); return; }
+  commit(tb + ({setup, overview, devices, tools, coverage,
+                dashboard, personal, mcp})[view]());
 }
 
 // Presentation is applied after a view renders so every existing view keeps
@@ -10151,8 +10160,10 @@ function decorateView() {
 // the tour's own check hangs off the wrapper rather than the body - a call
 // per branch is a call somebody adding the twelfth view forgets.
 async function render() {
+  const rev = ++RENDER_REV;
   document.body.classList.toggle('ui-compact', pref('display.compact', '0') === '1');
-  await renderView();
+  await renderView(rev);
+  if (rev !== RENDER_REV) return;
   decorateView();
   drawSetup();
   maybeTour();

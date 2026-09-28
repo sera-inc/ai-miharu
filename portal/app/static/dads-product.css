@@ -489,3 +489,52 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
     color: currentcolor;
   }
 }
+
+/* Sidebar overflow corrections generated with DeepSeek v4.1 Flash. */
+.brand,
+.brand span,
+.tenant-copy,
+.tenant-copy > b,
+.nav-area-block,
+.nav-area-items,
+.nav-child-row,
+.nav-child,
+.nav-child .lbl {
+  min-width: 0;
+  max-width: 100%;
+}
+.brand img {
+  width: 38px;
+  height: 38px;
+  max-width: 38px;
+  max-height: 38px;
+  flex: 0 0 38px;
+  object-fit: contain;
+}
+.brand > span {
+  flex: 1 1 auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.tenant-copy > b {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.nav-child {
+  align-items: flex-start;
+  white-space: normal !important;
+}
+.nav-child .lbl {
+  flex: 1 1 auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.nav-child .count {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
