@@ -83,12 +83,13 @@ def test_the_new_trend_widget_is_registered_both_sides():
 
 
 def test_charts_use_their_own_colour_tokens():
-    """--acc is interface chrome and sits below the chroma floor a fill
-    needs: it reads grey once it is an area rather than a 1px border."""
-    assert "--chart:#0a7ea4" in INDEX, "light chart token missing"
-    assert "--chart:#2b9ec4" in INDEX, "dark chart token missing"
-    # Its own step per mode, not one value flipped for both.
-    assert INDEX.count("--chart:#") == 2
+    """The chart series comes from DADS semantic tokens and changes by mode."""
+    dads = (Path(__file__).parent.parent / "app" / "static"
+            / "dads-product.css").read_text()
+    assert INDEX.count("--chart:var(--app-sg-chart-series-1)") == 2
+    assert "--app-sg-chart-series-1: var(--dads-color-blue-600);" in dads
+    assert "--app-sg-chart-series-1: var(--dads-color-blue-400);" in dads
+    assert dads.count("--app-sg-chart-series-1:") == 2
 
 
 def test_two_series_carry_a_legend():

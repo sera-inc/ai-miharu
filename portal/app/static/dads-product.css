@@ -35,6 +35,112 @@
   --app-sg-accent-on-primary: var(--dads-color-white);
 }
 
+/* DeepSeek v4.1 Flash mapped DADS Layer 2 tokens. Layer 1 remains read-only. */
+:root {
+  --app-sg-accent-glow-faint: color-mix(in srgb, var(--dads-color-green-400) 2%, transparent);
+  --app-sg-accent-glow-medium: color-mix(in srgb, var(--dads-color-green-400) 12%, transparent);
+  --app-sg-accent-glow-strong: color-mix(in srgb, var(--dads-color-green-400) 25%, transparent);
+  --app-sg-accent-glow-subtle: color-mix(in srgb, var(--dads-color-green-400) 9%, transparent);
+  --app-sg-accent-indicator: var(--dads-color-green-100);
+  --app-sg-accent-on-dark: var(--dads-color-blue-200);
+  --app-sg-border-mode-active: var(--dads-color-orange-500);
+  --app-sg-border-on-dark-faint: color-mix(in srgb, var(--dads-color-white) 2.5%, transparent);
+  --app-sg-border-on-dark-medium: color-mix(in srgb, var(--dads-color-white) 12%, transparent);
+  --app-sg-border-on-dark-strong: color-mix(in srgb, var(--dads-color-white) 15%, transparent);
+  --app-sg-border-on-dark-subtle: color-mix(in srgb, var(--dads-color-white) 6%, transparent);
+  --app-sg-border-raised: var(--dads-color-solid-gray-300);
+  --app-sg-border-selected: var(--dads-color-blue-600);
+  --app-sg-border-selected-subtle: color-mix(in srgb, var(--dads-color-cyan-400) 40%, transparent);
+  --app-sg-chart-soft: color-mix(in srgb, var(--dads-color-blue-500) 14%, transparent);
+  --app-sg-danger-border-subtle: color-mix(in srgb, var(--dads-color-red-300) 26%, transparent);
+  --app-sg-danger-on: var(--dads-color-white);
+  --app-sg-danger-on-dark: var(--dads-color-red-200);
+  --app-sg-danger-surface-subtle: color-mix(in srgb, var(--dads-color-red-500) 18%, transparent);
+  --app-sg-decoration-dot: var(--dads-color-solid-gray-400);
+  --app-sg-gradient-attention-end: color-mix(in srgb, var(--dads-color-yellow-1200) 60%, var(--dads-color-solid-gray-900));
+  --app-sg-gradient-attention-mid: color-mix(in srgb, var(--dads-color-yellow-1200) 70%, var(--dads-color-solid-gray-900));
+  --app-sg-gradient-attention-start: color-mix(in srgb, var(--dads-color-yellow-1200) 80%, var(--dads-color-solid-gray-900));
+  --app-sg-gradient-panel-end: var(--dads-color-green-700);
+  --app-sg-gradient-panel-start: var(--dads-color-blue-900);
+  --app-sg-gradient-posture-good-end: color-mix(in srgb, var(--dads-color-green-1000) 86%, var(--dads-color-solid-gray-900));
+  --app-sg-gradient-posture-good-mid: color-mix(in srgb, var(--dads-color-green-1000) 84%, var(--dads-color-solid-gray-900));
+  --app-sg-gradient-posture-good-start: color-mix(in srgb, var(--dads-color-green-1000) 80%, var(--dads-color-blue-1000));
+  --app-sg-gradient-posture-neutral-end: color-mix(in srgb, var(--dads-color-solid-gray-900) 88%, var(--dads-color-blue-1000));
+  --app-sg-gradient-posture-neutral-mid: color-mix(in srgb, var(--dads-color-solid-gray-900) 90%, var(--dads-color-blue-1000));
+  --app-sg-gradient-posture-neutral-start: color-mix(in srgb, var(--dads-color-green-1000) 76%, var(--dads-color-solid-gray-900));
+  --app-sg-icon-muted: var(--dads-color-solid-gray-536);
+  --app-sg-icon-pin-active: var(--dads-color-yellow-700);
+  --app-sg-primary-on-dark: var(--dads-color-green-100);
+  --app-sg-print-text: var(--dads-color-green-900);
+  --app-sg-shadow-accent-primary: color-mix(in srgb, var(--dads-color-green-900) 18%, transparent);
+  --app-sg-sidebar-muted: var(--dads-color-solid-gray-200);
+  --app-sg-sidebar-on-ink: var(--dads-color-green-100);
+  --app-sg-status-off: var(--dads-color-solid-gray-420);
+  --app-sg-status-off-glow: color-mix(in srgb, var(--dads-color-solid-gray-400) 14%, transparent);
+  --app-sg-success: var(--dads-color-success-1);
+  --app-sg-success-border-subtle: color-mix(in srgb, var(--dads-color-green-300) 20%, transparent);
+  --app-sg-success-on-dark: var(--dads-color-green-100);
+  --app-sg-success-surface: var(--dads-color-green-50);
+  --app-sg-success-surface-subtle: color-mix(in srgb, var(--dads-color-green-500) 16%, transparent);
+  --app-sg-surface-button-neutral: var(--dads-color-solid-gray-200);
+  --app-sg-surface-card-header: var(--dads-color-solid-gray-50);
+  --app-sg-surface-code: var(--dads-color-solid-gray-100);
+  --app-sg-surface-note: var(--dads-color-solid-gray-50);
+  --app-sg-surface-on-dark-active: color-mix(in srgb, var(--dads-color-white) 12%, transparent);
+  --app-sg-surface-on-dark-button: color-mix(in srgb, var(--dads-color-white) 7%, transparent);
+  --app-sg-surface-on-dark-hover: color-mix(in srgb, var(--dads-color-white) 6%, transparent);
+  --app-sg-surface-on-dark-subtle: color-mix(in srgb, var(--dads-color-white) 2%, transparent);
+  --app-sg-surface-on-dark-track: color-mix(in srgb, var(--dads-color-white) 10%, transparent);
+  --app-sg-surface-prompt: var(--dads-color-solid-gray-50);
+  --app-sg-surface-sidebar: var(--dads-color-solid-gray-50);
+  --app-sg-surface-sidebar-selected: var(--dads-color-blue-50);
+  --app-sg-surface-sidebar-selected-accent: color-mix(in srgb, var(--dads-color-cyan-400) 13%, transparent);
+  --app-sg-surface-summary-lead: var(--dads-color-green-50);
+  --app-sg-surface-toast: var(--dads-color-solid-gray-900);
+  --app-sg-surface-ui-tint: var(--dads-color-solid-gray-100);
+  --app-sg-text-on-dark: var(--dads-color-white);
+  --app-sg-text-on-dark-secondary: var(--dads-color-solid-gray-300);
+  --app-sg-warning-glow: color-mix(in srgb, var(--dads-color-orange-400) 16%, transparent);
+  --app-sg-warning-on: var(--dads-color-solid-gray-900);
+  --app-sg-warning-surface-subtle: color-mix(in srgb, var(--dads-color-yellow-400) 10%, transparent);
+  --app-sg-tour-pulse: color-mix(in srgb, var(--dads-color-cyan-700) 45%, transparent);
+}
+[data-theme="dark"] {
+  --app-sg-accent-glow-faint: color-mix(in srgb, var(--dads-color-green-300) 2%, transparent);
+  --app-sg-accent-glow-medium: color-mix(in srgb, var(--dads-color-green-300) 12%, transparent);
+  --app-sg-accent-glow-strong: color-mix(in srgb, var(--dads-color-green-300) 25%, transparent);
+  --app-sg-accent-glow-subtle: color-mix(in srgb, var(--dads-color-green-300) 9%, transparent);
+  --app-sg-accent-indicator: var(--dads-color-green-300);
+  --app-sg-border-mode-active: var(--dads-color-orange-400);
+  --app-sg-border-raised: var(--dads-color-solid-gray-600);
+  --app-sg-border-selected: var(--dads-color-blue-300);
+  --app-sg-border-selected-subtle: color-mix(in srgb, var(--dads-color-cyan-300) 40%, transparent);
+  --app-sg-chart-soft: color-mix(in srgb, var(--dads-color-blue-300) 22%, transparent);
+  --app-sg-danger-border-subtle: color-mix(in srgb, var(--dads-color-red-200) 26%, transparent);
+  --app-sg-danger-on: var(--dads-color-red-1000);
+  --app-sg-danger-surface-subtle: color-mix(in srgb, var(--dads-color-red-400) 18%, transparent);
+  --app-sg-icon-muted: var(--dads-color-solid-gray-300);
+  --app-sg-icon-pin-active: var(--dads-color-yellow-300);
+  --app-sg-primary-on-dark: var(--dads-color-green-200);
+  --app-sg-success-border-subtle: color-mix(in srgb, var(--dads-color-green-200) 20%, transparent);
+  --app-sg-success-on-dark: var(--dads-color-green-300);
+  --app-sg-success-surface: var(--dads-color-green-1200);
+  --app-sg-success-surface-subtle: color-mix(in srgb, var(--dads-color-green-400) 16%, transparent);
+  --app-sg-surface-button-neutral: var(--dads-color-solid-gray-700);
+  --app-sg-surface-card-header: var(--dads-color-solid-gray-800);
+  --app-sg-surface-code: var(--dads-color-solid-gray-800);
+  --app-sg-surface-note: var(--dads-color-solid-gray-800);
+  --app-sg-surface-prompt: var(--dads-color-solid-gray-800);
+  --app-sg-surface-sidebar: var(--dads-color-solid-gray-900);
+  --app-sg-surface-sidebar-selected: color-mix(in srgb, var(--dads-color-white) 14%, transparent);
+  --app-sg-surface-sidebar-selected-accent: color-mix(in srgb, var(--dads-color-cyan-300) 13%, transparent);
+  --app-sg-surface-summary-lead: var(--dads-color-green-1200);
+  --app-sg-surface-ui-tint: var(--dads-color-solid-gray-800);
+  --app-sg-warning-glow: color-mix(in srgb, var(--dads-color-orange-300) 16%, transparent);
+  --app-sg-warning-surface-subtle: color-mix(in srgb, var(--dads-color-yellow-300) 10%, transparent);
+  --app-sg-tour-pulse: color-mix(in srgb, var(--dads-color-cyan-300) 45%, transparent);
+}
+
 /* Product-specific extensions for DADS-derived controls without shared tokens. */
 :root {
   --app-sg-inset-md: 12px;

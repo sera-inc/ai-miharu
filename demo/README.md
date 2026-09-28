@@ -38,7 +38,7 @@ docker compose down -v
 ## The portal
 
 Open http://localhost:8091 and press **Sign in with Microsoft**. The
-stand-in identity provider offers three people; pick **Gengar**, whose
+stand-in identity provider offers three people; pick **管理者**, whose
 address the seeder put on the owner account, and you are in. The password
 form works too: username `gengar`, password `gengar-demo-portal`.
 

@@ -367,7 +367,7 @@ def test_diagnostics_report_the_login_mode(login_mode):
 def test_the_wizards_test_sign_in_stays_put():
     """The wizard's test has its answer the moment the message lands, so
     the tab must not navigate into the portal afterwards."""
-    html = main._sso_page("Signed in", "Taking you to the portal.",
+    html = main._sso_page("サインインしました", "ポータルに移動しています。",
                           go="/", who="gengar", test=True).body.decode()
     assert 'window.opener.postMessage' in html
     # The payload is HTML-escaped into an attribute on purpose - see the
@@ -375,13 +375,13 @@ def test_the_wizards_test_sign_in_stays_put():
     assert "&quot;test&quot;: true" in html
     # The return is what stops the navigation below it running.
     assert 'dataset.test="1";return;' in html
-    assert "You can close this tab" in html
+    assert "このタブを閉じて、セットアップウィザードに戻ってください。" in html
 
 
 def test_a_real_sign_in_goes_to_the_portal():
     """Somebody actually arriving must land in the portal, and must not be
     told to close their tab and go back to a wizard they never opened."""
-    html = main._sso_page("Signed in", "Taking you to the portal.",
+    html = main._sso_page("サインインしました", "ポータルに移動しています。",
                           go="/", who="gengar").body.decode()
     assert "&quot;test&quot;: false" in html
     assert 'dataset.test' in html          # the branch exists
@@ -394,7 +394,7 @@ def test_the_marker_does_not_come_from_window_opener():
     somebody who opened the sign-in screen that way and signed in normally
     was told to close their tab and left sitting on the callback page.
     The flag now travels with the sign-in that started it."""
-    html = main._sso_page("Signed in", "x", go="/", who="a").body.decode()
+    html = main._sso_page("サインインしました", "ポータルに移動しています。", go="/", who="a").body.decode()
     assert "if(window.opener){" not in html
     assert 'dataset.opener' not in html
 

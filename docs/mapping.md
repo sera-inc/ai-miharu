@@ -1,6 +1,6 @@
 # mapping.md — 実装値 → トークン対応表
 
-**対象**: `/home/student01/jobs/shadow-ai-guard-001/source`　**生成日**: 2026-09-27　**生成**: `scripts/inventory.mjs`
+**対象**: リポジトリ直下　**生成日**: 2026-09-27　**生成**: `scripts/inventory.mjs`
 **ステータス**: DeepSeek 4.1 Flash による仮対応（人間レビュー未承認、Phase 1 未完了）
 **現行再インベントリ**: 2026-09-27、14 ファイル・352 件。AI仮対応 108、保留 208、除外 36。除外 36 件には CSS 変数参照の誤検出 3 件を含む。
 

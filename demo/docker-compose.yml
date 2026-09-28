@@ -15,7 +15,7 @@
 #                           reporting. Start here. It runs managed mode like
 #                           a real deployment; the seeder has already created
 #                           the owner account and switched single sign-on on,
-#                           so press "Sign in with Microsoft" and pick Gengar
+#                           so press "Sign in with Microsoft" and pick the 管理者 account
 #                           (or use the password in demo/README.md).
 #   http://localhost:3000   Grafana (anonymous, no login), the "Shadow AI"
 #                           dashboard.
@@ -125,6 +125,7 @@ services:
       GF_AUTH_DISABLE_LOGIN_FORM: "true"
       GF_USERS_DEFAULT_THEME: "dark"
       GF_USERS_DEFAULT_LANGUAGE: "ja-JP"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/var/lib/grafana/dashboards/ai-guard.json"
       # Lets the portal embed panels. Off by default in Grafana, deliberately:
       # framing a session someone is logged into is how clickjacking works.
       # Safe here because this Grafana is anonymous, read-only and bound to

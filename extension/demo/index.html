@@ -5,10 +5,10 @@
   Part of Shadow AI Guard, https://github.com/AmanSK5/shadow-ai-guard
 -->
 
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>AI Guard - paste guard demo</title>
+<title>ペーストガードの動作デモ</title>
 <!--
   Zero-install demo of the paste guard. This page loads the REAL, unmodified
   ../src/guard.js and stubs the three chrome.* calls it makes, so what you
@@ -21,75 +21,84 @@
   visit /extension/demo/). Mode links reload with ?mode=warn|block|off.
 -->
 <style>
-  :root { color-scheme: dark; }
-  body { font-family: -apple-system, "Segoe UI", sans-serif; background:#14161c;
-         color:#e8e8e8; max-width:880px; margin:32px auto; padding:0 20px;
+  :root {
+    color-scheme: dark;
+    /* Standalone demo subset of the DADS Layer 2 adapter. */
+    --app-sg-surface-canvas: var(--dads-color-black, #000000);
+    --app-sg-text-primary: var(--dads-color-solid-gray-50, #f9f9f9);
+    --app-sg-text-secondary: var(--dads-color-solid-gray-200, #cccccc);
+    --app-sg-text-on-dark: var(--dads-color-white, #ffffff);
+    --app-sg-text-on-dark-secondary: var(--dads-color-solid-gray-300, #b3b3b3);
+    --app-sg-border-subtle: var(--dads-color-solid-gray-500, #7f7f7f);
+    --app-sg-border-strong: var(--dads-color-solid-gray-300, #b3b3b3);
+    --app-sg-surface-prompt: var(--dads-color-solid-gray-800, #333333);
+    --app-sg-surface-code: var(--dads-color-solid-gray-800, #333333);
+    --app-sg-surface-button-neutral: var(--dads-color-solid-gray-700, #4d4d4d);
+    --app-sg-surface-hover: color-mix(in srgb, var(--dads-color-white, #ffffff) 10%, transparent);
+    --app-sg-surface-panel: var(--dads-color-solid-gray-900, #1a1a1a);
+    --app-sg-border-mode-active: var(--dads-color-orange-400, #ff8d44);
+  }
+  body { font-family: -apple-system, "Segoe UI", sans-serif; background:var(--app-sg-surface-canvas);
+         color:var(--app-sg-text-primary); max-width:880px; margin:32px auto; padding:0 20px;
          line-height:1.5; }
   h1 { font-size:1.4em; } h2 { font-size:1.05em; margin-top:1.6em; }
-  .muted { color:#9aa0ab; font-size:0.92em; }
-  .mode a { color:#9aa0ab; text-decoration:none; padding:3px 10px;
-            border:1px solid #333; border-radius:5px; margin-right:6px; }
-  .mode a.active { color:#fff; border-color:#f5a524; }
-  #prompt { min-height:88px; background:#1e222b; border:1px solid #333;
+  .muted { color:var(--app-sg-text-secondary); font-size:0.92em; }
+  .mode a { color:var(--app-sg-text-secondary); text-decoration:none; padding:3px 10px;
+            border:1px solid var(--app-sg-border-subtle); border-radius:5px; margin-right:6px; }
+  .mode a.active { color:var(--app-sg-text-on-dark); border-color:var(--app-sg-border-mode-active); }
+  #prompt { min-height:88px; background:var(--app-sg-surface-prompt); border:1px solid var(--app-sg-border-strong);
             border-radius:10px; padding:14px; margin-top:10px; outline:none;
             white-space:pre-wrap; }
-  #prompt:empty::before { content:"Paste something here, like an AI tool prompt box..."; color:#6b7280; }
+  #prompt:empty::before { content:"ここにAIツールへの入力例を貼り付けてください…"; color:var(--app-sg-text-secondary); }
   table { border-collapse:collapse; width:100%; font-size:0.92em; }
-  td { padding:6px 8px; border-bottom:1px solid #262a33; vertical-align:top; }
-  code { background:#1e222b; padding:2px 6px; border-radius:4px;
+  td { padding:6px 8px; border-bottom:1px solid var(--app-sg-border-subtle); vertical-align:top; }
+  code { background:var(--app-sg-surface-code); padding:2px 6px; border-radius:4px;
          font-size:0.92em; word-break:break-all; }
-  button.copy { background:#262b36; color:#ddd; border:1px solid #3a3f4a;
+  button.copy { background:var(--app-sg-surface-button-neutral); color:var(--app-sg-text-on-dark-secondary); border:1px solid var(--app-sg-border-subtle);
                 border-radius:4px; padding:3px 10px; cursor:pointer;
                 font:inherit; font-size:0.85em; }
-  button.copy:active { background:#3a3f4a; }
-  #report { background:#101318; border:1px solid #262a33; border-radius:8px;
+  button.copy:active { background:var(--app-sg-surface-hover); }
+  #report { background:var(--app-sg-surface-panel); border:1px solid var(--app-sg-border-subtle); border-radius:8px;
             padding:12px; min-height:60px; font-family:ui-monospace, monospace;
             font-size:0.85em; white-space:pre-wrap; }
-  .ok { color:#4ade80; }
+  .ok { color:var(--app-sg-success); }
 </style>
 </head>
 <body>
 
-<h1>Paste guard demo</h1>
-<p>This page runs the extension's real <code>src/guard.js</code>, unmodified.
-The box below stands in for an AI tool's prompt box. Paste the vectors,
-watch the overlay, and watch the report panel: detection happens entirely
-in this page, and the report never contains what you pasted.</p>
+<h1>ペーストガードの動作デモ</h1>
+<p>このページでは、拡張機能の実際の <code>src/guard.js</code> を変更せずに動かします。
+下の欄をAIツールの入力欄に見立て、テスト例を貼り付けてください。
+警告画面と報告内容を確認できます。検出はこのページ内で行われ、貼り付けた本文は報告に含まれません。</p>
 
-<p class="mode">Mode:
-  <a href="?mode=warn" id="m-warn">warn</a>
-  <a href="?mode=block" id="m-block">block</a>
-  <a href="?mode=off" id="m-off">off</a>
-  <span class="muted">(warn shows a Paste anyway override; block does not)</span>
+<p class="mode">動作モード:
+  <a href="?mode=warn" id="m-warn">警告</a>
+  <a href="?mode=block" id="m-block">ブロック</a>
+  <a href="?mode=off" id="m-off">無効</a>
+  <span class="muted">（警告モードでは「そのまま貼り付ける」を選べます。ブロックモードでは選べません）</span>
 </p>
 
 <div id="prompt" contenteditable="true"></div>
 
-<h2>What would be reported</h2>
-<div id="report" class="muted">Nothing yet. Reports appear here exactly as
-the extension would send them to the receiver.</div>
+<h2>報告される内容</h2>
+<div id="report" class="muted">まだ報告はありません。拡張機能がレシーバーに送る内容がここに表示されます。</div>
 
-<h2>Test vectors (all fake or documentation values)</h2>
+<h2>検出テスト用の例（すべて架空または公式資料の値）</h2>
 <table id="vectors">
-  <tr><td><code>AKIAIOSFODNN7EXAMPLE</code></td><td>AWS access key (Amazon's documented example)</td><td></td></tr>
-  <tr><td><code>4111 1111 1111 1111</code></td><td>Payment card (industry test number, passes Luhn)</td><td></td></tr>
-  <tr><td><code>password: Summer2026!</code></td><td>Shared credential</td><td></td></tr>
-  <tr><td><code>CLIENT CONFIDENTIAL</code></td><td>Document classification marking</td><td></td></tr>
-  <tr><td><code>glpat-abcdefghij1234567890</code></td><td>GitLab personal access token shape</td><td></td></tr>
-  <tr><td><code>sk_live_abcdefghijklmnop1234</code></td><td>Stripe live key shape</td><td></td></tr>
-  <tr><td><code>AB 12 34 56 C</code></td><td>UK National Insurance number shape</td><td></td></tr>
-  <tr><td><code>GB82WEST12345698765432</code></td><td>IBAN (from the IBAN registry examples)</td><td></td></tr>
+  <tr><td><code>AKIAIOSFODNN7EXAMPLE</code></td><td>AWSアクセスキー（Amazon公式資料の例）</td><td></td></tr>
+  <tr><td><code>4111 1111 1111 1111</code></td><td>クレジットカード番号（検証用番号。Luhnチェックを通過）</td><td></td></tr>
+  <tr><td><code>password: Summer2026!</code></td><td>共有パスワード</td><td></td></tr>
+  <tr><td><code>CLIENT CONFIDENTIAL</code></td><td>文書の機密区分表示</td><td></td></tr>
+  <tr><td><code>glpat-abcdefghij1234567890</code></td><td>GitLabパーソナルアクセストークン形式</td><td></td></tr>
+  <tr><td><code>sk_live_abcdefghijklmnop1234</code></td><td>Stripe本番用キー形式</td><td></td></tr>
+  <tr><td><code>AB 12 34 56 C</code></td><td>英国の国民保険番号形式</td><td></td></tr>
+  <tr><td><code>GB82WEST12345698765432</code></td><td>IBAN（公式登録簿の例）</td><td></td></tr>
 </table>
 
-<h2>And the negatives</h2>
-<p class="muted">These must paste through silently: a date like
-<code>12-03-24</code>, a phone number, a 16-digit order number that fails
-the Luhn check, an email signature with a lowercase "this email is
-confidential" footer, ordinary prose using the word "internal".</p>
+<h2>検出しない例</h2>
+<p class="muted">次の内容では警告が出ないことを確認してください。日付（<code>12-03-24</code>）、電話番号、Luhn 検査で無効となる 16 桁の注文番号、一般的な英語のメール署名や通常の文章に含まれる一般語。</p>
 
-<p class="muted">The full detector list and the deliberate exclusions are
-documented in <code>src/guard.js</code>. Deploying the real thing is
-covered in the README next to this folder.</p>
+<p class="muted">検出対象と意図的な除外の全一覧は <code>src/guard.js</code> に記載しています。実際の導入方法は、このフォルダー内のREADMEを参照してください。</p>
 
 <script>
   // Stub the three chrome.* touchpoints guard.js uses. Everything else on
@@ -114,7 +123,7 @@ covered in the README next to this folder.</p>
     const el = document.getElementById("report");
     el.classList.remove("muted");
     el.textContent = JSON.stringify(payload, null, 2) +
-      "\n\n" + el.textContent.replace(/^Nothing yet[\s\S]*$/, "");
+      "\n\n" + el.textContent.replace(/^まだ報告はありません[\s\S]*$/, "");
   };
 
   window.chrome = {
@@ -128,11 +137,11 @@ covered in the README next to this folder.</p>
     const cell = row.querySelectorAll("td")[2];
     if (!codeEl || !cell) return;
     const b = document.createElement("button");
-    b.className = "copy"; b.textContent = "Copy";
+    b.className = "copy"; b.textContent = "コピー";
     b.addEventListener("click", async () => {
       await navigator.clipboard.writeText(codeEl.textContent);
-      b.textContent = "Copied"; b.classList.add("ok");
-      setTimeout(() => { b.textContent = "Copy"; b.classList.remove("ok"); }, 1200);
+      b.textContent = "コピーしました"; b.classList.add("ok");
+      setTimeout(() => { b.textContent = "コピー"; b.classList.remove("ok"); }, 1200);
     });
     cell.appendChild(b);
   });

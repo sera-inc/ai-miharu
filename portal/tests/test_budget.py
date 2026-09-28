@@ -121,7 +121,7 @@ def test_the_wizard_names_the_honest_provider_set():
     # ChatGPT Business gets the guided import and the page says why - the
     # absence of an admin API on that plan is OpenAI's, and presenting it
     # as ai-guard's gap (or hiding it) would both be wrong.
-    assert "自動同期にはベンダーの管理 API が必要" in INDEX
+    assert "自動同期にはベンダーの管理APIが必要" in INDEX
     # Requests for automatic setup now go to the Sera support address.
     assert "mailto:info@sera-inc.co.jp" in INDEX
 
@@ -161,7 +161,7 @@ def test_linking_a_tool_is_four_steps_with_a_review():
     together."""
     for needle in ("function bwRail(", "function bwBodyReview(",
                    "const BW_STEPS", "確認してリンク",
-                   'class="tiers"', "<th>プラン</th>", "シートあたりの価格",
+                   'class="tiers"', "<th>プラン</th>", "ライセンス単価",
                    "bw-tsum", "bw-money"):
         assert needle in INDEX, needle
     # The rail summary carries the money, not a step count: this is the one
@@ -208,8 +208,8 @@ def test_the_member_step_names_every_connector_and_its_plan():
     # of ones with code behind them.
     assert "The complete list of vendors" not in INDEX
     assert "plan it needs" not in INDEX
-    assert "自動に一覧されていないもの" in INDEX
-    assert "インポートまたは手動を使用" in INDEX
+    assert "一覧にないツールはCSVで取り込むか" in INDEX
+    assert "手動で登録してください" in INDEX
     # The old copy spoke only about ChatGPT in the general slot.
     assert "const BPROVIDER_NONE = `ChatGPT Business" not in INDEX
 
@@ -227,10 +227,10 @@ def test_the_member_step_answers_why_a_tool_is_missing():
     twenty-eight with no answer. The step now separates "the vendor offers
     nothing" from "the vendor offers something nobody has connected", which is
     the only one of the two worth opening an issue about."""
-    for needle in ("member_apis", "ベンダーAPI、コネクタ未対応",
+    for needle in ("member_apis", "管理APIあり・自動同期未対応",
                    "シート一覧がありません", "未記載",
-                   "まだ誰も接続していない管理API",
-                   "同期が用意されている"):
+                   "管理APIあり・未接続",
+                   "自動同期に対応済みのツール"):
         assert needle in INDEX, needle
     # A connector written from a docs page is not a connector anybody has
     # run. Being in the dropdown reads as "this works", so the ones that have
@@ -248,7 +248,7 @@ def test_import_and_manual_speak_about_the_tool_being_linked():
     assert "BPROVIDER_CHATGPT" not in INDEX
     assert "ChatGPT Business (Team) is the usual surprise" not in INDEX
     for needle in ("は自動で同期できます",
-                   "ベンダーはメンバーAPIを公開しています",
+                   "のベンダーはメンバーAPIを提供しています",
                    "読み取れる組織またはシート一覧がありません",
                    "メンバーAPIを文書化していません"):
         assert needle in INDEX, needle
@@ -265,7 +265,7 @@ def test_a_tool_you_defined_is_not_reported_as_undocumented():
     assert "ここにはそのベンダーが提供する内容の記録はありません" in INDEX
     # And the table says which tools it is actually about.
     assert "今回のリリースに同梱されるツール" in INDEX
-    assert "自分で定義したツールはここには含まれません" in INDEX
+    assert "独自に追加したツールは含まれません" in INDEX
 
 
 def test_the_budget_page_lists_providers_as_a_list_not_a_chain():
@@ -275,7 +275,7 @@ def test_the_budget_page_lists_providers_as_a_list_not_a_chain():
     stopped being the only notable absence, and the wizard's own step now says
     what applies to the tool being linked."""
     assert "ChatGPT Business has no admin API on that plan" not in INDEX
-    assert "labels.slice(0, -1).join(', ')" in INDEX
+    assert "labels.slice(0, -1).join('、')" in INDEX
 
 
 def test_a_new_plan_hands_its_key_to_what_follows():

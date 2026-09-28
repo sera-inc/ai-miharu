@@ -35,7 +35,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## シャドーAIの可視性 — デモモード\n\n**これはシードデータ上で動作する自己完結型デモであり、ライブ環境ではありません。** Lokiインスタンス1台、全サーフェスとOSにまたがる約11件のサンプル検出結果、法人ドメインは `example.com` / `example.co.uk` に固定されています。実際のデプロイとはいくつか異なる点があります：\n\n- **一部のパネルは省略されています。** セッションゲージ、レジストリツール数、最終スキャン経過時間タイルはPrometheusメトリクスを読み取りますが、このデモはLokiのみで動作するため、これらのパネルはここには含まれていません。`dashboards/` 内の完全なダッシュボードには含まれています。\n- **法人ドメイン変数はデモでは機能しません。** 業務用と個人用の分類は上記2つのサンプルドメインにハードコードされているため、`法人ドメイン` ボックスを編集してもここでは何も変わりません。実際のデプロイでは、その正規表現が分類を制御します。\n- **時間ベースのパネルは時間ピッカーに従います。** 検出結果は起動時に一度だけシードされるため、重大度またはサーフェスのグラフが空に見える場合は、範囲を広げてください（例：過去24時間）。\n\n**ボードの読み方：** ツールが存在すること自体は参考情報です。赤は、管理対象デバイス上で *個人*（法人以外）のアカウントがAIツールにサインインしているか、説明のつかない連携が見つかったことを意味します — 実際のデプロイでは、それらは自動的にアラートチャンネルにルーティングされます。",
+        "content": "## シャドーAIの可視性 — デモモード\n\n**これはサンプルデータ上で動作する自己完結型デモであり、本番環境ではありません。** Lokiインスタンス1台、全利用環境とオペレーティングシステムにまたがる約11件のサンプル検出結果、法人ドメインは `example.com` / `example.co.uk` に固定されています。実際のデプロイとはいくつか異なる点があります：\n\n- **一部のパネルは省略されています。** セッションゲージ、レジストリツール数、最終スキャン経過時間タイルはPrometheusの指標を読み取りますが、このデモはLokiのみで動作するため、これらのパネルはここには含まれていません。`dashboards/` 内の完全なダッシュボードには含まれています。\n- **法人ドメイン変数はデモでは機能しません。** 業務用と個人用の分類は上記2つのサンプルドメインに固定されているため、`法人ドメイン` ボックスを編集してもここでは何も変わりません。実際のデプロイでは、その正規表現が分類を制御します。\n- **時間に基づくパネルは期間選択に従います。** 検出結果は起動時に一度だけシードされるため、重大度または利用環境のグラフが空に見える場合は、範囲を広げてください（例：過去24時間）。\n\n**ダッシュボードの読み方：** ツールが存在すること自体は参考情報です。赤は、管理対象端末上で *個人*（法人以外）のアカウントが人工知能ツールにサインインしているか、説明のつかない連携が見つかったことを意味します — 実際のデプロイでは、それらは自動的に警告チャンネルへ送信されます。",
         "mode": "markdown"
       },
       "pluginVersion": "11.1.0",
@@ -47,7 +47,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去24時間に少なくとも1件の検出結果を送信した重複を除くデバイス数（すべての検出面）。Macは日中を通して報告し、Windowsとネットワーク機器は毎日06:00のスキャンで現れます。右側の2つのOSパネルはこの合計を内訳表示します。",
+      "description": "過去24時間に少なくとも1件の検出結果を送信した重複を除く端末数（すべての利用環境）。Macは日中を通して報告し、Windowsとネットワーク機器は毎日06:00のスキャンで現れます。右側の2つのOSパネルはこの合計を内訳表示します。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -64,7 +64,7 @@
               }
             ]
           },
-          "displayName": "報告デバイス（24時間）"
+          "displayName": "報告端末（24時間）"
         },
         "overrides": []
       },
@@ -105,7 +105,7 @@
           "refId": "A"
         }
       ],
-      "title": "報告デバイス（24時間）",
+      "title": "報告端末（24時間）",
       "type": "stat"
     },
     {
@@ -113,7 +113,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "24時間合計のうち、検出結果にデバイスレベルのmacOS証跡（MDMインベントリまたはエンドポイントコレクタ）が含まれるデバイス。",
+      "description": "24時間合計のうち、検出結果に端末レベルのmacOS証跡（MDM一覧またはエンドポイントコレクタ）が含まれる端末。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -180,7 +180,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "24時間合計のうち、検出結果にデバイスレベルのLinux証跡（RMMインベントリ）が含まれるデバイス。",
+      "description": "24時間合計のうち、検出結果に端末レベルのLinux証跡（RMM一覧）が含まれる端末。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -247,7 +247,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "24時間合計のうち、検出結果にデバイスレベルのWindows証跡（Intuneインベントリ）が含まれるデバイス。",
+      "description": "24時間合計のうち、検出結果に端末レベルのWindows証跡（Intune一覧）が含まれる端末。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -315,7 +315,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間に最も多くのデバイスで確認されたAIツール上位10件。各ツールが確認された重複を除くデバイス数で集計。全リストは下のインベントリテーブルにあります。",
+      "description": "過去7日間に最も多くの端末で確認されたAIツール上位10件。各ツールが確認された重複を除く端末数で集計。全リストは下の一覧テーブルにあります。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -363,14 +363,14 @@
       "pluginVersion": "11.1.0",
       "targets": [
         {
-          "expr": "topk(10, count by (tool) (count by (tool, device) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | device != \"\" [7d]))))",
+          "expr": "topk(10, count by (tool_display) (count by (tool_display, device) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | device != \"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude Codeのモデルコンテキストプロトコル連携{{ else if eq \"codex-cli\" .tool }}Codex コマンドライン{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}ペーストガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [7d]))))",
           "instant": true,
-          "legendFormat": "{{tool}}",
+          "legendFormat": "{{tool_display}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "title": "上位ツール（デバイス数、7日）",
+      "title": "上位ツール（端末数、7日）",
       "transformations": [
         {
           "id": "sortBy",
@@ -392,7 +392,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間に確認されたすべてのユーザー／ツール／デバイス。7日固定：ダッシュボードの時間ピッカーでは変更されません。上部のツールとアカウント種別コントロールでフィルタできます。account_type: personal = 非法人アカウントでサインイン（要対話）、work = 法人アカウント（問題なし）、none = ツールは存在するがアカウントを読み取れなかった（例：インストール済みIDE拡張機能）。これは「アカウントなし」とは異なります。",
+      "description": "過去7日間に確認されたすべての利用者／ツール／端末。期間は7日間に固定されており、ダッシュボードの期間選択では変更されません。上部のツールとアカウント種別の選択で絞り込めます。`account_type` の `personal` は法人以外のアカウントでサインインした状態（要対応）、`work` は法人アカウント（問題なし）、`none` はツールは存在するもののアカウントを読み取れなかった状態（例：統合開発環境にインストールされた拡張機能）を表します。「アカウントなし」とは異なります。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -474,8 +474,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
-                        "index": 1
+                        "text": "コマンドライン"
                       },
                       "desktop": {
                         "text": "デスクトップ",
@@ -486,16 +485,21 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
-                        "index": 5
+                        "text": "統合開発環境"
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      },
+                      "CLI": {
+                        "text": "コマンドライン"
+                      },
+                      "IDE": {
+                        "text": "統合開発環境"
                       }
                     }
                   }
@@ -522,6 +526,60 @@
                       "warn": {
                         "text": "警告",
                         "index": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -557,7 +615,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "count by (user, tool, surface, account_type, account_domain, device, severity) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | label_format device=`{{ if .device_name }}{{ .device_name }}{{ else }}{{ .device }}{{ end }}` | label_format account_type=`{{ if eq .account_domain \"\" }}none{{ else if or (eq .account_domain \"example.com\") (eq .account_domain \"example.co.uk\") }}work{{ else }}personal{{ end }}` | tool =~ `${tool:regex}` | account_type =~ `$account` [7d]))",
+          "expr": "count by (user, tool, surface, account_type, account_domain, device, severity) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | label_format device=`{{ if .device_name }}{{ .device_name }}{{ else }}{{ .device }}{{ end }}` | label_format account_type=`{{ if eq .account_domain \"\" }}none{{ else if or (eq .account_domain \"example.com\") (eq .account_domain \"example.co.uk\") }}work{{ else }}personal{{ end }}` | tool =~ `${tool:pipe}` | account_type =~ `$account` [7d]))",
           "format": "table",
           "instant": true,
           "queryType": "instant",
@@ -565,7 +623,7 @@
         }
       ],
       "timeFrom": "7d",
-      "title": "誰が何を実行しているか（過去7日間、フィルタ可）",
+      "title": "誰が何を実行しているか（過去7日間、絞り込み可）",
       "transformations": [
         {
           "id": "organize",
@@ -586,10 +644,10 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "surface": "サーフェス",
+              "surface": "利用環境",
               "account_type": "アカウント種別",
               "account_domain": "アカウントドメイン",
-              "device": "デバイス",
+              "device": "端末",
               "severity": "重大度"
             }
           }
@@ -618,7 +676,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "証跡の取得元：browser = ログインページ、cli/ide/mcp/desktop = デバイス上、network = DNSトラフィック、cloud = Microsoft 365の記録。",
+      "description": "証跡の取得元：`browser` はログインページ、`cli`（コマンドライン）／`ide`（統合開発環境）／`mcp`（モデルコンテキストプロトコル）／`desktop`（デスクトップアプリ）は端末上、`network`（ネットワーク）は名前解決通信、`cloud`（クラウド）はマイクロソフト365の記録です。",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -642,7 +700,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "CLI"
+                "value": "コマンドライン"
               }
             ]
           },
@@ -702,7 +760,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "MCP"
+                "value": "モデルコンテキストプロトコル"
               }
             ]
           },
@@ -714,7 +772,73 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "IDE"
+                "value": "統合開発環境"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "surface"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "CLI": {
+                        "text": "コマンドライン"
+                      },
+                      "IDE": {
+                        "text": "統合開発環境"
+                      },
+                      "cli": {
+                        "text": "コマンドライン"
+                      },
+                      "ide": {
+                        "text": "統合開発環境"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CLI"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "コマンドライン"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IDE"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "統合開発環境"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MCP"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "モデルコンテキストプロトコル"
               }
             ]
           }
@@ -753,7 +877,7 @@
           "refId": "A"
         }
       ],
-      "title": "検出面別の検出（7日）",
+      "title": "利用環境別の検出（7日）",
       "type": "piechart"
     },
     {
@@ -761,7 +885,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "時系列の報告アクティビティ。緑（info）= ツールの存在、正常。黄（warn）= 個人アカウントまたは説明のない連携。それぞれSlackにも送信されます。チャートがゼロで平坦な場合は報告が停止しており、それ自体が問題です。",
+      "description": "時系列で示す報告活動です。`info`（情報）はツールの存在を示す通常の報告、`warn`（警告）は個人アカウントまたは説明のない連携を示します。いずれもSlackに送信されます。グラフがゼロのまま平坦な場合は報告が停止しており、それ自体が問題です。",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -867,7 +991,7 @@
           "refId": "A"
         }
       ],
-      "title": "重要度別の検出（レート）",
+      "title": "重要度別の報告状況",
       "type": "timeseries"
     },
     {
@@ -875,7 +999,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間の検出面別・プラットフォーム別の重複を除くデバイス数。デバイスは確認されたすべての検出面に表示されるため、列の合計はデバイス総数にはなりません。",
+      "description": "過去7日間の利用環境別・プラットフォーム別の重複を除く端末数。端末は確認されたすべての利用環境に表示されるため、列の合計は端末総数にはなりません。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -928,8 +1052,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
-                        "index": 1
+                        "text": "コマンドライン"
                       },
                       "desktop": {
                         "text": "デスクトップ",
@@ -940,16 +1063,21 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
-                        "index": 5
+                        "text": "統合開発環境"
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      },
+                      "CLI": {
+                        "text": "コマンドライン"
+                      },
+                      "IDE": {
+                        "text": "統合開発環境"
                       }
                     }
                   }
@@ -988,7 +1116,7 @@
           "refId": "A"
         }
       ],
-      "title": "検出面×OS（デバイス数、7日）",
+      "title": "利用環境×オペレーティングシステム（端末数、7日）",
       "transformations": [
         {
           "id": "organize",
@@ -1002,8 +1130,8 @@
               "surface": 0
             },
             "renameByName": {
-              "Value #A": "デバイス (7日)",
-              "surface": "サーフェス"
+              "Value #A": "端末 (7日)",
+              "surface": "利用環境"
             }
           }
         },
@@ -1027,7 +1155,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "デバイスプラットフォーム別のすべての検出。'n/a (cloud/network)' はプラットフォームを特定できないソース（サインインログ、DNS、メール）からの証跡で、想定内でありエラーではありません。",
+      "description": "オペレーティングシステム別にまとめたすべての検出結果です。「該当なし（クラウド／ネットワーク）」は、サインイン記録、名前解決、メールなど、端末の種類を特定できない情報源からの検出を表します。想定された表示であり、エラーではありません。",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1079,7 +1207,7 @@
           "refId": "A"
         }
       ],
-      "title": "OS別の検出（7日）",
+      "title": "オペレーティングシステム別の検出（7日）",
       "type": "piechart"
     },
     {
@@ -1120,7 +1248,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間に検出されたAIツールの完全なリストと、各ツールが確認されたデバイス数。これは毎月の手動監査に代わる常時更新のリストです。",
+      "description": "過去7日間に検出されたAIツールの完全なリストと、各ツールが確認された端末数。これは毎月の手動監査に代わる常時更新のリストです。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1145,7 +1273,62 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
@@ -1180,7 +1363,7 @@
           "refId": "A"
         }
       ],
-      "title": "AIツールインベントリ（全ツール、デバイス数別、7日）",
+      "title": "人工知能ツール一覧（全ツール、端末数別、7日）",
       "transformations": [
         {
           "id": "organize",
@@ -1193,7 +1376,7 @@
               "tool": 0
             },
             "renameByName": {
-              "Value #A": "デバイス (7日)",
+              "Value #A": "端末 (7日)",
               "tool": "ツール"
             }
           }
@@ -1218,7 +1401,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間に何らかの検出があった重複を除くデバイス数（プラットフォーム別）。デバイスレベルとネットワークの両方の証跡があるデバイスはそれぞれにカウントされます。排他的なカウントは上部の整合統計を参照してください。",
+      "description": "過去7日間に何らかの検出があった重複を除く端末数（プラットフォーム別）。端末レベルとネットワークの両方の証跡がある端末はそれぞれにカウントされます。排他的なカウントは上部の整合統計を参照してください。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -1273,7 +1456,7 @@
           "refId": "A"
         }
       ],
-      "title": "検出のあるデバイス（OS別）",
+      "title": "検出のある端末（オペレーティングシステム別）",
       "type": "bargauge"
     },
     {
@@ -1281,7 +1464,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "ユーザーがAIツールに接続した連携（MCPサーバー）：どの連携を、誰が、どのデバイスで。既定では警告対象ではありません。レビュー用のインベントリです。",
+      "description": "ユーザーがAIツールに接続したモデルコンテキストプロトコル連携：どの連携を、誰が、どの端末で。既定では警告対象ではありません。レビュー用の一覧です。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1306,7 +1489,62 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -1341,7 +1579,7 @@
           "refId": "A"
         }
       ],
-      "title": "MCP連携（誰が何を接続したか、7日）",
+      "title": "モデルコンテキストプロトコルの連携（誰が何を接続したか、7日）",
       "transformations": [
         {
           "id": "organize",
@@ -1359,7 +1597,7 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "device": "デバイス",
+              "device": "端末",
               "Value #A": "件数"
             }
           }
@@ -1397,7 +1635,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "Anthropicのすべての検出面を1か所に。ツール列は、1つの製品が複数の名前で表示される理由を示します。claude.aiはドメインを報告するブラウザ拡張機能、claude-codeはCLIおよびIDE拡張機能、claudeはデスクトップアプリ、anthropic.claude-codeはツール名正規化前の生のVS Code拡張機能IDです（これらは7日間ウィンドウから自然に外れます）。承認済みツールのため、ここでの法人アカウントは想定内です。対応すべきは個人アカウントです。",
+      "description": "Claudeの全利用環境をまとめています。ツール欄には、1つの製品が複数の名称で検出される理由を示しています。`claude.ai` はドメインを報告するブラウザー拡張機能、`claude-code` はコマンドラインおよび統合開発環境の拡張機能、`claude` はデスクトップアプリ、`anthropic.claude-code` は名称を統一する前のコードエディター拡張機能の識別子です（7日間の表示期間を過ぎると自然に一覧から外れます）。承認済みツールのため、法人アカウントは想定内です。対応が必要なのは個人アカウントです。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1479,7 +1717,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
+                        "text": "コマンドライン",
                         "index": 1
                       },
                       "desktop": {
@@ -1491,16 +1729,70 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
+                        "text": "統合開発環境",
                         "index": 5
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1544,7 +1836,7 @@
         }
       ],
       "timeFrom": "7d",
-      "title": "Claude（Anthropic、すべての検出面）",
+      "title": "Claude（Anthropic、すべての利用環境）",
       "transformations": [
         {
           "id": "organize",
@@ -1564,10 +1856,10 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "surface": "サーフェス",
+              "surface": "利用環境",
               "account_type": "アカウント種別",
               "account_domain": "アカウントドメイン",
-              "device": "デバイス"
+              "device": "端末"
             }
           }
         },
@@ -1595,7 +1887,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "chatgpt.comはドメインを報告するブラウザ拡張機能、chatgptはデスクトップアプリまたはIDE拡張機能です。ChatGPTは既定でレジストリ内でapproved: falseとされているため、ここでの存在アラートは承認判断が下されるまでは情報提供目的です。実際のシグナルは個人アカウントです。",
+      "description": "`chatgpt.com` はドメインを報告するブラウザー拡張機能、`chatgpt` はデスクトップアプリまたは統合開発環境の拡張機能です。ChatGPTは既定でレジストリ上の `approved: false`（未承認）に設定されているため、承認判断が下されるまでは、ここに表示される存在警告は参考情報です。実際に対応が必要な兆候は個人アカウントです。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1677,7 +1969,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
+                        "text": "コマンドライン",
                         "index": 1
                       },
                       "desktop": {
@@ -1689,16 +1981,70 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
+                        "text": "統合開発環境",
                         "index": 5
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1742,7 +2088,7 @@
         }
       ],
       "timeFrom": "7d",
-      "title": "ChatGPT（OpenAI、すべての検出面）",
+      "title": "ChatGPT（OpenAI、すべての利用環境）",
       "transformations": [
         {
           "id": "organize",
@@ -1762,10 +2108,10 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "surface": "サーフェス",
+              "surface": "利用環境",
               "account_type": "アカウント種別",
               "account_domain": "アカウントドメイン",
-              "device": "デバイス"
+              "device": "端末"
             }
           }
         },
@@ -1793,7 +2139,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "アカウントIDは~/.codex/auth.json内のid_token JWTから取得されるため、ここでのアカウントドメインはCLIが実際にサインインしているアカウントです。開発者マシンにおける個人アカウントの最大の発生源です。",
+      "description": "アカウント識別子は `~/.codex/auth.json` 内の `id_token`（署名付き認証トークン）から取得するため、アカウントドメインにはコマンドラインで実際にサインインしているアカウントが表示されます。開発者の端末で個人アカウントが使われる主な経路です。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1875,7 +2221,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
+                        "text": "コマンドライン",
                         "index": 1
                       },
                       "desktop": {
@@ -1887,16 +2233,70 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
+                        "text": "統合開発環境",
                         "index": 5
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1940,7 +2340,7 @@
         }
       ],
       "timeFrom": "7d",
-      "title": "Codex CLI（OpenAI）",
+      "title": "Codex コマンドライン（OpenAI）",
       "transformations": [
         {
           "id": "organize",
@@ -1960,10 +2360,10 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "surface": "サーフェス",
+              "surface": "利用環境",
               "account_type": "アカウント種別",
               "account_domain": "アカウントドメイン",
-              "device": "デバイス"
+              "device": "端末"
             }
           }
         },
@@ -1991,7 +2391,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "会議文字起こしのため、ツールそのものよりもデータ経路が重要です。社内通話の文字起こしが組織外に出ます。クラウド検出面の検出にはデバイスがありません。証跡がマシンではなくEntraサインインまたはメールボックスだからです。プラン階層の検討に関係します：SSO、EUデータレジデンシー、SCIMはEnterprise限定です。",
+      "description": "会議の文字起こしでは、ツール自体よりもデータの送信先が重要です。社内会議の文字起こしが組織外へ送られる可能性があります。クラウド利用環境には端末情報がありません。Entraのサインイン記録またはメールボックスの情報に基づくためです。契約プランの検討にも関係します。シングルサインオン、欧州連合内のデータ保管、ユーザーの自動登録は法人向け上位プラン限定です。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -2073,7 +2473,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "CLI",
+                        "text": "コマンドライン",
                         "index": 1
                       },
                       "desktop": {
@@ -2085,16 +2485,70 @@
                         "index": 3
                       },
                       "mcp": {
-                        "text": "MCP",
+                        "text": "モデルコンテキストプロトコル",
                         "index": 4
                       },
                       "ide": {
-                        "text": "IDE",
+                        "text": "統合開発環境",
                         "index": 5
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -2158,10 +2612,10 @@
             "renameByName": {
               "user": "ユーザー",
               "tool": "ツール",
-              "surface": "サーフェス",
+              "surface": "利用環境",
               "account_type": "アカウント種別",
               "account_domain": "アカウントドメイン",
-              "device": "デバイス"
+              "device": "端末"
             }
           }
         },
@@ -2313,7 +2767,7 @@
     },
     {
       "type": "stat",
-      "title": "ペーストガード：アクティブデバイス（24時間）",
+      "title": "ペーストガード：アクティブ端末（24時間）",
       "id": 33,
       "gridPos": {
         "h": 5,
@@ -2354,11 +2808,11 @@
             "fixedColor": "green"
           },
           "decimals": 0,
-          "displayName": "ペーストガード：アクティブデバイス（24時間）"
+          "displayName": "ペーストガード：アクティブ端末（24時間）"
         },
         "overrides": []
       },
-      "description": "過去24時間にペーストガードがハートビートを送信したデバイス。ハートビートはそのデバイスでチェーン全体が動作していることを証明します。MDMの対象台数と比較してください。"
+      "description": "過去24時間にペーストガードがハートビートを送信した端末。ハートビートはその端末でチェーン全体が動作していることを証明します。MDMの対象台数と比較してください。"
     },
     {
       "type": "timeseries",
@@ -2377,12 +2831,12 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (tool) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | source=`paste_guard` | regexp `paste (?P<action>\\w+): (?P<detectors>[^\\\"]*)` | action!=\"\" [$__auto]))",
+          "expr": "sum by (tool_display) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | source=`paste_guard` | regexp `paste (?P<action>\\w+): (?P<detectors>[^\\\"]*)` | action!=\"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude Codeのモデルコンテキストプロトコル連携{{ else if eq \"codex-cli\" .tool }}Codex コマンドライン{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}ペーストガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [$__auto]))",
           "datasource": {
             "type": "loki",
             "uid": "loki"
           },
-          "legendFormat": "{{tool}}"
+          "legendFormat": "{{tool_display}}"
         }
       ],
       "fieldConfig": {
@@ -2459,11 +2913,69 @@
           }
         ]
       },
-      "description": "複数検出器のペーストはカンマ結合のdetectors値として表示されます。これは拡張機能のレポート形式です。"
+      "description": "複数検出器のペーストはカンマ結合のdetectors値として表示されます。これは拡張機能のレポート形式です。",
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tool"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "claude": {
+                        "text": "Claude"
+                      },
+                      "claude-code": {
+                        "text": "Claude Code"
+                      },
+                      "chatgpt": {
+                        "text": "ChatGPT"
+                      },
+                      "claude-code-mcp": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                      },
+                      "codex-cli": {
+                        "text": "Codex コマンドライン"
+                      },
+                      "cursor": {
+                        "text": "Cursor"
+                      },
+                      "deepseek": {
+                        "text": "DeepSeek"
+                      },
+                      "github-copilot": {
+                        "text": "GitHub Copilot"
+                      },
+                      "ollama": {
+                        "text": "Ollama"
+                      },
+                      "paste-guard": {
+                        "text": "ペーストガード"
+                      },
+                      "some-unregistered-tool": {
+                        "text": "未登録のサンプルAI"
+                      },
+                      "claude-code-mcp:atlassian,figma": {
+                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "type": "table",
-      "title": "ペーストガード：デバイスカバレッジ（24時間）",
+      "title": "ペーストガード：端末カバレッジ（24時間）",
       "id": 36,
       "gridPos": {
         "h": 8,
@@ -2509,12 +3021,12 @@
         "showHeader": true,
         "sortBy": [
           {
-            "displayName": "デバイス",
+            "displayName": "端末",
             "desc": false
           }
         ]
       },
-      "description": "ハートビートからのデバイス別ペーストガード状態：実行中の拡張機能バージョンとそのモード。"
+      "description": "ハートビートからの端末別ペーストガード状態：実行中の拡張機能バージョンとそのモード。"
     }
   ],
   "refresh": "5m",
@@ -2526,14 +3038,13 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
         "current": {
           "selected": true,
           "text": [
             "すべて"
           ],
           "value": [
-            "$__all"
+            ".*"
           ]
         },
         "datasource": {
@@ -2542,7 +3053,7 @@
         },
         "definition": "",
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": "ツール",
         "multi": true,
         "name": "tool",
@@ -2557,7 +3068,74 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query"
+        "type": "query",
+        "staticOptions": [
+          {
+            "text": "すべて",
+            "value": ".*"
+          },
+          {
+            "text": "Claude",
+            "value": "claude"
+          },
+          {
+            "text": "Claude（ブラウザ）",
+            "value": "claude\\.ai"
+          },
+          {
+            "text": "Claude Code",
+            "value": "claude-code"
+          },
+          {
+            "text": "Claude Codeのモデルコンテキストプロトコル連携",
+            "value": "claude-code-mcp"
+          },
+          {
+            "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）",
+            "value": "claude-code-mcp:atlassian,figma"
+          },
+          {
+            "text": "ChatGPT",
+            "value": "chatgpt"
+          },
+          {
+            "text": "ChatGPT（ブラウザ）",
+            "value": "chatgpt\\.com"
+          },
+          {
+            "text": "Codex コマンドライン",
+            "value": "codex-cli"
+          },
+          {
+            "text": "Cursor",
+            "value": "cursor"
+          },
+          {
+            "text": "DeepSeek",
+            "value": "deepseek"
+          },
+          {
+            "text": "Fireflies.ai",
+            "value": "fireflies"
+          },
+          {
+            "text": "GitHub Copilot",
+            "value": "github-copilot"
+          },
+          {
+            "text": "Ollama",
+            "value": "ollama"
+          },
+          {
+            "text": "ペーストガード",
+            "value": "paste-guard"
+          },
+          {
+            "text": "未登録のサンプルAI",
+            "value": "some-unregistered-tool"
+          }
+        ],
+        "staticOptionsOrder": "before"
       },
       {
         "current": {

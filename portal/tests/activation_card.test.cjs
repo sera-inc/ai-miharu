@@ -121,7 +121,7 @@ test('only an owner is offered the field', () => {
   for (const role of ['admin', 'viewer']) {
     const out = render({state: 'none'}, {role});
     assert.doesNotMatch(out, /data-act="act-save"/);
-    assert.match(out, /オーナー アカウントがサブスクリプションを有効化します/);
+    assert.match(out, /オーナー アカウントが契約を有効化します/);
   }
   assert.match(render({state: 'none'}, {role: 'owner'}), /data-act="act-save"/);
 });

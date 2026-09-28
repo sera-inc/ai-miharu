@@ -1822,10 +1822,11 @@ def _sso_page(title: str, body: str, go: str = "",
             '}catch(e){}})()</script>')
     # Shown to whoever did not get navigated away: the test tab, and
     # anybody whose browser ran no script at all.
-    onward = (f'<p><a href="{esc_attr(go)}">Continue</a></p>'
-              '<p class=t hidden>You can close this tab and go back to the '
-              'setup wizard.</p>') if go \
-        else '<p><a href="/">Back to sign in</a></p>'
+    onward = (f'<p><a href="{esc_attr(go)}">ポータルへ進む</a></p>'
+              '<p class=t hidden>このタブを閉じて、セットアップウィザードに戻ってください。</p>') if go \
+        else '<p><a href="/">サインイン画面に戻る</a></p>'
+    support = ('<p class=support>株式会社世良 · '
+               '<a href="mailto:info@sera-inc.co.jp">お問い合わせ</a></p>')
     return HTMLResponse(tell +
         "<!doctype html><meta charset=utf-8>"
         "<meta name=viewport content='width=device-width,initial-scale=1'>"
@@ -1839,7 +1840,7 @@ def _sso_page(title: str, body: str, go: str = "",
         # would take it into the portal; a real sign-in does the reverse.
         "[data-test] a{display:none}[data-test] p.t{display:block!important}"
         "</style>"
-        f"<h1>{esc_attr(title)}</h1><p>{esc_attr(body)}</p>{onward}")
+        f"<h1>{esc_attr(title)}</h1><p>{esc_attr(body)}</p>{onward}{support}")
 
 
 @app.get("/sso/start")
@@ -1856,10 +1857,10 @@ def sso_start(request: Request):
         out = managed.receiver_request(RECEIVER_URL, "GET", path, "", None)
     except managed.ReceiverError as e:
         if e.status == 404:
-            return _sso_page("Single sign-on is not set up",
-                             "This deployment has not finished configuring an "
-                             "identity provider. Sign in with a password.")
-        return _sso_page("Could not start sign-in", str(e.detail)[:300])
+            return _sso_page("シングルサインオンは未設定です",
+                             "この環境では認証サービスの設定が完了していません。パスワードでサインインしてください。")
+        return _sso_page("シングルサインオンを開始できませんでした",
+                         f"認証サービスに接続できませんでした。設定を確認するか、管理者にお問い合わせください（HTTP {e.status}）。")
     return RedirectResponse(out["authorize_url"], status_code=302)
 
 
@@ -1882,29 +1883,29 @@ async def sso_callback(request: Request):
     fields = urllib.parse.parse_qs(raw, keep_blank_values=True)
     form = {k: v[0] for k, v in fields.items() if v}
     if form.get("error"):
-        return _sso_page("Sign-in was refused", str(
-            form.get("error_description") or form.get("error"))[:300])
+        return _sso_page("サインインが拒否されました",
+                         "IDプロバイダーで認証できませんでした。設定を確認するか、管理者にお問い合わせください。")
     code, state = str(form.get("code") or ""), str(form.get("state") or "")
     if not code or not state:
-        return _sso_page("Sign-in did not complete",
-                         "The identity provider returned no authorization "
-                         "code.")
+        return _sso_page("サインインが完了しませんでした",
+                         "IDプロバイダーから認証コードが返されませんでした。もう一度サインインしてください。")
     try:
         out = managed.receiver_request(RECEIVER_URL, "POST",
                                        "/admin/sso/callback", "",
                                        {"code": code, "state": state})
     except managed.ReceiverError as e:
-        return _sso_page("Could not complete sign-in", str(e.detail)[:300])
+        return _sso_page("サインインを完了できませんでした",
+                         f"認証サービスに接続できませんでした。管理者にお問い合わせください（HTTP {e.status}）。")
     if not out.get("ok"):
-        return _sso_page("Signed in, but not here",
-                         str(out.get("detail") or "that sign-in was refused"))
+        return _sso_page("サインインを完了できませんでした",
+                         "認証は完了しましたが、ポータルへの接続が拒否されました。管理者にお問い合わせください。")
     is_test = bool(out.get("test"))
-    resp = _sso_page("Signed in",
+    resp = _sso_page("サインインしました",
                      # The test tab is not going anywhere, so it must not
                      # say it is. The body is the sentence somebody reads
                      # while deciding whether to wait or to act.
-                     "That is the configuration proved."
-                     if is_test else "Taking you to the portal.",
+                     "シングルサインオンの設定を確認できました。"
+                     if is_test else "ポータルに移動しています。",
                      go="/", who=str(out.get("username", "")), test=is_test)
     resp.set_cookie(SESSION_COOKIE, str(out.get("token", "")),
                     httponly=True, samesite="strict",

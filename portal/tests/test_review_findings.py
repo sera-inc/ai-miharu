@@ -282,7 +282,7 @@ def test_the_shell_says_so_when_the_read_failed():
     # The confident lines are gated on the read having worked.
     assert "const dataOk = () => !loadError;" in html
     for gated in ("何も観測されていません。それも結果であり",
-                  "スキャナーの検出結果があるすべてのデバイスには、コレクターからの報告もあります",
+                  "スキャナーの検出結果があるすべてのデバイスには、収集エージェントからの報告もあります",
                   "この期間に未対応の項目はありません。",
                   "小規模な環境では実際にあり得る結果"):
         before = html.split(gated)[0]

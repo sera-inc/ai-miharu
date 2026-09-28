@@ -376,7 +376,7 @@ def test_the_hosting_step_says_where_not_just_how():
     thing that cannot serve these."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("AWS S3", "Azure Blob Storage", "Google Cloud Storage",
-                   "アーティファクトリポジトリ", "コンテナレジストリではありません"):
+                   "成果物保管サービス", "コンテナレジストリではありません"):
         assert needle in html, needle
     # The S3 gotcha the extension README documents, where it is needed.
     assert "arn:aws:s3:::your-bucket/*" in html

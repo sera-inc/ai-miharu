@@ -282,10 +282,26 @@ function showOverlay(hits, action, onOverride) {
   box.id = "taag-paste-overlay";
   box.style.cssText =
     "position:fixed;top:16px;right:16px;z-index:2147483647;max-width:340px;" +
-    "background:#1f2430;color:#fff;border-left:4px solid " +
-    (action === "blocked" ? "#e5484d" : "#f5a524") + ";" +
+    "background:var(--app-sg-surface-toast);color:var(--app-sg-text-on-dark);border-left:4px solid " +
+    (action === "blocked" ? "var(--app-sg-danger)" : "var(--app-sg-warning)") + ";" +
     "border-radius:6px;padding:12px 14px;font:13px/1.45 -apple-system," +
-    "'Segoe UI',sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.35);";
+    "'Segoe UI',sans-serif;box-shadow:0 4px 14px var(--app-sg-shadow-color);";
+
+  // The extension runs on vendor pages without the portal stylesheet. Keep
+  // its small namespaced DADS Layer 2 token set local to this overlay.
+  // DADS variables take precedence when present; exact DADS 2.17.1 values
+  // are the standalone fallback for pages that do not load the token package.
+  const overlayTokens = {
+    "--app-sg-surface-toast": "var(--dads-color-solid-gray-900, #1a1a1a)",
+    "--app-sg-text-on-dark": "var(--dads-color-white, #ffffff)",
+    "--app-sg-text-on-dark-secondary": "var(--dads-color-solid-gray-300, #b3b3b3)",
+    "--app-sg-border-strong": "var(--dads-color-solid-gray-300, #b3b3b3)",
+    "--app-sg-danger": "var(--dads-color-red-200, #ffbbbb)",
+    "--app-sg-warning": "var(--dads-color-yellow-300, #ffd43d)",
+    "--app-sg-warning-on": "var(--dads-color-solid-gray-900, #1a1a1a)",
+    "--app-sg-shadow-color": "color-mix(in srgb, var(--dads-color-black, #000000) 70%, transparent)"
+  };
+  Object.entries(overlayTokens).forEach(([name, value]) => box.style.setProperty(name, value));
 
   const title = document.createElement("div");
   title.style.cssText = "font-weight:600;margin-bottom:4px;";
@@ -305,8 +321,8 @@ function showOverlay(hits, action, onOverride) {
     const go = document.createElement("button");
     go.textContent = "それでも貼り付ける";
     go.style.cssText =
-      "background:#f5a524;border:0;border-radius:4px;padding:5px 10px;" +
-      "color:#1f2430;font-weight:600;cursor:pointer;font:inherit;";
+      "background:var(--app-sg-warning);border:0;border-radius:4px;padding:5px 10px;" +
+      "color:var(--app-sg-warning-on);font-weight:600;cursor:pointer;font:inherit;";
     // preventDefault on mousedown so the click does not move focus and
     // selection out of the editor; the insert then lands where the paste
     // was headed.
@@ -318,8 +334,8 @@ function showOverlay(hits, action, onOverride) {
   const dismiss = document.createElement("button");
   dismiss.textContent = "閉じる";
   dismiss.style.cssText =
-    "background:transparent;border:1px solid #555;border-radius:4px;" +
-    "padding:5px 10px;color:#ddd;cursor:pointer;font:inherit;";
+    "background:transparent;border:1px solid var(--app-sg-border-strong);border-radius:4px;" +
+    "padding:5px 10px;color:var(--app-sg-text-on-dark-secondary);cursor:pointer;font:inherit;";
   dismiss.addEventListener("click", () => box.remove());
   row.appendChild(dismiss);
 

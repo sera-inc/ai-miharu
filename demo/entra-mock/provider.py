@@ -61,14 +61,14 @@ PORT = int(os.environ.get("MOCK_PORT", "8092"))
 # these have to be the addresses on the demo's accounts.
 PEOPLE = [
     {"oid": "00000000-0000-0000-0000-0000000000a1",
-     "name": "Gengar", "email": "gengar@example.com",
-     "note": "the owner account the demo sets up"},
+     "name": "管理者", "email": "gengar@example.com",
+     "note": "デモで作成されるオーナーアカウントです"},
     {"oid": "00000000-0000-0000-0000-0000000000a2",
-     "name": "Snorlax", "email": "snorlax@example.com",
-     "note": "an admin, if you created one"},
+     "name": "運用担当者", "email": "snorlax@example.com",
+     "note": "追加の管理者アカウントです（作成済みの場合）"},
     {"oid": "00000000-0000-0000-0000-0000000000a3",
-     "name": "Nobody At All", "email": "nobody@example.com",
-     "note": "no account here - shows the refusal"},
+     "name": "未登録ユーザー", "email": "nobody@example.com",
+     "note": "対応するアカウントはありません（拒否動作の確認用）"},
 ]
 
 # code -> what /token has to answer with. Single use, and short lived for
@@ -120,9 +120,9 @@ def _id_token(person: dict, nonce: str) -> str:
         _b64u(json.dumps(claims).encode()))
 
 
-PAGE = """<!doctype html><meta charset=utf-8>
+PAGE = """<!doctype html><html lang=ja><meta charset=utf-8>
 <meta name=viewport content='width=device-width,initial-scale=1'>
-<title>Sign in - demo identity provider</title>
+<title>サインイン（デモ環境）</title>
 <style>
  body{{font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
   background:#f3f3f3;color:#1b1b1b;margin:0;
@@ -153,14 +153,13 @@ PAGE = """<!doctype html><meta charset=utf-8>
       <rect width=7 height=7 x=9 y=0 fill="#7FBA00"/>
       <rect width=7 height=7 x=0 y=9 fill="#00A4EF"/>
       <rect width=7 height=7 x=9 y=9 fill="#FFB900"/>
-    </svg>Demo identity provider</p>
-  <h1>Pick an account</h1>
-  <p class=l>Standing in for Microsoft Entra. No password is asked for
-    because there is nothing here to prove.</p>
+    </svg>Microsoft Entra 認証デモ</p>
+  <h1>アカウントを選択</h1>
+  <p class=l>Microsoft Entra 認証画面の代わりに表示するテスト用ページです。
+    パスワードの入力や本人確認は行いません。</p>
   {buttons}
-  <p class=warn><b>This is the demo stack.</b> This provider signs nothing
-    and verifies nothing. It exists so the sign-in flow can be walked
-    without a real tenant.</p>
+  <p class=warn><b>デモ環境です。</b>このページでは本人確認や認証情報の検証を行いません。
+    実際のテナントを使わずに、サインインの流れを確認するための画面です。</p>
 </div>"""
 
 
@@ -216,7 +215,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/healthz":
             return self._json(200, {"ok": True})
 
-        return self._send(404, b"not found")
+        return self._send(404, "ページが見つかりません".encode())
 
     def _authorize(self, q):
         """Render the account picker. Everything the receiver sent rides
@@ -225,10 +224,10 @@ class Handler(BaseHTTPRequestHandler):
             return (q.get(k) or [""])[0]
 
         if one("client_id") != CLIENT_ID:
-            return self._send(400, b"unknown client_id for this demo provider")
+            return self._send(400, "このデモの認証設定と一致しません".encode())
         redirect = one("redirect_uri")
         if not redirect:
-            return self._send(400, b"no redirect_uri")
+            return self._send(400, "転送先URLが指定されていません".encode())
 
         buttons = []
         for i, p in enumerate(PEOPLE):
@@ -261,14 +260,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._issue_code(one)
         if url.path == "/token":
             return self._token(one)
-        return self._send(404, b"not found")
+        return self._send(404, "ページが見つかりません".encode())
 
     def _issue_code(self, one):
         """Somebody picked an account. Mint a code and post it back."""
         try:
             person = PEOPLE[int(one("who"))]
         except (ValueError, IndexError):
-            return self._send(400, b"no such account")
+            return self._send(400, "アカウントを選択してください".encode())
         _sweep()
         code = _b64u(secrets.token_bytes(24))
         _CODES[code] = {"at": time.time(), "person": person,
@@ -278,12 +277,12 @@ class Handler(BaseHTTPRequestHandler):
         # form_post, because that is the response mode the receiver asks
         # for: the code arrives in a POST body rather than a URL, where it
         # would sit in browser history and every proxy log on the way.
-        body = ('<!doctype html><meta charset=utf-8><title>Signing in</title>'
+        body = ('<!doctype html><meta charset=utf-8><title>サインイン中</title>'
                 '<body onload="document.forms[0].submit()">'
                 '<form method="POST" action="%s">'
                 '<input type=hidden name=code value="%s">'
                 '<input type=hidden name=state value="%s">'
-                '<noscript><button>Continue</button></noscript>'
+                '<noscript><button>続行</button></noscript>'
                 '</form>' % (html.escape(one("redirect_uri"), quote=True),
                              html.escape(code, quote=True),
                              html.escape(one("state"), quote=True)))
