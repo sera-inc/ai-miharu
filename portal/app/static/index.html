@@ -4758,7 +4758,7 @@ function extStatusRows(mode) {
     : '<span class="none">未設定</span>';
   return `<dl class="kv">
     <dt>Chromium 拡張機能 ID</dt><dd>${pill(st.id)}</dd>
-    <dt>Chromium ホスティング</dt><dd>${pill(st.crx && st.upd ? 'crx + updates.xml の URL' : st.crx || st.upd)}</dd>
+    <dt>Chromium 用の配布先</dt><dd>${pill(st.crx && st.upd ? 'crx + updates.xml の URL' : st.crx || st.upd)}</dd>
     <dt>Firefox（任意）</dt><dd>${pill(st.gecko && st.xpi ? st.gecko : st.gecko || st.xpi)}</dd>
     ${mode ? `<dt>ペーストガードモード</dt><dd><span class="pill ${st.mode === 'block' ? 'p-warn' : 'p-ok'}">${esc(st.mode === 'block' ? 'ブロック' : st.mode === 'warn' ? '警告' : st.mode || '警告（既定）')}</span></dd>` : ''}
   </dl>`;
@@ -4789,11 +4789,11 @@ async function extSetup() {
   // somebody presses to say they did it.
   const PAGES = [
     {t: 'ダウンロード', d: '事前設定済みのソース',
-     done: !!st.id, line: st.id ? 'ダウンロード済み - IDがそれを証明します'
+     done: !!st.id, line: st.id ? 'ダウンロード済み（拡張機能IDを確認済み）'
        : ready ? (ver ? 'ソース ' + ver + '、準備完了' : '準備完了') : ''},
     {t: 'パッケージ', d: '署名キーを保管',
-     done: !!st.id, line: st.id ? 'パッケージ済み - IDがそれを証明します' : ''},
-    {t: '識別情報', d: 'Chromium拡張機能ID',
+     done: !!st.id, line: st.id ? 'パッケージ化済み（拡張機能IDを確認済み）' : ''},
+    {t: '拡張機能ID', d: 'Chromium拡張機能ID',
      done: !!st.id, line: st.id},
     {t: '配布先', d: 'ブラウザーが取得する場所',
      done: !!(st.crx && st.upd),
@@ -4815,7 +4815,7 @@ async function extSetup() {
       <span class="${p.line ? 'val' : 'pend'}">${esc(p.line || p.d)}</span></span>
     </li>`).join('')}</ol>
     <div class="sssum">
-      <div class="lede" style="font-size:11.5px">必須ステップ ${ndone} / ${need.length} 完了</div>
+      <div class="lede" style="font-size:11.5px">必須の手順 ${need.length} 件中 ${ndone} 件が完了</div>
       <div class="barwrap"><div class="bar"
         style="width:${ndone / need.length * 100}%"></div></div>
       <div class="lede" style="font-size:11.5px">Firefox 版は任意です。この画面で拡張機能のソースを取得する必要はありません。保存した設定は、いつでも該当する手順に戻って変更できます。</div>
@@ -4860,7 +4860,7 @@ async function extSetup() {
     <h4>配布用ファイルを配置する</h4>
     <p class="lede">管理対象端末内のすべてのブラウザーからアクセスできる HTTPS の場所に、2 つのファイルを置きます。1 つは拡張機能パッケージ <span class="mono">${esc(crxName)}</span>、もう 1 つはそのパッケージを参照する更新マニフェスト（<span class="mono">updates.xml</span>）です。.crx は次の形式で配信します：
     <span class="mono">application/x-chrome-extension</span>。配布後の障害を防ぐため、次の 2 点を守ってください。読み取り権限は個々のファイルではなく、保存先のフォルダーやパスの接頭辞に対して設定します。ファイル単位の許可では、新しいリリースが非公開のまま追加されるおそれがあります。新しい .crx を配置した後も、以前の .crx は削除せずに残します。問題が起きた場合は、updates.xml の参照先を以前のファイルに戻して復旧できます。</p>
-    <dl class="kv" style="margin-bottom:14px"><dt>それらを配置する場所${INFO}</dt><dd>
+    <dl class="kv" style="margin-bottom:14px"><dt>配置先の例${INFO}</dt><dd>
       <span class="src-note" style="margin:6px 0 0;display:block">HTTPS 経由の 2 つの静的ファイルです。コンテナレジストリではありません。</span>
       <div class="src-note fnote">管理対象端末から HTTPS でファイルを取得できる場所であれば利用できます。多くのチームでは、既存の保管場所を使えます：
       <b>AWS S3</b>（必要に応じて CloudFront を利用）、<b>Azure Blob Storage</b>（必要に応じて Front Door を利用）、<b>Google Cloud Storage</b>、<b>Artifactory</b> や <b>Nexus</b> などの成果物保管サービス、社内 Web サーバーなどです。インターネットへの公開は不要です。配布先のブラウザーから接続できればよく、イントラネット内だけのホストも利用できます。既存の保管場所を使う方が承認を得やすい場合もあります。
@@ -4910,13 +4910,13 @@ async function extSetup() {
     <p class="lede" style="margin-top:14px">初回の設定作業は以上です。すべての設定と新しい登録トークンが入力済みのポリシー配布物は、セットアップウィザードの手順 7 からダウンロードできます。MDM 経由で端末へ配布すると、実際の導入が始まります。</p>`;
 
   return `<h2>拡張機能のセットアップ</h2>
-  <p class="lede">ブラウザー拡張機能を、ソースからホスト済みパッケージまで、1ステップずつ進めます。設定はここにあります。変更したいステップに戻ってください。</p>
+  <p class="lede">ブラウザー拡張機能を、ソースの取得から配布用パッケージの配置まで1手順ずつ進めます。ここで保存した設定は、該当する手順に戻っていつでも変更できます。</p>
   ${SETMSG ? `<div class="note">${esc(SETMSG)}</div>` : ''}
   <div class="ssow">${rail}
     <div class="ssmain">${body}
       <div class="ssfoot">
         ${EXTPAGE === 6 ? '' : EXTFROM === 'wizard'
-          ? `<button class="mini" data-act="ext-back-to-setup">デプロイ設定に戻る</button>`
+          ? `<button class="mini" data-act="ext-back-to-setup">セットアップウィザードに戻る</button>`
           : '<button class="mini" data-nav="settings">閉じる</button>'}
         <span class="sp"></span>
         ${EXTPAGE > 1 ? `<button class="mini" data-act="ext-page"
@@ -4925,7 +4925,7 @@ async function extSetup() {
           ? `<button class="mini pri" data-act="ext-page"
               data-key="${EXTPAGE + 1}">次へ</button>`
           : EXTFROM === 'wizard'
-          ? `<button class="mini pri" data-act="ext-back-to-setup">デプロイ設定に戻る</button>`
+          ? `<button class="mini pri" data-act="ext-back-to-setup">セットアップウィザードに戻る</button>`
           : '<button class="mini pri" data-nav="settings">完了</button>'}
       </div></div></div>`;
 }
@@ -4974,13 +4974,13 @@ async function wizard() {
     data-act="wiz-store" data-key="${k}">${lbl}</button>`;
 
     const WIZ_STEPS = [
-    {t: '受信サービス URL',         need: 'req', act: '収集を開始'},
-    {t: 'ログ保存先',            need: 'rec', act: '収集を開始'},
-    {t: '企業ドメイン',    need: 'req', act: '収集を開始'},
-    {t: 'ガバナンスベースライン',  need: 'opt', act: '活用する'},
-    {t: 'ブラウザ拡張機能',    need: 'opt', act: '活用する'},
-    {t: 'アラートと Grafana', need: 'opt', act: '活用する'},
-    {t: 'デプロイメントのダウンロード', need: 'out', act: '活用する'},
+    {t: '受信サービスのURL',         need: 'req', act: '収集を始める'},
+    {t: 'ログ保存先',            need: 'rec', act: '収集を始める'},
+    {t: '企業ドメイン',    need: 'req', act: '収集を始める'},
+    {t: 'ツールの初期判断',  need: 'opt', act: 'さらに活用する'},
+    {t: 'ブラウザー拡張機能',    need: 'opt', act: 'さらに活用する'},
+    {t: 'アラートと Grafana', need: 'opt', act: 'さらに活用する'},
+    {t: '配布用ファイル', need: 'out', act: 'さらに活用する'},
   ];
   // A first-run wizard that only counts steps tells you how far down the page
   // you are. This says what the deployment can do yet, and what it will get
@@ -4999,23 +4999,23 @@ async function wizard() {
   const wLine = n => {
     if (n === 1) return wv('receiver_public_url')
       ? {c: 'val', t: wv('receiver_public_url').replace(/^https?:\/\//, '')}
-      : {c: 'need', t: 'これがないとデプロイできません'};
+      : {c: 'need', t: '未設定だと何も展開できません'};
     if (n === 2) return wv('log_store_url')
-      ? {c: 'val', t: 'ここから読み取り中'}
-      : {c: 'pend', t: '検出結果はコンテナログに残ります'};
+      ? {c: 'val', t: '接続済み'}
+      : {c: 'pend', t: '検出結果はコンテナのログに残るだけ'};
     if (n === 3) return (cd.value || []).length
       ? {c: 'val', t: (cd.value || []).join(', ')}
-      : {c: 'need', t: 'すべてのアカウントが個人として扱われます'};
+      : {c: 'need', t: 'すべて個人アカウントとして扱われます'};
     if (n === 4) return (GOVDECS || []).length
       ? {c: 'val', t: (GOVDECS || []).length + ' 件記録済み'}
-      : {c: 'pend', t: 'まだ何も決定されていません'};
+      : {c: 'pend', t: '判断はまだ記録されていません'};
     if (n === 5) return extSettingsState().id
-      ? {c: 'val', t: 'パッケージ化済みでホスト済み'} : {c: 'pend', t: '未設定'};
+      ? {c: 'val', t: 'パッケージ化・配置済み'} : {c: 'pend', t: '未設定'};
     if (n === 6) return (wv('alertmanager_url') || wv('grafana_url'))
-      ? {c: 'val', t: wv('alertmanager_url') ? 'アラート通知オン' : 'Grafana 埋め込み'}
+      ? {c: 'val', t: wv('alertmanager_url') ? 'アラート通知オン' : 'Grafana を埋め込み表示'}
       : {c: 'pend', t: '何も通知されません'};
     return (CFG.managed && CFG.managed.artifacts_ready)
-      ? {c: 'val', t: 'ready'} : {c: 'pend', t: '受信サービス URL が必要です'};
+      ? {c: 'val', t: '準備完了'} : {c: 'pend', t: '受信サービスのURLが必要です'};
   };
   // A viewer can neither finish the wizard nor skip it: both write
   // onboarding_done, and the receiver refuses the write. Pressing the only
@@ -5027,7 +5027,7 @@ async function wizard() {
   const reqDone = WIZ_STEPS.filter((x, i) => x.need === 'req' && wDone(i + 1)).length;
   const canGo = reqDone === reqN;
   let wact = '';
-  const rail = `<div class="ssrail"><h3>デプロイを設定する</h3><ol>${
+  const rail = `<div class="ssrail"><h3>環境のセットアップ</h3><ol>${
     WIZ_STEPS.map((x, i) => {
       const n = i + 1, dn = wDone(n), ln = wLine(n);
       const hdr = x.act !== wact
@@ -5044,59 +5044,49 @@ async function wizard() {
         <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
     }).join('')}</ol>
     <div class="sssum">${canGo
-      ? `<div class="lede" style="font-size:11.5px;color:var(--pri);font-weight:600">今すぐデプロイできます</div>
+      ? `<div class="lede" style="font-size:11.5px;color:var(--pri);font-weight:600">収集エージェントを配布できます</div>
          <div class="barwrap"><div class="bar" style="width:100%"></div></div>
-         <div class="lede" style="font-size:11.5px">必須の2つのステップは完了しています。残りは後回しで構いません。ダウンロードを配布すると、収集エージェントはすぐに報告を開始します。</div>
+         <div class="lede" style="font-size:11.5px">必須の2項目は設定済みです。残りは後からでも構いません。配布用ファイルを端末に配布すると、収集エージェントがすぐに報告を始めます。</div>
          <p style="margin:9px 0 0"><button class="mini pri" data-act="wiz-step"
-           data-key="7">ダウンロードへ移動</button></p>`
-      : `<div class="lede" style="font-size:11.5px">必須ステップのうち ${reqDone} / ${reqN} 完了</div>
+           data-key="7">配布用ファイルへ</button></p>`
+      : `<div class="lede" style="font-size:11.5px">必須の項目 ${reqN} 件中 ${reqDone} 件が完了</div>
          <div class="barwrap"><div class="bar"
            style="width:${reqDone / reqN * 100}%"></div></div>
-         <div class="lede" style="font-size:11.5px">任意のステップは後で行えます。すべて設定で編集可能なままです。</div>`}
+         <div class="lede" style="font-size:11.5px">任意の項目は後から設定できます。どの値も「設定」画面で変更できます。</div>`}
     </div></div>`;
 
   let body = '';
-  if (WIZSTEP === 1) body = `<h4>エステートに名前を付ける</h4>
-  <p class="lede" style="margin-bottom:10px">任意ですが、どこにでも表示されます。ロゴの下のコントロール、サインイン画面、細いトップバーがすべてこれを表示します。後から設定 › 表示とアラートで編集できます。</p>
+  if (WIZSTEP === 1) body = `<h4>組織名</h4>
+  <p class="lede" style="margin-bottom:10px">任意です。設定すると、サイドバーのロゴの下、サインイン画面、狭い画面の上部バーに表示されます。後から「設定 › 表示とアラート」で変更できます。</p>
   <dl class="kv">
     ${settingRow('org_name', '組織名', '株式会社サンプル', '')}
   </dl>
-  <h4 style="margin-top:18px">マシンが受信サービスに接続する場所</h4>
-  <p class="lede" style="margin-bottom:10px">ノート PC とサーバーが検出結果を送信する先の URL です。以下のすべてのダウンロードに組み込まれるため、クラスター内からだけでなく、それらのマシンからも機能する必要があります。つまり、この名前をイングレスまたはリバースプロキシに向ける DNS レコードと証明書が必要です。ただし、Tailscale operator のようなものが両方を処理してくれる場合は除きます。</p>
-  <p class="lede" style="margin-bottom:10px">どのアドレスかわからない場合は、外部からこのポータルを公開しているアドレスです。確認するには:
-  <span class="mono">kubectl get ingress -A</span> Ingressホストの場合、
-  <span class="mono">kubectl get svc -A --field-selector
-  spec.type=LoadBalancer</span> ロードバランサーのアドレスの場合、または
-  <span class="mono">tailscale status</span> Tailscale Operatorが処理している場合です。その後、保存して接続確認ボタンを押します。受信サービスが入力したアドレスに応答するか、しないか。それだけが唯一意味のある確認です。</p>
+  <h4 style="margin-top:18px">端末から接続する受信サービスのURL</h4>
+  <p class="lede" style="margin-bottom:10px">ノートPCやサーバーが検出結果を送る先のURLです。下の配布用ファイルすべてに埋め込まれるため、クラスターの内側だけでなく、各端末から接続できる必要があります。通常は、この名前を Ingress またはリバースプロキシに向ける DNS レコードと証明書が必要です（Tailscale Operator などが両方を用意する場合は不要です）。</p>
+  <p class="lede" style="margin-bottom:10px">分からない場合は、このポータルを外部に公開しているアドレスを使います。Ingress のホスト名は <span class="mono">kubectl get ingress -A</span>、ロードバランサーのアドレスは <span class="mono">kubectl get svc -A --field-selector spec.type=LoadBalancer</span>、Tailscale Operator を使っている場合は <span class="mono">tailscale status</span> で確認できます。保存したら「接続を確認」を押してください。入力したアドレスで受信サービスが応答するかどうかが、唯一確かな確認方法です。</p>
   <dl class="kv">
-    ${settingRow('receiver_public_url', '公開受信サービス URL',
+    ${settingRow('receiver_public_url', '受信サービスの公開URL',
       'https://ai-guard.your-tailnet.ts.net', '')}
   </dl>
   <div style="margin-top:8px">
-    <button class="mini" data-act="run-test" data-key="receiver-url">保存したURLへの接続確認</button>
+    <button class="mini" data-act="run-test" data-key="receiver-url">接続を確認</button>
   </div>${testNote('receiver-url')}`;
   if (WIZSTEP === 2) body = `<h4>ログ保存先</h4>
-  <p class="lede" style="margin-bottom:10px">検出結果はLoki互換のログ保存先に保存されます。受信サービスがそこに書き込み、このポータルがそこから読み取ります。あなたのログ保存先はどこですか？</p>
-  <p class="lede" style="margin-bottom:10px">実際には、次のいずれかです
-  <b>Grafana Loki</b>、あらゆるデプロイモードでセルフホストされたもの、または
-  <b>Grafana Cloud Logs</b>、同じAPIをホスト型で提供するものです。すでにGrafanaスタックを運用しているなら、これがお使いのLokiです。</p>
-  <p class="lede" style="margin-bottom:10px">それ以外はLoki独自のHTTP APIを実装する必要があり、 <i>両方</i> の半分です。受信サービスが書き込む先は
-  <span class="mono">/loki/api/v1/push</span> そしてこのポータルが読み取る元は
-  <span class="mono">/loki/api/v1/query_range</span>。採用を確定する前に確認する価値があります。いくつかのログ保存先は Loki 互換をうたっています <i>取り込み</i> 一方で、独自の言語でクエリに応答し、そのうちの1つは、送信したすべての検出結果を受け取ったうえで、空のポータルを表示します。</p>
+  <p class="lede" style="margin-bottom:10px">検出結果は Loki 互換のログ保存先に保存されます。受信サービスが書き込み、このポータルが読み込みます。使用するログ保存先を選んでください。</p>
+  <p class="lede" style="margin-bottom:10px">通常は、自社で運用する <b>Grafana Loki</b>（どの構成でも可）か、同じAPIをクラウドで提供する <b>Grafana Cloud Logs</b> のどちらかです。すでに Grafana を運用している場合は、その Loki を使えます。</p>
+  <p class="lede" style="margin-bottom:10px">それ以外の製品を使う場合は、Loki の HTTP API を<i>書き込みと読み込みの両方</i>で実装している必要があります。受信サービスは <span class="mono">/loki/api/v1/push</span> に書き込み、このポータルは <span class="mono">/loki/api/v1/query_range</span> から読み込みます。採用前に確認してください。「Loki 互換」をうたう製品の中には、<i>取り込み</i>だけに対応し、検索は独自のクエリ言語で行うものがあります。その場合、送った検出結果はすべて保存されても、ポータルには何も表示されません。</p>
   <div style="margin-bottom:10px">
-    ${storeBtn('self', 'セルフホスト / クラスタ内')}
-    ${storeBtn('cloud', 'ホスト型（Grafana Cloud）')}
-    ${storeBtn('none', 'まだなし')}
+    ${storeBtn('self', '自社で運用（クラスター内など）')}
+    ${storeBtn('cloud', 'クラウド（Grafana Cloud）')}
+    ${storeBtn('none', 'まだ用意していない')}
   </div>
-  ${WIZSTORE === 'none' ? `<p class="lede">問題ありません。検出結果は受信サービスのコンテナログに残るため、何も失われません。ここでのページは、後から設定でストアを追加するまで空のままです。</p>`
-  : `${WIZSTORE === 'self' ? `<p class="lede">Lokiサービスを探す -
-    <span class="mono">kubectl get svc -A | grep -i loki</span> — 通常は、そのベース URL を貼り付けます
-    <span class="mono">http://loki.&lt;namespace&gt;.svc.cluster.local:3100</span>。クラスター内の Loki は通常、認証情報を必要としません。</p>`
-  : `<p class="lede">Grafana CloudのLoki詳細ページから、3つ必要です。URL、数値のインスタンスID（これがユーザー名です）、および次の権限を持つアクセスポリシートークンです: <b>logs:write と logs:read の両方</b>。書き込み専用トークンは典型的な間違いです。以下のテストボタンがそれを検出します。</p>`}
+  ${WIZSTORE === 'none' ? `<p class="lede">問題ありません。検出結果は受信サービスのコンテナのログに残るため、失われません。ただし、後から「設定」でログ保存先を追加するまで、このポータルの各画面は空のままです。</p>`
+  : `${WIZSTORE === 'self' ? `<p class="lede"><span class="mono">kubectl get svc -A | grep -i loki</span> で Loki のサービスを探し、ベースURLを貼り付けてください。通常は <span class="mono">http://loki.&lt;namespace&gt;.svc.cluster.local:3100</span> です。クラスター内の Loki には、通常は認証情報は不要です。</p>`
+  : `<p class="lede">Grafana Cloud の Loki の詳細ページで、次の3つを確認します。URL、数字のインスタンスID（ユーザー名として使います）、<b>logs:write と logs:read の両方</b>の権限を持つアクセスポリシートークンです。書き込み専用のトークンを使ってしまう間違いがよくありますが、下の接続確認ボタンで見つけられます。</p>`}
   <dl class="kv">${logStoreFields(WIZSTORE === 'cloud')}</dl>
   ${logStoreTests()}`}`;
   if (WIZSTEP === 3) body = `<h4>企業ドメイン</h4>
-  <p class="lede" style="margin-bottom:10px">業務用メールアドレスのドメインです。これらのいずれかでサインインしたAIツールは業務アカウントとして扱われ、それ以外は個人用としてフラグが付きます。収集エージェントは次回の実行時にこれを自動的に取得します。</p>
+  <p class="lede" style="margin-bottom:10px">仕事用メールアドレスのドメインです。これらのドメインでサインインしたAIツールは会社のアカウント、それ以外は個人アカウントとして扱います。収集エージェントは次回の実行時に自動で設定を取得します。</p>
   <input id="set-domains" class="mfield" style="min-width:340px"
     placeholder="example.com, example.co.uk"
     value="${esc((cd.value || []).join(', '))}">
@@ -5106,10 +5096,10 @@ async function wizard() {
       placeholder="GBP"
       value="${esc(((s.budget_currency || {}).value) || '')}">
     <button class="mini" data-act="save-setting" data-key="budget_currency">保存</button>
-    <div class="src-note">予算ビューで使用する優先通貨です。見出しはECBの毎日の基準レートでこの通貨に換算され（レートの日付は数値のすぐ横に表示されます）、新しくリンクされたツールはこの通貨が既定になり、通貨別の数値は引き続き表示されます。</div>
+    <div class="src-note">予算画面で使う通貨です。合計額は欧州中央銀行（ECB）の日次参照レートでこの通貨に換算します（レートの日付は金額の横に表示）。新しく登録する契約の既定の通貨にもなります。通貨ごとの金額も引き続き表示します。</div>
   </div>`;
-  if (WIZSTEP === 4) body = `<h4>ガバナンスベースライン</h4>
-  <p class="lede" style="margin-bottom:10px">組織が承認または禁止したAIツールです。実際に方針を決めているものだけを設定してください。残りは未決定のままで問題ありません。これらは後からAI台帳で調整できます。</p>
+  if (WIZSTEP === 4) body = `<h4>ツールの初期判断</h4>
+  <p class="lede" style="margin-bottom:10px">組織として承認済み、または利用を認めていないAIツールを記録します。方針が決まっているものだけを設定し、残りは未判断のままで構いません。後から AI台帳で変更できます。</p>
   ${GOVERR ? `<div class="note">${esc(GOVERR)}</div>` : ''}
   <div style="margin-bottom:10px">
     <input id="wiz-owner" class="mfield" value="${esc(WIZOWNER)}"
@@ -5119,36 +5109,36 @@ async function wizard() {
   </div>
   <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th></th></tr>
   ${REGTOOLS.map(toolRow).join('')}</table>`;
-  if (WIZSTEP === 5) body = `<h4>ブラウザ拡張機能とペーストガード</h4>
-  <p class="lede" style="margin-bottom:10px">1つの拡張機能で、AIサイトへのサインインに使われたアカウントを報告し、危険な貼り付けを警告またはブロックします。一度パッケージ化して配布先に置けば利用できます。ガイド付きセットアップが手順を1つずつ案内します。ここから設定済みのソースをダウンロードでき、リポジトリからコードを取得する必要はありません。保存した値はすべて、ステップ7でダウンロードできる設定済みポリシーに含まれます。最初はスキップして、後から設定することもできます。</p>
+  if (WIZSTEP === 5) body = `<h4>ブラウザー拡張機能と貼り付けガード</h4>
+  <p class="lede" style="margin-bottom:10px">1つの拡張機能で、AIサイトへのサインインに使われたアカウントを報告し、危険な貼り付けを警告またはブロックします。一度パッケージ化して配布先に置けば利用できます。ガイド付きセットアップが手順を1つずつ案内します。ここから設定済みのソースをダウンロードでき、リポジトリからコードを取得する必要はありません。保存した値はすべて、手順7でダウンロードする設定済みのポリシーに組み込まれます。最初は飛ばして、後から設定しても構いません。</p>
   ${extStatusRows(true)}
-  <p class="src-note" style="margin:14px 0 8px">6つの短いステップ: ダウンロード、パッケージ、ID、ホスティング、Firefox、動作。これらの値はここで管理されます。設定には現在の状態が表示され、変更するにはここへ誘導されます。</p>
+  <p class="src-note" style="margin:14px 0 8px">ダウンロード、パッケージ化、拡張機能ID、配布先、Firefox、動作の6つの短い手順です。これらの値は拡張機能のセットアップで管理し、「設定」画面では状態の表示と、ここへの移動ボタンだけを提供します。</p>
   <p style="margin:0"><button class="mini" style="padding:6px 14px"
     data-act="ext-open">拡張機能のセットアップを開く</button></p>`;
   if (WIZSTEP === 6) body = `<h4>アラートとGrafana</h4>
   <dl class="kv">
     ${settingRow('alertmanager_url', 'Alertmanager の URL',
       'http://alertmanager.<namespace>.svc:9093',
-      '警告の検出結果はこれを通じてページャーに通知されます。空の場合、どこにも通知されません。')}
+      '重要度「警告」の検出結果をここから通知します。空欄の場合は通知されません。')}
     ${settingRow('grafana_url', 'Grafana の URL',
       'ブラウザーが Grafana にアクセスするための URL',
-      '保存するとページが再読み込みされます（フレームの許可は各ページ読み込み時に組み込まれます）。パネルとダッシュボード UID は設定にあります。Grafana 側で埋め込みを許可しておく必要があります。')}
+      '保存するとページを再読み込みします（埋め込みの許可はページの読み込み時に設定されるため）。パネルとダッシュボードUIDは「設定」画面で指定します。Grafana 側でも埋め込みを許可してください。')}
   </dl>`;
-  if (WIZSTEP === 7) body = `<h4>デプロイ用ダウンロード</h4>
-  <p class="lede" style="margin-bottom:10px">受信サービスURLと新しい登録トークンがすでに含まれた、すぐにデプロイできるファイルです。MDM経由で配布するか、そのまま実行してください。端末は自動的に登録され、登録済み端末の一覧に表示されます。各ダウンロードにはそれぞれのトークンが付与されるため、他の展開に影響を与えずに1つを無効化できます。</p>
+  if (WIZSTEP === 7) body = `<h4>配布用ファイル</h4>
+  <p class="lede" style="margin-bottom:10px">受信サービスのURLと新しい登録トークンを埋め込んだ、そのまま使えるファイルです。MDMで配布するか、そのまま実行してください。端末は自動で登録され、「登録済み端末」に表示されます。ダウンロードごとに別のトークンが発行されるため、1つの配布だけを無効にできます。</p>
   ${CFG.managed && CFG.managed.artifacts_ready ? `<div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="mini" data-act="artifact" data-key="collector-macos">MacOS収集エージェント</button>
+    <button class="mini" data-act="artifact" data-key="collector-macos">macOS 収集エージェント</button>
     <button class="mini" data-act="artifact" data-key="collector-linux">Linux収集エージェント</button>
     <button class="mini" data-act="artifact" data-key="collector-windows">Windows収集エージェント</button>
-    <button class="mini" data-act="artifact" data-key="extension-policy">拡張機能ポリシー · Chromium macOS${eid ? '' : ' (ステップ5が必要)'}</button>
+    <button class="mini" data-act="artifact" data-key="extension-policy">拡張機能ポリシー · Chromium macOS${eid ? '' : '（手順5が必要）'}</button>
     <button class="mini" data-act="artifact" data-key="extension-windows">拡張機能の展開 · Chromium Windows</button>
     <button class="mini" data-act="artifact" data-key="firefox-policy">拡張機能ポリシー · Firefox macOS</button>
     <button class="mini" data-act="artifact" data-key="firefox-windows">拡張機能の展開 · Firefox Windows</button>
     <button class="mini" data-act="artifact" data-key="scanner-cronjob">スキャナー CronJob</button>
-    <button class="mini" data-act="artifact" data-key="discovery-cronjob">検出結果 CronJob</button>
-  </div>` : `<div class="note">まだ公開受信サービスURLがないため、ダウンロードにエージェントが到達できるURLを埋め込めません。ステップ1で保存すると、これらが表示されます。</div>`}`;
-  return `<h2>ようこそ — デプロイをセットアップしましょう</h2>
-  <p class="lede">一度に1ステップずつ。ここでの内容は後から設定で変更でき、変更は再デプロイなしですぐに反映されます。</p>
+    <button class="mini" data-act="artifact" data-key="discovery-cronjob">Discovery（新規ツール検出）CronJob</button>
+  </div>` : `<div class="note">受信サービスの公開URLが未設定のため、収集エージェントが接続できるURLをファイルに埋め込めません。手順1で保存すると、ここにダウンロードボタンが表示されます。</div>`}`;
+  return `<h2>ようこそ — 環境をセットアップしましょう</h2>
+  <p class="lede">1項目ずつ進めます。ここで設定した内容は後から「設定」画面で変更でき、変更は再配布なしですぐに反映されます。</p>
   ${SETMSG ? `<div class="note">${esc(SETMSG)}</div>` : ''}
   <div class="ssow">${rail}
     <div class="ssmain">${body}
@@ -5165,7 +5155,7 @@ async function wizard() {
           : `<button class="mini pri" data-act="${wizRO ? 'wiz-close' : 'wiz-finish'}"
               >${wizRO ? '閉じる' : 'セットアップを完了'}</button>`}
       </div></div></div>
-  <p class="src-note">後から戻れます。上記はすべて設定で編集可能なままで、設定からこのウィザードを再度開けます。</p>`;
+  <p class="src-note">後から戻れます。上の内容はすべて「設定」画面で変更でき、「設定」からこのウィザードを再び開けます。</p>`;
 }
 
 // The editable deployment settings, managed mode only: what the receiver
@@ -5184,10 +5174,10 @@ function fleetSettings() {
   const cd = s.corp_domains || {value: [], source: 'unset', env: []};
   const srcNote = cd.source === 'db'
     ? (cd.env || []).length
-      ? `ポータルに保存済みで、デプロイの <span class="mono">CORP_DOMAINS</span>（${esc(cd.env.join(', '))}）を上書きしています。消去するとデプロイ側の値に戻ります。`
+      ? `ポータルに保存した値を使っています（環境変数 <span class="mono">CORP_DOMAINS</span> の値「${esc(cd.env.join(', '))}」より優先）。「環境変数の値に戻す」を押すと、環境変数の値に戻ります。`
       : 'ポータルに保存済みです。'
     : cd.source === 'env'
-      ? `環境変数 <span class="mono">CORP_DOMAINS</span> から取得しています。ここで保存すると、環境変数を変更せずに上書きできます。`
+      ? `環境変数 <span class="mono">CORP_DOMAINS</span> の値を使っています。ここで保存すると、環境変数は変更せずにポータルの値が優先されます。`
       : 'まだどこにも設定されていません。';
   return `<div class="wcard" style="margin-bottom:10px"><h3>検出とペーストガード</h3>
   <p class="lede" style="margin-bottom:10px">設定は受信サービスに保存され、管理対象端末が自動で取得します。収集エージェントは次回の接続時に変更を受け取るため、MDMから再配布する必要はありません。</p>
@@ -5198,14 +5188,14 @@ function fleetSettings() {
         data-sinit="${esc((cd.value || []).join(', '))}"
         placeholder="example.com, example.co.uk"
         value="${esc((cd.value || []).join(', '))}">
-      ${cd.source === 'db' ? `<button class="mini" data-act="clear-domains">クリア（フォールバック）</button>` : ''}
-      ${cd.source === 'db' ? '<span class="pill p-mut">ここに保存済み</span>'
-        : cd.source === 'env' ? '<span class="pill p-mut">環境変数から</span>' : ''}
-      <div class="src-note fnote">これらのいずれかにサインインしたAIツールは業務アカウントとしてカウントされ、それ以外は個人アカウントとしてフラグ付けされます。 ${srcNote}</div></dd>
+      ${cd.source === 'db' ? `<button class="mini" data-act="clear-domains">環境変数の値に戻す</button>` : ''}
+      ${cd.source === 'db' ? '<span class="pill p-mut">ポータルに保存済み</span>'
+        : cd.source === 'env' ? '<span class="pill p-mut">環境変数の値</span>' : ''}
+      <div class="src-note fnote">これらのドメインでサインインしたAIツールは会社のアカウント、それ以外は個人アカウントとして扱います。${srcNote}</div></dd>
     ${pasteGuardFields()}
   </dl>
   <div class="wcard" style="margin-top:16px;background:var(--bg)">
-    <h3>ブラウザ拡張機能</h3>
+    <h3>ブラウザー拡張機能</h3>
     ${extStatusRows()}
     <div style="margin-top:12px">
       <p class="src-note" style="margin:0 0 8px">6つの手順があり、一覧から必要な手順へ直接移動できます。</p>
@@ -5217,12 +5207,12 @@ function fleetSettings() {
 function connectionSettings() {
   return `<div class="wcard" style="margin-bottom:10px"><h3>受信サービス</h3>
   <dl class="kv">
-    ${settingRow('receiver_public_url', '公開受信サービス URL',
+    ${settingRow('receiver_public_url', '受信サービスの公開URL',
       'https://ai-guard.your-tailnet.ts.net',
-      '収集エージェントが外部から接続するURLです。ダウンロードするすべての配布ファイルに含まれます。ポータル内部で使う受信サービスのアドレスとは異なります。', true)}
+      '端末が<b>外部から</b>接続するURLです。ダウンロードするすべての配布用ファイルに埋め込まれます。ポータルが内部で転送に使う受信サービスのアドレスとは別です。', true)}
   </dl>
   <div style="margin-top:8px">
-    <button class="mini" data-act="run-test" data-key="receiver-url">保存したURLへの接続確認</button>
+    <button class="mini" data-act="run-test" data-key="receiver-url">接続を確認</button>
   </div>${testNote('receiver-url')}</div>
 
   <div class="wcard" style="margin-bottom:10px"><h3>ログ保存先</h3>
@@ -5230,8 +5220,8 @@ function connectionSettings() {
   <dl class="kv">
     ${logStoreFields(true, true)}
     ${settingRow('log_store_push_url', 'ログ送信先URLの上書き',
-      '標準以外のプッシュパスを使用するゲートウェイ専用',
-      '詳細設定。空欄のままにするとベース URL から導出されます。ほとんどの場合はこれで正しく動作します。', true)}
+      '送信パスが標準と異なるゲートウェイを使う場合だけ入力',
+      '詳細設定です。空欄のままにするとベースURLから自動で組み立てます。ほとんどの場合はそれで正しく動作します。', true)}
   </dl>${logStoreTests()}</div>`;
 }
 
@@ -5245,74 +5235,66 @@ const MAIL_PRESETS = {
   cluster: {
     label: 'すでに運用しているリレー（Postfix、スマートホスト、オンプレミス Exchange）',
     host: '', port: '25', security: 'none',
-    help: `<p>多くのセルフホスト環境がすでに持っている構成で、最初に確認する価値があります。Kubernetesでは、ホストはサービス名（<span class="mono">postfix.mail.svc.cluster.local</span>、または単に
-      <span class="mono">postfix</span> 同じネームスペースから）、それ以外の場所ではリレーのホスト名です。ポート <b>25</b>、セキュリティ <b>なし</b>：自分たちが管理するネットワーク内では、TLSではなく、要求元によって受け入れるものを判断します。</p>
-    <p><b>おそらくこれらを自分で解明する必要はありません。</b> メールを送信するその他のもの — GitLab、Grafana、Alertmanager — にはすでに設定があります。その設定をコピーしてください：</p>
+    help: `<p>自社でサーバーを運用している環境の多くがすでに持っている構成で、最初に確認する価値があります。Kubernetes では、ホストはサービス名（<span class="mono">postfix.mail.svc.cluster.local</span>、同じ名前空間からなら <span class="mono">postfix</span> だけでも可）です。それ以外の環境ではリレーのホスト名です。ポートは <b>25</b>、セキュリティは<b>なし</b>を選びます。自社で管理するネットワーク内のリレーは、TLS ではなく送信元のアドレスで受け付けるかどうかを判断するためです。</p>
+    <p><b>多くの場合、値を一から調べる必要はありません。</b>GitLab、Grafana、Alertmanager など、すでにメールを送っている仕組みに同じ設定があります。次のコマンドで確認して流用してください：</p>
     <p class="mono" style="font-size:12px">helm get values &lt;release&gt; -n &lt;namespace&gt;</p>
-    <p>他のツールでは名称が異なります。GitLabの
-      <span class="mono">authentication: plain</span> はSMTP AUTHメカニズムであり、 <b>ではなく</b> 暗号化 — これはセキュリティをオンのままにすることに対応します
-      <b>なし</b> ここでユーザー名とパスワードを入力した状態で。その
-      <span class="mono">tls</span> と
-      <span class="mono">starttls_auto</span> がこのセキュリティフィールドに対応します。</p>
-    <p>オンプレミスのExchangeは通常同じです。既知のアドレスからの匿名リレーをポート25で受け入れる受信コネクタです。もし認証情報を要求する場合は、ポート587とSTARTTLSです。</p>`,
+    <p>ツールによって項目名が異なります。GitLab の <span class="mono">authentication: plain</span> は SMTP AUTH の認証方式で、暗号化の設定<b>ではありません</b>。この画面では、セキュリティを<b>なし</b>のままにして、ユーザー名とパスワードを入力する設定に当たります。このセキュリティ欄に対応するのは、GitLab の <span class="mono">tls</span> と <span class="mono">starttls_auto</span> です。</p>
+    <p>オンプレミスの Exchange も通常は同じで、既知のアドレスからの匿名リレーをポート25で受け付ける受信コネクタを使います。認証情報が必要な構成なら、ポート587とSTARTTLSです。</p>`,
   },
   m365: {
     label: 'Microsoft 365 / Exchange Online',
     host: 'smtp.office365.com', port: '587', security: 'starttls',
-    help: `<p><b>何かを入力する前にこれを読んでください。</b> MicrosoftはSMTP AUTHクライアント送信を廃止します — このフォームが採用するユーザー名とパスワードの経路です。多くのテナントですでに無効化されており、新規テナントでも通常は無効です。認証でテストが失敗するのは通常これが原因で、このポータルで修正できるものではありません。</p>
-    <p>代わりに何を使うか、作業量が少ない順に：</p>
+    help: `<p><b>入力する前にお読みください。</b>Microsoft は、このフォームが使うユーザー名とパスワードによる送信方式（SMTP AUTH クライアント送信）を廃止する予定です。すでに無効になっているテナントが多く、新しいテナントでは通常無効です。接続確認が認証エラーで失敗する場合、たいていはこれが原因で、このポータル側では解決できません。</p>
+    <p>代わりの方法（手間の少ない順）：</p>
     <ul>
-      <li><b>すでに運用しているリレー。</b> このリストの最初のオプションを選んだら、それで終わりです。</li>
-      <li><b>直接送信</b>:
-        <span class="mono">yourdomain-com.mail.protection.outlook.com</span>、ポート25、認証情報なし、セキュリティ <b>なし</b>。ご利用のテナント内のメールボックスにのみ配信します。これはまさに招待の動作です。このポータルの IP を SPF で許可する必要があります。また、Microsoft は現在、テナントがこれを拒否するためのスイッチを提供しているため、ご利用の設定を確認してください。</li>
-      <li><b>High Volume Email</b>、または <b>Azure Communication Services</b>
-        （以下に専用の項目があります）。どちらも先に Azure で設定します。</li>
+      <li><b>すでに運用しているリレー：</b>この一覧の最初の選択肢を選べば完了です。</li>
+      <li><b>Direct Send（直接送信）：</b><span class="mono">yourdomain-com.mail.protection.outlook.com</span>、ポート25、認証情報なし、セキュリティ<b>なし</b>。自社テナント内のメールボックスにだけ配信しますが、招待メールの宛先は社内なので十分です。このポータルの IP アドレスを SPF で許可する必要があります。また、Microsoft はテナント側でこの方式を拒否する設定を用意しているため、自社の設定を確認してください。</li>
+      <li><b>High Volume Email</b> または <b>Azure Communication Services</b>（この一覧に専用の選択肢があります）：どちらも先に Azure 側の設定が必要です。</li>
     </ul>
-    <p>SMTP AUTH がまだ有効な場合：ユーザー名は実際のライセンス済みメールボックスの完全なアドレス、パスワードはそのメールボックスのもの、From アドレスはそのメールボックスが送信元として使用できるアドレスである必要があります。</p>
+    <p>SMTP AUTH がまだ有効な場合：ユーザー名にはライセンスのあるメールボックスのメールアドレス全体、パスワードにはそのメールボックスのパスワードを入力します。差出人アドレスは、そのメールボックスが送信者として使えるアドレスにしてください。</p>
     <p><a href="https://learn.microsoft.com/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365"
-      target="_blank" rel="noopener">3 つのオプションに関する Microsoft のページ</a> 確認すべきはこれです。この分野は流動的だからです。</p>`,
+      target="_blank" rel="noopener">3つの方法についての Microsoft の説明</a>を確認してください。仕様の変更が続いています。</p>`,
   },
   acs: {
     label: 'Azure Communication Services',
     host: 'smtp.azurecomm.net', port: '587', security: 'starttls',
-    help: `<p>メール送信が必要なアプリケーションに対する Microsoft 自身の回答であり、SMTP AUTH が廃止される中で同社がユーザーを案内している先です。</p>
-    <p>まず Azure で設定します：Communication Services リソース、検証済みドメインを持つ Email Communication Service、およびそのリソースに対して承認された Entra アプリ登録です。ユーザー名はこれら 3 つの識別子をドットで連結して作成され、パスワードはそのアプリ登録のクライアント シークレットです。つまり、メールボックスの資格情報ではなく、メールボックスは関与しません。</p>
-    <p>正確なユーザー名の形式は、SMTP 認証情報を作成するときに Azure ポータルに表示されます。手作業で組み立てるのではなく、そこからコピーしてください。1 つのセグメントを間違えると、役立つ情報が何もない認証エラーで失敗するためです。</p>`,
+    help: `<p>アプリケーションからメールを送るための Microsoft 公式の方法で、SMTP AUTH の廃止に伴い Microsoft が案内している移行先です。</p>
+    <p>先に Azure で、Communication Services リソース、検証済みドメインを持つ Email Communication Service、そのリソースへの権限を付与した Entra のアプリ登録を用意します。ユーザー名はこの3つの識別子をドットでつないだもので、パスワードはアプリ登録のクライアントシークレットです。メールボックスの認証情報ではなく、メールボックスも使いません。</p>
+    <p>正確なユーザー名の形式は、SMTP 認証情報を作成するときに Azure ポータルに表示されます。手で組み立てずにコピーしてください。一部を間違えると、原因の分からない認証エラーになります。</p>`,
   },
   google: {
     label: 'Google Workspace / Gmail',
     host: 'smtp.gmail.com', port: '587', security: 'starttls',
-    help: `<p>ユーザー名は完全なアドレスです。パスワードは <b>アプリ パスワード</b>であり、アカウント自体のものではありません。そのアカウントのセキュリティ ページで生成され、そのページでは最初に 2 段階認証が必要です。</p>
-    <p>共有の送信者にはこちらが適しています： <span class="mono">smtp-relay.gmail.com</span>、アプリ › Google Workspace › Gmail › ルーティング › SMTP リレーサービス でこのポータルの IP を承認します。パスワードは不要で、招待が特定の 1 人のアカウントに依存しなくなります。</p>
-    <p>Google Cloud 上で実行していますか？ GCP は送信ポート 25 をブロックするため、プロジェクト内リレーは選択できません。これかトランザクション メール プロバイダーが手段です。</p>`,
+    help: `<p>ユーザー名はメールアドレス全体です。パスワードはアカウントのパスワードではなく<b>アプリパスワード</b>です。アカウントの「セキュリティ」ページで作成でき、先に2段階認証を有効にする必要があります。</p>
+    <p>共有の送信元には <span class="mono">smtp-relay.gmail.com</span> が適しています。管理コンソールの「アプリ › Google Workspace › Gmail › ルーティング › SMTP リレーサービス」で、このポータルの IP アドレスを許可します。パスワードは不要になり、招待メールが特定の個人のアカウントに依存しなくなります。</p>
+    <p>Google Cloud で動かしている場合、送信ポート25がブロックされるため、プロジェクト内のリレーは使えません。この方法か、配信専用のメールサービスを使ってください。</p>`,
   },
   ses: {
     label: 'Amazon SES',
     host: 'email-smtp.eu-west-1.amazonaws.com', port: '587', security: 'starttls',
-    help: `<p>ホストのリージョンを自分のリージョンに変更してください。認証情報は
-      <b>SMTP 認証情報</b>、SES コンソールの SMTP 設定で生成されます。これらは IAM ユーザーから派生したものですが、アクセスキーとシークレットではないため、それらを貼り付けると失敗します。</p>
-    <p>From アドレスは、そのリージョンで検証済みの ID である必要があります。新しい SES アカウントは本番アクセスを申請するまでサンドボックスに入るため、検証済みのアドレスにしか配信されません。これは誰もが一度は引っかかります。</p>`,
+    help: `<p>ホスト名のリージョンを、使用するリージョンに変更してください。認証情報には、SES コンソールの「SMTP 設定」で作成する<b>SMTP 認証情報</b>を使います。IAM ユーザーから作られますが、アクセスキーとシークレットキーそのものではないため、それらを貼り付けても失敗します。</p>
+    <p>差出人アドレスは、そのリージョンで検証済みの ID である必要があります。新しい SES アカウントは本番アクセスを申請するまでサンドボックス状態で、検証済みのアドレスにしか配信されません。多くの人が一度はここでつまずきます。</p>`,
   },
   provider: {
-    label: 'トランザクションメールプロバイダー (SendGrid、Mailgun、Postmark、Brevo)',
+    label: 'メール配信サービス（SendGrid、Mailgun、Postmark、Brevo）',
     host: '', port: '587', security: 'starttls',
-    help: `<p>すべて同じ構成です。ポート 587、STARTTLS、パスワードの代わりに API キーです。異なるのは、ホストとユーザー名に入力する内容です：</p>
+    help: `<p>いずれも、ポート587・STARTTLS・パスワードの代わりに API キーを使う構成です。異なるのはホスト名と、ユーザー名に入力する値です：</p>
     <table><tr><th>プロバイダー</th><th>サーバー</th><th>ユーザー名</th></tr>
       <tr><td>SendGrid</td><td><span class="mono">smtp.sendgrid.net</span></td>
-        <td>文字通りの単語 <span class="mono">apikey</span></td></tr>
+        <td><span class="mono">apikey</span>（この文字列をそのまま入力）</td></tr>
       <tr><td>Mailgun</td><td><span class="mono">smtp.mailgun.org</span></td>
         <td><span class="mono">postmaster@your-domain</span></td></tr>
       <tr><td>Postmark</td><td><span class="mono">smtp.postmarkapp.com</span></td>
-        <td>サーバー API トークンを両方のフィールドに入力します</td></tr>
+        <td>サーバー API トークン（ユーザー名とパスワードの両方に入力）</td></tr>
       <tr><td>Brevo</td><td><span class="mono">smtp-relay.brevo.com</span></td>
-        <td>その SMTP ページに表示されているログイン</td></tr></table>
-    <p>いずれも配信する前に送信ドメインを検証する必要があり、ほとんどはサンドボックスまたは共有 IP から始まります。</p>`,
+        <td>SMTP 設定ページに表示されるログイン名</td></tr></table>
+    <p>どのサービスも、配信前に送信ドメインの検証が必要です。多くは、最初はサンドボックスか共有 IP アドレスでの利用になります。</p>`,
   },
   other: {
     label: 'その他',
     host: '', port: '', security: 'starttls',
-    help: `<p>ポート 587 と STARTTLS が現在の既定です。リレーが 465 を提供する場合、それは暗黙的 TLS です。STARTTLS ではなくセキュリティ フィールドでそれを選択してください。そうしないと、接続は失敗するのではなくハングします。</p>
-    <p>組織で何を使っているかわからない？ メールを管理している人なら一言で答えられます。それは、すでに運用している他のセルフホスト型ツールでも必要だった同じ答えです。</p>`,
+    help: `<p>現在はポート587と STARTTLS が標準です。リレーがポート465を使う場合は暗黙的 TLS なので、セキュリティ欄で STARTTLS ではなく「暗黙的 TLS」を選んでください。選び間違えると、エラーにならず接続が止まったままになります。</p>
+    <p>自社で何を使っているか分からない場合は、メールの管理担当者に確認してください。ほかの自社運用ツールの設定と同じ答えで済みます。</p>`,
   },
 };
 
@@ -5321,9 +5303,8 @@ const MAIL_PRESETS = {
 // answer is that this form is always enough, and the rest is for estates
 // that would rather not paste a credential into a browser at all.
 const MAIL_ELSEWHERE = `
-  <p><b>このフォームは常に機能します</b>、あらゆる種類のデプロイで。以下はすべて、リレーのパスワードがすでにどこかでシークレットになっており、それをここにコピーする手順を避けたい場合の代替手段です。このフォームに保存された値は、それらより優先されます。</p>
-  <p><b>Docker Compose</b> - 受信サービスサービス上で、または
-    <span class="mono">.env</span> その横のファイル：</p>
+  <p><b>このフォームは、どの構成でも使えます。</b>以下は、リレーのパスワードがすでに別の場所でシークレットとして管理されていて、ブラウザーに貼り付けたくない場合の代替手段です。このフォームで保存した値は、以下のどの方法よりも優先されます。</p>
+  <p><b>Docker Compose</b>：受信サービスの設定、またはその隣の <span class="mono">.env</span> ファイルに記述します。</p>
   <pre class="mono">receiver:
   environment:
     SMTP_HOST: postfix.internal
@@ -5332,7 +5313,7 @@ const MAIL_ELSEWHERE = `
     SMTP_USERNAME: relay-user
     SMTP_PASSWORD: \${SMTP_PASSWORD}
     SMTP_FROM: ai-guard@example.com</pre>
-  <p><b>Helm</b> - また、パスワードがすでにクラスター内の Secret である場合は、2 つ目のコピーを作らず、そちらを指定してください：</p>
+  <p><b>Helm</b>：パスワードがすでにクラスター内の Secret にある場合は、コピーを作らずにその Secret を参照してください。</p>
   <pre class="mono">managed:
   smtp:
     host: postfix.mail.svc.cluster.local
@@ -5343,13 +5324,13 @@ const MAIL_ELSEWHERE = `
     password:
       existingSecret: smtp-credentials
       key: password</pre>
-  <p><b>その他</b> - 受信サービスは次を読み取ります：
+  <p><b>その他の構成</b>：受信サービスは、どのような方法で設定されたかに関係なく、次の環境変数を読み込みます。
     <span class="mono">SMTP_HOST</span>,
     <span class="mono">SMTP_PORT</span>,
     <span class="mono">SMTP_SECURITY</span>,
     <span class="mono">SMTP_USERNAME</span>,
-    <span class="mono">SMTP_PASSWORD</span> と
-    <span class="mono">SMTP_FROM</span> それらがどのようにしてそこに設定されたとしても、環境から</p>
+    <span class="mono">SMTP_PASSWORD</span>、
+    <span class="mono">SMTP_FROM</span>。</p>
   <p>この方法で設定すると、上の項目には環境変数の値が表示され、パスワードは「設定済み」とだけ表示されます。</p>`;
 
 
@@ -5363,11 +5344,11 @@ const MAIL_ELSEWHERE = `
 // The card is what you see when you are not setting it up, which is almost
 // always. The wizard is the one time you are.
 const MAIL_STEPS = [
-  {k: 'who',    t: 'メールを送信するもの', d: 'わかる範囲で自動入力します'},
-  {k: 'server', t: '送信先',     d: 'ホスト、ポート、暗号化'},
+  {k: 'who',    t: '送信に使うサービス', d: '分かる項目を自動入力'},
+  {k: 'server', t: '送信サーバー',     d: 'ホスト、ポート、暗号化'},
   {k: 'from',   t: '差出人',       d: '認証情報とアドレス'},
-  {k: 'words',  t: 'メッセージ内容',         d: '独自の行を追加'},
-  {k: 'test',   t: '動作確認',       d: '実際のメッセージを送信して完了'},
+  {k: 'words',  t: 'メッセージ内容',         d: '文面を編集'},
+  {k: 'test',   t: '動作確認',       d: 'テストメールを送って完了'},
 ];
 
 let MAILW = null;
@@ -5447,12 +5428,12 @@ function mailPreviewHtml() {
   const links = (fill(MAILW.body).match(/https?:\/\/[^\s<>"')]+/g) || [])
     .filter(u => !host || hostOf(u) !== host);
   const warn = links.length ? `<div class="note" style="border-color:var(--warn);
-    margin-top:12px"><b>これはあなたのポータル以外の場所にリンクしています。</b>
+    margin-top:12px"><b>ポータル以外へのリンクが含まれています。</b>
     <div class="src-note" style="margin-top:6px;font-style:normal;
       color:var(--mut)">${links.map(u => `<span class="mono">${esc(u)}</span>`)
-      .join(', ')} - 再確認に値します。セキュリティツールからのメールが人々にサインインするよう促すこと自体、すでに攻撃の形であり、${esc(portal)} 以外へのリンクがあると、本物の招待と偽物を区別できなくなります。ブロックはされていません。これはあなたのデプロイによるものです。</div></div>` : '';
-  return warn + `<div class="note" style="margin-top:12px"><b>何が届くか</b>
-    <div class="src-note" style="margin:2px 0 6px;font-style:normal">プレースホルダーを埋め込んだプレビュー。</div>
+      .join(', ')} — もう一度確認してください。セキュリティツールからサインインを促すメールは、それだけでフィッシングと同じ形をしています。${esc(portal)} 以外へのリンクがあると、本物の招待と偽物を見分けられなくなります。送信は止めず、この環境の判断に任せます。</div></div>` : '';
+  return warn + `<div class="note" style="margin-top:12px"><b>届くメールのプレビュー</b>
+    <div class="src-note" style="margin:2px 0 6px;font-style:normal">差し込み項目を実際の値に置き換えて表示しています。</div>
     <pre class="mono" style="white-space:pre-wrap;margin:0;font-size:12px;
       color:var(--mut)">件名: ${esc(fill(MAILW.subject))}
 
@@ -5474,7 +5455,7 @@ function mailPreviewSync() {
   const rst = document.getElementById('mw-reset');
   if (rst) rst.disabled = mailIsDefault();
   const lbl = document.getElementById('mw-isdefault');
-  if (lbl) lbl.textContent = mailIsDefault() ? 'これはデフォルトです' : '';
+  if (lbl) lbl.textContent = mailIsDefault() ? '既定の文面です' : '';
 }
 
 function mailBody(k) {
@@ -5482,8 +5463,8 @@ function mailBody(k) {
   const err = MAILW.err ? `<div class="note" style="border-color:var(--warn)"
     >${esc(MAILW.err)}</div>` : '';
   if (k === 'who') return `
-    <h4>メールを送信するもの</h4>
-    <p class="lede">最も近いものを選ぶと、ホスト、ポート、暗号化が自動入力され、そのリレーがどの種類の認証情報を求め、どこから取得するのかが表示されます。この時点では何も保存されず、その後もすべてのフィールドは編集可能なままです。</p>
+    <h4>送信に使うサービス</h4>
+    <p class="lede">近いものを選ぶと、ホスト・ポート・暗号化を自動入力し、必要な認証情報の種類と入手先を表示します。この時点ではまだ保存されず、どの項目も後から変更できます。</p>
     <p><select id="mw-who" class="mfield" style="min-width:340px">
       <option value=""${MAILW.provider ? '' : ' selected'}></option>
       ${Object.keys(MAIL_PRESETS).map(key => `<option value="${key}"${
@@ -5494,41 +5475,41 @@ function mailBody(k) {
       esc(MAIL_PRESETS[MAILW.provider].label)}</b>
       <div class="src-note" style="margin-top:6px;font-style:normal;
         color:var(--mut)">${MAIL_PRESETS[MAILW.provider].help}</div></div>` : ''}
-    <details class="how"><summary>またはポータル外で設定する（Compose、Helm、環境変数）</summary><div>${MAIL_ELSEWHERE}</div></details>
+    <details class="how"><summary>ポータル以外で設定する場合（Compose、Helm、環境変数）</summary><div>${MAIL_ELSEWHERE}</div></details>
     ${err}<div class="ssacts">
-      <button class="mini" data-act="mail-who-next">続行</button>
-      ${MAILW.provider ? '' : `<span class="lede">または、これをスキップして値を自分で入力する</span>`}</div>`;
+      <button class="mini" data-act="mail-who-next">次へ</button>
+      ${MAILW.provider ? '' : `<span class="lede">選ばずに進んで、値を直接入力することもできます</span>`}</div>`;
   if (k === 'server') return `
-    <h4>どこに送るか</h4>
-    <p class="lede">メールを受け付けるリレーです。最後のステップまでどこにも接続されないため、ここで値が間違っていても、探し回るのではなくクリック1回の手間で済みます。</p>
+    <h4>送信サーバー</h4>
+    <p class="lede">メールを受け付けるリレーを指定します。最後の手順まで接続はしないため、ここで値を間違えても、戻って直すだけで済みます。</p>
     <p><input id="mw-host" class="mfield" style="min-width:340px"
       placeholder="smtp.example.com" value="${esc(MAILW.host)}"></p>
     <p><input id="mw-port" class="mfield" style="min-width:140px"
       placeholder="587" value="${esc(MAILW.port)}">
       <select id="mw-sec" class="mfield" style="min-width:230px">
       ${[['starttls', 'STARTTLS（通常はポート 587）'],
-         ['tls', '暗黙的 TLS (ポート 465)'],
+         ['tls', '暗黙的 TLS（ポート 465）'],
          ['none', 'なし（信頼済みネットワークのみ）']].map(o => `<option value="${o[0]}"${
         MAILW.security === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}
       </select></p>
-    <p class="lede" style="font-size:12.5px">ポートを空欄にすると587、暗号化が暗黙的TLSの場合は465を意味します。465を提供するリレーはSTARTTLSではなくそのオプションを求めるため、そうしないと接続は失敗せずにハングします。</p>
+    <p class="lede" style="font-size:12.5px">ポートを空欄にすると587（暗黙的 TLS の場合は465）を使います。ポート465のリレーでは、STARTTLS ではなく「暗黙的 TLS」を選んでください。選び間違えると、エラーにならず接続が止まったままになります。</p>
     ${err}<div class="ssacts">
-      <button class="mini" data-act="mail-server-next">続行</button></div>`;
+      <button class="mini" data-act="mail-server-next">次へ</button></div>`;
   if (k === 'from') return `
     <h4>差出人</h4>
-    <p class="lede">リレーが求める場合は認証情報、およびメールが差出人として示すアドレスです。多くのリレーでは、あるIDで認証し、別のIDとして送信するため、これらは別々になっています。</p>
+    <p class="lede">リレーが求める場合の認証情報と、メールの差出人アドレスを入力します。認証に使うIDと差出人のアドレスが異なるリレーも多いため、別々に入力します。</p>
     <p><input id="mw-user" class="mfield" style="min-width:340px"
       placeholder="ユーザー名（リレーが認証を行わない場合は空欄）"
       value="${esc(MAILW.username)}"></p>
     <p><input id="mw-pass" class="mfield" type="password" style="min-width:340px"
       autocomplete="new-password"
-      placeholder="${MAILW.passSet ? '保存済み - 空欄のままにすると保持されます'
+      placeholder="${MAILW.passSet ? '保存済み（空欄のままなら変更しません）'
                                    : 'パスワードまたはAPIキー'}"></p>
     <p><input id="mw-from" class="mfield" style="min-width:340px"
       placeholder="ai-guard@example.com" value="${esc(MAILW.from)}"></p>
     <p><input id="mw-portal" class="mfield" style="min-width:340px"
       placeholder="https://ai-guard.example.com" value="${esc(MAILW.portal)}"></p>
-    <p class="lede" style="font-size:12.5px">最後の項目は、ユーザーがアクセスするよう案内されるアドレスです。受信サービスは、このポータルがどのホスト名でアクセスされているかを知らないため、間違ったホスト名へのリンクは、リンクがないよりも悪いです。</p>
+    <p class="lede" style="font-size:12.5px">最後の項目は、メールで案内するポータルのアドレスです。受信サービスはこのポータルのホスト名を知らないため、ここで指定します。誤ったアドレスへのリンクは、リンクがないよりも有害です。</p>
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-save" ${busy ? 'disabled' : ''}>${busy
         ? '<span class="ssspin"></span>保存中…' : '保存して続行'}</button></div>`;
@@ -5536,8 +5517,7 @@ function mailBody(k) {
     const def = mailIsDefault();
     return `
     <h4>メッセージの内容</h4>
-    <p class="lede">メッセージ全体は自由に変更できます。送信時に2つのプレースホルダーが入力されます: <span class="mono">{username}</span> と
-      <span class="mono">{portal_url}</span>。両方のボックスを空のままにすると、標準で付属する文言に戻ります。</p>
+    <p class="lede">件名と本文は自由に変更できます。送信時に <span class="mono">{username}</span> と <span class="mono">{portal_url}</span> が実際の値に置き換わります。両方の欄を空にすると、製品に付属の文面に戻ります。</p>
     <p><input id="mw-subject" class="mfield" style="min-width:340px;width:100%;
       max-width:560px" placeholder="件名" value="${esc(MAILW.subject)}"></p>
     <p><textarea id="mw-body" class="mfield" rows="12"
@@ -5546,8 +5526,8 @@ function mailBody(k) {
       font-size:12.5px;line-height:1.5">${esc(MAILW.body)}</textarea></p>
     <div class="ssacts" style="margin-top:0">
       <button class="mini" id="mw-reset" data-act="mail-reset"
-        ${def ? 'disabled' : ''}>デフォルトに戻す</button>
-      <span class="lede" id="mw-isdefault">${def ? 'これはデフォルトです' : ''}</span>
+        ${def ? 'disabled' : ''}>既定の文面に戻す</button>
+      <span class="lede" id="mw-isdefault">${def ? '既定の文面です' : ''}</span>
     </div>
     <div id="mw-preview">${mailPreviewHtml()}</div>
     ${err}<div class="ssacts">
@@ -5556,18 +5536,18 @@ function mailBody(k) {
   }
   const missed = (USERS || []).filter(u => u.email && !u.invited_at).length;
   return `
-    <h4>動作することを確認</h4>
-    <p class="lede">保存しました。まだ何も送信されていません。正しく見えるのに黙って送信されない設定は、招待が消え、受け取れなかった人が受信トレイを確認しなかったとして責められる原因になります。</p>
+    <h4>テスト送信で確認</h4>
+    <p class="lede">保存しました。まだメールは送信していません。設定が正しく見えても実際には届かない場合、招待が届かず、受け取れなかった人が確認不足だと誤解されかねません。テストメールで確かめてください。</p>
     <p><input id="mw-to" class="mfield" style="min-width:340px"
-      placeholder="テスト送信先…" value="${esc(MAILW.to)}"></p>
+      placeholder="テストメールの送信先アドレス" value="${esc(MAILW.to)}"></p>
     ${MAILW.done.test ? `<div class="note" style="border-color:var(--pri)"
       >${esc(MAILW.done.test)}</div>` : ''}
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-try" ${busy ? 'disabled' : ''}>${busy
-        ? '<span class="ssspin"></span>送信中…' : 'テストを送信'}</button>
+        ? '<span class="ssspin"></span>送信中…' : 'テストメールを送信'}</button>
       ${missed ? `<button class="mini" data-act="user-invite-all"
-        ${MAILW.done.test ? '' : 'disabled'}>誰も受け取っていない ${missed} 件の招待を送信</button>` : ''}
-      ${missed && !MAILW.done.test ? `<span class="lede">テストが届いた後</span>` : ''}</div>`;
+        ${MAILW.done.test ? '' : 'disabled'}>まだ案内していない ${missed} 人に招待を送信</button>` : ''}
+      ${missed && !MAILW.done.test ? `<span class="lede">テストメールが届いたら押せます</span>` : ''}</div>`;
 }
 
 function mailWizard() {
@@ -5590,10 +5570,10 @@ function mailWizard() {
             : `<span class="pend">${esc(s.d)}</span>`}</span></li>`;
       }).join('')}</ol>
       <div class="sssum">
-        <div class="lede" style="font-size:11.5px">${n} / ${MAIL_STEPS.length} 完了</div>
+        <div class="lede" style="font-size:11.5px">${MAIL_STEPS.length} 手順中 ${n} 手順が完了</div>
         <div class="barwrap"><div class="bar"
           style="width:${n / MAIL_STEPS.length * 100}%"></div></div>
-        <div class="lede" style="font-size:11.5px">メールは任意のままです。アカウントはどちらでも作成されます。</div>
+        <div class="lede" style="font-size:11.5px">メールの設定は任意です。設定しなくてもアカウントは作成できます。</div>
       </div>
     </div>
     <div class="ssmain">${mailBody(MAIL_STEPS[MAILW.step].k)}
@@ -5615,24 +5595,20 @@ function mailSettings() {
   return `<div class="wcard" style="margin-bottom:10px"><h3>メール</h3>
   <p style="margin:0 0 6px"><span class="pill ${ready ? 'p-ok' : 'p-mut'}">${
     ready ? 'オン' : 'オフ'}</span>${src === 'env'
-    ? ' <span class="pill p-mut">デプロイ設定から</span>' : ''}</p>
+    ? ' <span class="pill p-mut">環境変数の値</span>' : ''}</p>
   <p class="lede">${ready
-    ? `招待メールは <span class="mono">${esc(host)}</span> を通じて
-       <span class="mono">${esc(from)}</span> から送信されます。`
-    : `アカウントが作成されたことを相手に知らせるために使います。設定は任意です。
-       設定しない場合でも、アカウントはこれまでとまったく同じように作成されます。
-       ポータルは作成を拒否せず、メールが誰にも送信されなかったことをはっきり表示します。`}</p>
+    ? `招待メールは <span class="mono">${esc(host)}</span> から、差出人 <span class="mono">${esc(from)}</span> で送信されます。`
+    : `アカウントを作成したことを本人に知らせるために使います（任意）。設定しなくてもアカウントは通常どおり作成でき、その場合はメールを送っていないことを画面で明示します。`}</p>
   <p><button class="mini" data-act="mail-open">${ready
     ? '設定を確認' : '設定する'}</button>
     ${ready ? `<button class="mini" data-act="mail-quick-test"
       style="margin-left:6px">テストメールを送信</button>` : ''}
     ${MAILMSG ? `<span class="lede" style="margin:0 0 0 8px;font-size:12.5px"
       >${MAILMSG}</span>` : ''}</p>
-  ${missed ? `<div class="note">${missed === 1 ? 'この1人' : `この${missed}人`}はここにアカウントを持っていますが、
-    一度も通知を受けていません。
+  ${missed ? `<div class="note">アカウントを作成済みで、まだ案内メールを受け取っていない人が ${missed} 人います。
     ${ready ? `<button class="mini" data-act="user-invite-all"
-      style="margin-left:6px">未通知のユーザーに招待を送信</button>`
-    : 'メールを設定すると、ここに1つのボタンが表示されます。'}</div>` : ''}
+      style="margin-left:6px">まだ案内していない人に招待を送信</button>`
+    : 'メールを設定すると、まとめて招待を送るボタンがここに表示されます。'}</div>` : ''}
   </div>`;
 }
 
@@ -5912,7 +5888,7 @@ function ssoBody(k) {
       placeholder="アプリケーション (クライアント) ID" value="${esc(SSOW.client)}"></p>
     <p><input id="sso-secret" class="mfield" type="password"
       style="min-width:340px" autocomplete="new-password"
-      placeholder="${SSOW.secretSet ? '保存済み - 空欄のままにすると保持されます'
+      placeholder="${SSOW.secretSet ? '保存済み（空欄のままなら変更しません）'
                                     : 'クライアント シークレットの値'}"></p>
     <p class="lede" style="font-size:12.5px">作成時にシークレットをコピーしなかった場合は、新しいものを作成する必要があります。Entra では値が一度しか表示されません。ここでこれらの値を使って Microsoft にトークンを要求するため、シークレットが間違っていれば、最初にサインインしようとする人ではなく、この時点で検出されます。</p>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-client"

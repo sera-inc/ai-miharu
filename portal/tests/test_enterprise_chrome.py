@@ -100,7 +100,7 @@ def test_the_estate_control_takes_the_organisations_name():
     assert "settingRow('org_name', '組織名', '株式会社サンプル'," in HTML
     assert "function orgSettings()" in HTML
     assert "body = orgSettings() + mailSettings() + alertingSettings();" in HTML
-    assert "<h4>エステートに名前を付ける</h4>" in HTML
+    assert "<h4>組織名</h4>" in HTML
     assert "${esc(org)} にサインインしてください。" in HTML
     assert "if (key === 'org_name' && AUTH) { AUTH.org_name = val.trim(); showEstate(); }" in HTML
 

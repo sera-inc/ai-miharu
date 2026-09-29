@@ -362,7 +362,7 @@ def test_the_extension_setup_wears_the_rail_and_infers_the_early_steps():
     Chromium id without having packed the thing that produced it. Evidence,
     rather than a tick somebody presses to say they did it."""
     html = (main.STATIC / "index.html").read_text()
-    assert "パッケージ済み - IDがそれを証明" in html
+    assert "パッケージ化済み（拡張機能IDを確認済み）" in html
     assert "ダウンロード済み - IDがそれを証明" in html
     assert 'data-act="ext-page"' in html and "ssrail" in html
     # The numbered pill row is gone.
@@ -419,9 +419,9 @@ def test_the_rail_says_what_each_step_costs_to_skip():
     says so, because the moment it starts working is worth naming."""
     html = (main.STATIC / "index.html").read_text()
     for needle in ("必須", "推奨", "任意",
-                   "今すぐデプロイできます", "収集を開始", "活用する",
-                   "すべてのアカウントが個人として扱われます",
-                   "これがないとデプロイできません"):
+                   "収集エージェントを配布できます", "収集を始める", "さらに活用する",
+                   "すべて個人アカウントとして扱われます",
+                   "未設定だと何も展開できません"):
         assert needle in html, needle
 
 
@@ -437,7 +437,7 @@ def test_the_first_two_steps_say_where_to_look_not_just_what_to_type():
     assert "kitchen table" not in html
     for needle in ("kubectl get ingress -A", "tailscale status",
                    "Grafana Cloud Logs", "/loki/api/v1/query_range",
-                   "Loki 互換をうたっています"):
+                   "「Loki 互換」をうたう製品の中には"):
         assert needle in html, needle
 
 
