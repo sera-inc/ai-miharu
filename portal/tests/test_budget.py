@@ -160,13 +160,13 @@ def test_linking_a_tool_is_four_steps_with_a_review():
     step with nothing showing the licence, its covered tools and the cost
     together."""
     for needle in ("function bwRail(", "function bwBodyReview(",
-                   "const BW_STEPS", "確認してリンク",
-                   'class="tiers"', "<th>プラン</th>", "ライセンス単価",
+                   "const BW_STEPS", "確認して登録",
+                   'class="tiers"', "<th>シート種別</th>", "シート単価",
                    "bw-tsum", "bw-money"):
         assert needle in INDEX, needle
     # The rail summary carries the money, not a step count: this is the one
     # wizard whose subject is a number.
-    assert "月間支出" in INDEX
+    assert "月額費用" in INDEX
     assert "function bwLive()" in INDEX
     # Currency is read off the screen too, or every figure renders unitless
     # until the step is left.
@@ -200,7 +200,7 @@ def test_the_member_step_names_every_connector_and_its_plan():
     The general note replaced a ChatGPT-specific one: naming a single absence
     made it look like the only one, when every tool without a connector is in
     exactly the same position."""
-    assert "プラン、およびその方法" in INDEX
+    assert "必要なプランと方法" in INDEX
     # There used to be a SECOND table listing only the built connectors,
     # directly above a dropdown containing exactly those same connectors. It
     # said nothing the full table does not, and having both invited the
@@ -261,8 +261,8 @@ def test_a_tool_you_defined_is_not_reported_as_undocumented():
     invented five minutes earlier, that its vendor documents no members API.
     Nobody had looked. "We have no record" and "we looked and there is
     nothing" are different sentences."""
-    assert "はあなたが定義したツールです" in INDEX
-    assert "ここにはそのベンダーが提供する内容の記録はありません" in INDEX
+    assert "は組織で独自に定義したツールです" in INDEX
+    assert "ここにはベンダーが提供する内容の記録がありません" in INDEX
     # And the table says which tools it is actually about.
     assert "今回のリリースに同梱されるツール" in INDEX
     assert "独自に追加したツールは含まれません" in INDEX
@@ -318,7 +318,7 @@ def test_a_headerless_paste_keeps_the_role_and_seat_it_plainly_carries():
     assert "if (spare.length === 1) iTier = spare[0];" in fn
     assert "guessed = iRole >= 0 || iTier >= 0;" in fn
     assert "&& i !== iRole && i !== iTier && !ignored.includes(i)).length" in fn
-    assert "'ヘッダー行なし、列名は値から生成'" in html
+    assert "'ヘッダー行なし（列名は値から推定）'" in html
 
 
 def test_a_subscription_record_is_collapsible_and_remembers_being_open():

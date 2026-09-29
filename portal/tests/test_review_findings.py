@@ -277,7 +277,7 @@ def test_the_shell_says_so_when_the_read_failed():
     html = open(os.path.join(index, "app", "static", "index.html")).read()
     # A banner above every view, not on the one page that checked.
     assert "function loadBanner()" in html
-    assert "このページは回答ではありません" in html
+    assert "このページの内容は実際の状況を表していません" in html
     assert "const tb = tabbar() + loadBanner();" in html
     # The confident lines are gated on the read having worked.
     assert "const dataOk = () => !loadError;" in html

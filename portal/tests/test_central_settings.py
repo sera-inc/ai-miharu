@@ -280,7 +280,7 @@ def test_the_fleet_tab_is_renamed_but_keeps_its_id():
     #settings/fleet links still land. The orientation tour is intentionally
     separate now: it teaches the work-area model rather than each setting."""
     html = (main.STATIC / "index.html").read_text()
-    assert "['fleet', '検出とペーストガード']" in html
+    assert "['fleet', '検出と貼り付けガード']" in html
     assert "const SETTABS = STABS.map(([id]) => id);" in html
 
 

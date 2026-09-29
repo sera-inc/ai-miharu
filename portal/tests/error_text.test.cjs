@@ -1,0 +1,77 @@
+// Run with: node --test portal/tests/error_text.test.cjs
+//
+// The portal's Japanese error messages, rendered by the browser's own
+// functions. The receiver keeps its API details in English (its tests and
+// logs read them that way) and the portal says the same thing in Japanese, so
+// what matters here is which English sentences are recognised, that a Japanese
+// tool or organisation name quoted inside an English sentence does not make
+// the whole sentence look Japanese, and that a mail server's own words are
+// kept as evidence rather than translated.
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const html = fs.readFileSync(path.join(__dirname, '../app/static/index.html'), 'utf8');
+// From the first helper of the block to the comment that follows uiRelayText.
+const start = html.indexOf('const uiApiName = ');
+const end = html.indexOf('// The refusal detail from a failed write');
+assert.ok(start > 0 && end > start, 'the error-text block moved: update this slice');
+const block = html.slice(start, end);
+// The two tables uiErrorText reads before its own code runs.
+// The two activation tables uiErrorText reads: one line each, defined side by side.
+const lineAt = marker => { const i = html.indexOf(marker); return html.slice(i, html.indexOf('\n', i) + 1); };
+const tables = lineAt('const JA_ACTIVATION_REFUSAL = ') + lineAt('const EN_ACTIVATION_REFUSAL_CODES = ');
+
+function load() {
+  const c = vm.createContext({});
+  vm.runInContext(tables + block + '; this.uiErrorText = uiErrorText; this.uiRelayText = uiRelayText;', c);
+  return c;
+}
+const { uiErrorText, uiRelayText } = load();
+
+test('a known English sentence that quotes a Japanese name is still translated', () => {
+  // The bug: any Japanese character made the whole string look Japanese, so
+  // this reached the screen in English.
+  assert.equal(uiErrorText('malformed tool id: 会議録ボット', 422),
+               'ツール ID の形式が正しくありません: 会議録ボット');
+  assert.equal(uiErrorText('not an email address: 山田太郎', 422),
+               'メールアドレスの形式が正しくありません: 山田太郎');
+  assert.match(uiErrorText('claude-code is already covered by the claude 世良チーム subscription - one licence, one subscription; fold them together instead', 422),
+               /claude-code は、すでに claude の契約（世良チーム）の対象に含まれています/);
+});
+
+test('vendor refusals name the vendor and the reason', () => {
+  assert.match(uiErrorText('the Anthropic API answered 401: the key is wrong, expired or revoked', 200),
+               /^Anthropic API が 401 を返しました。キーが正しくないか/);
+  assert.match(uiErrorText('the exchange-rate source answered 200, but not with JSON', 0),
+               /^為替レートの取得元が 200 を返しましたが、JSON 形式ではありませんでした。$/);
+  assert.match(uiErrorText('could not reach the Cursor API (ConnectTimeout)', 0),
+               /^Cursor API に接続できませんでした（ConnectTimeout）。$/);
+  assert.match(uiErrorText('the ECB publishes no reference rate for JPY', 0), /^欧州中央銀行（ECB）は JPY の参考レートを公表していません。$/);
+});
+
+test('a Japanese message passes through untouched, and an unknown English one does not', () => {
+  assert.equal(uiErrorText('保存できませんでした: 入力内容を確認してください。', 422),
+               '保存できませんでした: 入力内容を確認してください。');
+  assert.equal(uiErrorText('something the portal has never heard of', 500),
+               '処理できませんでした（HTTP 500）。');
+  assert.equal(uiErrorText('', 0), '処理できませんでした。');
+  assert.equal(uiErrorText(null, 404), '処理できませんでした（HTTP 404）。');
+});
+
+test('activation refusals still map to their Japanese explanations', () => {
+  assert.match(uiErrorText('no key was given', 400), /キーが入力されていません/);
+});
+
+test('the mail server\'s own words are kept as evidence, under a Japanese lead-in', () => {
+  // SMTP replies are what an administrator searches for in the relay's
+  // documentation, so the text and its code stay exactly as received.
+  assert.equal(uiRelayText('535 5.7.8 Authentication credentials invalid'),
+               'メールサーバーの応答: 535 5.7.8 Authentication credentials invalid');
+  assert.equal(uiRelayText('ConnectionRefusedError'),
+               'メールサーバーとの通信に失敗しました（ConnectionRefusedError）。');
+  assert.equal(uiRelayText('no mail server is configured'), 'メールサーバーが設定されていません。');
+  assert.equal(uiRelayText(''), 'メールサーバーから理由は示されませんでした。');
+  assert.equal(uiRelayText('メールサーバーが応答しません'), 'メールサーバーが応答しません');
+});

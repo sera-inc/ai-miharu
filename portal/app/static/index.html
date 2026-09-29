@@ -1113,7 +1113,7 @@ let SETTAB = 'fleet';
 // was renamed because "Fleet" also names a whole nav section (enrolled devices
 // and enrollment tokens), and two different things called Fleet in one product
 // is a coin toss every time somebody says it.
-const STABS = [['fleet', '検出とペーストガード'],
+const STABS = [['fleet', '検出と貼り付けガード'],
                ['connection', '受信サービスとログ保存先'],
                ['alerting', '表示とアラート'], ['account', 'アカウント'],
                ['start', 'はじめに']];
@@ -1876,7 +1876,7 @@ function showEstate() {
   } else {
     state = 'off'; text = 'ソースからの報告がありません'; sub = 'どのソースからも報告がありません';
     title = '検出ソースが ' + hours
-      + ' 以内に報告していません。検出ソースを開いてリンクしてください。';
+      + ' 以内に報告していません。「検出ソース」を開いて、接続の状況を確認してください。';
   }
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('estate-name', name);
@@ -1901,15 +1901,15 @@ const app = document.getElementById('app'), q = document.getElementById('q');
 // links keep working.
 const NAV = [
   {id:'home',      lbl:'概要',   items:[['overview','概要'],['dashboard','Grafana']]},
-  {id:'inventory', lbl:'資産一覧',  items:[['tools','ツール'],['people','ユーザー'],
-                                            ['devices','デバイス'],['personal','個人アカウント'],
-                                            ['mcp','モデルコンテキストプロトコルサーバー']]},
+  {id:'inventory', lbl:'資産一覧',  items:[['tools','ツール'],['people','利用者'],
+                                            ['devices','端末'],['personal','個人アカウント'],
+                                            ['mcp','MCPサーバー']]},
   {id:'governance',lbl:'ガバナンス', items:[['register','AI台帳'],['registry','ツールレジストリ'],
-                                            ['paste','ペーストガード'],['iso','ISO 42001証跡']]},
+                                            ['paste','貼り付けガード'],['iso','ISO/IEC 42001 証跡']]},
   {id:'spend',     lbl:'予算',     items:[['budget','予算']]},
-  {id:'agentic',   lbl:'エージェント型AI', items:[['agentic','自律AIの活動']]},
-  {id:'health',    lbl:'検出カバレッジ',     items:[['setup','検出元'],['coverage','検出対象外端末']]},
-  {id:'managed',   lbl:'端末管理',      items:[['fleet','デバイス'],['tokens','登録トークン']]},
+  {id:'agentic',   lbl:'エージェント型AI', items:[['agentic','エージェント型AI']]},
+  {id:'health',    lbl:'検出カバレッジ',     items:[['setup','検出ソース'],['coverage','収集エージェント未導入']]},
+  {id:'managed',   lbl:'端末管理',      items:[['fleet','登録済み端末'],['tokens','登録トークン']]},
   {id:'system',    lbl:'設定',   items:[['settings','設定']]},
 ];
 const NAVICONS = {
@@ -2029,17 +2029,17 @@ function windowSelect(cls) {
   const choices = WINDOWS.some(w => w[0] === dflt) ? WINDOWS
     : [[dflt, fmtWindow(dflt)]].concat(WINDOWS).sort((a, b) => a[0] - b[0]);
   return `<label class="${cls}"
-      title="すべてのカウントはこのレポート期間を対象としています。デプロイのデフォルトは ${esc(fmtWindow(dflt))} です。Grafana パネルは独自の時間範囲を維持します。">
-      <select data-window aria-label="レポート期間">${
+      title="すべての件数は、この集計期間を対象にしています。この環境の既定値は ${esc(fmtWindow(dflt))} です。Grafana のパネルは、それぞれ独自の時間範囲を使います。">
+      <select data-window aria-label="集計期間">${
         choices.map(([h, l]) => `<option value="${h}"${h === hours ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select></label>`;
 }
 // A preference of the person, not a setting of the deployment, so it sits
 // with the other display choices and says so.
 function windowRow() {
   const dflt = Number((CFG && CFG.lookback_hours) || 168);
-  return `<dt>レポート期間${INFO}</dt><dd>${windowSelect('mfield window-field')}
-    <span class="pill p-mut">自分の変更</span>
-    <div class="src-note fnote">すべてのページはこのレポート期間でレポートし、選択はデプロイではなくアカウントに従います。デプロイのデフォルトは ${esc(fmtWindow(dflt))} です。概要ヘッダーにはクイック変更用の同じコントロールがあり、Grafana パネルは独自の時間範囲を維持します。</div></dd>`;
+  return `<dt>集計期間${INFO}</dt><dd>${windowSelect('mfield window-field')}
+    <span class="pill p-mut">個人の設定</span>
+    <div class="src-note fnote">すべての画面が、この集計期間で表示されます。この設定は、環境全体ではなく、ご自身のアカウントに保存されます。この環境の既定値は ${esc(fmtWindow(dflt))} です。概要画面の上部にも、すばやく変更できる同じ選択欄があります。Grafana のパネルは、それぞれ独自の時間範囲を使います。</div></dd>`;
 }
 // Standalone portals have no central settings, but the window is still a
 // choice a person can make, so the card stands alone there.
@@ -2287,8 +2287,8 @@ function trendChart(days, a, b, aLabel, bLabel) {
 // the console layer presentation helpers: use the same graph, lifecycle and register reads
 // as the working views. No demo fixtures or network calls live in renderers.
 let UI_PERSONAL_TOOLS = false;
-const UI_TERMS = Object.freeze({"Workspace":"ワークスペース","Discovery":"検出","Governance":"ガバナンス","Financial governance":"財務ガバナンス","Autonomous activity":"自律型アクティビティ","Coverage":"カバレッジ","Fleet operations":"端末管理","Administration":"管理","Managed estate":"管理対象端末","Standalone portal":"スタンドアロンポータル","Monitoring active":"監視中","Owner":"オーナー","Reporting window":"レポート期間","24 hours":"24時間","3 days":"3日","7 days":"7日","14 days":"14日","30 days":"30日","90 days":"90日","just now":"たった今","m ago":"分前","h ago":"時間前","d ago":"日前","Unassigned":"未割り当て","high":"高","medium":"中","low":"低","approved":"承認済み","reviewing":"レビュー中","rejected":"拒否済み","unapproved":"未承認","coding":"コーディング","assistant":"アシスタント","deepseek":"DeepSeek","productivity":"生産性","browser":"ブラウザ","desktop":"デスクトップ","network":"ネットワーク","cloud":"クラウド","ide":"統合開発環境","cli":"コマンドライン","mcp":"モデルコンテキストプロトコル","MCP":"モデルコンテキストプロトコル","None":"なし","Unattributed":"未帰属","never":"一度もなし","personal":"個人","corporate":"法人","last":"最終","exported":"エクスポート済み","endpoint":"接続先","fleet":"端末群","required":"必須","recommended":"推奨","optional":"任意","ready":"準備完了","open":"未解決","healthy":"正常","silent":"サイレント","unknown":"不明","source":"ソース","installed":"インストール済み","using":"使用中","findings":"検出事項","device":"デバイス","devices":"デバイス","users":"ユーザー","account":"アカウント","accounts":"アカウント","stale":"未更新","expiring":"期限切れ間近","expired":"期限切れ","unseated":"シート未割当","idle":"待機中","reporting":"レポート中","own log store": "独自のログ保存先", "the signed-in account": "サインイン中のアカウント", "login": "ログイン", "none": "なし", "enterprise": "エンタープライズ", "trial": "トライアル", "transcription": "文字起こし", "writing": "文章作成", "image": "画像", "search": "検索", "local-model": "ローカルモデル", "voice": "音声", "platform": "プラットフォーム", "agent": "エージェント", "other": "その他", "unreviewed": "未レビュー", "project": "プロジェクト", "team": "チーム", "person": "個人", "macos": "macOS", "linux": "Linux", "demo": "デモ", "launchd, at login": "launchd、ログイン時", "systemd timer, every 15 min": "systemdタイマー、15分ごと", "launchd, every 6 hours": "launchd、6時間ごと", "member": "メンバー", "admin": "管理者", "viewer": "閲覧者", "owner": "オーナー","windows": "Windows", "active": "有効", "revoked": "失効", "warn": "警告", "block": "ブロック", "off": "オフ", ".mcp.json in a repository": ".mcp.json（リポジトリ内）", "Windsurf / Devin Desktop": "Windsurf／Devinデスクトップ版", "JetBrains IDEs": "JetBrains製IDE", "aws_access_key": "AWS アクセスキー", "private_key": "秘密鍵", "gitlab_pat": "GitLab パーソナルアクセストークン", "github_token": "GitHub トークン", "anthropic_key": "Anthropic API キー", "openai_key": "OpenAI API キー", "slack_token": "Slack トークン", "jwt": "JWT", "google_api_key": "Google API キー", "azure_storage_secret": "Azure ストレージシークレット", "stripe_live_key": "Stripe 本番用シークレットキー", "mailchimp_key": "Mailchimp API キー", "hubspot_token": "HubSpot アクセストークン", "sendgrid_key": "SendGrid API キー", "meta_access_token": "Meta アクセストークン", "password_assignment": "パスワード", "payment_card": "カード番号", "uk_nino": "国民保険番号", "iban": "IBAN", "bulk_emails": "大量メールリスト", "classification_marking": "分類マーキング"});
-const UI_GRAFANA_PANEL_NAMES = Object.freeze({"Devices reporting (24h)":"24時間以内に報告した端末","Top tools (devices, 7d)":"AIツール別の端末数（過去7日間）","Findings by surface (7d)":"利用環境別の検出結果（過去7日間）","Findings by severity (rate)":"重大度別の検出結果","Devices with findings, by OS":"OS別・検出結果のある端末","Pastes stopped (7d)":"ペーストを遮断した回数（過去7日間）"});
+const UI_TERMS = Object.freeze({"Workspace":"ワークスペース","Discovery":"検出","Governance":"ガバナンス","Financial governance":"財務ガバナンス","Autonomous activity":"自律AIの活動","Coverage":"カバレッジ","Fleet operations":"端末管理","Administration":"管理","Managed estate":"管理対象環境","Standalone portal":"単独ポータル","Monitoring active":"監視中","Owner":"オーナー","Reporting window":"集計期間","24 hours":"24時間","3 days":"3日","7 days":"7日","14 days":"14日","30 days":"30日","90 days":"90日","just now":"たった今","m ago":"分前","h ago":"時間前","d ago":"日前","Unassigned":"未割り当て","high":"高","medium":"中","low":"低","approved":"承認済み","reviewing":"レビュー中","rejected":"拒否済み","unapproved":"未承認","coding":"コーディング","assistant":"アシスタント","deepseek":"DeepSeek","productivity":"生産性","browser":"ブラウザー","desktop":"デスクトップ","network":"ネットワーク","cloud":"クラウド","ide":"IDE","cli":"CLI","mcp":"MCP","MCP":"MCP","None":"なし","Unattributed":"利用者未登録","never":"一度もなし","personal":"個人用","corporate":"会社用","last":"最終","exported":"エクスポート済み","endpoint":"端末の収集エージェント","fleet":"端末管理（MDM）","required":"必須","recommended":"推奨","optional":"任意","ready":"準備完了","open":"未解決","healthy":"正常","silent":"報告なし","unknown":"不明","source":"検出ソース","installed":"インストール済み","using":"使用中","findings":"検出結果","device":"端末","devices":"端末","users":"ユーザー","account":"アカウント","accounts":"アカウント","stale":"未更新","expiring":"期限が近い","expired":"期限切れ","unseated":"シートなし","idle":"利用なし","reporting":"報告中","own log store": "独自のログ保存先", "the signed-in account": "サインイン中のアカウント", "login": "サインイン", "none": "なし", "enterprise": "エンタープライズ", "trial": "トライアル", "transcription": "文字起こし", "writing": "文章作成", "image": "画像", "search": "検索", "local-model": "ローカルモデル", "voice": "音声", "platform": "プラットフォーム", "agent": "エージェント", "other": "その他", "unreviewed": "未レビュー", "project": "プロジェクト", "team": "チーム", "person": "個人", "macos": "macOS", "linux": "Linux", "demo": "デモ", "launchd, at login": "launchd、ログイン時", "systemd timer, every 15 min": "systemdタイマー、15分ごと", "launchd, every 6 hours": "launchd、6時間ごと", "member": "メンバー", "admin": "管理者", "viewer": "閲覧者", "owner": "オーナー","windows": "Windows", "active": "有効", "revoked": "失効済み", "warn": "警告", "block": "ブロック", "off": "オフ", ".mcp.json in a repository": ".mcp.json（リポジトリ内）", "Windsurf / Devin Desktop": "Windsurf／Devinデスクトップ版", "JetBrains IDEs": "JetBrains製IDE", "aws_access_key": "AWS アクセスキー", "private_key": "秘密鍵", "gitlab_pat": "GitLab パーソナルアクセストークン", "github_token": "GitHub トークン", "anthropic_key": "Anthropic API キー", "openai_key": "OpenAI API キー", "slack_token": "Slack トークン", "jwt": "JWT", "google_api_key": "Google API キー", "azure_storage_secret": "Azure ストレージシークレット", "stripe_live_key": "Stripe 本番用シークレットキー", "mailchimp_key": "Mailchimp API キー", "hubspot_token": "HubSpot アクセストークン", "sendgrid_key": "SendGrid API キー", "meta_access_token": "Meta アクセストークン", "password_assignment": "パスワード", "payment_card": "カード番号", "uk_nino": "英国の国民保険番号（NINO）", "iban": "IBAN", "bulk_emails": "メールアドレスの大量リスト", "classification_marking": "機密表示"});
+const UI_GRAFANA_PANEL_NAMES = Object.freeze({"Devices reporting (24h)":"24時間以内に報告した端末","Top tools (devices, 7d)":"AIツール別の端末数（過去7日間）","Findings by surface (7d)":"利用環境別の検出結果（過去7日間）","Findings by severity (rate)":"重大度別の検出結果","Devices with findings, by OS":"OS別・検出結果のある端末","Pastes stopped (7d)":"貼り付けを遮断した回数（過去7日間）"});
 const UI_TERMS_CASEFOLD = Object.freeze(Object.fromEntries(
   Object.entries(UI_TERMS).map(([key, label]) => [key.toLowerCase(), label])));
 const uiTerm = value => {
@@ -2305,8 +2305,98 @@ const uiEvidence = value => {
   const dns = raw.match(/^DNS lookup for (.+) \(via (.+)\)$/);
   return dns ? `DNS 参照: ${dns[1]}（${dns[2]} 経由）` : raw;
 };
-const JA_SOURCE_CATALOG = Object.freeze({"collector-macos":{"label":"macOS 収集エージェント","needs":"以下に示す事前構成済みスクリプトをダウンロードし、Jamf ポリシーとして実行します（root、定期的な報告）。受信サービス URL と登録トークンはスクリプト内にすでに含まれています。クラシック モードでは、代わりに AIGUARD_RECEIVER_BASE、AIGUARD_TOKEN、AIGUARD_CORP_DOMAINS をスクリプト パラメーターとして渡してください。"},"collector-linux":{"label":"Linux 収集エージェント","needs":"以下に示すスクリプトをダウンロードし、root でスケジュールに従って実行します（RMM ジョブ、cron、systemd timer など）。そのまま実行できます。クラシック モードでは、macOS と同じ 3 つの環境変数を設定してください。"},"collector-windows":{"label":"Windows 収集エージェント","needs":"以下に示すスクリプトをダウンロードし、Intune プラットフォーム スクリプトとしてアップロードします。そのまま使用できます。クラシック モードでは、まずスクリプトの先頭で同じ 3 つの値を設定してください。"},"browser_extension":{"label":"ブラウザ拡張機能: アカウント","needs":"ブラウザ内の各 AI サイトにどのアカウントがサインインしているかを表示します。拡張機能を一度パッケージ化し（拡張機能の配布手順書を参照）、次に以下からお使いのプラットフォーム用の事前構成済みポリシーをダウンロードします。macOS 用 Chromium ポリシー、Windows 用デプロイ スクリプト、およびその両方の Firefox 版です。URL、登録トークン、ドメイン、ペースト ガード設定はすべて組み込まれています。"},"paste_guard":{"label":"ブラウザ拡張機能: ペースト ガード","needs":"同じ拡張機能の一部です。2 回目のインストールは不要です。マークされたドキュメントが AI ツールに貼り付けられると警告またはブロックします。モードとマークは設定で指定します。上記のアカウント行が報告しているのにこちらが静かな場合、ガードは動作しており、危険な貼り付けは誰も行っていません。"},"entra_sign_in":{"label":"Entra サインイン","needs":"Entra で AuditLog.Read.All と Directory.Read.All を持つアプリを登録し、スキャナーに AIGUARD_ENTRA_TENANT_ID、_CLIENT_ID、_CLIENT_SECRET を設定します。"},"entra_delegated_access":{"label":"Entra 委任アクセス","needs":"サインインと同じ Entra アプリです。対話型サインイン ログでは見落とされるバックグラウンド/API 利用を検出します。"},"entra_consent_grant":{"label":"Entra 同意の付与","needs":"同じアプリ登録です。ユーザーがサードパーティ アプリケーションに付与した OAuth 許可を報告します。"},"entra_service_principal":{"label":"Entra サービス プリンシパル","needs":"同じ Entra アプリです。非人間 ID（サービス アカウントやアプリ登録）を報告します。隠れた AI エージェントはここに存在しがちです。"},"exchange_email":{"label":"Exchange サインアップの証跡","needs":"Entra アプリに Mail.Read を追加します。従業員が仕事用メールで直接作成した AI アカウント（シングルサインオンを使わず）を検出します。Entra でサインインをブロックしても、その経路は塞がりません。"},"jamf_app":{"label":"Jamf アプリケーション","needs":"コンピューター インベントリへの読み取りアクセスを持つ Jamf Pro API クライアントです。AIGUARD_JAMF_URL、_CLIENT_ID、_CLIENT_SECRET を設定します。Kandji、Addigy、その他の MDM の場合: 検出結果の形式を出力できるものであればこの行を埋められます - スキャナー作成ガイドを参照してください。"},"jamf_extension":{"label":"Jamf ブラウザ拡張機能","needs":"同じ Jamf 資格情報を使用します。インベントリから AI ブラウザ拡張機能を報告します。"},"intune_app":{"label":"Intune アプリケーション","needs":"Entra アプリに DeviceManagementApps.Read.All と DeviceManagementManagedDevices.Read.All を追加します。2 つ目がないと、検出結果はデバイス情報のない件数に低下します。"},"intune_extension":{"label":"Intune ブラウザ拡張機能","needs":"同じ Intune アクセス許可です。まだどのスキャナーからも出力されていません。"},"sentinelone_dns":{"label":"SentinelOne DNS","needs":"Deep Visibility の読み取りアクセスを持つ SentinelOne API トークンです。AIGUARD_S1_URL と AIGUARD_S1_TOKEN を設定します。別の DNS またはネットワーク セキュリティ製品を使用していますか？ 検出結果の形式を出力できるものであればこの行を埋められます - スキャナー作成ガイドを参照してください。"},"sentinelone_network":{"label":"SentinelOne ネットワーク","needs":"同じ SentinelOne トークンです。ブラウザを一切経由しないローカル プロセスからの AI トラフィックを検出します。"},"sentinelone_bridge":{"label":"SentinelOne 接続先","needs":"同じ SentinelOne トークンです。AI ツールの接続先（インストール済みソフトウェアではなく宛先）を表示します。"},"mcp_scan":{"label":"モデルコンテキストプロトコル連携の検出","needs":"エンドポイント 収集エージェントが AI ツールの構成ファイルを読み取ることによって取得されます - 個別のセットアップは不要です。収集エージェントが報告しているのにこれが静かな場合、モデルコンテキストプロトコルのサーバーはまだ設定されていません。"}});
-const JA_AUDIT_KINDS = Object.freeze({"admin_created":"管理者を作成","break_glass_login":"緊急アクセスログイン","budget_connection_deleted":"予算接続を削除","budget_connection_saved":"予算接続を保存","budget_members_replaced":"予算メンバーを置換","budget_rekeyed_by_plan":"予算をプラン別に再キー化","budget_subscription_deleted":"予算契約を削除","budget_subscription_saved":"予算契約を保存","budget_sync":"予算同期","candidate_dismissed":"候補を却下","candidate_observed":"候補を観測","candidate_reported":"候補を報告","cli_grant_":"CLI権限付与","cli_grant_requested":"CLI権限付与を要求","cli_grant_verifier_mismatch":"CLI付与の検証者不一致","cli_token_issued":"CLIトークンを発行","decision_cleared":"決定をクリア","decision_recorded":"決定を記録","enroll_refused_revoked":"失効済みのため登録拒否","enrolled":"登録","finding_status_cleared":"検出事項ステータスをクリア","finding_status_set":"検出事項ステータスを設定","identity_map_replaced":"利用者対応表を置換","login":"ログイン","login_failed":"ログイン失敗","login_throttled":"ログイン試行制限","logout":"ログアウト","password_changed":"パスワード変更","password_reset":"パスワードリセット","reenroll_allowance_used":"再登録許可を使用","reenroll_allowed":"再登録を許可","reenrolled":"再登録","registry_entry_deleted":"レジストリエントリを削除","registry_entry_saved":"レジストリエントリを保存","revoked":"失効","setting_changed":"設定を変更","setting_cleared":"設定をクリア","sso_bound":"SSOを連携","sso_login":"SSOログイン","sso_unbound":"SSO連携を解除","supersede_conflict":"上書き競合","token_minted":"トークンを生成","token_revoked":"トークンを取り消し","upgrade_finished":"アップグレード完了","upgrade_started":"アップグレード開始","user_created":"ユーザーを作成","user_deleted":"ユーザーを削除","user_email_set":"ユーザーメールを設定","user_invited":"ユーザーを招待","user_role_changed":"ユーザーロールを変更","cli_grant_approved":"CLI権限付与を承認","cli_grant_denied":"CLI権限付与を拒否"});
+const JA_SOURCE_CATALOG = Object.freeze({
+  'collector-macos': {label: 'macOS の収集エージェント',
+    needs: '下の設定済みスクリプトをダウンロードし、Jamf のポリシーとして実行します（root 権限で、定期的に報告）。受信サービスの URL と登録トークンは、スクリプトにすでに含まれています。クラシックモード（登録トークンを使わない従来の方式）では、代わりに AIGUARD_RECEIVER_BASE、AIGUARD_TOKEN、AIGUARD_CORP_DOMAINS をスクリプトのパラメーターとして渡してください。'},
+  'collector-linux': {label: 'Linux の収集エージェント',
+    needs: '下のスクリプトをダウンロードし、root 権限で定期的に実行します（RMM のジョブ、cron、systemd タイマーなど）。そのまま実行できます。クラシックモードでは、macOS と同じ3つの環境変数を設定してください。'},
+  'collector-windows': {label: 'Windows の収集エージェント',
+    needs: '下のスクリプトをダウンロードし、Intune のプラットフォームスクリプトとしてアップロードします。そのまま使えます。クラシックモードでは、先にスクリプトの冒頭で、同じ3つの値を設定してください。'},
+  'browser_extension': {label: 'ブラウザー拡張機能: アカウント',
+    needs: 'ブラウザーで、各 AI サイトにどのアカウントでサインインしているかを表示します。拡張機能を一度パッケージ化し（extension/README.md を参照）、下から利用するプラットフォーム向けの設定済みポリシーをダウンロードしてください。macOS 向けの Chromium ポリシー、Windows 向けの配布スクリプト、およびそれぞれの Firefox 版があります。URL、登録トークン、自社ドメイン、貼り付けガードの設定は、すべて組み込み済みです。'},
+  'paste_guard': {label: 'ブラウザー拡張機能: 貼り付けガード',
+    needs: '上のアカウントと同じ拡張機能の機能なので、追加のインストールは不要です。機密表示のある文書が AI ツールに貼り付けられると、警告またはブロックします。モードと機密表示は「設定」で指定します。上のアカウントの行は報告しているのにこの行が静かな場合は、ガードは動いていて、危険な貼り付けが行われていないということです。'},
+  'entra_sign_in': {label: 'Entra のサインイン',
+    needs: 'Entra でアプリを登録し、AuditLog.Read.All と Directory.Read.All の権限を付与します。そのうえで、スキャナーに AIGUARD_ENTRA_TENANT_ID、AIGUARD_ENTRA_CLIENT_ID、AIGUARD_ENTRA_CLIENT_SECRET を設定してください。'},
+  'entra_delegated_access': {label: 'Entra の委任アクセス',
+    needs: 'サインインと同じ Entra アプリを使います。対話型のサインインログでは見落とされる、バックグラウンドや API 経由の利用を検出します。'},
+  'entra_consent_grant': {label: 'Entra の同意の付与',
+    needs: '同じアプリ登録を使います。ユーザーがサードパーティのアプリに付与した OAuth の許可を報告します。'},
+  'entra_service_principal': {label: 'Entra のサービスプリンシパル',
+    needs: '同じ Entra アプリを使います。人ではない ID（サービスアカウントやアプリ登録）を報告します。目に見えない AI エージェントは、こうした ID の中にいることが多くあります。'},
+  'exchange_email': {label: 'Exchange のサインアップ痕跡',
+    needs: 'Entra アプリに Mail.Read を追加します。従業員が会社のメールアドレスで直接（シングルサインオンを経由せずに）作成した AI アカウントを検出します。Entra でサインインをブロックしても、この経路は塞げません。'},
+  'jamf_app': {label: 'Jamf のアプリケーション',
+    needs: 'コンピューターのインベントリを読み取れる Jamf Pro の API クライアントを用意し、AIGUARD_JAMF_BASE_URL、AIGUARD_JAMF_CLIENT_ID、AIGUARD_JAMF_CLIENT_SECRET を設定します。Kandji、Addigy などほかの MDM を使う場合も、検出結果の形式で出力できるものがあれば、この行を埋められます（docs/writing-a-scanner.md を参照）。'},
+  'jamf_extension': {label: 'Jamf のブラウザー拡張機能',
+    needs: 'Jamf と同じ認証情報を使います。インベントリから、AI 関連のブラウザー拡張機能を報告します。'},
+  'intune_app': {label: 'Intune のアプリケーション',
+    needs: 'Entra アプリに DeviceManagementApps.Read.All と DeviceManagementManagedDevices.Read.All を追加します。後者がないと、検出結果は端末の情報を持たない件数だけになります。'},
+  'intune_extension': {label: 'Intune のブラウザー拡張機能',
+    needs: 'Intune と同じアクセス許可を使います。現時点では、これを出力するスキャナーはありません。'},
+  'sentinelone_dns': {label: 'SentinelOne の DNS',
+    needs: 'Deep Visibility の読み取り権限を持つ SentinelOne の API トークンを用意し、AIGUARD_S1_BASE_URL と AIGUARD_S1_API_TOKEN を設定します。別の DNS 製品やネットワークセキュリティ製品を使っている場合も、検出結果の形式で出力できるものがあれば、この行を埋められます（docs/writing-a-scanner.md を参照）。'},
+  'sentinelone_network': {label: 'SentinelOne のネットワーク',
+    needs: '同じ SentinelOne トークンを使います。ブラウザーを経由しない、端末上のプロセスによる AI 通信を検出します。'},
+  'sentinelone_bridge': {label: 'SentinelOne の接続先',
+    needs: '同じ SentinelOne トークンを使います。AI ツールがどこに接続したか（インストールされているソフトウェアではなく、通信の宛先）を表示します。'},
+  'mcp_scan': {label: 'MCP 連携の検出',
+    needs: '端末の収集エージェントが AI ツールの設定ファイルを読み取って検出するため、別のセットアップは不要です。収集エージェントは報告しているのにこの行が静かな場合は、MCP サーバーがまだ誰にも設定されていないということです。'}
+});
+const JA_AUDIT_KINDS = Object.freeze({
+  admin_created: '管理者アカウントを作成',
+  break_glass_login: '緊急用（ブレークグラス）アカウントでサインイン',
+  budget_connection_deleted: '予算: API 接続を削除',
+  budget_connection_saved: '予算: API 接続を保存',
+  budget_members_replaced: '予算: メンバー一覧を置き換え',
+  budget_rekeyed_by_plan: '予算: 契約をプラン別に振り分け直し',
+  budget_subscription_deleted: '予算: 契約を削除',
+  budget_subscription_saved: '予算: 契約を保存',
+  budget_sync: '予算: ユーザーを同期',
+  candidate_dismissed: '未登録ツールの候補を対象外にした',
+  candidate_observed: '未登録ツールの候補を検出',
+  candidate_reported: '未登録ツールの候補が報告された',
+  cli_grant_: 'CLI の権限付与',
+  cli_grant_requested: 'CLI の権限付与を要求',
+  cli_grant_verifier_mismatch: 'CLI の権限付与: 照合コードが一致しない',
+  cli_grant_approved: 'CLI の権限付与を承認',
+  cli_grant_denied: 'CLI の権限付与を拒否',
+  cli_token_issued: 'CLI 用トークンを発行',
+  decision_cleared: 'AI台帳の判断を消去',
+  decision_recorded: 'AI台帳の判断を記録',
+  enroll_refused_revoked: '失効済みの端末の登録を拒否',
+  enrolled: '端末を登録',
+  finding_status_cleared: '個人アカウントの対応状況を消去',
+  finding_status_set: '個人アカウントの対応状況を設定',
+  identity_map_replaced: '利用者対応表を置き換え',
+  login: 'サインイン',
+  login_failed: 'サインインに失敗',
+  login_throttled: 'サインインを制限（試行回数の超過）',
+  logout: 'サインアウト',
+  password_changed: 'パスワードを変更',
+  password_reset: 'パスワードを再設定',
+  reenroll_allowance_used: '再登録の許可を使用',
+  reenroll_allowed: '再登録を許可',
+  reenrolled: '端末を再登録',
+  registry_entry_deleted: 'ツールレジストリの登録を削除',
+  registry_entry_saved: 'ツールレジストリの登録を保存',
+  revoked: '端末の認証情報を失効',
+  setting_changed: '設定を変更',
+  setting_cleared: '設定を既定値に戻した',
+  sso_bound: 'シングルサインオンのアカウントを連携',
+  sso_login: 'シングルサインオンでサインイン',
+  sso_unbound: 'シングルサインオンの連携を解除',
+  supersede_conflict: '稼働中の端末と同じシリアル番号での登録を拒否',
+  token_minted: '登録トークンを発行',
+  token_revoked: '登録トークンを失効',
+  upgrade_finished: 'アップグレードが完了',
+  upgrade_started: 'アップグレードを開始',
+  user_created: 'アカウントを作成',
+  user_deleted: 'アカウントを削除',
+  user_email_set: 'アカウントのメールアドレスを設定',
+  user_invited: '招待メールを送信',
+  user_role_changed: 'アカウントのロールを変更'
+});
 const uiAuditKind = kind => Object.prototype.hasOwnProperty.call(JA_AUDIT_KINDS, kind) ? JA_AUDIT_KINDS[kind] : String(kind || "").replace(/_/g, " ");
 const uiSourceNeeds = (id, fallback) => (Object.prototype.hasOwnProperty.call(JA_SOURCE_CATALOG, id) ? JA_SOURCE_CATALOG[id].needs : fallback);
 // Widgets the person asked to see in full, this page view. A widget draws a
@@ -2367,7 +2457,7 @@ const UI_TOOL_LABELS = Object.freeze({
   'github-copilot': 'GitHub Copilot', cursor: 'Cursor',
   fireflies: 'Fireflies.ai', ollama: 'Ollama',
   'some-unregistered-tool': '未登録のサンプルAI',
-  'claude-code-mcp': 'Claude Codeのモデルコンテキストプロトコル連携',
+  'claude-code-mcp': 'Claude Code の MCP 連携',
   deepseek: 'DeepSeek',
   'paste-guard': '貼り付けガード'
 });
@@ -2541,7 +2631,7 @@ function uiReviewQueueDetail() {
         <div class="candidate-list">${cands.slice(0, 6).map(c => `
           <article class="decision-candidate">
             <div class="candidate-identity"><strong>${esc(uiRegistryToolName({name:c.name}))}</strong>
-              ${c.kind === 'mcp_server' ? ' <span class="pill p-acc">モデルコンテキストプロトコルサーバー</span>' : ''}
+              ${c.kind === 'mcp_server' ? ' <span class="pill p-acc">MCPサーバー</span>' : ''}
               ${c.kind === 'process' ? ' <span class="pill p-warn">プロセス</span>' : ''}
               <p>${esc(c.kind === 'mcp_server' || c.kind === 'process'
                     ? (c.evidence || '') : (c.domains || []).join(', '))}</p>
@@ -2552,7 +2642,7 @@ function uiReviewQueueDetail() {
                 <span>以下でツールの一致を確認してください。</span></div>` : ''}
             </div>
             <div class="candidate-scope"><b>${c.devices || 0}</b>
-              <span>デバイス${
+              <span>端末${
                 c.confidence ? ' · ' + esc(uiTerm(c.confidence)) : ''}</span></div>
             <div class="candidate-actions">
               ${c.kind === 'process' ? ((REGTOOLS || []).length ? `<span class="candidate-linker">
@@ -2563,7 +2653,7 @@ function uiReviewQueueDetail() {
                     .map(t => `<option value="${esc(t.id)}"${
                       t.id === c.suggested_tool ? ' selected' : ''}>${esc(uiRegistryToolName(t))}</option>`).join('')}
                 </select><button class="mini" data-act="cand-belongs"
-                  data-key="${esc(c.key)}">リンク</button></span>`
+                  data-key="${esc(c.key)}">紐付ける</button></span>`
                 : `<span class="src-note" title="レジストリのツール一覧が読み込まれませんでした。ページを更新してください。">ツール一覧を利用できません</span>`)
                 + `<button class="mini" data-act="cand-noattr"
                   data-key="${esc(c.key)}" title="このシグナルがどのプログラムにも当てはまらないことを記録します。">該当ツールなし</button>` : ''}
@@ -2897,9 +2987,9 @@ const WIDGETS = {
     // Two numbers, not four. The overview is a glance: is the guard running,
     // and did somebody ignore it. Warned and blocked are the detail behind
     // that, and they have a page.
-    const head = `<div class="ui-panel-head"><div><h3>ペーストガード</h3><p>ブラウザー拡張機能を導入した端末での記録</p></div></div>`;
+    const head = `<div class="ui-panel-head"><div><h3>貼り付けガード</h3><p>ブラウザー拡張機能を導入した端末での記録</p></div></div>`;
     if (!PG) return `<div class="wcard w4 ui-widget ui-paste-card">${head}
-      <p class="ui-empty">ペーストガードのデータがありません。</p></div>`;
+      <p class="ui-empty">貼り付けガードのデータがありません。</p></div>`;
     const over = PG.overridden || 0, live = PG.guard_devices || 0;
     const warned = PG.warned || 0;
     const versions = (PG.guard_versions || []).length;
@@ -2925,7 +3015,7 @@ const WIDGETS = {
           <td>${(r.detectors || []).slice(0, 3).map(d => `<span class="ui-surface">${esc(uiTerm(d))}</span>`).join('')}</td>
         </tr>`).join('')}</tbody></table></div>` : ''}
       <div class="ui-panel-footer"><span>${warned ? `この期間中に ${warned} 件の警告が表示されました` : 'この期間に警告はありません'}<i class="ui-shown"></i></span>
-        <button class="mini" data-nav="paste">ペーストガードを開く ${uiIcon('arrow')}</button></div></div>`;
+        <button class="mini" data-nav="paste">貼り付けガードを開く ${uiIcon('arrow')}</button></div></div>`;
   },
 
   review_queue: () => {
@@ -3022,7 +3112,7 @@ const WIDGET_TITLES = {stat_row: '主要な数値', top_tools: '検出されたA
 // One line each, for the planner: what the card is for, so the arrangement
 // can be made from names rather than by reading every widget in full.
 const WIDGET_BLURB = {stat_row: '全体状況と4つの主要件数',
-  top_tools: '観測されたすべてのツール（デバイス、ID、個人アカウントを含む）',
+  top_tools: '検出されたすべてのツール（端末、ID、個人アカウントを含む）',
   review_queue: '対応事項と、判断・検出結果のキュー',
   detection_coverage: '収集エージェントのカバー率と、報告中の検出ソース',
   recent_personal_accounts: '企業ドメイン以外のアカウントでの最近の利用',
@@ -3228,7 +3318,7 @@ function identityMapPanel(unattributed) {
     <h3>利用者対応表</h3><p class="src-note" style="margin-top:0">クラシックモードでは、<span class="mono">IDENTITY_MAP</span> で指定したファイルが対応表になります。${CFG.identity_map_configured ? '設定済みです。' : '未設定です。'}</p></div>`;
   const last = saved.map(e => e.updated_at).sort().pop() || '';
   return `<div class="wcard" style="margin-bottom:12px"><h3>利用者対応表</h3>
-  <p class="src-note" style="margin-top:0">デバイスキーまたは端末内のユーザー名が、誰に対応するのかを登録します。
+  <p class="src-note" style="margin-top:0">端末のキー、または端末上のユーザー名が、どの利用者にあたるかを登録します。
   ${saved.length
     ? `<strong>${saved.length}</strong> 行を保存済み${last ? `、最終更新 ${when(last)}` : ''}`
     : 'ここにはまだ何も保存されていません'}${CFG.identity_map_configured
@@ -3378,9 +3468,9 @@ function tools() {
       const rank = x => x[2].level === 'high' ? 2 : x[2].level === 'medium' ? 1 : 0;
       return rank(b) - rank(a) || (b[1].devices||[]).length - (a[1].devices||[]).length;
     });
-  return `<h2>ツール</h2><p class="lede">同じツールをブラウザー、デスクトップアプリ、コマンドラインなど複数の利用環境で使う場合は、利用環境ごとに表示されます。確認が必要なツールは一覧の上位に並びます。「要注意」は複数の懸念が重なっている場合、「要観察」は確認すべき要因がある場合に表示されます。各ツールを開くと詳しい要因を確認できます。CursorやWindsurfなどAI機能を組み込んだエディターは、モデルの実行が確認されるまでは「インストール済みのみ」と表示されます。「検出元が特定した人数」は検出ソースが直接特定した人数です。AI台帳には端末から利用者を紐付けた人数も含まれるため、数値が異なる場合があります。</p>
+  return `<h2>ツール</h2><p class="lede">同じツールをブラウザー、デスクトップアプリ、コマンドラインなど複数の利用環境で使う場合は、利用環境ごとに表示されます。確認が必要なツールは一覧の上位に並びます。「要注意」は複数の懸念が重なっている場合、「要観察」は確認すべき要因がある場合に表示されます。各ツールを開くと詳しい要因を確認できます。CursorやWindsurfなどAI機能を組み込んだエディターは、モデルの実行が確認されるまでは「インストール済みのみ」と表示されます。「検出ソースが特定した人数」は、検出ソースが直接特定した人数です。AI台帳には端末から利用者を紐付けた人数も含まれるため、数値が異なる場合があります。</p>
   <div class="tcard"><table class="ui-page-table"><thead><tr><th>AIツール</th><th>状態</th><th>端末数</th>
-    <th title="検出ソースがこのツールについて直接特定した利用者の数です。クラウドのサインインには利用者の情報が含まれますが、端末での検出結果には端末の情報しか含まれません。端末の利用者は利用者対応表から求めるため、端末で検出されたツールでは、この数がAI台帳の利用者数より少なくなります。">検出元が特定した人数</th>
+    <th title="検出ソースがこのツールについて直接特定した利用者の数です。クラウドのサインインには利用者の情報が含まれますが、端末での検出結果には端末の情報しか含まれません。端末の利用者は利用者対応表から求めるため、端末で検出されたツールでは、この数がAI台帳の利用者数より少なくなります。">検出ソースが特定した人数</th>
     <th>利用環境別</th></tr></thead>
   <tbody>${rows.map(([k,t,a]) => `<tr data-open="tool" data-key="${esc(k)}" style="cursor:pointer">
     <td><strong>${esc(uiToolName(k))}</strong><span class="ui-id">${esc(uiToolInfo(k).vendor ? uiToolInfo(k).vendor + ' · ' : '')}${esc(k)}</span></td><td>${attnPill(a)}${t.usage === 'installed'
@@ -3825,7 +3915,7 @@ function rwBodyFound() {
     <dt>検出端末</dt><dd>${ev.devices} 台</dd>
     ${ev.confidence ? `<dt>判定</dt><dd>${esc(uiTerm(ev.category || 'AIツール'))}
       <span class="pill p-ok">信頼度 ${esc(uiTerm(ev.confidence))}</span></dd>` : ''}
-    <dt>検出元</dt><dd>検出処理（Discovery）の実行結果</dd>
+    <dt>検出ソース</dt><dd>検出処理（Discovery）の実行結果</dd>
   </dl></div>` : ''}
   <dl class="kv">
     ${row('rw-name', '名前', RW.name, 'ツール名（例：業務AIアシスタント）')}
@@ -4308,7 +4398,7 @@ async function paste() {
   }
   const rows = (PG.rows || []).filter(r => match(r.tool));
 
-  return `<h2>ペーストガード</h2>
+  return `<h2>貼り付けガード</h2>
   <p class="lede">貼り付けガードが止めた内容、対象のツール、件数を確認できます。保存するのはメタデータだけです。ガードは端末上でクリップボードの内容を検査し、どの検出ルールに一致したかだけを報告するため、貼り付けた文章そのものは送信も保存もされません。警告を見て貼り付けをやめた場合は、ガードが役割を果たしたことを示します。「警告後に続行」は警告を見たうえで貼り付けた件数で、フォローアップが必要なのはこの行です。</p>
 
   <dl class="stats">
@@ -4330,7 +4420,7 @@ async function paste() {
         <span>${esc(uiToolName(r.tool))}</span>
         <b>${r.warned} 件を停止${r.overridden ? `（うち警告後の続行 ${r.overridden} 件を防止）` : ''}</b>
         <span></span></div>`).join('')}
-    <p class="src-note">設定 → 検出とペーストガードでモードを切り替えてください。端末へ反映するにはポリシー配布ファイルを再生成してください。</p></div>` : ''}
+    <p class="src-note">設定 → 検出と貼り付けガードでモードを切り替えてください。端末へ反映するにはポリシー配布ファイルを再生成してください。</p></div>` : ''}
 
   ${rows.length ? `<div class="tcard"><table>
   <thead><tr><th>AIツール</th><th class="n">警告</th><th class="n">警告後に続行</th>
@@ -4631,15 +4721,12 @@ function uiTestText(raw) {
   if (raw == null) return '';
   const s = String(raw);
   if (!s) return '';
-  // 既に日本語を含む文字列はそのまま返す
-  if (/[\u3000-\u30ff\u3400-\u9fff]/.test(s)) return s;
-
   let m;
   if ((m = s.match(/^could not reach (.+?)\/healthz from inside the cluster \((.+)\)\. That can be normal: if URL only reachable from endpoints' VPN\/tailnet, confirm via curl \1\/healthz from fleet machine\.$/))) {
     return 'クラスター内から ' + m[1] + '/healthz に到達できませんでした（' + m[2] + '）。この状態は正常な場合があります。URL が端末の VPN または Tailscale ネットワークからしか到達できない場合は、管理対象端末で curl ' + m[1] + '/healthz を実行して確認してください。';
   }
   if ((m = s.match(/^(.+?) answered, but not like an ai-guard receiver$/))) {
-    return m[1] + ' は応答しましたが、AI Guard 受信サービスとして認識できません。';
+    return m[1] + ' は応答しましたが、世良AIガバナンスの受信サービスとして認識できません。';
   }
   if (s === 'the host has no dot: machines other than this one cannot resolve a short name. On Tailscale use the full .ts.net address, not the ingress short name.') {
     return 'ホスト名にドットがありません。この端末以外では短い名前を解決できません。Tailscale では短い名前ではなく、完全な .ts.net アドレスを使用してください。';
@@ -4692,6 +4779,8 @@ function uiTestText(raw) {
   if (s === 'the hosted .xpi is Mozilla-signed') {
     return '配置されている .xpi は Mozilla の署名済みです。';
   }
+  // どの既知メッセージにも当てはまらない場合: 日本語のメッセージはそのまま返す。
+  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
   return '設定とサーバーログを確認してください。';
 }
 
@@ -4760,7 +4849,7 @@ function extStatusRows(mode) {
     <dt>Chromium 拡張機能 ID</dt><dd>${pill(st.id)}</dd>
     <dt>Chromium 用の配布先</dt><dd>${pill(st.crx && st.upd ? 'crx + updates.xml の URL' : st.crx || st.upd)}</dd>
     <dt>Firefox（任意）</dt><dd>${pill(st.gecko && st.xpi ? st.gecko : st.gecko || st.xpi)}</dd>
-    ${mode ? `<dt>ペーストガードモード</dt><dd><span class="pill ${st.mode === 'block' ? 'p-warn' : 'p-ok'}">${esc(st.mode === 'block' ? 'ブロック' : st.mode === 'warn' ? '警告' : st.mode || '警告（既定）')}</span></dd>` : ''}
+    ${mode ? `<dt>貼り付けガードモード</dt><dd><span class="pill ${st.mode === 'block' ? 'p-warn' : 'p-ok'}">${esc(st.mode === 'block' ? 'ブロック' : st.mode === 'warn' ? '警告' : st.mode || '警告（既定）')}</span></dd>` : ''}
   </dl>`;
 }
 // min-width:0 for the same reason as .ssmain: a flex item will not shrink
@@ -4802,7 +4891,7 @@ async function extSetup() {
     {t: 'Firefox', d: '任意', opt: true,
      done: !!(st.gecko && st.xpi),
      line: (st.gecko && st.xpi) ? st.gecko : '未設定'},
-    {t: '動作', d: 'ペーストガードの動作', done: true,
+    {t: '動作', d: '貼り付けガードの動作', done: true,
      line: (st.mode === 'block' ? 'ブロック' : st.mode === 'warn' || !st.mode ? '警告' : st.mode) + 'モード'},
   ];
   const need = PAGES.filter(p => !p.opt);
@@ -4960,7 +5049,7 @@ async function wizard() {
     const state = d && LABEL[d]
       ? `<span class="pill ${LABEL[d][1]}">${LABEL[d][0]}</span>`
       : d ? `<span class="pill p-acc">${esc(d)}</span>`
-      : '<span class="none">決定なし</span>';
+      : '<span class="none">判断なし</span>';
     return `<tr><td>${esc(t.name)}</td>
       <td style="color:var(--mut)">${esc(t.vendor)}</td>
       <td>${state}</td>
@@ -5179,7 +5268,7 @@ function fleetSettings() {
     : cd.source === 'env'
       ? `環境変数 <span class="mono">CORP_DOMAINS</span> の値を使っています。ここで保存すると、環境変数は変更せずにポータルの値が優先されます。`
       : 'まだどこにも設定されていません。';
-  return `<div class="wcard" style="margin-bottom:10px"><h3>検出とペーストガード</h3>
+  return `<div class="wcard" style="margin-bottom:10px"><h3>検出と貼り付けガード</h3>
   <p class="lede" style="margin-bottom:10px">設定は受信サービスに保存され、管理対象端末が自動で取得します。収集エージェントは次回の接続時に変更を受け取るため、MDMから再配布する必要はありません。</p>
   <dl class="kv">
     <dt>企業ドメイン${INFO}</dt><dd>
@@ -5620,7 +5709,7 @@ function orgSettings() {
   return `<div class="wcard" style="margin-bottom:10px"><h3>表示</h3>
   <dl class="kv">
     ${settingRow('org_name', '組織名', '株式会社サンプル',
-      'エステートの名前: ロゴの下のコントロール、狭い画面のトップバー、サインイン画面にすべて表示されます。誰もサインインする前に表示されるため、名前に留めてください。空の場合、ポータルは「管理対象環境」と表示します。')}
+      '組織の名前です。ロゴの下、幅の狭い画面の上部バー、サインイン画面に表示されます。サインイン前の画面にも表示されるため、名前だけにしてください。空の場合は「管理対象環境」と表示します。')}
     ${windowRow()}
   </dl></div>`;
 }
@@ -5633,18 +5722,18 @@ function alertingSettings() {
       '警告の検出項目はこれを通じてページ通知されます。空の場合、検出項目はログに記録されダッシュボードに表示されますが、ページ通知は行われません。', true)}
     ${settingRow('webhook_url', '通知Webhook',
       'https://hooks.slack.com/services/…',
-      'Slack互換の受信Webhookです。受信サービスは、検出結果が新しいツールまたはモデルコンテキストプロトコルサーバーをレビューキューに追加したときにここへ投稿します - 検出結果ごとに1回で、検出項目ごとではありません。週次ダイジェストは別です。ポータルのデプロイで DIGEST_WEBHOOK_URL を設定してください。', true)}
+      'Slack 互換の受信 Webhook です。新しいツールまたは MCP サーバーが確認待ちの一覧に加わったときに、受信サービスがここへ投稿します（該当する検出のたびではなく、追加された1回ごと）。週次ダイジェストは別で、ポータルの環境変数 DIGEST_WEBHOOK_URL に設定します。', true)}
     ${settingRow('grafana_url', 'Grafana の URL',
       'ブラウザーが Grafana にアクセスするための URL',
       '保存するとページが再読み込みされます。フレームの権限はこのページ自体のセキュリティポリシーにあり、読み込みごとに固定されています。Grafana 側でも埋め込みを許可する必要があります。', true)}
     ${settingRow('grafana_panels', 'Grafana パネル',
-      '例: ai-guard:2:報告デバイス（24時間）; 複数指定はセミコロン区切り', '', true)}
+      '例: ai-guard:2:報告した端末（24時間）; 複数指定はセミコロン区切り', '', true)}
     ${settingRow('grafana_dashboard_uid', 'Grafana ダッシュボード UID',
       'ダッシュボードURLの /d/ セグメント',
       'パネルではなくダッシュボード全体を埋め込みます。完全なダッシュボードURLを貼り付けても機能します。UIDだけに切り詰められます。', true)}
     ${settingRow('budget_currency', '優先通貨',
       'GBP',
-      '予算の見出しは ECB の日次基準為替レートでそれに変換され、レート日付をインラインで表示します。新しくリンクされたツールは既定でそれを使用します。', true)}
+      '予算画面の合計金額を、この通貨に欧州中央銀行（ECB）の日次参考レートで換算して表示し、レートの日付を併記します。新しく登録するツールの通貨の既定値としても使われます。', true)}
     ${settingRow('working_hours', '勤務時間',
       '09:00-18:00',
       '自律型 AI の日別表示では、勤務時間外を網掛けします。無人実行のジョブも表示されます。勤務時間を設定するまで網掛けされません。22:00-06:00 のような夜勤にも対応します。', true)}
@@ -6160,7 +6249,7 @@ function ssoEnforceBlock() {
 // screen share of this page discloses nothing.
 let ACT = null, ACTMSG = null;
 
-const JA_ACTIVATION_REFUSAL = {"empty": "キーが入力されていません。アクティベーションキーを入力してください。", "too_long": "アクティベーションキーとして長すぎます。入力内容を確認し、正しいキーを貼り付けてください。", "not_a_key": "アクティベーションキーは nyxl_ で始まります。これは別のもの（登録トークンなど）のようです。確認してください。", "damaged": "このキーは破損しています。キーの形式になっていません。全体を貼り付け直してください。", "not_ours": "このキーはこのソフトウェア向けに発行されていないか、発行後に変更されています。全体を貼り付けたか確認し、問題なければ再発行を依頼してください。", "unreadable": "このキーは署名されていますが、読み取れません。再貼り付けするか、再発行を依頼してください。", "too_new": "このキーには、実行中のリリースより新しいリリースが必要です。アップグレードしてからアクティベートしてください。", "incomplete": "このキーは署名されていますが、キーに必要な情報がすべて記載されていません。再発行を依頼してください。", "unknown_plan": "このキーは、このリリースが認識していないプラン用です。アップグレードしてからアクティベートしてください。", "publisher_key": "このデプロイの ACTIVATION_PUBLIC_KEY は 32-byte Ed25519 公開鍵ではないため、修正または削除されるまでキーを確認できません。"};
+const JA_ACTIVATION_REFUSAL = {"empty": "キーが入力されていません。アクティベーションキーを入力してください。", "too_long": "アクティベーションキーとして長すぎます。入力内容を確認し、正しいキーを貼り付けてください。", "not_a_key": "アクティベーションキーは nyxl_ で始まります。これは別のもの（登録トークンなど）のようです。確認してください。", "damaged": "このキーは破損しています。キーの形式になっていません。全体を貼り付け直してください。", "not_ours": "このキーはこのソフトウェア向けに発行されていないか、発行後に変更されています。全体を貼り付けたか確認し、問題なければ再発行を依頼してください。", "unreadable": "このキーは署名されていますが、読み取れません。再貼り付けするか、再発行を依頼してください。", "too_new": "このキーには、実行中のリリースより新しいリリースが必要です。アップグレードしてからアクティベートしてください。", "incomplete": "このキーは署名されていますが、キーに必要な情報がすべて記載されていません。再発行を依頼してください。", "unknown_plan": "このキーは、このリリースが認識していないプラン用です。アップグレードしてからアクティベートしてください。", "publisher_key": "この環境の ACTIVATION_PUBLIC_KEY は 32-byte Ed25519 公開鍵ではないため、修正または削除されるまでキーを確認できません。"};
 const EN_ACTIVATION_REFUSAL_CODES = {"no key was given": "empty", "this is too long to be an activation key": "too_long", "an activation key starts with nyxl_. This looks like something else - an enrollment token, perhaps.": "not_a_key", "this key is damaged - it is not the shape a key has. Paste it again, whole.": "damaged", "this key was not issued for this software, or it has been altered since it was issued. Check you pasted all of it; if you did, ask for it to be reissued.": "not_ours", "this key is signed but unreadable": "unreadable", "this key needs a newer release than the one running here. Upgrade, then activate.": "too_new", "this key is signed, but it does not state everything a key has to state. Ask for it to be reissued.": "incomplete", "this key is for a plan this release does not know about. Upgrade, then activate.": "unknown_plan", "this deployment's ACTIVATION_PUBLIC_KEY is not a 32-byte Ed25519 public key, so no key can be checked until it is corrected or removed.": "publisher_key"};
 
 function activationCard() {
@@ -6177,14 +6266,14 @@ function activationCard() {
   // registry credential of its own and no rights over the deployment: it
   // knows what the key says, and the command does the moving - on the
   // operator's machine, approved here by an owner, like an upgrade.
-  const steps = a.state !== 'active' ? '' : `<details class="how ui-how"><summary>このデプロイを Nyxus に移行する</summary><div class="ui-steps">
+  const steps = a.state !== 'active' ? '' : `<details class="how ui-how"><summary>この環境を Nyxus に移行する</summary><div class="ui-steps">
     <p>1つのコマンドで、この環境をそのまま Nyxus に移行します。受信サービスのデータベースを引き継ぐため、アカウント、判断、登録済み端末、設定はそのまま残り、ログ保存先にある検出結果も引き続き閲覧できます。コマンドは自分の端末で、自分の kubeconfig または Docker を使って実行し、実行前にこのページでオーナーが承認します。</p>
     <ol class="ui-steplist">
-      <li><b>aiguardctl をインストール</b><span>このデプロイをアップグレードするのと同じコマンドです。このページの「アップグレード」を参照してください。</span></li>
+      <li><b>aiguardctl をインストール</b><span>この環境をアップグレードするときと同じコマンドです。このページの「アップグレード」を参照してください。</span></li>
       <li><b>キーをシェルに設定してください。</b>${uiCommand("export NYXUS_KEY='<your activation key>'")}<span>ポータルはそれを返却しません。これは認証情報です。コマンドは使用前に、ここに保存されているキーと一致することを確認し、コマンドラインには決して出しません。</span></li>
       <li><b>計画を表示</b>${uiCommand('aiguardctl upgrade --edition nyxus --portal ' + location.origin + ' --nyxus-version <version> --dry-run')}<span>すべてのコマンドを順番に、それぞれが何を保持するかを示します。何も実行されず、何も承認されません。</span></li>
       <li><b>実行する</b>${uiCommand('aiguardctl upgrade --edition nyxus --portal ' + location.origin + ' --nyxus-version <version>')}<span>データベースをバックアップし、既存のサービスを停止して、同じデータで Nyxus を起動します。Docker Compose の場合は、<code>--nyxus-compose-file</code> に Nyxus の compose ファイルのパスを指定して追加します。</span></li>
-      <li><b>次にエンドポイントです。</b><span>MDM 内の収集エージェントスクリプトを、同じポリシーで Nyxus のものに置き換えます。各マシンはそれぞれの識別情報を維持します。</span></li>
+      <li><b>次にエンドポイントです。</b><span>MDM 内の収集エージェントスクリプトを、同じポリシーで Nyxus のものに置き換えます。各端末はそれぞれの認証情報をそのまま使い続けます。</span></li>
     </ol>
     <p class="src-note">このバージョンは契約に含まれます。シェル内のキーがここに保存されているものと異なる場合、コマンドは何も変更する前に停止します。</p>
   </div></details>`;
@@ -6198,7 +6287,7 @@ function activationCard() {
   }
 
   const facts = a.state === 'none' ? `<dl class="health-facts">
-      <div><dt>実行中</dt><dd>オープンエディション</dd></div>
+      <div><dt>実行中</dt><dd>オープン版</dd></div>
       <div><dt>ライセンス</dt><dd>Apache 2.0</dd></div>
       <div><dt>アクティベーション</dt><dd>保存されていません</dd></div>
       <div><dt>確認済み</dt><dd>オフライン、外部リクエストなし</dd></div></dl>`
@@ -6207,16 +6296,16 @@ function activationCard() {
       <div><dt>状態</dt><dd>このリリースでは検証できません</dd></div></dl>`
     : `<dl class="health-facts">
       <div><dt>組織</dt><dd>${esc(a.org)}</dd></div>
-      <div><dt>プラン</dt><dd>${esc(({enterprise: 'エンタープライズ', trial: '試用版'})[a.plan] || a.plan)}${a.devices ? ` <span>· 最大 ${esc(a.devices)} デバイス</span>` : ''}</dd></div>
+      <div><dt>プラン</dt><dd>${esc(({enterprise: 'エンタープライズ', trial: '試用版'})[a.plan] || a.plan)}${a.devices ? ` <span>· 最大 ${esc(a.devices)} 台</span>` : ''}</dd></div>
       <div><dt>${a.state === 'expired' ? '期限切れ' : '有効期限'}</dt><dd>${esc(a.expires)}${
         a.state === 'expired' ? ` <span>· ${esc(-a.days_left)} 日前</span>`
         : ` <span>· ${esc(a.days_left)} 日後</span>`}</dd></div>
       <div><dt>参照</dt><dd>${esc(a.id)} <span>· キー ${esc(a.fingerprint)}</span></dd></div></dl>`;
 
   const note = a.state === 'active'
-    ? (soon ? `<p class="health-note warning">この契約は ${esc(a.expires)} に期限切れになります。更新すると、ここにあるキーが置き換わります。当日に動作が停止することはありません。ここにあるものはこのキーで有効化されたものではないからです。単にイメージをプルできなくなるだけです。</p>` : '')
-    : a.state === 'expired' ? `<p class="health-note warning">このキーは ${esc(a.expires)} に期限切れになりました。デプロイはそのまま継続します。期限切れの契約は、新しいイメージとサポートが提供されないという意味であり、ポータルが停止するわけではありません。更新して新しいキーを貼り付けてください。このデプロイを Nyxus に移行するには有効なキーが必要です。</p>`
-    : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(JA_ACTIVATION_REFUSAL[a.code] || (a.reason ? uiErrorText(a.reason, 0) : ''))} これは、その署名キーを含むリリースをまだ適用していないデプロイにおける、再発行された署名キーの見え方です。まずアップグレードし、それからキーを疑ってください。</p>`
+    ? (soon ? `<p class="health-note warning">この契約は ${esc(a.expires)} に期限が切れます。更新したら、ここのキーを新しいキーに置き換えてください。期限が切れても、当日に動作が止まることはありません。この環境の機能は、キーによって有効になっているわけではないためです。影響があるのは、新しいイメージを取得できなくなる点だけです。</p>` : '')
+    : a.state === 'expired' ? `<p class="health-note warning">このキーは ${esc(a.expires)} に期限が切れました。この環境は、そのまま動き続けます。契約の期限切れは、新しいイメージとサポートが提供されなくなるという意味で、ポータルが止まるわけではありません。更新して、新しいキーを貼り付けてください。この環境を Nyxus に移行するには、有効なキーが必要です。</p>`
+    : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(JA_ACTIVATION_REFUSAL[a.code] || (a.reason ? uiErrorText(a.reason, 0) : ''))} 署名キーが再発行された場合、そのキーを含むリリースをまだ適用していない環境では、このように表示されます。まずアップグレードし、それでも解決しない場合にキーを疑ってください。</p>`
     : `<p class="health-note">この環境はオープン版で動作しており、機能はすべて使えます。キーがないために制限されている画面や機能はありません。Nyxus は原著者（Shadow AI Guard の作者）が提供する同じシステムの商用版で、サポート付きの契約でプライベートイメージとして配布されています。株式会社世良が販売・サポートするものではありません。アクティベーションキーには発行先の組織と有効期間が記載されており、このポータルが持つ署名とオフラインで照合して確認します。</p>`;
 
   const form = !owner
@@ -6405,7 +6494,7 @@ async function cliApprove() {
   const managed = CFG.managed && CFG.managed.enabled;
   const head = `<h2>コマンドを承認</h2>`;
   if (!managed || !(AUTH && AUTH.mode === 'login'))
-    return head + `<p class="lede">このデプロイにはアカウントがないため、ここで承認できるものはありません。</p>`;
+    return head + `<p class="lede">この環境にはアカウントがないため、ここで承認できるものはありません。</p>`;
   if (!CLICODE) return head + `<p class="lede">そのリンクにはリクエストコードが含まれていません。コマンドを再実行し、表示されるリンクを開いてください。</p>`;
   if (!owner) return head + `<p class="lede">コード <b class="mono">${esc(CLICODE)}</b> のリクエストが承認を待っています。この環境をアップグレードするコマンドを承認できるのはオーナーだけです。オーナーにこのリンクを開くよう依頼してください。</p>`;
   if (CLIDONE) return head + `<div class="note">${esc(CLIDONE)}</div>
@@ -6430,13 +6519,13 @@ async function cliApprove() {
         <p class="src-note">コマンドを実行したターミナルに表示されたコードと一致している必要があります。</p>
       </div>
       <dl class="health-facts cli-grant-facts">
-        <div><dt>アクション</dt><dd>このデプロイを最新リリースにアップグレードする</dd></div>
+        <div><dt>アクション</dt><dd>この環境を最新リリースにアップグレードする</dd></div>
         <div><dt>実行元</dt><dd>要求者のマシン <span>・自身の kubeconfig または Docker コンテキスト</span></dd></div>
         <div><dt>要求日時</dt><dd>${when(g.requested_at)}${cliLeft(g.expires_at)}</dd></div>
         <div><dt>クライアント</dt><dd>${esc(g.requester || '未記載')}</dd></div>
       </dl>
     </div>
-    <p class="health-note"><b>承認すると</b>、45分間有効なトークンが1つ発行されます。このトークンで許可されるのは、コマンドがこの実行の進行状況をここに報告することだけです。ポータルのほかの機能や、クラスター・ホストへのアクセス権は付与しません。アップグレード自体は要求者の認証情報で実行され、チャートまたは compose ファイルがデプロイするすべてを対象とします。</p>
+    <p class="health-note"><b>承認すると</b>、45分間有効なトークンが1つ発行されます。このトークンで許可されるのは、コマンドがこの実行の進行状況をここに報告することだけです。ポータルのほかの機能や、クラスター・ホストへのアクセス権は付与しません。アップグレード自体は要求者の認証情報で実行され、チャート（Helm）または compose ファイルが展開するすべてが対象です。</p>
     <div class="cli-grant-actions">
       <button class="mini pri" data-act="cli-approve">承認</button>
       <button class="mini" data-act="cli-deny">拒否</button>
@@ -6485,8 +6574,8 @@ function upgradeTracker() {
     : r.outcome === 'unverified' ? '<span class="pill p-amb">実行済み、未確認</span>'
     : `<span class="pill p-warn">${esc(r.outcome ? ({finished:'完了',succeeded:'成功',unverified:'実行済み、未確認',failed:'失敗',skipped:'スキップ',running:'実行中',stale:'未確認'}[r.outcome] || '不明') : '完了')}</span>`;
   const note = r.status === 'stale'
-    ? 'コマンドは結果を確認する前に報告を停止したため、この実行は終了されませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。'
-    : r.outcome === 'unverified' ? 'コマンドは実行されましたが、結果を確認できませんでした。上の「実行中」に、実際にデプロイされている内容が表示されています。' : '';
+    ? 'コマンドは結果を確認する前に報告を停止したため、この実行は終了されませんでした。上の「実行中」に、実際に稼働している内容が表示されています。'
+    : r.outcome === 'unverified' ? 'コマンドは実行されましたが、結果を確認できませんでした。上の「実行中」に、実際に稼働している内容が表示されています。' : '';
   const stat = s => s === 'done' ? 'p-ok' : s === 'failed' ? 'p-warn' : s === 'skipped' ? 'p-mut' : 'p-amb';
   const statusLabel = s => ({running:'実行中', done:'完了', failed:'失敗', skipped:'スキップ', stale:'未確認'}[s] || '不明');
   const KNOWN_STEPS = {
@@ -6512,7 +6601,7 @@ function upgradeTracker() {
     if (/^(kubectl|docker|helm)\b/.test(s)) return `実行コマンド: ${s}`;
     if (KNOWN_STEPS[s]) return KNOWN_STEPS[s];
     const m = s.match(/^stop\s+(.+)$/i);
-    if (m) return `デプロイ ${m[1]} を停止`;
+    if (m) return `${m[1]} を停止`;
     return '実行手順（詳細は実行ログを確認）';
   };
   const translateDetail = detail => {
@@ -6702,16 +6791,16 @@ return `端末 ${ents(G.devices || {}).length} 台のうち <strong>${un.length}
   <ol style="padding-left:18px;line-height:2;margin:6px 0">
     <li><a href="/api/suggest-identities?fmt=csv" style="color:var(--pri)">提案された対応表をダウンロード</a>。ローカルのユーザー名をクラウドソースの ID と照合し、一致しなかったものは入力できるよう一覧表示します。</li>
     <li>すべての行を確認してください。これらは文字列一致であり、1つ間違えると、別人のアクティビティに誤った人物名が紐づきます。</li>
-    <li>このファイルはこのリポジトリの外に保管してください。名前付きの人物をマシンに紐づけるため、個人データです。gitではなく、デプロイ設定と一緒に保存してください。</li>
+    <li>このファイルはこのリポジトリの外に保管してください。名前付きの人物をマシンに紐づけるため、個人データです。git には置かず、導入時の設定ファイル（Helm の values や compose の設定など）と一緒に保管してください。</li>
     <li><code>IDENTITY_MAP</code> にそのファイルのパスを設定します。Docker では読み取り専用でマウントし、Kubernetes では ConfigMap または Secret をファイルとしてマウントします。</li>
   </ol>
   このファイルは自動で再読み込みされるため、編集内容は ${esc(CFG.cache_ttl_seconds || 300)} 秒以内に反映されます。再起動は不要です。対応表にない端末は「利用者未登録」と表示されます。</div></details>`}</div>
 
   ${(S.unexpected || []).length ? `<div class="tcard">
-  <div class="cardhead"><h3>未認識のソース</h3>
+  <div class="cardhead"><h3>認識できない検出ソース</h3>
     <span class="pill p-amb">${S.unexpected.length}</span></div>
-  <p class="lede">これらは報告していますが、このポータルのビルドでは認識されません。このポータルより新しいものか、独自のソース名を持つカスタムスキャナーのいずれかです。どちらにせよ確認する価値があります。</p>
-  <table><tr><th>ソース</th></tr>${S.unexpected.map(u =>
+  <p class="lede">これらの検出ソースからは報告が届いていますが、このバージョンのポータルには定義がありません。ポータルより新しい検出ソースか、独自の名前を付けたカスタムスキャナーのどちらかです。いずれの場合も、内容の確認をおすすめします。</p>
+  <table><tr><th>検出ソース</th></tr>${S.unexpected.map(u =>
     `<tr><td>${esc(u)}</td></tr>`).join('')}</table></div>` : ''}`;
 }
 
@@ -6719,16 +6808,15 @@ return `端末 ${ents(G.devices || {}).length} 台のうち <strong>${un.length}
 // fixed window, which is right for a glance and wrong the moment somebody
 // wants to change the range or drill into a series. The URL has to be
 // configured for the embed to work at all, so linking to it costs nothing.
-const openIn = base => `<p class="lede">このパネルは固定表示で埋め込まれています。期間の変更や詳細の確認、編集を行うには、
-  <a href="${esc(base)}" target="_blank" rel="noopener noreferrer"
+const openIn = base => `<p class="lede">以下は、表示期間を固定したキオスクモード（操作枠なしの表示）で埋め込んでいます。期間の変更、詳細の確認、編集を行うには、<a href="${esc(base)}" target="_blank" rel="noopener noreferrer"
      style="color:var(--pri)">${esc(base)}</a> を直接開いてください。</p>`;
 
 function dashboard() {
   if (!CFG.grafana_url) return `<h2>Grafana</h2>
-    <div class="note">Grafana の接続先（<code>GRAFANA_URL</code>）が未設定です。埋め込み表示を許可した Grafana の URL を設定してください。 個別のパネル（<code>GRAFANA_PANELS</code>）を <code>dashboardUid:panelId:Title</code> の形式でカンマ区切りにするか、ダッシュボード UID（<code>GRAFANA_DASHBOARD_UID</code>）を指定して全体を表示します。
+    <div class="note">Grafana が設定されていません。<code>GRAFANA_URL</code> に、埋め込みを許可している Grafana の URL を設定してください。続けて、<code>GRAFANA_PANELS</code> に <code>dashboardUid:panelId:Title</code> の形式でパネルをセミコロン（;）区切りで指定するか、<code>GRAFANA_DASHBOARD_UID</code> にダッシュボードの UID を指定して、ダッシュボード全体を1つのフレームに埋め込みます。
     <br><br>
-    Grafana は標準では他サイトへの埋め込み表示を拒否します。管理者は埋め込み表示を有効にし（<code>GF_SECURITY_ALLOW_EMBEDDING</code>）、Cookie の送信条件（<code>SameSite</code>）を調整してください。さらに、アクセス方法として制限付きの匿名閲覧か認証プロキシを選びます。これらは管理者が設定する必要があります。</div>
-    <p class="lede">Grafana を設定しなくてもポータルの他の機能は利用できます。この画面にはグラフと履歴が表示されます。</p>`;
+    Grafana は標準設定ではフレームへの埋め込みを拒否します。<code>allow_embedding = true</code>（<code>GF_SECURITY_ALLOW_EMBEDDING</code>）、フレームを許可する Cookie の <code>SameSite</code> 設定、そして埋め込み表示の認証方法（アクセスを絞った Grafana での匿名アクセス、または認証プロキシ）を決める必要があります。これらはポータル側では設定できないため、Grafana の管理者が判断してください。</div>
+    <p class="lede">Grafana を設定しなくても、ポータルのほかの機能はすべて使えます。この画面は、グラフと履歴を追加で表示するためのものです。</p>`;
 
   const base = CFG.grafana_url, panels = CFG.grafana_panels || [];
   const q = 'orgId=1&theme=' + (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
@@ -6749,7 +6837,7 @@ function dashboard() {
   const bad = panels.filter(p => p.error);
   return `<h2>Grafana</h2>
   ${openIn(base)}
-  <p class="lede">このパネルは ${esc(base)} から読み込まれています。表示されない場合は、Grafana 側で埋め込み表示と Cookie の送信条件が許可されているか確認してください。</p>
+  <p class="lede">パネルは ${esc(base)} から埋め込んでいます。枠が空白のままの場合は、Grafana が埋め込みを拒否しています。Grafana 側の <code>allow_embedding</code> と Cookie の <code>SameSite</code> 設定を確認してください。</p>
   ${bad.length ? `<div class="note">${bad.map(b => esc(uiErrorText(b.error, 0))).join('<br>')}</div>` : ''}
   <div style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(420px,1fr))">
   ${panels.filter(p => !p.error).map(p => `
@@ -6767,8 +6855,7 @@ function dashboard() {
 
 function managedGate(title) {
   if (!CFG.managed || !CFG.managed.enabled) return `<h2>${esc(title)}</h2>
-  <p class="lede">マネージドモードが設定されていません。設定してください <code>RECEIVER_URL</code>
-  ポータルで（および <code>MANAGED_MODE=true</code> 受信サービス上で）ここから登録トークンとデバイスを管理できます。従来のファイルとトークンのフローは、これがなくても引き続き機能します。</p>`;
+  <p class="lede">マネージドモード（管理対象環境）が設定されていません。ポータルに <code>RECEIVER_URL</code>、受信サービスに <code>MANAGED_MODE=true</code> を設定すると、この画面から登録トークンと端末を管理できます。従来のファイルとトークンによる方法は、設定しなくても引き続き使えます。</p>`;
   return '';
 }
 
@@ -6788,25 +6875,25 @@ async function managedError(r, title) {
 }
 
 async function fleet() {
-  const gate = managedGate('端末群'); if (gate) return gate;
+  const gate = managedGate('登録済み端末'); if (gate) return gate;
   if (!FLEET) {
     const r = await mfetch('/api/fleet');
-    if (!r.ok) return managedError(r, '端末群');
+    if (!r.ok) return managedError(r, '登録済み端末');
     FLEET = await r.json();
   }
   const ds = FLEET.devices || [];
-  return `<h2 data-tour="fleet">端末群</h2>
-  <p class="lede">資格情報を保持するすべてのデバイス。検出結果の下のデバイスは異なり、実際に検出結果を報告したデバイスを示します。失効は1台のデバイスのみを遮断し、それは維持されます。失効したシリアルは、管理者が再イメージングまたは交換のために再び許可するまで、有効なトークンがあっても登録時に拒否されます。再イメージングされたノートPCや、実行ごとに登録するスキャナーなど、稼働中のデバイスが再度登録する場合は、その行を保持し、登録済みの下に記録されます。</p>
-  ${ds.length ? `<table><tr><th>デバイス</th><th>プラットフォーム</th><th>シリアル</th>
-    <th>登録済み</th><th>最終確認</th><th>エージェント</th><th>ステータス</th><th></th></tr>
+  return `<h2 data-tour="fleet">登録済み端末</h2>
+  <p class="lede">認証情報を発行済みのすべての端末の一覧です。「検出結果」の「端末」画面は別のもので、そちらには実際に検出結果を報告した端末が表示されます。失効させると、その1台だけを遮断でき、この状態は維持されます。失効した端末のシリアル番号は、有効なトークンを使っても登録を拒否されます。再イメージ化や交換のために管理者が再登録を許可するまで、登録できません。再イメージ化したノートPCや、実行のたびに登録するスキャナーのように、稼働中の端末が再登録した場合は、同じ行のまま「登録日時」の欄に再登録の履歴が記録されます。</p>
+  ${ds.length ? `<table><tr><th>端末</th><th>OS</th><th>シリアル番号</th>
+    <th>登録日時</th><th>最終確認</th><th>エージェントのバージョン</th><th>状態</th><th></th></tr>
   ${ds.map(d => `<tr>
     <td>${esc(d.hostname || d.serial)}<br><span class="mono" style="font-size:11px;color:var(--mut)">${esc(d.id)}</span></td>
     <td>${esc(uiTerm(d.platform))}</td><td class="mono">${esc(d.serial)}</td>
-    <td>${when(d.enrolled_at)}${d.reenrolled_at ? `<br><span style="font-size:11px;color:var(--mut)">再登録 ×${esc(String((d.enrollments || 1) - 1))}、最終 ${when(d.reenrolled_at)}</span>` : ''}</td><td>${when(d.last_seen)}</td>
+    <td>${when(d.enrolled_at)}${d.reenrolled_at ? `<br><span style="font-size:11px;color:var(--mut)">再登録 ${esc(String((d.enrollments || 1) - 1))} 回（直近: ${when(d.reenrolled_at)}）</span>` : ''}</td><td>${when(d.last_seen)}</td>
     <td>${esc(uiTerm(d.agent_version || '—'))}</td>
     <td>${d.revoked_at ? (d.reenroll_allowed_at
-                       ? '<span class="pill p-amb" title="失効済みですが、このシリアルはもう一度登録できる可能性があります">再登録許可</span>'
-                       : '<span class="pill p-mut">失効</span>')
+                       ? '<span class="pill p-amb" title="失効済みですが、このシリアル番号でもう一度だけ登録できます">再登録を許可済み</span>'
+                       : '<span class="pill p-mut">失効済み</span>')
                        : '<span class="pill p-ok">有効</span>'}</td>
     <td>${!d.revoked_at
             ? `<button class="mini" data-act="revoke-device" data-key="${esc(d.id)}">失効させる</button>`
@@ -6819,8 +6906,8 @@ async function fleet() {
       // report without ever holding a device credential - but nothing
       // said so, and the two pages looked like they disagreed.
       const reporting = ents(G.devices || {}).length;
-      return reporting ? `ここには登録済みのデバイスはありませんが、<strong>${reporting}</strong> 台のデバイスが検出結果を報告しています。これらは登録トークンのフロー外で設定されており、動作しますが、デバイスごとの失効はできません。登録すると再び可能になります。<br><br>` : '';
-    })()}デバイスはまだ登録されていません。登録トークンビューで登録トークンを発行するか、セットアップから事前設定済み収集エージェントをダウンロードしてください。マシンは登録されるとここに表示されます。</div>`}`;
+      return reporting ? `登録済みの端末はありませんが、<strong>${reporting}</strong> 台の端末が検出結果を報告しています。これらは登録トークンを使わない方法で設定されています。この方法でも動作しますが、端末ごとの失効はできません。端末を登録すると、失効できるようになります。<br><br>` : '';
+    })()}登録済みの端末はまだありません。「登録トークン」画面でトークンを発行するか、「検出ソース」画面で設定済みの収集エージェントをダウンロードしてください。端末は、登録されるとここに表示されます。</div>`}`;
 }
 
 async function tokens() {
@@ -6835,24 +6922,24 @@ async function tokens() {
   const state = t => t.revoked_at ? ['revoked', 'p-mut']
     : t.expires_at <= nowIso ? ['expired', 'p-mut'] : ['active', 'p-ok'];
   return `<h2>登録トークン</h2>
-  <p class="lede">登録トークンはMDMまたはRMMに配置します。Jamfのパラメータ、Intuneのスクリプト、RMM変数などです。各マシンは一度だけそれを交換して、自身の資格情報を取得します。トークンはデバイスの登録のみが可能で、検出結果を送信することはできないため、MDMアーティファクト内での長い有効期限は問題ありません。展開が完了したとき、またはトークンが漏えいしたときは、ここで失効させてください。</p>
+  <p class="lede">登録トークンは、MDM や RMM に設定して使います（Jamf のパラメータ、Intune のスクリプト、RMM の変数など）。各端末は、このトークンを1回だけ使って、その端末専用の認証情報と交換します。トークンでできるのは端末の登録だけで、検出結果は送信できません。そのため、MDM の配布物に有効期限の長いトークンを入れても問題ありません。展開が終わったとき、またはトークンが漏えいしたときは、ここで失効させてください。</p>
   ${MINTED ? (MINTED.error
     ? `<div class="note">${esc(MINTED.error)}
-       <button class="mini" data-act="dismiss-minted">無視</button></div>`
+       <button class="mini" data-act="dismiss-minted">閉じる</button></div>`
     : `<div class="tokpane"><strong>トークン ${esc(MINTED.id)} を発行しました。</strong>
-       これは一度しか表示されません — 受信サービスはハッシュを保存します。
+       表示されるのはこの1回だけです。受信サービスにはハッシュ値のみが保存されます。
        <br><code>${esc(MINTED.token)}</code><br>
        <button class="mini" data-act="copy" data-copy="${esc(MINTED.token)}">コピー</button>
-       <button class="mini" data-act="dismiss-minted">完了、保存しました</button>
+       <button class="mini" data-act="dismiss-minted">保存したので閉じる</button>
        </div>`) : ''}
   <div style="margin:10px 0 16px">
-    <input id="mint-note" class="mfield" placeholder="メモ、例: macOS Jamf 展開">
-    <label style="font-size:12px;color:var(--mut)">有効期限まであと
+    <input id="mint-note" class="mfield" placeholder="メモ（例: macOS 向け Jamf 展開）">
+    <label style="font-size:12px;color:var(--mut)">有効期間
       <input id="mint-ttl" class="mfield" style="min-width:74px" value="180"
         title="このトークンが機能しなくなるまでの日数"> 日</label>
     <button class="mini" data-act="mint">トークンを発行</button>
   </div>
-  ${ts.length ? `<table><tr><th>識別子</th><th>メモ</th><th>作成日</th><th>有効期限</th><th>ステータス</th><th></th></tr>
+  ${ts.length ? `<table><tr><th>ID</th><th>メモ</th><th>作成日</th><th>有効期限</th><th>状態</th><th></th></tr>
   ${ts.map(t => { const [lbl, cls] = state(t); return `<tr>
     <td class="mono">${esc(t.id)}</td><td>${esc(t.note === 'Demo rollout (Jamf and Intune)' ? 'デモ配布（Jamf と Intune）' : (t.note || '—'))}</td>
     <td>${when(t.created_at)}</td><td>${when(t.expires_at)}</td>
@@ -7015,9 +7102,9 @@ function bReconcile(sub) {
   return {eff, obs, matched, unobserved, strangers, findings};
 }
 
-const CURRENCY_SIGNS = {GBP: '£', USD: '$', EUR: '€'};
+const CURRENCY_SIGNS = {JPY: '¥', GBP: '£', USD: '$', EUR: '€'};
 function bMoney(n, cur) {
-  const v = Math.round(n).toLocaleString('en-GB');
+  const v = Math.round(n).toLocaleString('ja-JP');
   const sign = CURRENCY_SIGNS[(cur || '').toUpperCase()];
   return sign ? sign + v : (cur ? esc(cur) + ' ' + v : v);
 }
@@ -7085,15 +7172,15 @@ function bConversionNote(subs) {
   if (curs.size < 2) return '';
   const pref = bPrefCur();
   if (!pref) {
-    return `設定で優先通貨を設定すると、合計を1つ表示できます。どちらに換算するかの指定がないため、これらは別々に集計されています。`;
+    return `「設定」で優先する通貨を指定すると、合計を1つにまとめて表示できます。通貨が複数あり、換算先が指定されていないため、現在は通貨ごとに別々に集計しています。`;
   }
   if (!BFX || !BFX.ok) {
-    return `${esc(pref)} に換算されませんでした: 為替レートのソースに到達できませんでした${BFX && BFX.detail ? ` (${esc(uiErrorText(BFX.detail, 0))})` : ''}。受信サービスは ECB の日次レートを api.frankfurter.dev から取得します。このデプロイが外向き通信を制限している場合、そのホストに到達できる必要があります。`;
+    return `${esc(pref)} に換算できませんでした。${BFX && BFX.detail ? esc(uiErrorText(BFX.detail, 0)) : '為替レートを取得できませんでした。'}受信サービスは欧州中央銀行（ECB）の日次レートを api.frankfurter.dev から取得します。この環境で外部への通信を制限している場合は、このホストへの接続を許可してください。`;
   }
   const missing = [...curs].filter(c =>
     c !== pref && !((BFX.rates || {})[c]));
   if (missing.length) {
-    return `換算されませんでした: ECB は ${missing.map(esc).join(', ')} の基準レートを公表していません。`;
+    return `換算できませんでした。欧州中央銀行（ECB）が ${missing.map(esc).join('、')} の参考レートを公表していません。`;
   }
   return '';
 }
@@ -7283,13 +7370,13 @@ function bTierRows(tiers, eff, cur) {
           ${!t.covers || !t.covers.length || t.covers.includes(tool) ? 'checked' : ''}>
         <span class="mono">${esc(tool)}</span></label>`).join('')}</div></td></tr>`;
   return `<table class="tiers"><thead>
-    <tr><th>プラン</th><th style="width:96px">シート数</th>
-      <th style="width:140px">ライセンス単価</th>
+    <tr><th>シート種別</th><th style="width:96px">シート数</th>
+      <th style="width:140px">シート単価</th>
       <th style="width:110px">月額</th></tr></thead><tbody>
     ${rows.map((t, i) => {
       const line = (t.seats || 0) * (t.unit_price_monthly || 0);
       return `<tr>
-      <td><input id="bt-name-${i}" class="mfield" placeholder="階層、例: プレミアム"
+      <td><input id="bt-name-${i}" class="mfield" placeholder="例: プレミアム"
         value="${esc(t.name || '')}"></td>
       <td><input id="bt-seats-${i}" class="mfield num" placeholder="0"
         value="${t.seats != null ? esc(String(t.seats)) : ''}"></td>
@@ -7324,15 +7411,15 @@ function bWizTotals() {
 }
 
 const BW_STEPS = [
-  {k: 1, t: 'どのツール',        d: 'ライセンスの対象範囲'},
-  {k: 2, t: 'メンバー一覧',       d: '名前の取得元'},
+  {k: 1, t: 'ツールの選択',   d: 'ライセンスの対象範囲'},
+  {k: 2, t: 'メンバー一覧',   d: '名前の取得元'},
   {k: 3, t: 'シート数と料金', d: '月額費用'},
-  {k: 4, t: '確認とリンク',   d: '契約全体'},
+  {k: 4, t: '確認して登録',   d: '契約の内容'},
 ];
 const BW_SOURCES = [
-  ['api', '自動', "ベンダーの管理API、オンデマンドで同期"],
-  ['csv', 'インポート', "ベンダーの管理ページからメンバーのエクスポートを貼り付け"],
-  ['manual', '手動', "ツールのカードでメンバーを手動で追加"],
+  ['api', '自動', 'ベンダーの管理 API から、必要なときに同期します'],
+  ['csv', 'インポート', 'ベンダーの管理画面で書き出したメンバー一覧を貼り付けます'],
+  ['manual', '手動', '契約カードで、メンバーを1人ずつ追加します'],
 ];
 const bwSrcName = s => (BW_SOURCES.find(x => x[0] === s) || [])[1] || '';
 const B_VENDOR_NAMES = Object.freeze({
@@ -7359,7 +7446,7 @@ function bwRailLine(st) {
   if (st.k === 1) {
     if (!w.tool_id) return {c: 'pend', t: st.d};
     const n = (w.covers || []).length;
-    return {c: 'val', t: bToolName(w.tool_id) + (n ? ' +' + n + ' 件カバー済み' : '')};
+    return {c: 'val', t: bToolName(w.tool_id) + (n ? ' ほか' + n + '件も対象' : '')};
   }
   if (st.k === 2) return w.source
     ? {c: 'val', t: bwSrcName(w.source) + (w.source === 'api' && w.provider
@@ -7369,7 +7456,7 @@ function bwRailLine(st) {
     ? {c: 'val', t: bMoney(tot.monthly, bWizCur()) + ' / 月 · '
         + tot.seats + 'シート'}
     : {c: 'pend', t: st.d};
-  return tot.tiers.length ? {c: 'val', t: 'リンク準備完了'} : {c: 'pend', t: st.d};
+  return tot.tiers.length ? {c: 'val', t: '登録できます'} : {c: 'pend', t: st.d};
 }
 const bToolName = id =>
   ((REGTOOLS || []).find(t => t.id === id) || {}).name || id;
@@ -7390,7 +7477,7 @@ function bwRail() {
   const w = BWIZ, tot = bWizTotals();
   const eff = 1 + (w.covers || []).length;
   return `<div class="ssrail">
-    <h3>${w.editing ? '契約を編集' : 'ツールをリンク'}</h3>
+    <h3>${w.editing ? '契約を編集' : 'ツールの契約を登録'}</h3>
     <ol>${BW_STEPS.map(st => {
       const d = bwDone(st), on = w.step === st.k, ln = bwRailLine(st);
       return `<li class="ssstep ${d ? 'done' : ''} ${on ? 'on' : ''}"
@@ -7400,13 +7487,13 @@ function bwRail() {
         <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
     }).join('')}</ol>
     <div class="sssum">
-      <div class="lede" style="font-size:11.5px">月間支出</div>
+      <div class="lede" style="font-size:11.5px">月額費用</div>
       <div class="money" id="bw-money">${tot.monthly
         ? bMoney(tot.monthly, bWizCur())
-        : '<span style="color:var(--mut);font-size:13px;font-weight:400">まだ価格が設定されていません</span>'}</div>
+        : '<span style="color:var(--mut);font-size:13px;font-weight:400">料金が未入力です</span>'}</div>
       <div class="lede" style="font-size:11.5px">${tot.seats
-        ? tot.seats + 'シートで'
-        : ''}${eff}ツールを1つのライセンスでカバー。</div>
+        ? '1つのライセンスで' + eff + 'ツール・' + tot.seats + 'シート'
+        : '1つのライセンスで' + eff + 'ツールが対象'}</div>
     </div></div>`;
 }
 
@@ -7437,16 +7524,16 @@ function bwBodyTool() {
       const covered = t.id !== w.tool_id && coveredBy[t.id]
         && coveredBy[t.id] !== t.id;
       const have = plansOn[t.id] || [];
-      const label = covered ? ` (${coveredBy[t.id]} でカバー)`
-        : have.length ? ` — ${have.join(', ')} 件リンク済み` : '';
+      const label = covered ? `（${coveredBy[t.id]} の契約に含まれています）`
+        : have.length ? ` — 登録済み: ${have.join('、')}` : '';
       return `<option value="${esc(t.id)}"${t.id === w.tool_id ? ' selected' : ''}
         ${covered ? 'disabled' : ''}>${esc(t.name)}${esc(label)}</option>`;
     };
     const obs = tools.filter(t => seen.has(t.id));
     const rest = tools.filter(t => !seen.has(t.id));
     return `<select id="bw-tool" class="mfield bw-tool-picker" style="min-width:240px">
-      ${obs.length ? `<optgroup label="エステート内で検出済み">${obs.map(opt).join('')}</optgroup>
-        <optgroup label="レジストリのウォッチリスト">${rest.map(opt).join('')}</optgroup>`
+      ${obs.length ? `<optgroup label="この環境で検出済み">${obs.map(opt).join('')}</optgroup>
+        <optgroup label="ツールレジストリ（未検出）">${rest.map(opt).join('')}</optgroup>`
         : tools.map(opt).join('')}</select>`;
   })();
   const covers = (() => {
@@ -7472,29 +7559,29 @@ function bwBodyTool() {
       <input type="checkbox" id="bwc-${esc(t.id)}"
         ${on.has(t.id) ? 'checked' : ''} ${coveredBy[t.id] ? 'disabled' : ''}>
       <span>${esc(t.name)}</span>${coveredBy[t.id]
-        ? `<span class="tag mut">${esc(coveredBy[t.id])} でカバー</span>`
+        ? `<span class="tag mut">${esc(coveredBy[t.id])} の契約に含まれる</span>`
         : mates.includes(t) ? '<span class="tag">同じライセンス</span>' : ''}</label>`;
     const suggested = mates.length + kin.length;
     return `${suggested
       ? `<div class="covers">${mates.map(box).join('')}${kin.map(box).join('')}</div>`
-      : `<div class="src-note" style="margin:6px 0 0">レジストリ内に、このツールとライセンスグループまたはベンダーを共有するものはないため、提案できるものはありません。そのライセンスが他のツールにも利用権を与える場合は、以下でそれらにチェックを入れてください。</div>`}
+      : `<div class="src-note" style="margin:6px 0 0">レジストリ内に、このツールとライセンスグループまたはベンダーを共有するものはないため、提案できるものはありません。そのライセンスがほかのツールも対象にしている場合は、下の「すべてのツールから選択…」から選んでください。</div>`}
       ${rest.length ? `<details style="margin-top:8px"><summary
         style="font-size:12px;color:var(--mut);cursor:pointer">${suggested
           ? 'その他のツール…' : 'すべてのツールから選択…'}</summary>
         <div class="covers" style="margin-top:7px">${rest.map(box).join('')}</div>
       </details>` : ''}`;
   })();
-  return `<h4>どのツール</h4>
-  <p>レジストリがメニューです。まだ登録されていないツールは、まずツールレジストリに追加されるため、検出結果と支出が1つのリストにまとまります。</p>
+  return `<h4>ツールを選択</h4>
+  <p>選べるのは、ツールレジストリに登録されているツールです。未登録のツールは、先にツールレジストリへ追加してください。そうすると、検出結果と支出を同じツール一覧で管理できます。</p>
   <dl class="kv">
     <dt>ツール</dt><dd>${picker}</dd>
     <dt>ベンダー</dt><dd><input id="bw-vendor" class="mfield"
       value="${esc(w.vendor || '')}" placeholder="例: Anthropic"></dd>
     <dt>プラン</dt><dd><input id="bw-plan" class="mfield"
-      value="${esc(w.plan || '')}" placeholder="例: Team（標準＋プレミアムシート）"></dd>
-    <dt>他に対象</dt><dd>${covers}</dd>
+      value="${esc(w.plan || '')}" placeholder="例: Team（スタンダードとプレミアムのシート）"></dd>
+    <dt>対象に含めるツール</dt><dd>${covers}</dd>
   </dl>
-  <p class="src-note wnote">この1つのライセンスが対象とするすべてのツール。ライセンスごとに1つの契約です。対象ツールのいずれかで確認されたメンバーは観測済みとしてカウントされ、支出は1回だけカウントされます。これを誤ると、同じライセンスに二重請求され、観測使用の回答がすべて半減します。</p>`;
+  <p class="src-note wnote">このライセンスで使えるすべてのツールを選んでください。契約は、ライセンスごとに1件です。対象のどのツールで確認されたメンバーも利用確認済みとして数え、費用は1回だけ計上します。ここを誤ると、同じライセンスの費用が二重に計上され、利用確認の結果も2つの契約に分かれて、実際より少なく見えてしまいます。</p>`;
 }
 
 function bwBodySource() {
@@ -7532,11 +7619,11 @@ function bwBodySource() {
   const counts = {};
   rows.forEach(r => { counts[r[2]] = (counts[r[2]] || 0) + 1; });
   const everything = !rows.length ? '' : `<details style="margin:0 0 12px">
-    <summary style="font-size:12.5px;color:var(--mut);cursor:pointer">自動同期に対応済みのツール：${counts.built || 0}件。登録済みツール：${rows.length}件。${counts.vendor
-        ? `（管理APIあり・未接続：${counts.vendor}件）`
-        : ''}（独自に追加したツールは含まれません）</summary>
+    <summary style="font-size:12.5px;color:var(--mut);cursor:pointer">自動同期に対応済みのツール（プルダウンの選択肢）: ${counts.built || 0}件。同梱ツール ${rows.length}件についてベンダー側の対応状況を確認できます${counts.vendor
+        ? `（管理APIあり・未接続: ${counts.vendor}件）`
+        : ''}。独自に追加したツールは含まれません。</summary>
     <div class="rvw" style="margin:9px 0 0"><table>
-      <tr><th>ツール</th><th>ステータス</th><th>プラン、およびその方法</th></tr>
+      <tr><th>ツール</th><th>対応状況</th><th>必要なプランと方法</th></tr>
       ${rows.map(([id, a, b]) => `<tr>
         <td class="sname">${esc(nameOf(id))}</td>
         <td><span class="pill ${STATUS[b][1]}">${STATUS[b][0]}</span></td>
@@ -7544,10 +7631,10 @@ function bwBodySource() {
           style="color:var(--mut)">${esc(a.how || '')}</span></td>
       </tr>`).join('')}
     </table></div>
-    <p class="src-note">2026年8月にベンダーのドキュメントと照合して確認済み。ベンダーはこれらのゲートを頻繁に変更するため、これらのいずれかが古くなっている場合も、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡いただくことをおすすめします。</p>
+    <p class="src-note">2026年8月時点のベンダー公開ドキュメントで確認した内容です。ベンダーは対応プランの条件を頻繁に変更するため、内容が古くなっている場合は、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までお知らせください。</p>
   </details>`;
-  return `<h4>メンバーリストはどこから取得しますか？</h4>
-  <p>誰が実際にシートを保有しているか。これがないと、支出は誰にも紐づかない数値になり、シート経済性に関するどの質問にも回答できません。</p>
+  return `<h4>メンバー一覧の取得方法</h4>
+  <p>シートを実際に使えるのは誰かを示す一覧です。これがないと、費用は誰にも結び付かない数字になり、シートの費用対効果を判断できません。</p>
   <div id="bw-source" class="srcpick">${BW_SOURCES.map(([v, name, blurb]) => `
     <label data-act="b-source" data-key="${v}">
       <input type="radio" name="bw-source" value="${v}"
@@ -7557,19 +7644,19 @@ function bwBodySource() {
   ${w.source === 'api' ? `
     ${everything}
     <dl class="kv">
-      <dt>プロバイダー</dt><dd><select id="bw-provider" class="mfield bw-provider-picker"
+      <dt>連携先</dt><dd><select id="bw-provider" class="mfield bw-provider-picker"
         style="min-width:300px">
         ${list.map(([id, p]) => `<option value="${esc(id)}"
           ${id === w.provider ? 'selected' : ''}>${esc(bVendorName(p.label))}</option>`).join('')}
       </select></dd>
       <dt>APIキー</dt><dd><input id="bw-key" class="mfield" type="password"
         style="min-width:300px"
-        placeholder="${w.key_set ? '保存済み - 貼り付けて置き換え' : 'ベンダーAPIキーを貼り付け'}"
+        placeholder="${w.key_set ? '保存済み（貼り付けると置き換えます）' : 'ベンダーの API キーを貼り付け'}"
         autocomplete="off" value="${esc(w.api_key || '')}"></dd>
     </dl>
     ${((providers[w.provider] || {}).unverified)
-      ? `<div class="note" style="margin-top:22px">このコネクタは ${esc((providers[w.provider] || {}).label || w.provider)} の文書化されたエンドポイントを基に作成されており、実際の組織に対して実行されたことはありません。最初の同期が拒否された場合、メッセージにはベンダーとステータスが表示されます。接続に失敗した場合は、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）へお問い合わせください。</div>` : ''}
-    <p class="src-note wnote">受信側で保存され、サーバー側で使用されます。どのページもそれを読み戻すことはありません。 ${esc(((providers[w.provider] || {}).key_hint) || '')}</p>
+      ? `<div class="note" style="margin-top:22px">この連携機能は、${esc((providers[w.provider] || {}).label || w.provider)} が公開しているエンドポイントの仕様をもとに作成したもので、実際の組織に対して実行されたことはありません。最初の同期が拒否された場合は、表示されるメッセージにベンダー名とステータスが含まれます。その内容を添えて、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡ください。</div>` : ''}
+    <p class="src-note wnote">キーは受信サービスに保存され、サーバー側でのみ使われます。画面に再表示されることはありません。${esc(((providers[w.provider] || {}).key_hint) || '')}</p>
   ` : ''}
   <div class="callout">${w.source === 'api' ? esc(BPROVIDER_NONE) : (() => {
     // Import and Manual used to carry a paragraph about ChatGPT, whichever
@@ -7587,27 +7674,26 @@ function bwBodySource() {
     // "We have no record" and "we looked and there is nothing" are different
     // sentences and only one of them is true here.
     if (!a.api) {
-      return `<b>${me} はあなたが定義したツールです</b>。したがって、ここにはそのベンダーが提供する内容の記録はありません。この一覧は、今回のリリースに同梱されるツールを対象としています。インポートと手動は、ほかのツールとまったく同じようにこのツールでも機能します。もしそのベンダーに接続する価値のある管理APIがあるなら、課題を起票する価値があります。`;
+      return `<b>${me} は組織で独自に定義したツールです</b>。そのため、ここにはベンダーが提供する内容の記録がありません。この一覧は、今回のリリースに同梱されるツールだけを対象にしています。インポートと手動は、ほかのツールと同じように使えます。連携する価値のある管理 API がベンダーにある場合は、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡ください。`;
     }
     if (a.connector && providers[a.connector]) {
-      return `<b>${me} は自動で同期できます。</b>${plan} インポートと手動も引き続き利用でき、数値は同一です。自動は、リストを手作業で最新に保つ手間を省くだけです。`;
+      return `<b>${me} は自動で同期できます。</b>${plan ? ' 対象プラン: ' + plan.trim() : ''} インポートと手動でも使え、集計結果は同じです。自動にすると、一覧を手作業で最新に保つ手間が省けます。`;
     }
     if (a.api === 'rest' || a.api === 'scim') {
       // The plan is a sentence of its own, not an insert: several of them end
       // in a full stop, so splicing one mid-clause read as
       // "a members API Enterprise. The Admin API is in preview. - nothing".
-      return `<b>${me}のベンダーはメンバーAPIを提供しています</b>が、この画面には接続機能がありません。接続機能が用意されるまではCSVで取り込むか、手動で登録してください。自動連携が必要な場合は、ベンダーへの問い合わせをご検討ください。${plan ? ` ベンダーの案内：${plan}` : ''}`;
+      return `<b>${me}のベンダーはメンバーAPIを提供しています</b>が、この製品にはまだ接続機能がありません。それまでは CSV で取り込むか、手動で登録してください。自動連携をご希望の場合は、株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡ください。${plan ? ` ベンダー側の条件:${plan}` : ''}`;
     }
     if (a.api === 'none') {
       return `<b>${me} には読み取れる組織またはシート一覧がありません。</b>
-        ${esc(a.how || '')} インポートまたは手動が唯一の方法であり、これはこのページの制限ではなくベンダー側の境界です。`;
+        ${esc(a.how || '')} CSV インポートか手動登録が唯一の方法です。これはこの画面の制約ではなく、ベンダー側の制約です。`;
     }
     return `<b>${me} のベンダーはメンバーAPIを文書化していません。</b>
-      ${esc(a.how || '')} インポートまたは手動です。`;
+      ${esc(a.how || '')} CSV インポートか手動登録を使ってください。`;
   })()}
-    ${w.source === 'csv' ? ' 貼り付けボックスはレビュー手順の直後にあります: '
-      + '先にツールをリンクし、その後エクスポートをドロップしてください。' : ''}</div>
-  <p class="src-note" style="margin-top:0">ベンダーを接続したいですか？ 自動セットアップはご要望に応じて提供します。株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡ください。</p>`;
+    ${w.source === 'csv' ? ' 貼り付け欄は、確認の手順の直後に表示されます。先にツールを登録してから、書き出したメンバー一覧を貼り付けてください。' : ''}</div>
+  <p class="src-note" style="margin-top:0">接続したいベンダーがありますか？ 自動連携はご要望をうかがったうえで追加を検討します。株式会社世良（<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>）までご連絡ください。</p>`;
 }
 
 function bwBodySeats() {
@@ -7615,44 +7701,42 @@ function bwBodySeats() {
   const eff = [w.tool_id].concat(w.covers || []);
   const tot = bWizTotals();
   return `<h4>シートと料金</h4>
-  <p>組織が支払う内容。階層名が重要です。メンバーのシート階層がここにある名前と一致する場合、そのメンバーはその階層のシートに計上されます。</p>
+  <p>組織が支払っている内容を入力します。シート種別の名前は重要です。メンバーのシート種別がここに入力した名前と一致すると、そのメンバーはその種別のシートとして数えられます。</p>
   ${bTierRows(w.tiers, eff, bWizCur())}
   <div class="tsum"><span class="big" id="bw-tsum">${tot.monthly
     ? bMoney(tot.monthly, bWizCur())
-    : '<span style="color:var(--mut);font-weight:400;font-size:13px">まだ価格が設定されていません</span>'}</span>
-    <span style="color:var(--mut)">月額、 <span id="bw-tseats">${tot.seats}</span>
-      シート</span></div>
+    : '<span style="color:var(--mut);font-weight:400;font-size:13px">料金が未入力です</span>'}</span>
+    <span style="color:var(--mut)">月額（<span id="bw-tseats">${tot.seats}</span> シート）</span></div>
   <dl class="kv" style="margin-top:16px">
     <dt>通貨</dt><dd><input id="bw-currency" class="mfield" style="max-width:110px"
       value="${esc(w.currency || '')}" placeholder="GBP"></dd>
     <dt>更新日</dt><dd><input id="bw-renewal" class="mfield" style="max-width:180px"
       value="${esc(w.renewal || '')}" placeholder="YYYY-MM-DD"></dd>
-    <dt>所有者</dt><dd><input id="bw-owner" class="mfield"
-      value="${esc(w.owner || '')}" placeholder="この予算の保有者"></dd>
+    <dt>担当者</dt><dd><input id="bw-owner" class="mfield"
+      value="${esc(w.owner || '')}" placeholder="この予算の担当者"></dd>
   </dl>
-  <p class="src-note wnote">ベンダー API はユーザーごとの階層を公開していないため、いずれにしても階層はあなたが指定します。${eff.length > 1 ? '階層ごとのカバレッジがあると、'
-    + '「プレミアムには claude-code が含まれ、スタンダードには含まれない」と言えるようになります。これが'
-    + 'カード上のシート経済性の検出結果を支えます。' : ''}</p>`;
+  <p class="src-note wnote">ベンダーの API はユーザーごとのシート種別を返さないため、どの取得方法でもシート種別は入力が必要です。${eff.length > 1 ? '種別ごとの対象ツールを設定すると、'
+    + '「プレミアムには claude-code が含まれるが、スタンダードには含まれない」といった指摘ができるようになります。'
+    + '契約カードに表示される、シートの費用対効果に関する指摘は、この設定にもとづきます。' : ''}</p>`;
 }
 
 function bwBodyReview() {
   const w = BWIZ;
   const eff = [w.tool_id].concat(w.covers || []);
   const tot = bWizTotals();
-  return `<h4>確認してリンク</h4>
-  <p>1つの契約で、${eff.length}件のツールをカバーします。
-  ここは後からすべて変更できます。</p>
+  return `<h4>確認して登録</h4>
+  <p>この契約1件で、${eff.length}ツールが対象になります。内容は登録後もすべて変更できます。</p>
   <div class="rvw"><table>
-    <tr><th>内容</th><th>値</th></tr>
+    <tr><th>項目</th><th>内容</th></tr>
     <tr><td class="sname">ライセンス</td><td>${esc(w.plan || '—')}
-      <div style="color:var(--mut);font-size:12px">${esc(w.vendor || 'ベンダー未記録')}</div></td></tr>
-    <tr><td class="sname">対象</td><td>
+      <div style="color:var(--mut);font-size:12px">${esc(w.vendor || 'ベンダー未入力')}</div></td></tr>
+    <tr><td class="sname">対象ツール</td><td>
       ${eff.map(t => `<span class="pill p-mut">${esc(uiToolName(t))}</span>`).join(' ')}
-      <div style="color:var(--mut);font-size:12px">1回だけカウントされます。これらのいずれかで確認されたメンバーは、観測済みとしてカウントされます。</div></td></tr>
+      <div style="color:var(--mut);font-size:12px">費用は1回だけ計上します。これらのどのツールで確認されたメンバーも、利用確認済みとして数えます。</div></td></tr>
     <tr><td class="sname">メンバー</td><td>${esc(bwSrcName(w.source))}
       ${w.source === 'api' ? `<span class="pill p-mut">${esc(w.provider || '')}</span>` : ''}
       ${w.source === 'csv' && !w.editing
-        ? '<span class="pill p-warn">リンク後に貼り付けが必要</span>' : ''}</td></tr>
+        ? '<span class="pill p-warn">登録後にメンバー一覧の貼り付けが必要</span>' : ''}</td></tr>
     <tr><td class="sname">シート数</td><td>${tot.tiers.length
       ? tot.tiers.map(t => `<div>${esc(uiPlanTier(t.name))} — ${t.seats || 0}
           × ${bMoney(t.unit_price_monthly || 0, w.currency)}
@@ -7660,9 +7744,9 @@ function bwBodyReview() {
       : '<span style="color:var(--mut)">未設定</span>'}</td></tr>
     <tr><td class="sname">月額</td><td><b>${bMoney(tot.monthly, w.currency)}</b>
       <div style="color:var(--mut);font-size:12px">更新日 ${esc(w.renewal || '—')}
-      · 所有者 ${esc(w.owner || '—')}</div></td></tr>
+      · 担当者 ${esc(w.owner || '—')}</div></td></tr>
   </table></div>
-  <div class="callout"><b>他に対象</b> は、再確認する価値があります。同じライセンスを共有する2つのツールを別々にリンクすると、二重に請求され、観測された使用の回答がすべて半減し、後続ではそれが起きたことを判別できません。</div>`;
+  <div class="callout"><b>対象に含めるツール</b>は、登録前にもう一度確認してください。同じライセンスを共有する2つのツールを別々に登録すると、費用が二重に計上され、利用確認の結果も2つの契約に分かれてしまいます。しかも、後から見ても原因は分かりません。</div>`;
 }
 
 function budgetWizard() {
@@ -7670,7 +7754,7 @@ function budgetWizard() {
   const body = w.step === 2 ? bwBodySource()
     : w.step === 3 ? bwBodySeats()
     : w.step === 4 ? bwBodyReview() : bwBodyTool();
-  return `<h2>${w.editing ? '編集: ' + esc(w.tool_id) : 'ツールをリンク'}</h2>
+  return `<h2>${w.editing ? '契約を編集: ' + esc(uiToolName(w.tool_id)) : 'ツールの契約を登録'}</h2>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
   <div class="ssow">${bwRail()}
     <div class="ssmain budget-wizard">${body}
@@ -7683,7 +7767,7 @@ function budgetWizard() {
           ? `<button class="mini pri" data-act="b-step" data-key="${w.step + 1}"
               ${w.tool_id ? '' : 'disabled'}>次へ</button>`
           : `<button class="mini pri" data-act="b-save">${w.editing
-              ? '変更を保存' : 'ツールをリンク'}</button>`}
+              ? '変更を保存' : 'この内容で登録'}</button>`}
       </div></div></div>`;
 }
 
@@ -7698,7 +7782,7 @@ function bwLive() {
   if (rail) rail.outerHTML = bwRail();
   const sum = document.getElementById('bw-tsum');
   if (sum) sum.innerHTML = tot.monthly ? esc(bMoney(tot.monthly, bWizCur()))
-    : '<span style="color:var(--mut);font-weight:400;font-size:13px">まだ価格が設定されていません</span>';
+    : '<span style="color:var(--mut);font-weight:400;font-size:13px">料金が未入力です</span>';
   // The rail was replaced above, so its money node is the new one.
   const st = document.getElementById('bw-tseats');
   if (st) st.textContent = tot.seats;
@@ -7738,13 +7822,13 @@ function bProvenance(sub, conn) {
   const stale = (at, verb) => {
     const days = bAgeDays(at);
     return days != null && days > B_STALE_DAYS
-      ? ` <span class="pill p-amb">${days}日経過 - ${verb}?</span>` : '';
+      ? ` <span class="pill p-amb">${days}日前の情報 - ${verb}しますか？</span>` : '';
   };
   if (conn) {
     if (conn.last_sync_at) {
       bits.push((conn.last_sync_ok
-        ? `API 経由で同期されたユーザー ${when(conn.last_sync_at)}`
-        : `前回の API 同期に失敗 ${when(conn.last_sync_at)}: ${esc(conn.last_sync_detail)}`)
+        ? `API で同期 ${when(conn.last_sync_at)}`
+        : `前回の API 同期に失敗 ${when(conn.last_sync_at)}: ${esc(uiErrorText(conn.last_sync_detail, 0))}`)
         + stale(conn.last_sync_at, '再同期'));
     } else bits.push('API 接続は保存済みですが、同期はまだ実行されていません');
   }
@@ -7763,6 +7847,11 @@ function bProvenance(sub, conn) {
 // would have opened the Teams contract, and importing users into one would
 // have replaced the other's list.
 const bKey = s => s.tool_id + '|' + (s.plan_key || 'default');
+// 操作結果のメッセージ用に、契約の内部キーを「ツール名（プラン名）」に直す。
+const bLabel = k => {
+  const s = bFind(k);
+  return s ? uiToolName(s.tool_id) + (s.plan ? '（' + s.plan + '）' : '') : String(k || '').split('|')[0];
+};
 const bSplit = k => {
   const i = String(k || '').indexOf('|');
   return i < 0 ? {tool_id: k, plan_key: ''}
@@ -7782,7 +7871,9 @@ const bRoleLabel = value => ({
   owner: 'オーナー', admin: '管理者', member: 'メンバー',
   viewer: '閲覧者', editor: '編集者', guest: 'ゲスト'
 })[String(value || '').trim().toLowerCase()] || String(value || '');
-const uiPlanTier = value => ({standard: 'スタンダード', premium: 'プレミアム', business: 'ビジネス', team: 'チーム', 'copilot business': 'ビジネス', enterprise: 'エンタープライズ', pro: 'プロ', edu: '教育機関向け', education: '教育機関向け'})[String(value || '').trim().toLowerCase()] || String(value || '');
+// Standard / Premium のような一般語のシート種別だけを日本語で表示する。
+// Team・Enterprise・Copilot Business などの製品プラン名は、ベンダーの表記のまま残す。
+const uiPlanTier = value => ({standard: 'スタンダード', premium: 'プレミアム'})[String(value || '').trim().toLowerCase()] || String(value || '');
 function budgetCard(sub) {
   const ro = AUTH && AUTH.role === 'viewer';
   const conn = bConn(sub);
@@ -7814,7 +7905,7 @@ function budgetCard(sub) {
   const usageBits = m => {
     const u = m.usage || {};
     const b = [];
-    if (u.transcripts != null) b.push(u.transcripts + ' 件のトランスクリプト');
+    if (u.transcripts != null) b.push('文字起こし ' + u.transcripts + ' 件');
     if (u.minutes != null) b.push(u.minutes + ' 分');
     return b.join(', ');
   };
@@ -7840,83 +7931,77 @@ function budgetCard(sub) {
   const twins = (BUDGET.subscriptions || []).filter(o =>
     o.tool_id !== sub.tool_id && myGroups.has(groupOf[o.tool_id]));
   const findingBlock = f => f.kind === 'unused'
-    ? `<details class="budget-details"><summary>${f.members.length}名分の${esc(uiPlanTier(f.tier))}シートは、${esc(uiToolName(f.tool))}で使用を確認できていません — ${esc(uiPlanTier(f.tier))}の差分は未使用の可能性があります</summary>
-      <p class="src-note">${esc(uiToolName(f.tool))}の利用は確認できていますが、${esc(uiPlanTier(f.tier))}ライセンスの利用は確認できていません。この一覧はライセンスの利用状況を示すもので、メンバーの在席状況を示すものではありません。別のライセンスを使っているメンバーも、ここでは利用確認済みに数えられます。</p>
+    ? `<details class="budget-details"><summary>${esc(uiPlanTier(f.tier))} シート ${f.members.length} 件で、${esc(uiToolName(f.tool))} の利用を確認できていません — ${esc(uiPlanTier(f.tier))} の上乗せ分が使われていない可能性があります</summary>
+      <p class="src-note">${esc(uiToolName(f.tool))} を使えることが、${esc(uiPlanTier(f.tier))} シートを選ぶ理由になる部分です。ライセンスの他のツールを使っていて、${esc(uiToolName(f.tool))} だけ使っていないメンバーも、利用確認済みとして数えます。この一覧は、シートの費用対効果を見るためのもので、利用がないことを示すものではありません。</p>
       <ul>${f.members.map(e => `<li>${esc(e)}</li>`).join('')}</ul></details>`
-    : `<details class="budget-details budget-warning"><summary>${f.members.length}名分の${esc(uiPlanTier(f.tier))}シートは${esc(uiToolName(f.tool))}で使用を確認しましたが、そのプランの対象には含まれていません</summary>
-      <p class="src-note">この階層の対象範囲が狭すぎる形で記録されているか、これらのユーザーがそのシートでは付与されるべきでないアクセスを持っているかのどちらかです。どちらなのかを把握する価値があります。</p>
+    : `<details class="budget-details budget-warning"><summary>${esc(uiPlanTier(f.tier))} シート ${f.members.length} 件で、その種別の対象外である ${esc(uiToolName(f.tool))} の利用を確認しました</summary>
+      <p class="src-note">この種別の対象ツールの記録が狭すぎるか、シートで許可されていないはずのアクセスをこれらのユーザーが持っているか、のどちらかです。どちらなのかを確認してください。</p>
       <ul>${f.members.map(e => `<li>${esc(e)}</li>`).join('')}</ul></details>`;
   const reviewCount = unobserved.length + strangers.length + obs.personal.length;
   return `<details class="budget-card${reviewCount ? ' has-review' : ''}" data-bkey="${esc(bKey(sub))}"${BOPEN.has(bKey(sub)) ? ' open' : ''}>
   <summary class="budget-card-summary"><span class="budget-card-head"><span class="budget-card-identity"><span class="budget-eyebrow">${esc(bVendorName(sub.vendor) || '契約')}</span>
-    <span class="budget-card-title">${esc(uiToolName(sub.tool_id))}${sub.plan ? ` <span class="pill p-acc">${esc(uiPlanTier(sub.plan))}</span>` : ''}</span>
-    <span class="budget-card-copy">${eff.length > 1 ? `${eff.map(t => esc(uiToolName(t))).join('、')} をカバー` : 'ツール契約1件'}${sub.owner ? ` <span>·</span> 担当: ${esc(sub.owner)}` : ''}</span></span>
-    <span class="budget-card-state"><span class="pill ${reviewCount ? 'p-amb' : 'p-ok'}">${reviewCount ? reviewCount + '件のレビュー項目' : 'レビュー項目なし'}</span>
-      ${days != null ? `<span class="budget-renewal">${when(sub.renewal_date)}${days <= 30 ? ` · ${days <= 0 ? '期限超過' : days + '日'}` : ''} に更新</span>` : ''}
-      <span class="budget-disclosure">レビュー詳細 <b>⌄</b></span></span>
+    <span class="budget-card-title">${esc(uiToolName(sub.tool_id))}${sub.plan ? ` <span class="pill p-acc">${esc(sub.plan)}</span>` : ''}</span>
+    <span class="budget-card-copy">${eff.length > 1 ? `${eff.map(t => esc(uiToolName(t))).join('、')} が対象` : 'ツール契約1件'}${sub.owner ? ` <span>·</span> 担当者: ${esc(sub.owner)}` : ''}</span></span>
+    <span class="budget-card-state"><span class="pill ${reviewCount ? 'p-amb' : 'p-ok'}">${reviewCount ? '確認事項 ' + reviewCount + ' 件' : '確認事項なし'}</span>
+      ${days != null ? `<span class="budget-renewal">更新日 ${when(sub.renewal_date)}${days <= 30 ? ` · ${days <= 0 ? '更新日を過ぎています' : '残り' + days + '日'}` : ''}</span>` : ''}
+      <span class="budget-disclosure">詳細を見る <b>⌄</b></span></span>
   </span><span class="budget-kpis">
-    <span><strong>${bMoney(monthly, sub.currency)}</strong><em>月額契約額</em><small>${seats} 有償ライセンス</small></span>
-    <span><strong>${(sub.members || []).length}</strong><em>割り当てユーザー</em><small>${seats - (sub.members || []).length > 0 ? `${seats - (sub.members || []).length} ライセンス未割り当て` : '全ライセンス割り当て済み'}</small></span>
-    <span><strong>${matched.length}</strong><em>観測ユーザー</em><small>契約利用者 ${(sub.members || []).length} 人中</small></span>
-    <span class="${reviewCount ? 'attention' : 'clear'}"><strong>${reviewCount}</strong><em>レビュー項目</em><small>${unobserved.length ? `${unobserved.length}人が利用未確認` : '利用未確認の人はいません'}${strangers.length ? ` · ${strangers.length}人が未割り当て` : ''}${obs.personal.length ? ` · ${obs.personal.length}件の個人利用` : ''}</small></span>
+    <span><strong>${bMoney(monthly, sub.currency)}</strong><em>月額の契約金額</em><small>有償シート ${seats}</small></span>
+    <span><strong>${(sub.members || []).length}</strong><em>登録ユーザー</em><small>${seats - (sub.members || []).length > 0 ? `未割り当てのシート ${seats - (sub.members || []).length}` : '全シート割り当て済み'}</small></span>
+    <span><strong>${matched.length}</strong><em>利用確認済み</em><small>登録ユーザー ${(sub.members || []).length} 人中</small></span>
+    <span class="${reviewCount ? 'attention' : 'clear'}"><strong>${reviewCount}</strong><em>確認事項</em><small>${unobserved.length ? `利用未確認 ${unobserved.length} 人` : '利用未確認の人はいません'}${strangers.length ? ` · シートなし ${strangers.length} 人` : ''}${obs.personal.length ? ` · 個人アカウント ${obs.personal.length} 件` : ''}</small></span>
   </span></summary><div class="budget-card-body">
-  ${twins.length ? `<div class="note">${twins.map(o => esc(o.tool_id)).join('、')} は別々に登録されていますが、同じライセンスの対象です。1つのライセンスにつき契約を1件にまとめてください。これらのツールの紐付けを解除し、この契約を編集して「他に対象」で追加します。費用の二重計上を防ぎ、利用状況を統合できます。</div>` : ''}
-  ${seats > (sub.members || []).length ? `<p class="src-note">${seats - (sub.members || []).length}
-    ${seats}席のうち${seats - (sub.members || []).length}席がメンバー一覧の誰にも割り当てられていません。ここは見直しやすい支出項目ですが、上記の数値には含まれていません。</p>` : ''}
-  ${eff.length > 1 && matched.length ? `<p class="src-note">対象ツールごとの確認人数：
-    ${eff.map(t => `${esc(uiToolName(t))} ${matched.filter(x => x.seenOn.includes(t)).length}`).join('、')}。この契約は複数のツールを対象とします。いずれかのツールで利用が確認されたメンバーは、利用確認済みとして数えます。</p>` : ''}
-  <section class="budget-tier-section"><div class="budget-section-head"><div><span>ライセンス割り当て</span><h4>プラン別ライセンス</h4></div>
-    <span>${tiers.length ? tiers.length + ' 階層' : '階層未記録'}</span></div>
-  ${tiers.length ? `<table class="budget-tier-table${eff.length > 1 ? ' has-covers' : ''}"><tr><th>プラン</th><th class="num">購入済みライセンス</th><th class="num">割り当て済み</th><th class="num">ライセンス単価</th><th class="num">月額</th>${eff.length > 1 ? '<th>対象</th>' : ''}</tr>
+  ${twins.length ? `<div class="note">${twins.map(o => esc(o.tool_id)).join('、')} は別々に登録されていますが、同じライセンスの対象です。ライセンス1つにつき契約は1件にしてください。これらの契約の登録を解除し、この契約を編集して「対象に含めるツール」に追加すると、費用の二重計上がなくなり、利用状況も1つにまとまります。</div>` : ''}
+  ${seats > (sub.members || []).length ? `<p class="src-note">有償シート ${seats} 件のうち ${seats - (sub.members || []).length} 件は、ユーザー一覧の誰にも割り当てられていません。ここは最も手軽に削減できる費用で、上記のどの数値にも含まれていません。</p>` : ''}
+  ${eff.length > 1 && matched.length ? `<p class="src-note">ツール別の利用確認人数: ${eff.map(t => `${esc(uiToolName(t))} ${matched.filter(x => x.seenOn.includes(t)).length} 人`).join('、')}。1つのライセンスで複数のツールを使えるため、どれか1つでも利用を確認できたメンバーは、利用確認済みとして数えます。</p>` : ''}
+  <section class="budget-tier-section"><div class="budget-section-head"><div><span>シートの割り当て</span><h4>シート種別ごとの状況</h4></div>
+    <span>${tiers.length ? tiers.length + ' 種別' : 'シート種別が未登録'}</span></div>
+  ${tiers.length ? `<table class="budget-tier-table${eff.length > 1 ? ' has-covers' : ''}"><tr><th>シート種別</th><th class="num">購入済みシート</th><th class="num">割り当て済み</th><th class="num">シート単価</th><th class="num">月額</th>${eff.length > 1 ? '<th>対象ツール</th>' : ''}</tr>
     ${tiers.map(t => `<tr><td>${esc(uiPlanTier(t.name))}</td><td class="num">${t.seats}</td>
       <td class="num">${tierOf[bNorm(t.name)] || 0}</td>
       <td class="num">${bMoney(t.unit_price_monthly, sub.currency)}</td>
       <td class="num">${bMoney((t.seats || 0) * (t.unit_price_monthly || 0), sub.currency)}</td>
       ${eff.length > 1 ? `<td>${bTierCovers(t, eff).map(x => esc(uiToolName(x))).join('、')}</td>` : ''}</tr>`).join('')}</table>` : ''}
   </section>
-  <section class="budget-insights"><div class="budget-section-head"><div><span>アカウントとレビューの詳細</span><h4>ユーザー、使用状況、例外</h4></div>
-    <span>${reviewCount ? reviewCount + '件をレビュー' : '例外なし'}</span></div>
-  ${tiers.length && noTier ? `<p class="budget-data-note">${noTier} ユーザーにはシート階層がありません${conn && conn.last_sync_at ? '。ベンダーAPIは階層を報告しません。CSVインポートまたはメンバー追加行で設定します' : ''}。</p>` : ''}
-  ${ents(oddTiers).length ? `<p class="budget-data-note budget-warning">上記のどの階層にも一致しないユーザー階層: ${ents(oddTiers).map(([v, n]) => `"${esc(v)}" (${n})`).join(', ')}。編集で階層名を変更するか、再インポートして一致させてください。</p>` : ''}
+  <section class="budget-insights"><div class="budget-section-head"><div><span>ユーザーと確認事項</span><h4>ユーザー、利用状況、例外</h4></div>
+    <span>${reviewCount ? '確認事項 ' + reviewCount + ' 件' : '例外なし'}</span></div>
+  ${tiers.length && noTier ? `<p class="budget-data-note">${noTier} 人のシート種別が設定されていません${conn && conn.last_sync_at ? '（ベンダーの API はシート種別を返さないため、CSV インポートまたは「メンバーを追加」の行で設定してください）' : ''}。</p>` : ''}
+  ${ents(oddTiers).length ? `<p class="budget-data-note budget-warning">上のどのシート種別にも一致しないユーザーの種別: ${ents(oddTiers).map(([v, n]) => `「${esc(v)}」（${n} 人）`).join('、')}。「編集」でシート種別の名前を変更するか、再インポートして揃えてください。</p>` : ''}
   ${(sub.members || []).length ? `<details class="budget-details budget-users"><summary>ユーザー
       (${(sub.members || []).length}) — ${bProvenance(sub, conn) || '手動入力'}</summary>
     <table><tr><th>メンバー</th><th>ロール</th><th>シート</th>
-      <th title="ベンダー自身のAPIが報告する使用状況です。一部のベンダーだけがこれを公開しており、ユーザーがCSVインポート由来のライセンスには使用状況がありません。">ベンダー使用状況</th><th>ソース</th></tr>
+      <th title="ベンダー自身の API が返す利用状況です。公開しているベンダーは一部だけで、ユーザーを CSV インポートで登録した契約には表示されません。">ベンダー側の利用状況</th><th>登録元</th></tr>
     ${(sub.members || []).map(memberRow).join('')}</table></details>`
-    : `<p class="budget-data-note">ユーザーはまだいません${conn ? ' - 同期を実行してください' : ''}。</p>`}
-  ${unobserved.length ? `<details class="budget-details budget-warning"><summary>${unobserved.length}件の有償シートは利用を確認できていません — プラン見直し候補</summary>
-    <p class="src-note">「未観測」とは、現在の
-    対象期間で ${eff.length > 1
-      ? 'このライセンスが対象とするすべてのツール (' + eff.map(t => esc(uiToolName(t))).join('、') + ')'
-      : esc(uiToolName(sub.tool_id))} 上のアクティビティにこのメンバーを
-    利用状況をこのメンバーに対応付けられる検出記録がなかったことを意味します。検出範囲に抜けがあると、利用がないように見える場合があります。この一覧をもとに判断する前に、検出元の記録を確認してください。</p>
+    : `<p class="budget-data-note">ユーザーがまだ登録されていません${conn ? '。「今すぐユーザーを同期」を実行してください' : ''}。</p>`}
+  ${unobserved.length ? `<details class="budget-details budget-warning"><summary>有償シート ${unobserved.length} 件で利用を確認できていません — ダウングレードの候補</summary>
+    <p class="src-note">「利用未確認」とは、現在の対象期間内に、${eff.length > 1
+      ? 'このライセンスが対象とするすべてのツール（' + eff.map(t => esc(uiToolName(t))).join('、') + '）'
+      : esc(uiToolName(sub.tool_id))} でのこのメンバーの利用を確認できた検出記録が、1件もなかったことを意味します。検出ソースが対象外の環境での利用は、利用がないのと区別できません。この一覧をもとに判断する前に、「検出ソース」画面を確認してください。</p>
     <ul>${unobserved.map(x => `<li>${esc(x.m.email)}${x.m.seat_tier ? ` <span class="pill p-mut">${esc(uiPlanTier(x.m.seat_tier))}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
   ${findings.map(findingBlock).join('')}
-  ${strangers.length ? `<details class="budget-details budget-warning"><summary>${strangers.length}人の観測済み利用者が、割り当て済みシートに一致しません</summary>
-    <p class="src-note">ユーザーリストの誰とも一致しなかった観測されたID。照合は名前で行われ、一致しない場合は「未一致」であり、誰かがライセンス未所有であることの証明ではありません。ただし、これらのいくつかが下の個人アカウントと並んでいることこそ、このページが存在する理由であるシャドー支出の全体像です。</p>
+  ${strangers.length ? `<details class="budget-details budget-warning"><summary>利用を確認したが、ユーザー一覧に一致しない人が ${strangers.length} 人います</summary>
+    <p class="src-note">ユーザー一覧のどの人とも一致しなかった、検出済みの ID です。照合は名前で行うため、一致しない場合は「未照合」であって、ライセンスがない証拠ではありません。ただし、下の個人アカウントとあわせて複数見つかる場合は、この画面で見つけたい「シャドー支出」の状態です。</p>
     <ul>${strangers.map(n => `<li>${esc(n)}</li>`).join('')}</ul></details>` : ''}
-  ${obs.personal.length ? `<details class="budget-details budget-risk"><summary>${obs.personal.length}
-     件の個人利用の利用 ${obs.personal.length}件（${eff.length > 1 ? 'このライセンス' : esc(uiToolName(sub.tool_id))}）</summary>
-    <table><tr><th>実行者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントドメイン</th><th>デバイス</th><th>最終確認</th></tr>
+  ${obs.personal.length ? `<details class="budget-details budget-risk"><summary>個人アカウントでの利用 ${obs.personal.length} 件（${eff.length > 1 ? 'このライセンスのツール' : esc(uiToolName(sub.tool_id))}）</summary>
+    <table><tr><th>利用者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントのドメイン</th><th>端末</th><th>最終確認</th></tr>
     ${obs.personal.map(r => `<tr><td>${esc(r.user || '—')}</td>
       ${eff.length > 1 ? `<td>${esc(uiToolName(r.tool))}</td>` : ''}
       <td class="mono">${esc(r.account_domain)}</td>
       <td>${esc(r.device_name || r.device || '—')}</td>
       <td>${when(r.last_seen)}</td></tr>`).join('')}</table>
-    <p class="src-note">これらは個人アカウントビューにも表示されます。ここに表示されるのは、個人アカウントが同じツールを利用しているのにシートに支払っていることが、まさに支出の課題だからです。</p></details>` : ''}
-  ${obs.unlinked ? `<p class="budget-data-note">${obs.unlinked} 台のデバイスが
-    ${eff.length > 1 ? 'このライセンスが対象とするツール' : esc(uiToolName(sub.tool_id))} を実行していますが、人物が紐づいていません。上記のどこにもカウントされません。利用者対応表（ソースビュー）がそれらをリンクします。</p>` : ''}
+    <p class="src-note">これらは「個人アカウント」画面にも表示されます。ここにも表示するのは、シートに費用を払いながら、同じツールを個人アカウントでも使っている状態が、支出の面で確認すべき点だからです。</p></details>` : ''}
+  ${obs.unlinked ? `<p class="budget-data-note">${obs.unlinked} 台の端末で、${eff.length > 1 ? 'このライセンスが対象とするツール' : esc(uiToolName(sub.tool_id))} が使われていますが、利用者が紐付いていないため、上記のどこにも数えていません。「検出ソース」画面の利用者対応表で紐付けられます。</p>` : ''}
   </section>
   ${ro ? '' : `<footer class="budget-card-actions">
     <div class="budget-actions-main">
     ${conn ? `<button class="mini" data-act="b-sync" data-key="${esc(bKey(sub))}">今すぐユーザーを同期</button>` : ''}
     <button class="mini" data-act="b-edit" data-key="${esc(bKey(sub))}">編集</button>
     <button class="mini" data-act="b-import" data-key="${esc(bKey(sub))}">ユーザーをインポート</button>
-    <button class="mini" data-act="b-unlink" data-key="${esc(bKey(sub))}">リンク解除</button>
+    <button class="mini" data-act="b-unlink" data-key="${esc(bKey(sub))}">登録を解除</button>
     </div>
   <div class="budget-add-member"><span>メンバーを追加</span>
-    <input id="bm-email-${esc(bKey(sub))}" class="mfield" placeholder="メンバーを追加: メールアドレス" autocomplete="off">
-    <input id="bm-tier-${esc(bKey(sub))}" class="mfield" placeholder="シート階層">
+    <input id="bm-email-${esc(bKey(sub))}" class="mfield" placeholder="メールアドレス" autocomplete="off">
+    <input id="bm-tier-${esc(bKey(sub))}" class="mfield" placeholder="シート種別（例: スタンダード）">
     <button class="mini" data-act="b-madd" data-key="${esc(bKey(sub))}">追加</button>
   </div></footer>`}
   </div></details>`;
@@ -7933,13 +8018,13 @@ function budgetImport() {
   if (!BCSV.plan_key && plans.length === 1) BCSV.plan_key = plans[0].plan_key || 'default';
   const askPlan = !BCSV.plan_key && plans.length > 1;
   return `<h2>ユーザーをインポート — ${esc(BCSV.tool_id)}${plan && plan.plan ? ` · ${esc(plan.plan)}` : ''}</h2>
-  ${askPlan ? `<div class="note">${esc(BCSV.tool_id)} には ${plans.length} 件のプランがあります。
-    <label style="margin-left:6px">これらのユーザーを以下にインポート：
+  ${askPlan ? `<div class="note">${esc(uiToolName(BCSV.tool_id))} には ${plans.length} 件のプランがあります。
+    <label style="margin-left:6px">インポート先のプラン:
       <select id="b-csv-plan" class="mfield" style="min-width:160px;display:inline-block;width:auto;margin-left:6px">
         <option value="">プランを選択…</option>
         ${plans.map(x => `<option value="${esc(x.plan_key || 'default')}">${esc(x.plan || ((x.plan_key && x.plan_key !== 'default') ? x.plan_key : '既定'))}</option>`).join('')}
       </select></label></div>` : ''}
-  <p class="lede">ベンダーの管理画面からメンバー一覧をCSV形式で書き出し、ここに貼り付けてください。ChatGPT Businessでは「ワークスペース設定」→「メンバー」、Claudeでは「組織設定」→「メンバー」から出力できます。列名 name（氏名）、email（メールアドレス）、role（役割）、status（状態）、seat tier（ライセンス階層）を認識します。カンマ区切りとタブ区切りに対応しており、ExcelやNumbersから表を貼り付けても読み込めます。メールアドレスの一覧だけでも取り込めます。</p>
+  <p class="lede">ベンダーの管理画面からメンバー一覧をCSV形式で書き出し、ここに貼り付けてください。ChatGPT Businessでは「ワークスペース設定」→「メンバー」、Claudeでは「組織設定」→「メンバー」から出力できます。列名 name（氏名）、email（メールアドレス）、role（ロール）、status（状態）、seat tier（シート種別）を認識します。カンマ区切りとタブ区切りに対応しており、ExcelやNumbersから表を貼り付けても読み込めます。メールアドレスの一覧だけでも取り込めます。</p>
   ${BMSG ? `<div class="note">${esc(BMSG)}</div>` : ''}
   <div class="wcard" style="max-width:760px">
   <textarea id="b-csv" class="mfield" style="width:100%;min-height:140px;font-family:var(--monofont,monospace)"
@@ -7950,19 +8035,13 @@ function budgetImport() {
     ${parsed && parsed.members.length && !askPlan ? `<button class="mini" data-act="b-csv-save">${parsed.members.length} 名のメンバーをインポート</button>` : ''}
   </div>
   ${parsed ? `${parsed.headerless ? `<p class="src-note" style="color:var(--warn)">これらの行の一部の列は、値から列名を特定できず、ヘッダー行がないため除外されました。ヘッダー行を含めて再度貼り付けてください（例：name、email、role、seat tier）。すべての列が取り込まれます。</p>` : ''}
-    ${parsed.missing && parsed.missing.tier ? `<p class="src-note" style="color:var(--warn)">ヘッダーにシート/階層列が認識されなかったため、シート階層は空でインポートされ、階層テーブルはこれらのユーザーをシートに計上できません。</p>` : ''}
-    ${parsed.map ? `<p class="src-note">読み取り: ${{tabs: 'タブ区切り', semicolons: 'セミコロン区切り', commas: 'カンマ区切り'}[parsed.map.delim] || '形式不明'}、
-    ${parsed.map.header ? 'ヘッダー行を検出' : parsed.map.guessed
-      ? 'ヘッダー行なし、列名は値から生成' : 'ヘッダー行なし'};
-    ${ents(parsed.map.cols).map(([f, i]) =>
-      `${({email: 'メールアドレス', name: '氏名', role: '役割', tier: 'ライセンス階層'})[f] || f} ${i >= 0 ? ordinal(i + 1) : '該当なし'}`)
-      .join(', ')}。</p>` : ''}
-    <p class="src-note">${parsed.members.length} 行を認識、
-    ${parsed.skipped} 件をスキップ（アドレスなし、または重複）。インポートすると
-    このツールの以前のCSVインポートが置き換わります。API同期および手動の
-    行は変更されず、空のロールまたはシート階層が、その人物に既に保存されている
-    値を上書きすることはありません。</p>
-    ${parsed.members.length ? `<table><tr><th>メールアドレス</th><th>ロール</th><th>シート</th></tr>
+    ${parsed.missing && parsed.missing.tier ? `<p class="src-note" style="color:var(--warn)">ヘッダーにシート種別の列が見つからなかったため、シート種別は空のままインポートされます。シート種別ごとの集計では、これらのユーザーを各シートに数えられません。</p>` : ''}
+    ${parsed.map ? `<p class="src-note">読み取り結果: ${{tabs: 'タブ区切り', semicolons: 'セミコロン区切り', commas: 'カンマ区切り'}[parsed.map.delim] || '形式不明'}、${parsed.map.header ? 'ヘッダー行あり' : parsed.map.guessed
+      ? 'ヘッダー行なし（列名は値から推定）' : 'ヘッダー行なし'}。列の対応: ${ents(parsed.map.cols).map(([f, i]) =>
+      `${({email: 'メールアドレス', name: '氏名', role: 'ロール', tier: 'シート種別'})[f] || f} ${i >= 0 ? ordinal(i + 1) : '該当なし'}`)
+      .join('、')}。</p>` : ''}
+    <p class="src-note">${parsed.members.length} 行を読み取り、${parsed.skipped} 行をスキップしました（メールアドレスなし、または重複）。インポートすると、このツールの以前の CSV インポート分が置き換わります。API 同期分と手動で追加した分は変更されません。ロールやシート種別が空の場合も、すでに保存されている値は上書きされません。</p>
+    ${parsed.members.length ? `<table><tr><th>メールアドレス</th><th>ロール</th><th>シート種別</th></tr>
     ${parsed.members.slice(0, 8).map(m => `<tr><td>${esc(m.email)}</td>
       <td>${esc(bRoleLabel(m.role) || '—')}</td><td>${esc(uiPlanTier(m.seat_tier || '—'))}</td></tr>`).join('')}
     ${parsed.members.length > 8 ? `<tr><td colspan="3" style="color:var(--mut)">…ほか ${parsed.members.length - 8} 件</td></tr>` : ''}</table>` : ''}` : ''}
@@ -7985,25 +8064,25 @@ function bCsvCell(v) {
 // people no seat covers, and personal-account use all live in one file
 // without pretending to be the same kind of row.
 function budgetCsv() {
-  const rows = [['row_type', 'licence', 'tool', 'person', 'name', 'role',
-                 'seat_tier', 'status', 'seen_on', 'account_domain',
-                 'device', 'last_seen', 'source']];
-  const who = e => BRNAMES ? e : 'withheld';
+  const rows = [['行の種類', 'ライセンス', 'ツール', 'ユーザー', '氏名', 'ロール',
+                 'シート種別', '状態', '利用を確認したツール', 'アカウントのドメイン',
+                 '端末', '最終確認', '登録元']];
+  const who = e => BRNAMES ? e : '非公開';
   (BUDGET.subscriptions || []).forEach(sub => {
     const {eff, obs, matched, unobserved, strangers} = bReconcile(sub);
     const cov = eff.join(' + ');
-    matched.forEach(x => rows.push(['seat', cov, sub.tool_id,
+    matched.forEach(x => rows.push(['シート', cov, sub.tool_id,
       who(x.m.email), who(x.m.name || ''), x.m.role || '',
-      x.m.seat_tier || (x.tier || {}).name || '', 'observed',
+      x.m.seat_tier || (x.tier || {}).name || '', '利用確認済み',
       x.seenOn.join(' '), '', '', '', x.m.source || '']));
-    unobserved.forEach(x => rows.push(['seat', cov, sub.tool_id,
+    unobserved.forEach(x => rows.push(['シート', cov, sub.tool_id,
       who(x.m.email), who(x.m.name || ''), x.m.role || '',
-      x.m.seat_tier || (x.tier || {}).name || '', '未観測',
+      x.m.seat_tier || (x.tier || {}).name || '', '利用未確認',
       '', '', '', '', x.m.source || '']));
-    strangers.forEach(n => rows.push(['unmatched_user', cov, sub.tool_id,
-      who(n), '', '', '', '一致するシートなし', '', '', '', '', 'observed']));
-    obs.personal.forEach(r => rows.push(['personal_account', cov, r.tool,
-      who(r.user || ''), '', '', '', '個人アカウント', '',
+    strangers.forEach(n => rows.push(['ユーザー一覧に一致しない利用者', cov, sub.tool_id,
+      who(n), '', '', '', 'シートなしで利用', '', '', '', '', '検出']));
+    obs.personal.forEach(r => rows.push(['個人アカウント', cov, r.tool,
+      who(r.user || ''), '', '', '', '個人アカウントで利用', '',
       r.account_domain || '', who(r.device_name || r.device || ''),
       (r.last_seen || '').slice(0, 10), (r.sources || []).join(' ')]));
   });
@@ -8046,22 +8125,22 @@ function budgetReport() {
     </div>` : '';
     return `<div class="wcard" style="margin-bottom:14px">
     <h3 style="margin-top:0">${esc(uiToolName(sub.tool_id))}
-      ${sub.plan ? `<span class="pill p-acc">${esc(uiPlanTier(sub.plan))}</span>` : ''}
-      ${eff.length > 1 ? `<span style="font-size:12px;color:var(--mut);font-weight:normal">${eff.map(t => esc(uiToolName(t))).join('、')} をカバー</span>` : ''}</h3>
+      ${sub.plan ? `<span class="pill p-acc">${esc(sub.plan)}</span>` : ''}
+      ${eff.length > 1 ? `<span style="font-size:12px;color:var(--mut);font-weight:normal">${eff.map(t => esc(uiToolName(t))).join('、')} が対象</span>` : ''}</h3>
     <p class="src-note" style="margin-top:0">
       ${bMoney(monthly, sub.currency)} /月
       ${sub.renewal_date ? ` · 更新: ${esc(sub.renewal_date)}` : ''}
-      ${sub.owner ? ` · 所有者: ${esc(sub.owner)}` : ''}
+      ${sub.owner ? ` · 担当者: ${esc(sub.owner)}` : ''}
       · ${bProvenance(sub, bConn(sub)) || '手動入力'}</p>
-    <table class="plain"><tr><th>ライセンス上</th><th>使用していることを観測</th>
-      <th>未観測</th><th>シートなしで利用</th><th>個人アカウント</th></tr>
+    <table class="plain"><tr><th>登録ユーザー</th><th>利用確認済み</th>
+      <th>利用未確認</th><th>シートなしで利用</th><th>個人アカウント</th></tr>
       <tr><td class="num">${(sub.members || []).length}</td>
       <td class="num">${matched.length}</td>
       <td class="num">${unobserved.length}</td>
       <td class="num">${strangers.length}</td>
       <td class="num">${obs.personal.length}</td></tr></table>
-    ${tiers.length ? `<table class="plain" style="margin-top:10px"><tr><th>プラン</th><th>購入済みライセンス</th>
-      <th>割り当て済み</th><th>シート単価</th><th>月額</th>${eff.length > 1 ? '<th>対象</th>' : ''}</tr>
+    ${tiers.length ? `<table class="plain" style="margin-top:10px"><tr><th>シート種別</th><th>購入済みシート</th>
+      <th>割り当て済み</th><th>シート単価</th><th>月額</th>${eff.length > 1 ? '<th>対象ツール</th>' : ''}</tr>
       ${tiers.map(t => `<tr><td>${esc(uiPlanTier(t.name))}</td><td class="num">${t.seats}</td>
         <td class="num">${(sub.members || []).filter(m =>
           bNorm(m.seat_tier).includes(bNorm(t.name))
@@ -8069,33 +8148,32 @@ function budgetReport() {
         <td class="num">${bMoney(t.unit_price_monthly, sub.currency)}</td>
         <td class="num">${bMoney((t.seats || 0) * (t.unit_price_monthly || 0), sub.currency)}</td>
         ${eff.length > 1 ? `<td>${bTierCovers(t, eff).map(x => esc(uiToolName(x))).join('、')}</td>` : ''}</tr>`).join('')}</table>` : ''}
-    ${list('未観測の有償ライセンス - ダウングレード候補',
+    ${list('利用を確認できなかった有償シート — ダウングレードの候補',
       unobserved.map(x => `${who(x.m.email)}${x.m.seat_tier ? ` <span class="pill p-mut">${esc(uiPlanTier(x.m.seat_tier))}</span>` : ''}`),
-      'これらのユーザーの利用状況を照合できる検出記録はありません：' +
+      '対象期間内に、' +
       (eff.length > 1 ? 'このライセンスが対象とするすべてのツール' : esc(uiToolName(sub.tool_id))) +
-      ' の対象期間内。カバレッジのギャップは不在と同じに見えます。')}
+      ' でのこれらのユーザーの利用を確認できた検出記録はありません。検出ソースが対象外の環境での利用は、利用がないのと区別できません。')}
     ${findings.map(f => list(
       f.kind === 'unused'
-        ? `${esc(uiPlanTier(f.tier))} シートは ${esc(uiToolName(f.tool))} で一度も確認されていません - ${esc(uiPlanTier(f.tier))} の差分は未使用の可能性があります`
-        : `${esc(uiPlanTier(f.tier))} シートは ${esc(uiToolName(f.tool))} で確認されましたが、その階層ではカバーされていません`,
+        ? `${esc(uiPlanTier(f.tier))} シートで ${esc(uiToolName(f.tool))} の利用を確認できていません — ${esc(uiPlanTier(f.tier))} の上乗せ分が使われていない可能性があります`
+        : `${esc(uiPlanTier(f.tier))} シートで、その種別の対象外である ${esc(uiToolName(f.tool))} の利用を確認しました`,
       f.members.map(e => who(e)),
       f.kind === 'unused'
-        ? esc(uiToolName(f.tool)) + ' へのアクセスは、この階層がそれを持たない階層と比べて得られるものです。これらのユーザーは引き続き観測済みとしてカウントされます。'
-        : '階層のカバレッジが狭すぎるか、これらのシートが意図した以上に権限を与えているかのどちらかです。')).join('')}
-    ${list('使用を観測したが、どのシートにも一致しない', strangers.map(n => who(n)),
-      'このライセンスで確認されたIDのうち、ユーザーリストの誰とも一致しなかったものです。照合は名前で行われるため、不一致は未照合を意味するだけで、ライセンス未付与ユーザーの証拠ではありません。')}
+        ? esc(uiToolName(f.tool)) + ' を使えることが、この種別のシートを選ぶ理由になる部分です。これらのユーザーも、利用確認済みとして数えています。'
+        : 'この種別の対象ツールの記録が狭すぎるか、シートで許可されていないはずのアクセスがあるか、のどちらかです。')).join('')}
+    ${list('利用を確認したが、ユーザー一覧に一致しない人', strangers.map(n => who(n)),
+      'このライセンスで確認された ID のうち、ユーザー一覧のどの人とも一致しなかったものです。照合は名前で行うため、一致しない場合は「未照合」であって、ライセンスがない証拠ではありません。')}
     ${obs.personal.length ? `<div class="rep-block" style="margin-top:12px">
-      <strong>有料プラン併用時の個人アカウント利用</strong>
-      ${BRNAMES ? `<table style="margin-top:4px"><tr><th>実行者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントドメイン</th><th>最終確認</th></tr>
+      <strong>有料プランと並行した、個人アカウントでの利用</strong>
+      ${BRNAMES ? `<table style="margin-top:4px"><tr><th>利用者</th>${eff.length > 1 ? '<th>ツール</th>' : ''}<th>アカウントのドメイン</th><th>最終確認</th></tr>
         ${obs.personal.map(r => `<tr><td>${r.user ? who(r.user)
       : '<span class="pill p-mut">識別情報なし</span>'}</td>
           ${eff.length > 1 ? `<td>${esc(uiToolName(r.tool))}</td>` : ''}
           <td class="mono">${esc(r.account_domain)}</td>
           <td>${esc((r.last_seen || '').slice(0, 10))}</td></tr>`).join('')}</table>`
-        : `<p class="src-note">個人アカウントの利用 ${obs.personal.length}件は、${new Set(obs.personal.map(r => r.account_domain)).size}種類のドメインにまたがります。名前は伏せています。</p>`}
+        : `<p class="src-note">個人アカウントでの利用 ${obs.personal.length} 件（${new Set(obs.personal.map(r => r.account_domain)).size} 種類のドメイン）。氏名は伏せています。</p>`}
     </div>` : ''}
-    ${obs.unlinked ? `<p class="src-note">${obs.unlinked} 台のデバイスがこのライセンスを使用しており、人物が
-      紐付いていません。上記のどこにもカウントされていません。</p>` : ''}
+    ${obs.unlinked ? `<p class="src-note">${obs.unlinked} 台の端末でこのライセンスのツールが使われていますが、利用者が紐付いていないため、上記のどこにも数えていません。</p>` : ''}
     </div>`;
   };
   return `<div class="noprint" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
@@ -8104,30 +8182,28 @@ function budgetReport() {
     <button class="mini" data-act="b-report-csv">CSVをダウンロード</button>
     <button class="mini" data-act="b-report-names">${BRNAMES ? '名前を伏せる' : '名前を表示'}</button>
     <span class="src-note" style="margin:0">${BRNAMES
-      ? '名前は表示されています。広く共有する場合は名前を伏せてください。カウントは保持されます。'
-      : '名前は伏せられています。ページ内とCSVにはカウントのみが表示されます。'}</span>
+      ? '氏名を表示しています。広く共有する場合は、氏名を伏せてください（人数は残ります）。'
+      : '氏名を伏せています。この画面と CSV には人数だけが含まれます。'}</span>
   </div>
   <div class="rep-head">
     <h2 style="margin-bottom:4px">AI支出とシート利用</h2>
-    <p class="src-note" style="margin-top:0">${esc(stamp)} 協定世界時に 世良AIガバナンス ${CFG.version === 'dev' ? '開発版' : esc(CFG.version || '')} から生成 · 観測対象は過去
-    ${days} 日${BRNAMES ? '' : ' · 名前非表示'}</p>
+    <p class="src-note" style="margin-top:0">${esc(stamp)} UTC に世良AIガバナンス${CFG.version ? ' ' + (CFG.version === 'dev' ? '（開発版）' : esc(CFG.version)) : ''}で作成 · 集計期間: 直近 ${days} 日間${BRNAMES ? '' : ' · 氏名は非表示'}</p>
   </div>
   <dl class="stats">
     <div><dt>${conv ? bMoney(conv.total, bPrefCur()) : (spendParts.join(' + ') || '0')}</dt>
-      <dd>追跡中の支出 / 月${conv ? ` · ${spendParts.join(' + ')}（ECBにて）${esc(conv.date)}` : ''}</dd></div>
-    <div><dt>${subs.length}</dt><dd>追跡中のライセンス</dd></div>
-    <div><dt>${totals.seats}</dt><dd>購入済みライセンス${totals.seats > totals.members
-      ? ` · ${totals.seats - totals.members} 件が誰にも割り当てられていません` : ''}</dd></div>
-    <div><dt>${totals.observed} / ${totals.members}</dt><dd>ライセンスを保有し、利用が確認された人</dd></div>
-    <div><dt${totals.unobserved ? ' style="color:var(--warn)"' : ''}>${totals.unobserved}</dt><dd>一度も観測されなかった人</dd></div>
-    <div><dt${totals.personal ? ' style="color:var(--dstr)"' : ''}>${totals.personal}</dt><dd>追跡対象ライセンスにおける個人アカウント利用</dd></div>
+      <dd>月額の追跡支出${conv ? ` · ${spendParts.join(' + ')}（ECB ${esc(conv.date)} のレートで換算）` : ''}</dd></div>
+    <div><dt>${subs.length}</dt><dd>追跡中の契約</dd></div>
+    <div><dt>${totals.seats}</dt><dd>購入済みシート${totals.seats > totals.members
+      ? ` · ${totals.seats - totals.members} 件は誰にも割り当てられていません` : ''}</dd></div>
+    <div><dt>${totals.observed} / ${totals.members}</dt><dd>シートを持つ人のうち、利用を確認できた人</dd></div>
+    <div><dt${totals.unobserved ? ' style="color:var(--warn)"' : ''}>${totals.unobserved}</dt><dd>利用を確認できなかった人</dd></div>
+    <div><dt${totals.personal ? ' style="color:var(--dstr)"' : ''}>${totals.personal}</dt><dd>追跡中の契約と同じツールでの個人アカウント利用</dd></div>
   </dl>
   ${subs.length ? subs.map(block).join('')
-    : '<div class="note">ライセンスはまだリンクされていません。</div>'}
+    : '<div class="note">契約はまだ登録されていません。</div>'}
   <div class="wcard" style="margin-top:14px"><h3 style="margin-top:0">この画面の見方</h3>
   <p class="src-note" style="margin-top:0">
-  支出は、組織が支払ったと記録しているものです。それ以外はすべて観測されたものです。プラットフォームは、ブラウザー、コマンドライン、統合開発環境、デスクトップ、ネットワーク、クラウドサインインをまたいでAIツールを検出し、それらの観測結果を各ライセンスの人物に名前で照合します。 <strong>観測済み</strong> 上の期間内に、そのライセンスが対象とする少なくとも1つのツールでその人物が確認されたことを意味します。バンドル内の1つのツールで利用されていなくても、未観測ということではありません。
-  <strong>一度も観測されていない</strong> どの利用環境でも利用を確認できなかったことを意味します。これは未使用シートの強いヒントであり、証拠ではありません。すべてに展開されていない検出ソースは、不在とまったく同じに見えますし、休暇中の人も、一度もサインインしない人と同じに見えます。これらは確認すべき手がかりとして扱い、請求の根拠となる判定として扱わないでください。</p></div>`;
+  支出は、組織が支払っていると記録した金額です。それ以外の数値はすべて、検出した結果にもとづきます。この製品は、ブラウザー、CLI、IDE、デスクトップアプリ、ネットワーク、クラウドのサインインをまたいで AI ツールを検出し、その結果を、各ライセンスに登録された人と名前で照合します。<strong>利用確認済み</strong>とは、上の期間内に、そのライセンスが対象とするツールのうち少なくとも1つで、その人が確認されたことを意味します。バンドルの中の1つのツールで利用がなくても、利用未確認にはなりません。<strong>利用未確認</strong>とは、どの検出ソースでもその人を確認できなかったことを意味します。未使用シートの有力な手がかりですが、証拠ではありません。すべての端末に展開されていない検出ソースは、利用がないのと同じに見えます。休暇中の人も、一度もサインインしない人と同じに見えます。確認のきっかけとして使い、請求の根拠にはしないでください。</p></div>`;
 }
 
 async function budget() {
@@ -8156,14 +8232,14 @@ async function budget() {
   ${(() => { const n = conv ? '' : bConversionNote(subs);
      return n ? `<p class="src-note" style="margin-bottom:10px">${n}</p>` : ''; })()}
   ${subs.length ? `<dl class="stats" style="margin-bottom:14px">
-    <div><dt>${spend}</dt><dd>月間追跡支出${conv
-      ? ` · ${spendParts.join(' + ')}（ECBにて）${esc(conv.date)}` : ''}</dd></div>
+    <div><dt>${spend}</dt><dd>月額の追跡支出${conv
+      ? ` · ${spendParts.join(' + ')}（ECB ${esc(conv.date)} のレートで換算）` : ''}</dd></div>
     <div><dt>${subs.length}</dt><dd>登録済み契約</dd></div>
   </dl>` : ''}
   ${subs.map(budgetCard).join('')}
-  ${subs.length ? '' : `<div class="note">契約はまだ登録されていません。ツールの契約を登録すると、費用やライセンスの割り当て状況を、検出データから分かる実際の利用状況と照らし合わせて確認できます。</div>`}
+  ${subs.length ? '' : `<div class="note">契約はまだ登録されていません。ツールの契約を登録すると、費用とシートの割り当て状況を、検出データから分かる実際の利用状況と照らし合わせて確認できます。</div>`}
   <p style="margin-top:10px">
-    ${ro ? '' : '<button class="mini" data-act="b-open">ツールをリンク</button>'}
+    ${ro ? '' : '<button class="mini" data-act="b-open">ツールの契約を登録</button>'}
     ${subs.length ? '<button class="mini" data-act="b-report">レポートを出力</button>' : ''}</p>
   <p class="src-note">利用者情報の自動同期に対応しているサービス：
   ${(() => {
@@ -8177,8 +8253,7 @@ async function budget() {
     if (labels.length === 1) return labels[0];
     return labels.slice(0, -1).join('、') + '、' + labels[labels.length - 1];
   })()}。
-  その他のサービスはCSVからの取り込みまたは手動登録に対応しています。どちらの方法でも集計方法は同じです。対応サービスの追加をご希望の場合はお問い合わせください
-  <a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a>。</p>`;
+  その他のサービスは、CSV での取り込みまたは手動登録で使えます。どちらの方法でも集計方法は同じです。対応サービスの追加をご希望の場合は、<a href="mailto:info@sera-inc.co.jp">info@sera-inc.co.jp</a> までお知らせください。</p>`;
 }
 
 async function budgetAction(act, el) {
@@ -8243,7 +8318,7 @@ async function budgetAction(act, el) {
   if (act === 'b-report-print') { window.print(); return; }
   if (act === 'b-report-csv') {
     const stamp = new Date().toISOString().slice(0, 10);
-    const blob = new Blob([budgetCsv()], {type: 'text/csv;charset=utf-8'});
+    const blob = new Blob(['﻿' + budgetCsv()], {type: 'text/csv;charset=utf-8'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `ai-guard-budget-${stamp}${BRNAMES ? '' : '-anonymised'}.csv`;
@@ -8301,8 +8376,8 @@ async function budgetAction(act, el) {
                            {tool_id: w.tool_id, plan_key: pk});
       if (!s) return;
       const out = s.ok ? await s.json() : {ok: false, detail: await _refusal(s)};
-      BMSG = out.ok ? `リンクしました。ベンダーから${out.count}名のメンバーを同期しました。`
-        : 'リンクしましたが、初回同期に失敗しました: ' + uiErrorText(out.detail, 0);
+      BMSG = out.ok ? `登録しました。ベンダーから ${out.count} 名のメンバーを同期しました。`
+        : '登録しましたが、初回の同期に失敗しました: ' + uiErrorText(out.detail, 0);
     } else if (w.source === 'csv' && !w.editing) {
       BWIZ = null; BUDGET = null;
       BOPEN.add(w.tool_id + '|' + (pk || 'default'));
@@ -8310,7 +8385,7 @@ async function budgetAction(act, el) {
               text: '', parsed: null};
       BMSG = '';
       render(); return;
-    } else BMSG = w.editing ? '保存しました。' : 'リンクしました。カードからユーザーを追加してください。';
+    } else BMSG = w.editing ? '保存しました。' : '登録しました。契約カードからユーザーを追加してください。';
     BOPEN.add(w.tool_id + '|' + (pk || 'default'));
     BWIZ = null; BUDGET = null; render(); return;
   }
@@ -8318,15 +8393,16 @@ async function budgetAction(act, el) {
     const r = await post('/api/budget/sync', bSplit(key));
     if (!r) return;
     const out = r.ok ? await r.json() : {ok: false, detail: await _refusal(r)};
-    BMSG = out.ok ? `${out.count} 名のメンバーを ${key} 向けに同期しました。`
-      : `${key} の同期に失敗しました: ` + uiErrorText(out.detail, 0);
+    BMSG = out.ok ? `${bLabel(key)} のメンバー ${out.count} 名を同期しました。`
+      : `${bLabel(key)} の同期に失敗しました: ` + uiErrorText(out.detail, 0);
     BUDGET = null; render(); return;
   }
   if (act === 'b-unlink') {
+    const label = bLabel(key);
     const r = await post('/api/budget/subscription-delete', bSplit(key));
     if (!r) return;
-    BMSG = r.ok ? `${key} のリンクを解除しました。そのユーザーと保存されたキーも一緒に削除されました。`
-      : 'リンク解除できませんでした: ' + await _refusal(r);
+    BMSG = r.ok ? `${label} の登録を解除しました。登録されていたユーザーと、保存していた API キーも削除しました。`
+      : '登録を解除できませんでした: ' + await _refusal(r);
     BUDGET = null; render(); return;
   }
   if (act === 'b-import') {
@@ -8344,7 +8420,7 @@ async function budgetAction(act, el) {
       tool_id: BCSV.tool_id, plan_key: BCSV.plan_key || '',
       source: 'csv', members: BCSV.parsed.members});
     if (!r) return;
-    BMSG = r.ok ? `${BCSV.parsed.members.length} 名のメンバーを ${BCSV.tool_id} 向けにインポートしました。`
+    BMSG = r.ok ? `${uiToolName(BCSV.tool_id)} のメンバー ${BCSV.parsed.members.length} 名をインポートしました。`
       : 'インポートできませんでした: ' + await _refusal(r);
     if (r.ok) { BOPEN.add(BCSV.tool_id + '|' + (BCSV.plan_key || 'default')); BCSV = null; BUDGET = null; }
     render(); return;
@@ -8417,14 +8493,95 @@ async function userRole(uid, role) {
 // Localizes an error detail for operator-facing display. Pure: takes the
 // raw string and HTTP status; returns Japanese for known activations and
 // any already-Japanese text, else a neutral Japanese fallback with the code.
+// 受信サービスの API は、メッセージを英語で返す（テストとログがその文言に依存する）。
+// 予算の同期や登録で表示されうるメッセージだけ、ここで日本語にして、
+// どのベンダーが何を理由に拒否したのかが利用者に伝わるようにする。
+const uiApiName = v => {
+  const n = String(v).replace(/^the /, '').replace('exchange-rate source', '為替レートの取得元');
+  return /[ぁ-んァ-ヶ一-龯]$/.test(n) ? n : n + ' ';
+};
+const EN_ERROR_PATTERNS = [
+  [/^a server and a from address are needed first$/,
+    () => 'メールサーバーと差出人アドレスを先に設定してください。'],
+  [/^(.+) answered 401: the key is wrong, expired or revoked$/,
+    m => `${uiApiName(m[1])}が 401 を返しました。キーが正しくないか、期限切れまたは失効しています。`],
+  [/^(.+) answered 403: the key lacks the scope this sync needs \(read:members for Anthropic\)$/,
+    m => `${uiApiName(m[1])}が 403 を返しました。キーに、この同期に必要な権限（Anthropic の場合は read:members）がありません。`],
+  [/^(.+) answered 429 \(rate limited\): try again in a minute$/,
+    m => `${uiApiName(m[1])}が 429（利用回数の制限）を返しました。1分ほど待ってから、もう一度お試しください。`],
+  [/^the Devin API answered 403: the service user needs the ViewOrgMembership permission on this organisation$/,
+    () => 'Devin API が 403 を返しました。サービスユーザーに、この組織の ViewOrgMembership 権限が必要です。'],
+  [/^the Devin API answered 404: no organisation (.+) - check the id on Settings > Service Users$/,
+    m => `Devin API が 404 を返しました。組織 ${m[1]} が見つかりません。Settings > Service Users で ID を確認してください。`],
+  [/^(.+) answered 200, but not with JSON$/,
+    m => `${uiApiName(m[1])}が 200 を返しましたが、JSON 形式ではありませんでした。`],
+  [/^(.+) answered HTTP (\d+)$/,
+    m => `${uiApiName(m[1])}が HTTP ${m[2]} を返しました。`],
+  [/^could not reach (.+) \((\w+)\)$/,
+    m => `${uiApiName(m[1])}に接続できませんでした（${m[2]}）。`],
+  [/^more than (\d+) members: refusing rather than store a partial member list as if it were complete$/,
+    m => `メンバーが ${m[1]} 人を超えたため、同期を中止しました。一部だけを保存して、完全な一覧のように扱わないためです。`],
+  [/^(.+) kept paginating past (\d+) members$/,
+    m => `${uiApiName(m[1])}がメンバー ${m[2]} 人を超えてもページ送りを続けたため、同期を中止しました。`],
+  [/^the Fireflies API refused the query: (.*)$/,
+    m => `Fireflies API がクエリを拒否しました（ベンダーのメッセージ: ${m[1]}）。`],
+  [/^the Cursor API answered with JSON this does not recognise as a member list$/,
+    () => 'Cursor API の応答が、メンバー一覧として認識できない形式の JSON でした。'],
+  [/^(.+) answered without a SCIM Resources list - check the base URL is the SCIM one$/,
+    m => `${uiApiName(m[1])}の応答に SCIM の Resources 一覧がありません。ベース URL が SCIM 用のものか確認してください。`],
+  [/^the Devin key needs the organisation id with it, as org-xxxx:cog_xxxx - both are on Settings > Service Users$/,
+    () => 'Devin のキーには組織 ID を併記する必要があります（org-xxxx:cog_xxxx の形式）。どちらも Settings > Service Users にあります。'],
+  [/^(.+) is not a Devin organisation id: it should look like org-xxxx, from Settings > Service Users$/,
+    m => `${m[1]} は Devin の組織 ID ではありません。org-xxxx の形式で、Settings > Service Users に表示されます。`],
+  [/^the ECB publishes no reference rate for (.+)$/,
+    m => `欧州中央銀行（ECB）は ${m[1]} の参考レートを公表していません。`],
+  [/^malformed tool id: (.*)$/, m => `ツール ID の形式が正しくありません: ${m[1]}`],
+  [/^malformed tool id in covers: (.*)$/, m => `対象に含めるツールの ID の形式が正しくありません: ${m[1]}`],
+  [/^renewal_date must be an ISO date \(YYYY-MM-DD\)$/, () => '更新日は YYYY-MM-DD の形式で入力してください。'],
+  [/^malformed seat tier name$/, () => 'シート種別の名前は、制御文字を含まない1〜64文字で入力してください。'],
+  [/^seat tier names must be unique$/, () => 'シート種別の名前が重複しています。同じ名前は使えません。'],
+  [/^(.+) is already covered by the (\S+) (.+) subscription - one licence, one subscription; fold them together instead$/,
+    m => `${m[1]} は、すでに ${m[2]} の契約（${m[3]}）の対象に含まれています。ライセンス1つにつき契約は1件です。契約を1つにまとめてください。`],
+  [/^tier (.+) covers (.+), which the subscription does not - a tier can only narrow the subscription's own coverage$/,
+    m => `シート種別 ${m[1]} の対象に指定された ${m[2]} は、契約の対象に含まれていません。シート種別の対象は、契約の対象より狭くすることしかできません。`],
+  [/^no subscription for that tool and plan$/, () => 'このツールとプランの契約が見つかりません。'],
+  [/^source must be csv or manual$/, () => '取得元は CSV か手動のどちらかにしてください。'],
+  [/^not an email address: (.*)$/, m => `メールアドレスの形式が正しくありません: ${m[1]}`],
+  [/^duplicate email: (.*)$/, m => `メールアドレスが重複しています: ${m[1]}`],
+  [/^provider must be one of: (.*)$/, m => `連携先は次のいずれかにしてください: ${m[1]}`],
+  [/^the API key contains whitespace or control characters - check the paste$/,
+    () => 'API キーに空白または制御文字が含まれています。貼り付けた内容を確認してください。'],
+  [/^to must be a 3-letter currency code$/, () => '通貨は3文字のコード（例: JPY）で指定してください。'],
+  [/^no connection for that tool( and plan)?(: save one first)?$/,
+    () => 'このツールには API 接続が保存されていません。先に接続を保存してください。'],
+  [/^(.+) has (\d+) subscriptions \((.*)\) - say which plan this is for$/,
+    m => `${m[1]} には契約が ${m[2]} 件あります（${m[3]}）。どのプランの操作かを指定してください。`],
+];
 function uiErrorText(raw, status) {
   if (raw == null) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
   const s = String(raw);
   if (!s) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
-  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
+  // 既知の英語メッセージを先に照合する。日本語のツール名や組織名を引用しただけの
+  // 英語の文も、英語の文として扱うため。
   const activationCode = EN_ACTIVATION_REFUSAL_CODES[s];
   if (activationCode) return JA_ACTIVATION_REFUSAL[activationCode];
+  for (const [re, say] of EN_ERROR_PATTERNS) {
+    const m = re.exec(s);
+    if (m) return say(m);
+  }
+  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
   return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
+}
+
+// メールサーバー（SMTP リレー）が返した文言。診断に役立つので原文を残し、何の文言かを日本語で示す。
+function uiRelayText(detail) {
+  const s = String(detail == null ? '' : detail).trim();
+  if (!s) return 'メールサーバーから理由は示されませんでした。';
+  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
+  if (s === 'no mail server is configured') return 'メールサーバーが設定されていません。';
+  if (/^\d{3}\b/.test(s)) return 'メールサーバーの応答: ' + s;
+  if (/^[A-Za-z_.]+$/.test(s)) return 'メールサーバーとの通信に失敗しました（' + s + '）。';
+  return 'メールサーバーの応答: ' + s;
 }
 
 // The refusal detail from a failed write, for the message line.
@@ -8492,9 +8649,8 @@ async function managedAction(act, el) {
       ACTMSG = {ok: false, text: '先にキーを貼り付けてください。'}; render(); return;
     }
     if (act === 'act-clear'
-        && !confirm('保存されているアクティベーションキーを削除しますか？ このデプロイは '
-                    + 'そのまま動作し続けます。キーは '
-                    + 'プライベートイメージの利用権を与えるもので、ここではそれに依存するものはありません。')) return;
+        && !confirm('保存しているアクティベーションキーを削除しますか？この環境は今のまま動き続けます。'
+                    + 'キーはプライベートイメージを利用する権利を示すもので、この環境の動作はキーに依存していません。')) return;
     el.disabled = true; el.textContent = act === 'act-clear' ? '削除中…' : '確認中…';
     const r = await mfetch('/api/activation', {method: 'POST',
       body: JSON.stringify({key})});
@@ -8507,7 +8663,7 @@ async function managedAction(act, el) {
     }
     ACT = await r.json();
     ACTMSG = act === 'act-clear'
-      ? {ok: true, text: '削除しました。このデプロイはオープンエディションに戻りました。'}
+      ? {ok: true, text: '削除しました。この環境はオープン版に戻りました。'}
       : ACT.state === 'expired'
         ? {ok: true, text: '保存しました。キーは正規のものですが、有効期限が切れています。'}
         : {ok: true, text: '有効化しました。' + ACT.org + ' は ' + ACT.expires + ' まで有効です。'};
@@ -8540,17 +8696,17 @@ async function managedAction(act, el) {
   if (act === 'id-save' || act === 'id-clear') {
     const entries = act === 'id-clear' ? [] : (IDPARSE.rows || []);
     if (act === 'id-clear'
-        && !confirm('ポータルに保存された 利用者対応表を消去しますか？ '
-                    + '関連付けられていたデバイスは関連付けが解除されます。'
-                    + 'マウントされたファイルがある場合は、引き続き適用されます。')) return;
+        && !confirm('ポータルに保存した利用者対応表を消去しますか？'
+                    + '対応表で利用者が分かっていた端末は、利用者未登録に戻ります。'
+                    + 'マウントしたファイルがある場合は、そのファイルが引き続き使われます。')) return;
     const r = await mfetch('/api/identity-map', {method: 'POST',
       body: JSON.stringify({entries})});
     if (r.status === 401) { sessionLost(); return; }
     if (!r.ok) { IDMSG = '保存できませんでした: ' + await _refusal(r); render(); return; }
     const out = await r.json();
     IDMSG = act === 'id-clear'
-      ? 'クリアしました。帰属先は、マウントされたファイルがあればそこにフォールバックします。'
-      : `${out.count} 行を保存しました。これで各ページがそれらを基に再計算されます。`;
+      ? '消去しました。マウントしたファイルがある場合は、そのファイルの内容に戻ります。'
+      : `${out.count} 行を保存しました。すべての画面が、この対応表で集計し直されます。`;
     IDPARSE = null; IDMAP = null;
     // Attribution runs through the graph, so the page must re-read it
     // rather than re-render yesterday's answer with today's map.
@@ -8567,8 +8723,7 @@ async function managedAction(act, el) {
     // is an account somebody has to be told about by other means, every
     // time, forever.
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      USERR = 'メールアドレスが必要です。サインインの照合に使われるものであり、 '
-        + '招待の送信先にもなります。';
+      USERR = 'メールアドレスは必須です。サインイン時の照合に使われ、招待メールの送信先にもなります。';
       render(); return;
     }
     const r = await mfetch('/api/users', {method: 'POST', body: JSON.stringify(
@@ -8579,10 +8734,10 @@ async function managedAction(act, el) {
     // that is said out loud rather than implied.
     const out = await r.json();
     USERR = out.invited
-      ? 'アカウントを作成し、' + esc(email) + ' にメールを送信しました。'
-      : 'アカウントを作成しましたが、メールは送信されませんでした： ' + (out.invite_error
-          || 'メールサーバーが設定されていません') + '。ご自身で伝えるか、'
-        + 'メールを設定して、送信できなかった招待を送信してください。';
+      ? 'アカウントを作成し、' + esc(email) + ' に招待メールを送信しました。'
+      : 'アカウントを作成しました。招待メールは送信されていません（'
+        + esc(uiRelayText(out.invite_error || 'no mail server is configured')).replace(/。$/, '')
+        + '）。本人に直接伝えるか、メールを設定してから、送信できなかった招待を送信してください。';
     USERS = null; render(); return;
   }
   if (act === 'setup-reload') { SETTINGS = null; SETCHANGE = null; await load(true); return; }
@@ -8615,8 +8770,7 @@ async function managedAction(act, el) {
   if (act === 'mail-server-next') {
     mailStash();
     if (!MAILW.host.trim()) {
-      MAILW.err = 'サーバーが必要です。これは他の何物も '
-        + '代わりにはなれない唯一の値です。';
+      MAILW.err = 'メールサーバーの指定は必須です。ほかの値では代わりにできません。';
       render(); return;
     }
     MAILW.done.server = MAILW.host.trim();
@@ -8625,8 +8779,7 @@ async function managedAction(act, el) {
   if (act === 'mail-save') {
     mailStash();
     if (!MAILW.from.trim()) {
-      MAILW.err = '差出人アドレスが必要です。ほとんどのリレーは、それがなければメールを拒否し、 '
-        + 'その拒否理由はほとんど判読できません。';
+      MAILW.err = '差出人アドレスの指定は必須です。多くのメールリレーは、差出人アドレスのないメールを拒否します。しかも、その理由は分かりにくいことがほとんどです。';
       render(); return;
     }
     if (await mailSave()) {
@@ -8649,7 +8802,7 @@ async function managedAction(act, el) {
   if (act === 'mail-words-next') {
     mailStash();
     if (await mailSave()) {
-      MAILW.done.words = (MAILW.note || '').trim() ? 'あなたの文面を追加済み' : '既定';
+      MAILW.done.words = (MAILW.note || '').trim() ? '追記あり' : '既定のまま';
       MAILW.step = mailIdx('test'); MAILW.err = ''; render();
     }
     return;
@@ -8668,13 +8821,13 @@ async function managedAction(act, el) {
     if (out.ok) { MAILW.done.test = '送信しました。受信トレイを確認してください。'; }
     // The relay's own words. "Could not send" is undebuggable, and relays
     // say useful things here.
-    else { MAILW.err = '送信できませんでした: ' + uiErrorText(out.detail, 0); }
+    else { MAILW.err = '送信できませんでした。' + uiRelayText(out.detail); }
     render(); return;
   }
   if (act === 'mail-quick-test') {
     const to = (AUTH && (USERS || []).filter(u => u.username === AUTH.username)
       .map(u => u.email)[0]) || '';
-    if (!to) { MAILMSG = 'あなたのアカウントには送信先アドレスがありません。';
+    if (!to) { MAILMSG = 'ご自身のアカウントにメールアドレスが登録されていません。';
       render(); return; }
     MAILMSG = '送信中…'; render();
     const r = await mfetch('/api/test/mail',
@@ -8682,7 +8835,7 @@ async function managedAction(act, el) {
     if (r.status === 401) { sessionLost(); return; }
     if (!r.ok) { MAILMSG = '拒否されました: ' + await _refusal(r); render(); return; }
     const out = await r.json();
-    MAILMSG = out.ok ? '送信先: ' + esc(to) + '.' : '送信できませんでした: ' + uiErrorText(out.detail, 0);
+    MAILMSG = out.ok ? esc(to) + ' に送信しました。' : '送信できませんでした。' + uiRelayText(out.detail);
     render(); return;
   }
   if (act === 'mail-test') {
@@ -8696,7 +8849,7 @@ async function managedAction(act, el) {
     const out = await r.json();
     // The relay's own words on failure. "Could not send" is undebuggable,
     // and relays say useful things here.
-    MAILMSG = out.ok ? '送信しました。受信トレイを確認してください。' : '送信できませんでした: ' + uiErrorText(out.detail, 0);
+    MAILMSG = out.ok ? '送信しました。受信トレイを確認してください。' : '送信できませんでした。' + uiRelayText(out.detail);
     render(); return;
   }
   if (act === 'user-invite' || act === 'user-invite-all') {
@@ -8708,8 +8861,8 @@ async function managedAction(act, el) {
     if (!r.ok) { USERR = '送信できませんでした: ' + await _refusal(r); render(); return; }
     const out = await r.json();
     USERR = out.failed && out.failed.length
-      ? out.considered + ' 件中 ' + out.sent + ' 件を送信しました。 '
-        + out.failed.map(f => esc(f.username) + '：' + esc(uiErrorText(f.detail, 0))).join('、')
+      ? out.considered + ' 件中 ' + out.sent + ' 件を送信しました。送信できなかった宛先: '
+        + out.failed.map(f => esc(f.username) + '（' + esc(uiRelayText(f.detail)).replace(/。$/, '') + '）').join('、')
       : (out.sent === 1 ? '招待を送信しました。' : out.sent + ' 件の招待を送信しました。');
     USERS = null; render(); return;
   }
@@ -8822,9 +8975,9 @@ async function managedAction(act, el) {
   if (act === 'sso-enforce') {
     const want = el.getAttribute('data-key') === '1';
     if (want && !confirm('シングルサインオンを必須にしますか？\n\n'
-        + 'ブレークグラス用のアカウントを除き、すべてのアカウントは '
-        + 'Microsoft Entra 経由でしかサインインできなくなります。ブレークグラスのパスワードは、 '
-        + 'このポータルを使わずに入手できる場所に保管してください。')) return;
+        + '緊急用（ブレークグラス）のアカウントを除き、すべてのアカウントは '
+        + 'Microsoft Entra 経由でしかサインインできなくなります。緊急用アカウントのパスワードは、'
+        + 'このポータルにサインインしなくても取り出せる場所に保管してください。')) return;
     const r = await mfetch('/api/settings', {method: 'POST',
       body: JSON.stringify({sso_enforce: want ? '1' : ''})});
     if (r.status === 401) { sessionLost(); return; }
@@ -8877,7 +9030,7 @@ async function managedAction(act, el) {
   if (act === 'sso-check-client') {
     ssoStash();
     if (!SSOW.secret && !SSOW.secretSet) {
-      SSOW.err = 'ペアを確認するにはクライアントシークレットが必要です。';
+      SSOW.err = 'クライアント ID とシークレットの組み合わせを確認するには、クライアントシークレットが必要です。';
       render(); return;
     }
     // With a stored secret and nothing typed there is nothing to check
@@ -8907,8 +9060,8 @@ async function managedAction(act, el) {
   if (act === 'sso-enable') {
     if (await ssoSave(true)) {
       SSOW = null;
-      SETMSG = 'シングルサインオンがオンになりました。ローカルパスワードは引き続き機能するため、 '
-        + 'ブレークグラスアカウントが依然としてサインイン手段になります。';
+      SETMSG = 'シングルサインオンをオンにしました。ローカルのパスワードでのサインインも引き続き使えるため、'
+        + '緊急用（ブレークグラス）のアカウントは今もサインインに使えます。';
       render();
     }
     return;
@@ -8963,8 +9116,7 @@ async function managedAction(act, el) {
         const e = await r.json();
         // 422 is pydantic refusing the shape (a short password, an empty
         // field); its detail is a list, so name the field rule instead.
-        d = r.status === 422 ? 'フィールドを確認してください。パスワードは12 '
-          + '文字以上が必要で、空欄にすることはできません。' : e.detail || d;
+        d = r.status === 422 ? '入力内容を確認してください。パスワードは12文字以上で、空欄にはできません。' : e.detail || d;
       } catch (e) { /* keep statusText */ }
       showLogin(String(uiErrorText(d, r.status)));
     }
@@ -9131,7 +9283,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       const d = await _refusal(r);
-      alert('リンクできませんでした: ' + d);
+      alert('紐付けできませんでした: ' + d);
     } else {
       CAND = (CAND || []).filter(x => x.key !== key);
       AGENTIC = null;   // that page shows this process as a mystery today
@@ -9191,8 +9343,7 @@ async function managedAction(act, el) {
   }
   if (act === 'reg-delete') {
     const id = el.getAttribute('data-key');
-    if (!confirm('カスタムツール ' + id + 'を削除しますか？端末群は '
-                 + '次回の報告時に識別子のスキャンを停止します。')) return;
+    if (!confirm('カスタムツール ' + id + ' を削除しますか？各端末は、次回の報告から、このツールの識別子のスキャンをやめます。')) return;
     const r = await mfetch('/api/registry-entries',
       {method: 'POST', body: JSON.stringify({delete: [id]})});
     if (!r.ok) {
@@ -9237,14 +9388,13 @@ async function managedAction(act, el) {
   }
   if (act === 'gov-clear') {
     const id = el.getAttribute('data-key');
-    if (!confirm('記録された決定 ' + id + 'をクリアしますか？ステータスは '
-                 + 'ガバナンスファイルまたはレジストリのデフォルトに戻ります。')) return;
+    if (!confirm(id + ' の記録済みの判断を消去しますか？状態は、ガバナンスファイルまたはレジストリの既定値に戻ります。')) return;
     const r = await mfetch('/api/governance-decisions',
       {method: 'POST', body: JSON.stringify({delete: [id]})});
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
-      alert('決定をクリアできませんでした: ' + uiErrorText(d, r.status));
+      alert('判断を消去できませんでした: ' + uiErrorText(d, r.status));
     }
     REG = null; EV = null; render(); return;
   }
@@ -9299,7 +9449,7 @@ async function managedAction(act, el) {
           .map(x => x.trim()).filter(Boolean);
     const r = await mfetch('/api/settings',
       {method: 'POST', body: JSON.stringify({classification_markings: marks})});
-    if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。展開するには拡張機能のアーティファクトを再生成してください。'; }
+    if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。反映するには、拡張機能の配布用ファイルを再生成してください。'; }
     else if (r.status === 401) { sessionLost(); return; }
     else { let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {} SETMSG = '保存できませんでした: ' + uiErrorText(d, r.status); }
     render(); return;
@@ -9312,8 +9462,7 @@ async function managedAction(act, el) {
       if (el.checked) parts.push('grafana:' + el.getAttribute('data-ref'));
     });
     if (!parts.length) {
-      SETMSG = 'ウィジェットを少なくとも1つ選択してください: 空のリストは '
-        + 'デフォルトセットにフォールバックします。これはおそらく、すべてのチェックを外した意図とは異なります。';
+      SETMSG = 'ウィジェットを1つ以上選択してください。すべてのチェックを外すと、既定のウィジェット一式に戻ってしまいます。すべて外した意図とは違うはずです。';
       render(); return;
     }
     const r = await mfetch('/api/settings', {method: 'POST',
@@ -9431,7 +9580,7 @@ async function managedAction(act, el) {
       : {extension_id: _val('set-extid')};
     const r = await mfetch('/api/settings',
       {method: 'POST', body: JSON.stringify(body)});
-    if (r.ok) { SETTINGS = await r.json(); SETMSG = '設定を保存しました。端末群には次回の報告時に反映されます。'; }
+    if (r.ok) { SETTINGS = await r.json(); SETMSG = '保存しました。各端末には、次回の報告時に反映されます。'; }
     else {
       if (r.status === 401) { sessionLost(); return; }
       let d = r.statusText; try { d = (await r.json()).detail || d; } catch (e) {}
@@ -9510,12 +9659,11 @@ async function managedAction(act, el) {
   }
   if (act === 'revoke-token' || act === 'revoke-device') {
     const id = el.getAttribute('data-key');
-    const what = act === 'revoke-token' ? '登録トークン' : 'デバイス資格情報';
-    if (!confirm('失効: ' + what + ' ' + id + '？この操作は元に戻せません。 '
+    const what = act === 'revoke-token' ? '登録トークン' : '端末の認証情報';
+    if (!confirm(what + ' ' + id + ' を失効させますか？この操作は元に戻せません。'
                  + (act === 'revoke-token'
-                    ? '失効したトークンは、直ちにデバイスの発行を停止します。'
-                    : "失効したデバイスのシリアルは、その後 /enroll で拒否されます。管理者が "
-                      + '再び許可するまで。'))) return;
+                    ? '失効したトークンでは、ただちに端末を登録できなくなります。'
+                    : '失効した端末のシリアル番号は、管理者が再登録を許可するまで、/enroll で拒否されます。'))) return;
     const path = act === 'revoke-token'
       ? '/api/enrollment-tokens/' + encodeURIComponent(id) + '/revoke'
       : '/api/devices/' + encodeURIComponent(id) + '/revoke';
@@ -9529,10 +9677,10 @@ async function managedAction(act, el) {
   }
   if (act === 'allow-reenroll') {
     const id = el.getAttribute('data-key');
-    if (!confirm('デバイス ' + id + ' に再登録を許可しますか？これは、 '
-                 + '再イメージングまたは交換用マシンの場合に使用します。許可は '
-                 + '次の登録で消費され、新しい資格情報は '
-                 + '他のものと同様に失効します。')) return;
+    if (!confirm('端末 ' + id + ' の再登録を許可しますか？'
+                 + '再イメージ化した端末や、交換した端末に使います。'
+                 + '許可は次回の登録で使い切られ、新しく発行される認証情報も、'
+                 + '他の端末と同じように失効させられます。')) return;
     const r = await mfetch('/api/devices/' + encodeURIComponent(id)
                            + '/allow-reenrollment', {method: 'POST'});
     if (!r.ok) {
@@ -9548,7 +9696,7 @@ async function managedAction(act, el) {
     if (!r.ok) {
       if (r.status === 401) { sessionLost(); return; }
       const d = await _refusal(r);
-      alert('アーティファクトを生成できませんでした: ' + d);
+      alert('配布用ファイルを生成できませんでした: ' + d);
       return;
     }
     // Each artifact mints its own enrollment token, so the tokens list is
@@ -9576,9 +9724,9 @@ let NAVOPEN = [];
 const NAV_PIN_KEY = 'navigation.pins';
 const NAVNAMES = {
   overview:'ワークスペース概要', dashboard:'Grafana ダッシュボード', personal:'個人アカウント',
-  register:'AI台帳', registry:'ツールレジストリ', paste:'ペーストガード',
-  iso:'証跡センター', agentic:'エージェント型AI', setup:'検出ソース',
-  coverage:'検出漏れ', fleet:'登録済み端末', tokens:'登録トークン',
+  register:'AI台帳', registry:'ツールレジストリ', paste:'貼り付けガード',
+  iso:'ISO/IEC 42001 証跡', agentic:'エージェント型AI', setup:'検出ソース',
+  coverage:'収集エージェント未導入', fleet:'登録済み端末', tokens:'登録トークン',
 };
 const navEntry = id => {
   for (const sec of NAV) {
@@ -9763,7 +9911,7 @@ function tabbar() {
   const aside = view === 'overview' && !OVEDIT ? overviewTools() : '';
   const tabs = (sec && sec.items.length >= 2)
     ? `<div class="tabs">${sec.items.map(([id, lbl]) =>
-        `<button data-nav="${id}" class="${view===id?'on':''}">${lbl}</button>`).join('')}</div>`
+        `<button data-nav="${id}" class="${view===id?'on':''}">${esc(NAVNAMES[id] || lbl)}</button>`).join('')}</div>`
     : '';
   if (!tabs && !aside) return '';
   return `<div class="tabrow">${tabs}<span class="tabaside">${aside}</span></div>`;
@@ -9772,7 +9920,7 @@ function tabbar() {
 function overviewTools() {
   const hidden = overviewWidgets().hidden.length;
   return `${hidden ? `<button class="mini" data-act="ov-showall"
-    >${hidden} 件の非表示 ウィジェット を復元</button>` : ''}
+    >非表示のウィジェット ${hidden} 件を復元</button>` : ''}
     <button class="mini ui-density" data-act="ui-density" aria-pressed="${pref('display.compact', '0') === '1'}">${pref('display.compact', '0') === '1' ? 'ゆったり表示' : 'コンパクト表示'}</button>
     <button class="mini" data-act="ov-edit">ウィジェットを編集</button>`;
 }
@@ -9791,17 +9939,11 @@ function loadBanner() {
   if (!loadError) return '';
   const denied = /401|403|login|permission|read-only|forbidden/i.test(loadError);
   return `<div class="note" style="border-color:var(--dstr);margin-bottom:14px">
-    <strong>検出結果を読み取れなかったため、このページは回答ではありません。</strong>
+    <strong>検出結果を読み取れなかったため、このページの内容は実際の状況を表していません。</strong>
     <div class="src-note" style="margin-top:4px;font-style:normal">${esc(uiErrorText(loadError, 0))}</div>
     <div class="src-note" style="margin-top:6px">${denied
-      ? `このアカウントは拒否されました。読み取りはポータル経由で行われますが、この
-         デプロイメントにはログ保存先用の独自の資格情報がないため、読み取りは
-         あなたのセッションで実行されています。このロールではそれを使えません。
-         管理者は、ポータル上で <span class="mono">RECEIVER_ADMIN_TOKEN</span> を設定するか、
-         <span class="mono">LOKI_URL</span> に独自の資格情報を付与することで、
-         すべてのアカウントに対して修正できます。それまでは、以下のカウントは
-         何も読み取られていないためゼロであり、何も起きていないからではありません。`
-      : `以下のすべてのカウントは、ゼロではなく欠落しています。ロゴの下にあるエステートコントロールのシステム状態は、最後の読み取りが成功した時刻と、最後の読み取りが失敗した時刻を記録します。`}</div>
+      ? `このアカウントの読み取りは拒否されました。検出結果はポータル経由で読み取りますが、この環境のポータルにはログ保存先の認証情報がないため、サインイン中のアカウントの権限で読み取っています。このロールでは読み取れません。管理者が、ポータルに <span class="mono">RECEIVER_ADMIN_TOKEN</span> を設定するか、<span class="mono">LOKI_URL</span> とポータル専用の認証情報を設定すると、すべてのアカウントで解決します。それまでは、下の件数は「何も起きていない」のではなく、「何も読み取れていない」ためにゼロになっています。`
+      : `下の件数はすべて、ゼロではなく「取得できていない」状態です。ロゴの下の環境名から開ける「システム状態」で、最後に読み取れた時刻と、最後に失敗した時刻を確認できます。`}</div>
   </div>`;
 }
 
@@ -9828,9 +9970,9 @@ async function agentic() {
   // as an unsupervised agent.
   const nAuto = c.autonomous || 0, nUnrec = c.unrecognised || 0;
   const strong = nAuto
-    ? `<h1 class="ag-verdict">${nAuto} 件の処理が人の操作なしに実行されます。${
-        c.unaccountable ? ` <em>${c.unaccountable} 件は責任者が不明です。</em>` : ''}</h1>`
-    : `<h1 class="ag-verdict">ここでは、自律的に実行されていると報告しているものはありません。</h1>`;
+    ? `<h1 class="ag-verdict">人の操作なしに動いているものが ${nAuto} 件あります。${
+        c.unaccountable ? ` <em>うち ${c.unaccountable} 件は、責任者を特定できません。</em>` : ''}</h1>`
+    : `<h1 class="ag-verdict">人の操作なしに動いていると報告されているものは、ありません。</h1>`;
   // "Nothing reported it" is only an answer from devices that looked. A
   // collector too old to read a scheduler produces the same silence as an
   // estate that schedules nothing, and the difference is the whole question.
@@ -9841,13 +9983,11 @@ async function agentic() {
   const sc = AGENTIC.scan_coverage;
   const scanNote = (!nAuto && sc && sc.devices_reporting) ? `<p class="lede" style="margin:-2px 0 14px">${
       sc.capable
-        ? `${sc.devices_reporting} 台のデバイスのうち <b>${sc.capable}</b> 台がスケジューラを読むコレクタを実行しています。したがって、${sc.capable === 1 ? 'その1台' : 'それら'}にとって、これはギャップではなく回答です。${sc.unknown ? ` 残りの${sc.unknown} 台は、一度も確認していない可能性がある${esc(sc.min_version)}より古いバージョンを報告しています。` : ''}`
-        : `${esc(sc.min_version)} 以降のコレクタを報告しているデバイスはありません。したがって、
-           <b>ここではまだ何も調べられていません</b>。これは欠落であり、所見ではありません。
-           ゼロを読む前にコレクタを更新してください。`}</p>` : '';
+        ? `報告している ${sc.devices_reporting} 台のうち <b>${sc.capable}</b> 台は、スケジューラーを読み取れる収集エージェントを実行しています。${sc.capable === 1 ? 'その1台' : 'それらの端末'}については、「無人で動くものはない」という結果は、確認したうえでの結果です。${sc.unknown ? `残りの ${sc.unknown} 台は ${esc(sc.min_version)} より古いバージョンを報告しており、スケジューラーをまだ確認していない可能性があります。` : ''}`
+        : `${esc(sc.min_version)} 以降の収集エージェントを報告している端末はありません。そのため、<b>ここではまだ何も調べられていません</b>。「何もない」という結果ではなく、確認できていない状態です。0 件という表示を読む前に、収集エージェントを更新してください。`}</p>` : '';
   const weak = nUnrec
-    ? `<p class="lede" style="margin:-2px 0 14px">さらに${nUnrec}件のプロセスがモデルに到達しましたが、レジストリに登録されたブラウザーやツールには該当しません。人による操作かどうかは確認できていません${
-       c.unattributed ? `。また、以下の${c.unattributed}件には、身元を示す情報がありません` : ''}。</p>`
+    ? `<p class="lede" style="margin:-2px 0 14px">このほかに、${nUnrec} 件のプロセスが AI モデルに接続しましたが、ブラウザーでも、レジストリに登録されたツールでもありません。人が操作していたかどうかは分かっていません${
+       c.unattributed ? `。また、下の行のうち ${c.unattributed} 件は、誰のアカウントか分かる情報が一切ありません` : ''}。</p>`
     : '';
   const head = strong + scanNote + weak;
 
@@ -9856,32 +9996,32 @@ async function agentic() {
     // point of the page: an empty box is a credential with nobody behind
     // it, and there is nothing to revoke when somebody leaves.
     const who = a.accountable
-      ? `<div class="ag-node ag-held"><b>誰が承認したか</b><i>${esc(a.account || a.user)}</i>
-         <s>${esc(uiTerm(a.identity || 'アカウント確認済み'))}</s></div>`
-      : `<div class="ag-node ag-gap"><b>誰が承認したか</b><i>${
-          a.identity === 'machine' ? '— 人ではなく認証キー'
-          : a.identity === 'none' ? '— サインインなし'
-          : '— 未確立'}</i></div>`;
+      ? `<div class="ag-node ag-held"><b>誰の権限か</b><i>${esc(a.account || a.user)}</i>
+         <s>${esc(uiTerm(a.identity || 'アカウントを確認済み'))}</s></div>`
+      : `<div class="ag-node ag-gap"><b>誰の権限か</b><i>${
+          a.identity === 'machine' ? '— 人ではなく、キーで動作'
+          : a.identity === 'none' ? '— サインインしていない'
+          : '— 特定できていない'}</i></div>`;
     const runs = a.process
-      ? `<div class="ag-node ag-gap"><b>実行</b><i>— 既知のツールはありません</i>
+      ? `<div class="ag-node ag-gap"><b>実行されるもの</b><i>— 既知のツールではない</i>
          <s>${esc(a.process)}</s></div>`
-      : `<div class="ag-node"><b>実行</b><i>${esc(a.tool)}</i>${
-          a.mode === 'autonomous' ? '<s>無人</s>' : ''}</div>`;
+      : `<div class="ag-node"><b>実行されるもの</b><i>${esc(a.tool)}</i>${
+          a.mode === 'autonomous' ? '<s>無人で実行</s>' : ''}</div>`;
     // What the MACHINE has configured, which is not the same as what this
     // process can drive - and the box has to say which it means. A curl
     // downloading an installer was being shown its machine's MCP servers as
     // though they were its own capability.
     const reach = a.reach.length
       ? a.reach.map(x => `<span class="pill p-amb">${esc(x)}</span>`).join('')
-        + `<s>このマシンで構成済み</s>`
-      : (a.process ? `<span class="pill p-mut">モデルAPIに直接</span>`
-                   : `<span class="pill p-mut">何も設定されていません</span>`);
+        + `<s>この端末に設定済み</s>`
+      : (a.process ? `<span class="pill p-mut">AI モデルの API に直接接続</span>`
+                   : `<span class="pill p-mut">設定なし</span>`);
     return `<div class="ag-link">
-      <div class="ag-node"><b>開始</b><i>${esc(uiTerm(a.trigger || '未確立'))}</i>
+      <div class="ag-node"><b>起動のきっかけ</b><i>${esc(uiTerm(a.trigger || '特定できていない'))}</i>
         <s>${esc(uiTerm(a.os || ''))}</s></div>
       <div class="ag-rail"></div>${who}<div class="ag-rail"></div>${runs}
       <div class="ag-rail"></div>
-      <div class="ag-node"><b>このマシンが到達できる</b><i>${reach}</i></div></div>`;
+      <div class="ag-node"><b>この端末から到達できるもの</b><i>${reach}</i></div></div>`;
   };
 
   // The day. Configured cadence, not observed runs - a spec says what a
@@ -9907,15 +10047,15 @@ async function agentic() {
     `<span class="ag-work" style="left:${sp.left}%;width:${sp.width}%"></span>`).join('') : '';
   const scheduled = A.filter(a => a.lane.kind !== 'none');
   const unscheduled = A.filter(a => a.lane.kind === 'none');
-  const nolane = unscheduled.length ? `<p class="ag-nolane" style="margin:9px 0 0">描画対象外:
-      ${unscheduled.map(a => esc(label(a.device, G.devices[a.device] || {}))).join(', ')}
-      - イベントによってトリガーされた、またはこれを読み取れない仕様。時刻を推測するのは、その行を省略するより悪い。</p>` : '';
+  const nolane = unscheduled.length ? `<p class="ag-nolane" style="margin:9px 0 0">表示していない端末:
+      ${unscheduled.map(a => esc(label(a.device, G.devices[a.device] || {}))).join('、')}
+      （イベントで起動するか、読み取れない形式の設定です）。時刻を推測して表示するより、表示しないほうが正確なためです。</p>` : '';
   // A panel that vanishes says the same thing as a panel that was never
   // built. With rows on the page and none of them drawable, the reason has
   // to be on screen - the estate cannot otherwise tell "nothing declares a
   // cadence" from "this was never deployed".
   const day = !A.length ? '' : !scheduled.length ? `<div class="ag-day">
-    <p class="lede" style="margin:0">ここには、これが読み取れる周期を宣言しているものはありません。すべての行はスケジューラーではなくネットワークから取得されているため、描画できる日がありません。これは、タイマーで実行されているものがないこととは同じではありません。デバイスがスケジュールを報告するのは、その収集エージェントがスケジュールを読み取れるほど新しい場合だけです。どれが該当するかはヘルスが示します。</p>
+    <p class="lede" style="margin:0">実行の周期を読み取れたものはありません。どの行も、スケジューラーではなくネットワーク通信から検出されたため、1日の実行予定を描画できません。これは、タイマーで動くものが存在しないという意味ではありません。端末がスケジュールを報告するのは、収集エージェントが新しく、スケジュールを読み取れる場合だけです。どの端末が該当するかは、「検出ソース」画面で確認できます。</p>
     ${nolane}</div>` : `<div class="ag-day"><div class="ag-grid">
     ${scheduled.map(a => `<div class="ag-lane">
       <div class="ag-lname"><b>${esc(label(a.device, G.devices[a.device] || {}))}</b>
@@ -9927,9 +10067,9 @@ async function agentic() {
     <div class="ag-ticks mono"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
     <div class="ag-key">
       <span><span class="ag-sw" style="background:var(--dstr)"></span>責任者がいない</span>
-      <span><span class="ag-sw" style="background:var(--acc)"></span>登録済みIDで実行</span>
+      <span><span class="ag-sw" style="background:var(--acc)"></span>身元の分かるアカウントで実行</span>
       <span><span class="ag-sw" style="background:transparent;box-shadow:inset 0 0 0 1.5px var(--dstr)"></span>周期の設定あり（無人実行かどうかは未確認）</span>
-      ${wh ? `<span><span class="ag-sw" style="background:color-mix(in srgb,var(--fg) 6%,transparent)"></span>稼働時間、${esc(wh.label)}</span>` : ''}
+      ${wh ? `<span><span class="ag-sw" style="background:color-mix(in srgb,var(--fg) 6%,transparent)"></span>勤務時間（${esc(wh.label)}）</span>` : ''}
     </div>
     ${nolane}
   </div>`;
@@ -9937,54 +10077,54 @@ async function agentic() {
   const chains = A.map(a => `<div class="ag-chain">
     <div class="ag-head">
       <span class="ag-who">${esc(label(a.device, G.devices[a.device] || {}))}
-        <span>${esc(a.user || '所有者情報なし')}</span></span>
+        <span>${esc(a.user || '利用者の記録なし')}</span></span>
       ${a.accountable
-        ? '<span class="pill p-acc">タイマー実行（担当者を特定済み）</span>'
+        ? '<span class="pill p-acc">タイマーで実行（責任者は特定済み）</span>'
         : a.process
-          ? '<span class="pill p-warn">検出用ツールは未導入です</span>'
-          : '<span class="pill p-warn">責任者を特定できる情報なし</span>'}
+          ? '<span class="pill p-warn">対応するツールが見つかりません</span>'
+          : '<span class="pill p-warn">責任者を特定できません</span>'}
     </div>${nodes(a)}
-    ${a.process ? `<p class="ag-note">設定ファイル、既知のバイナリ、モデルコンテキストプロトコルサーバーは見つかっていません。検出できたのはネットワーク通信のみです。ブラウザー以外のプロセスがモデルに接続しています。証拠： <span class="mono">${esc(uiEvidence(a.evidence))}</span></p>` : ''}
+    ${a.process ? `<p class="ag-note">設定ファイルも、既知のバイナリも、MCP サーバーも見つかっていません。確認できたのはネットワーク通信だけです。ブラウザー以外のプロセスが、AI モデルに接続しています。根拠: <span class="mono">${esc(uiEvidence(a.evidence))}</span></p>` : ''}
   </div>`).join('');
 
   const servers = srv.length ? `<div class="tcard">
-    <div class="cardhead"><h3>何に到達できるか</h3></div>
-    <p class="lede">モデルコンテキストプロトコルサーバーを設定すると、AIモデルが外部サービスや機能にアクセスできる場合があります。以下は端末から報告されたモデルコンテキストプロトコルサーバーです。現時点ではリスク評価を行っていません。</p>
-    <table><tr><th>サーバー</th><th>設定場所</th><th>デバイス</th></tr>
+    <div class="cardhead"><h3>アクセスできる対象</h3></div>
+    <p class="lede">MCP サーバーを設定すると、AI モデルにその機能が渡されます。以下は、各端末から報告された MCP サーバーです。リスク評価は、まだ行っていません。</p>
+    <table><tr><th>サーバー</th><th>設定場所</th><th>端末数</th></tr>
     ${srv.map(m => `<tr><td class="mono">${esc(m.server)}</td>
       <td>${(m.tools || []).map(t => `<span class="pill p-mut">${esc(uiToolName(t))}</span>`).join('')}</td>
       <td>${(m.devices || []).length}</td></tr>`).join('')}</table></div>` : '';
 
   return `${head}
-  <p class="lede">各実行経路では、2列目を確認してください。空欄の場合、担当者が退職したときにアクセスを取り消すための情報が登録されていません。</p>
-  ${scheduled.length ? `<p class="label" style="margin:0 0 9px">実行スケジュール</p>
-    <p class="lede" style="margin:0 0 10px">各ジョブの設定（cron、systemdタイマー、launchdの間隔）から実行予定を表示しています。これは<em>設定内容</em>であり、実行された事実を示すものではありません。この画面では、ジョブの実行自体は監視していません。
-    ${wh ? `網掛け部分は、設定された稼働時間（${esc(wh.label)}）を示します。`
-         : `稼働時間は<b>設定 › 表示とアラート</b>で指定できます。指定すると、その時間帯が網掛けで表示されます。`}</p>` : ''}
+  <p class="lede">各項目の2番目の枠（誰の権限か）を確認してください。空欄の場合は、その人が退職しても、取り消すべき権限が分かりません。</p>
+  ${scheduled.length ? `<p class="label" style="margin:0 0 9px">1日のうちの実行予定</p>
+    <p class="lede" style="margin:0 0 10px">各ジョブに設定されたスケジュール（cron、systemd タイマー、launchd の間隔）から、実行予定を表示しています。表示しているのは<em>設定されている内容</em>であり、実際に実行された記録ではありません。この画面では、ジョブが実行される様子は監視していません。
+    ${wh ? `網掛けの部分は、設定した勤務時間（${esc(wh.label)}）です。`
+         : `勤務時間を<b>設定 › 表示とアラート</b>で指定すると、人がいる時間帯が網掛けで表示されます。勤務時間は自動では分からないため、指定するまで網掛けはされません。`}</p>` : ''}
   ${day}
   ${A.length ? chains : `<div class="tcard"><p class="lede" style="margin:12px 0">
-    この環境から無人実行の報告はありません。該当する処理がない場合と、収集エージェントが検出できる状態になっていない場合があります。検出ソースの稼働状況はシステム状態で確認できます。
+    無人で動いているという報告はありません。実際にないか、収集エージェントが更新されておらず確認できていないか、のどちらかです。どの検出ソースが報告しているかは、「検出ソース」画面で確認できます。
     </p></div>`}
   ${servers}
   <div class="ag-two">
   <div class="ag-cov">
-    <p class="label" style="margin:0">モデルコンテキストプロトコルサーバーが表示される場所</p>
-    <p class="lede" style="margin:8px 0 0">この一覧が示すのは、監視対象として登録されたクライアントだけです。監視対象外のクライアントは、未使用のクライアントと同じように見えます。この一覧だけでは、組織内のすべてのクライアントが監視されているとは判断できません。</p>
+    <p class="label" style="margin:0">MCP サーバーを確認できるクライアント</p>
+    <p class="lede" style="margin:8px 0 0">「MCP サーバーが見つからない」という結果は、この一覧に載っているクライアントだけが対象です。監視していないクライアントは、誰も使っていないクライアントと見分けがつきません。この画面は、そのどちらとも受け取れるような表示をしないようにしています。</p>
     <div class="ag-chips">
       ${(cov.watched || []).map(x =>
         `<span class="ag-chip"><span class="ag-dot on"></span>${esc(uiTerm(x))}</span>`).join('')}
       ${(cov.unwatched || []).map(x =>
         `<span class="ag-chip"><span class="ag-dot"></span>${esc(uiTerm(x))}</span>`).join('')}
     </div>
-    <p class="src-note" style="margin:11px 0 0">モデルコンテキストプロトコル設定パスがレジストリに登録されたクライアント名は緑色で表示されます。これはソフトウェアの配布状況ではなく、検出設定の登録状況を示します。</p>
+    <p class="src-note" style="margin:11px 0 0">レジストリに MCP の設定ファイルのパスが登録されたクライアントは、緑で表示されます。必要なのはレジストリへの登録であり、この製品の新しいリリースではありません。</p>
   </div>
   <div class="ag-limit">
-    <p class="label" style="margin:0">この画面で確認できないことと、その理由</p>
+    <p class="label" style="margin:0">この画面では分からないこと（と、その理由）</p>
     <ul>
-      <li><b>何をするよう求められたか。</b> プロンプトはマシン上にあり、読み取ることは可能です。誰かが入力した内容を読むのは、どのツールが実行されたかを知るより踏み込んだことであり、このページの何かに答えるために必要ではありません。</li>
-      <li><b>Windowsのスケジュールタスクから起動するスクリプト。</b> macOSとLinuxではジョブの環境設定を読み取れますが、Windowsのタスクが示すのは実行コマンドで、ユーザーの環境を引き継ぎます。そのため、ジョブ設定からスクリプトにモデルの認証情報が渡されるかは確認できません。たとえば <span class="mono">nightly-report.sh</span> の内容も読み取りません。スクリプトを読むことは、プロンプトを読むのと同様に必要以上に踏み込むためです。Windowsで検出がないことは、スケジュール処理が存在しない証拠にはなりません。</li>
-            <li><b>それが指示された範囲にとどまったかどうか。</b> 上記の情報だけでは、指示された範囲内で実行されたかどうかは分かりません。実環境で検証し、この情報だけでは不十分だと分かった場合に、追加の確認方法を検討してください。</li>
-      <li><b>実際に何をしたか。</b> ツール呼び出しの回数だけでは、プロンプトの内容は分かりません。ペーストガードが記録する内容も同様です。ツール呼び出しを確認できるかどうかは、各クライアントがローカルにどの情報を記録するかによります。</li>
+      <li><b>何をするよう指示されたか。</b> プロンプトは端末上にあり、読み取ることはできます。ただし、入力内容を読むことは、どのツールが動いたかを知ることよりも踏み込んだ行為です。この画面の疑問に答えるためにも必要ないため、読み取っていません。</li>
+      <li><b>Windows で、スクリプトを実行するスケジュールタスク。</b> Windows 以外では対応済みです。たとえば <span class="mono">nightly-report.sh</span> を実行するジョブは、レジストリと照合できる名前を含みませんが、ジョブの定義自体がそのスクリプトにモデルの認証情報を渡している場合は、ジョブが何に到達できるかを表示します。macOS と Linux は、ジョブの環境変数が定義に含まれているため、読み取れます。Windows のスケジュールタスクには実行コマンドしかなく、ユーザーの環境をそのまま引き継ぐため、読み取れるものがなく、ラッパースクリプトの中で行われることは見えません。スクリプトの中身を読むことは、プロンプトを読むのと同じ踏み込みになるため、行っていません。Windows で何も検出されないことは、スケジュール実行がないことの証拠にはなりません。</li>
+      <li><b>指示された範囲にとどまっていたか。</b> 必要な情報は上と同じで、同じ判断になります。上の指標を実際の環境で運用し、不十分だと分かった時点で、改めて検討する価値があります。そのときは、承認する担当者に説明する根拠もそろいます。</li>
+      <li><b>実際に何をしたか。</b> ツール呼び出しの回数を数えるだけなら、プロンプトの内容を読まずに結果を確認できます。これは、貼り付けガードがすでに報告している内容と同じ形です。実際に確認できるかどうかは、各クライアントがローカルに何を記録するかによります。</li>
     </ul>
   </div></div>`;
 }
@@ -10070,8 +10210,8 @@ function decorateView() {
   stamp.className = 'print-head';
   const orgName = ((AUTH && AUTH.org_name) || '').trim()
     || (CFG && CFG.managed && CFG.managed.enabled ? '管理対象環境' : '単独ポータル');
-  stamp.textContent = orgName + ' · 過去' + fmtWindow(hours) + ' · エクスポート '
-    + new Date().toLocaleString();
+  stamp.textContent = orgName + ' · 集計期間: 過去' + fmtWindow(hours) + ' · 出力日時: '
+    + new Date().toLocaleString('ja-JP');
   head.appendChild(stamp);
   const meta = document.createElement('div');
   meta.className = 'view-meta';
@@ -10831,97 +10971,97 @@ const TOUR_VERSION = '2';
 const TOURS = {
   admin: [
     {title: '世良AIガバナンスへようこそ',
-     body: 'ポータルを簡単にご案内します。所要時間は約2分で、途中でいつでも終了できます。',
+     body: 'ポータルの主な画面を、約2分のツアーでご案内します。途中でいつでも終了できます。',
      ok: '開始'},
     {view: 'overview', sel: '[data-area="discovery"]',
-     title: '画面の使い方',
-     body: 'ページはサイドバーでグループ化されています。複数のグループを開いたままにし、よく使うページをピン留めすると、それらが一番上に表示されます。'},
+     title: '画面の探し方',
+     body: '画面は、サイドバーの項目ごとにまとまっています。複数の項目を開いたままにできます。よく使う画面はピン留めすると、いちばん上に表示されます。'},
     {view: 'overview', sel: '#who', when: () => !!(AUTH && AUTH.mode === 'login' && AUTH.username),
      title: 'アカウント',
-     body: 'ここからパスワードを変更したりサインアウトできます。テーマの切り替えはその隣にあり、セットアップが完了するまではベルに残りの項目が表示されます。'},
+     body: 'ここから、パスワードの変更とサインアウトができます。テーマの切り替えは、その隣にあります。セットアップが終わるまでは、ベルのアイコンに残りの作業が表示されます。'},
     {view: 'overview', sel: '[data-tour="stats"]',
      title: '概要',
-     body: '主要な数値: 確認が必要な個人アカウント、影響を受けた人、検出されたツール、報告している端末群の割合。すべては右上で選択した期間のもので、全期間ではありません。'},
+     body: '主要な数値です。確認が必要な個人アカウント、影響を受けている人数、検出されたツール、報告している端末の割合を表示します。すべて、右上で選んだ期間の数値で、全期間の累計ではありません。'},
     {view: 'overview', sel: '[data-act="ov-edit"]',
-     title: '概要を自分好みに',
-     body: '編集では、カードの表示・非表示、並べ替え、サイズ変更、または2つを横並びにできます。レイアウトはアカウントに保存されるため、次回サインイン時も同じです。'},
+     title: '概要を自分用に整える',
+     body: '「ウィジェットを編集」で、カードの表示・非表示、並べ替え、サイズ変更、2枚を横に並べる設定ができます。レイアウトはアカウントに保存されるため、次回サインインしても同じ表示になります。'},
     {view: 'setup', sel: '[data-tour="source-overview"]',
-     title: 'まず報告されている内容を確認',
-     body: 'このページでは、どの検出ソースがデータを送信しているかを示します。低い件数を良い知らせと受け取る前に、まずここを確認してください。ソースが沈黙していれば、何も見えません。'},
+     title: 'まず報告状況を確認',
+     body: 'この画面では、どの検出ソースがデータを送っているかを確認できます。件数が少ないことを良い知らせと受け取る前に、ここを見てください。報告のない検出ソースは、何も検出できません。'},
     {view: 'devices', sel: '[data-tour="device-summary"]',
-     title: 'デバイス',
-     body: '報告のあったすべてのデバイスと、そこで確認されたツール、人物、アカウント。未割り当てとは、そのデバイスにまだ誰も紐付けられていないことを意味します。ポータルは推測しません。'},
+     title: '端末',
+     body: '報告のあったすべての端末と、そこで確認されたツール、利用者、アカウントを表示します。「利用者未登録」は、その端末にまだ利用者が紐付けられていないことを示します。ポータルは推測で紐付けません。'},
     {view: 'personal', sel: '[data-tour="personal"]',
      title: '個人アカウント',
-     body: '個人アカウントで行われている作業です。承認済みのツールであっても、これらは解消されません。それぞれについて行った対応をここに記録すると、それが概要から消えるための条件です。'},
+     body: '個人アカウントで行われている作業です。承認済みのツールであっても、個人アカウントでの利用は承認しただけでは解消されません。それぞれに対応した内容をここに記録すると、概要から消えます。'},
     {view: 'register', sel: '.register-overview',
      title: 'AI台帳',
-     body: '各ツールに対するあなたの決定: 所有者は誰か、それが承認されているかどうか、およびレビュー予定時期。検出されたがまだ判断がないツールは、忘れられないように一覧に表示されます。'},
+     body: 'ツールごとの判断を記録します。担当者、承認するかどうか、次のレビュー日を残せます。検出されたのにまだ判断のないツールも一覧に出るため、見落としません。'},
     {view: 'iso', sel: '.evidence-summary',
-     title: '証跡センター',
-     body: 'ポータルが記録で裏付けられる内容: 選択した期間について、ISO 42001テーマ別にグループ化。レビュー用にPDFとして保存するか、JSON形式でダウンロードできます。'},
+     title: 'ISO/IEC 42001 証跡',
+     body: '選択した期間について、ポータルが記録で裏付けられる内容を、ISO/IEC 42001 のテーマ別にまとめています。レビュー用に PDF として保存するか、JSON をダウンロードして保管できます。'},
     {view: 'budget', sel: '[data-tour="budget"]',
      title: '予算',
-     body: '承認済みの各ツールをプランとシートに紐付けてください。すると、このページには支払額と実際に使用されている量が並んで表示されます。'},
+     body: '承認したツールごとにプランとシートを登録すると、支払っている金額と、実際に使われている状況を並べて確認できます。'},
     {view: 'agentic', sel: '.ag-verdict',
      title: 'エージェント型AI',
-     body: 'キーボードを操作する人がいなくても実行されるもの: スケジュールされたジョブ、モデルコンテキストプロトコルサーバー、タイマーで起動されるツール。各行には何が証跡なのかが示されます。'},
+     body: '人が操作していなくても動くものを表示します。スケジュール実行のジョブ、MCP サーバー、タイマーで起動するツールなどです。各行に、そう判断した根拠が表示されます。'},
     {view: 'fleet', sel: '[data-tour="fleet"]',
-     title: '登録済みデバイス',
-     body: '登録トークンを作成して収集エージェントに渡すと、そのデバイスは最初の報告時にここに表示されます。'},
+     title: '登録済み端末',
+     body: '登録トークンを作成して収集エージェントに渡すと、その端末は最初に報告した時点でここに表示されます。'},
     {view: 'settings', tab: 'start', sel: '[data-tour="getting-started"]',
      title: 'はじめに',
-     body: 'セットアップチェックリストとこのツアーはどちらもここにあるので、どちらにも後で戻ることができます。'},
+     body: 'セットアップのチェックリストとこのツアーは、どちらもここにあります。あとからいつでも見返せます。'},
     {view: 'diagnostics', sel: '[data-tour="system-health"]',
-     title: 'システムの状態',
-     body: 'ロゴの下にある名前をクリックするとここに来られます。ここでは、ポータルがログ保存先とレジストリに到達できるかどうか、およびデータがどれだけ新しいかが表示されます。'},
+     title: 'システム状態',
+     body: 'ロゴの下の環境名をクリックすると開きます。ポータルがログ保存先とレジストリに接続できているか、データがどれだけ新しいかを確認できます。'},
   ],
   viewer: [
     {title: '世良AIガバナンスへようこそ',
-     body: 'ポータルの簡単なツアーです。このアカウントでは、すべてを閲覧できますが、何も変更できません。これは監査人やレビュー担当者向けです。',
+     body: 'ポータルの主な画面を、約2分のツアーでご案内します。このアカウントは、すべての画面を閲覧できますが、変更はできません。監査担当者やレビュー担当者に向いた権限です。',
      ok: '開始'},
     {view: 'overview', sel: '[data-area="discovery"]',
-     title: '画面の使い方',
-     body: 'ページはサイドバーでグループ化されています。複数のグループを開いたままにし、よく使うページをピン留めすると、それらが一番上に表示されます。'},
+     title: '画面の探し方',
+     body: '画面は、サイドバーの項目ごとにまとまっています。複数の項目を開いたままにできます。よく使う画面はピン留めすると、いちばん上に表示されます。'},
     {view: 'overview', sel: '#who', when: () => !!(AUTH && AUTH.mode === 'login' && AUTH.username),
      title: 'アカウント',
-     body: 'ここからパスワードを変更したりサインアウトできます。テーマの切り替えはその隣にあります。'},
+     body: 'ここから、パスワードの変更とサインアウトができます。テーマの切り替えは、その隣にあります。'},
     {view: 'overview', sel: '[data-tour="stats"]',
      title: '概要',
-     body: '主要な数値: 確認が必要な個人アカウント、影響を受けた人、検出されたツール、報告している端末群の割合。すべては右上で選択した期間のもので、全期間ではありません。'},
+     body: '主要な数値です。確認が必要な個人アカウント、影響を受けている人数、検出されたツール、報告している端末の割合を表示します。すべて、右上で選んだ期間の数値で、全期間の累計ではありません。'},
     {view: 'overview', sel: '[data-act="ov-edit"]',
-     title: '概要を自分好みに',
-     body: '編集では、カードの表示・非表示、並べ替え、サイズ変更、または2つを横並びにできます。レイアウトはアカウントに保存されるため、次回サインイン時も同じです。'},
+     title: '概要を自分用に整える',
+     body: '「ウィジェットを編集」で、カードの表示・非表示、並べ替え、サイズ変更、2枚を横に並べる設定ができます。レイアウトはアカウントに保存されるため、次回サインインしても同じ表示になります。'},
     {view: 'setup', sel: '[data-tour="source-overview"]',
-     title: 'まず報告されている内容を確認',
-     body: 'このページでは、どの検出ソースがデータを送信しているかを示します。低い件数を良い知らせと受け取る前に、まずここを確認してください。ソースが沈黙していれば、何も見えません。'},
+     title: 'まず報告状況を確認',
+     body: 'この画面では、どの検出ソースがデータを送っているかを確認できます。件数が少ないことを良い知らせと受け取る前に、ここを見てください。報告のない検出ソースは、何も検出できません。'},
     {view: 'devices', sel: '[data-tour="device-summary"]',
-     title: 'デバイス',
-     body: '報告のあったすべてのデバイスと、そこで確認されたツール、人物、アカウント。未割り当てとは、そのデバイスにまだ誰も紐付けられていないことを意味します。ポータルは推測しません。'},
+     title: '端末',
+     body: '報告のあったすべての端末と、そこで確認されたツール、利用者、アカウントを表示します。「利用者未登録」は、その端末にまだ利用者が紐付けられていないことを示します。ポータルは推測で紐付けません。'},
     {view: 'personal', sel: '[data-tour="personal"]',
      title: '個人アカウント',
-     body: '個人アカウントで行われている作業です。承認済みのツールであっても、これらは解消されません。管理者がそれぞれについて行った対応をここに記録します。'},
+     body: '個人アカウントで行われている作業です。承認済みのツールであっても、承認しただけでは解消されません。それぞれに対応した内容は、管理者がここに記録します。'},
     {view: 'register', sel: '.register-overview',
      title: 'AI台帳',
-     body: '各ツールの所有者、ステータス、レビュー日。検出されたがまだ判断がないツールは、管理者が引き継げるように一覧に残ります。'},
+     body: 'ツールごとの担当者、状態、レビュー日を表示します。検出されたのに判断のないツールも一覧に残るため、管理者が引き継げます。'},
     {view: 'iso', sel: '.evidence-summary',
-     title: '証跡センター',
-     body: 'ポータルが記録で裏付けられる内容: 選択した期間について、ISO 42001テーマ別にグループ化。レビュー用にPDFとして保存するか、JSON形式でダウンロードできます。'},
+     title: 'ISO/IEC 42001 証跡',
+     body: '選択した期間について、ポータルが記録で裏付けられる内容を、ISO/IEC 42001 のテーマ別にまとめています。レビュー用に PDF として保存するか、JSON をダウンロードして保管できます。'},
     {view: 'budget', sel: '[data-tour="budget"]',
      title: '予算',
-     body: '承認済みの各ツールのコストと、その使用量を並べて表示します。プランの紐付けは管理者の操作です。'},
+     body: '承認したツールごとの費用と、実際の利用状況を並べて表示します。プランの登録は管理者の操作です。'},
     {view: 'agentic', sel: '.ag-verdict',
      title: 'エージェント型AI',
-     body: 'キーボードを操作する人がいなくても実行されるもの: スケジュールされたジョブ、モデルコンテキストプロトコルサーバー、タイマーで起動されるツール。各行には何が証跡なのかが示されます。'},
+     body: '人が操作していなくても動くものを表示します。スケジュール実行のジョブ、MCP サーバー、タイマーで起動するツールなどです。各行に、そう判断した根拠が表示されます。'},
     {view: 'fleet', sel: '[data-tour="fleet"]',
-     title: '登録済みデバイス',
-     body: 'どのデバイスがどのトークンで許可されたか。トークンの作成と失効は管理者の操作です。'},
+     title: '登録済み端末',
+     body: 'どの端末が、どのトークンで登録を許可されたかを確認できます。トークンの作成と失効は管理者の操作です。'},
     {view: 'settings', tab: 'start', sel: '[data-tour="getting-started"]',
      title: 'はじめに',
-     body: 'セットアップチェックリストとこのツアーはどちらもここにあるので、どちらにも後で戻ることができます。'},
+     body: 'セットアップのチェックリストとこのツアーは、どちらもここにあります。あとからいつでも見返せます。'},
     {view: 'diagnostics', sel: '[data-tour="system-health"]',
-     title: 'システムの状態',
-     body: 'ロゴの下にある名前をクリックするとここに来られます。ここでは、ポータルがログ保存先とレジストリに到達できるかどうか、およびデータがどれだけ新しいかが表示されます。'},
+     title: 'システム状態',
+     body: 'ロゴの下の環境名をクリックすると開きます。ポータルがログ保存先とレジストリに接続できているか、データがどれだけ新しいかを確認できます。'},
   ],
 };
 
@@ -10935,23 +11075,22 @@ const TOURS = {
 // becomes useful - but somebody who has just worked through nine settings
 // has earned a question rather than another overlay springing open.
 const TOUR_AFTER_WIZARD = {
-  title: "これでセットアップは完了です",
-  body: '短いウォークスルーでは、各ページに何が表示され、どこから数値が来るのかを説明します。'
-      + 'そのうちどれが、今あなたが設定した内容に依存するかも含みます。'
-      + '設定内に残るので、今はしないという選択も問題ありません。',
-  ok: '案内して', no: '今はしない'};
+  title: 'セットアップが完了しました',
+  body: '各画面に何が表示され、その数値がどこから来ているかを、短いツアーで説明します。いま設定した内容によって変わる数値についても触れます。'
+      + 'このツアーは「設定」に残るため、今回は見送っても、あとから見られます。',
+  ok: 'ツアーを見る', no: '今回は見送る'};
 
 // Shown instead of a welcome to somebody who has taken the other role's
 // tour already: they know the pages, and what they need is the delta.
 const TOUR_ROLE_CHANGED = {
   admin: {
-    title: 'あなたは管理者になりました',
-    body: '誰かがこのアカウントを閲覧者から管理者に変更しました。あなたがこれまで閲覧していたページは、変更できるページになりました - 設定、ツールの判断、アカウント、デバイス登録です。短いウォークスルーでは、それらがどこにあるかを説明します。設定にあるので、今はしない場合はそこで確認できます。',
-    ok: '見せて', no: 'いいえ、結構です'},
+    title: 'このアカウントは管理者になりました',
+    body: 'このアカウントの権限が、閲覧者から管理者に変更されました。これまで閲覧していた画面のうち、設定、ツールの判断、アカウント、端末の登録は、変更できるようになりました。それらがどこにあるかを、短いツアーで説明します。今回は見送っても、「設定」から見られます。',
+    ok: 'ツアーを見る', no: '見送る'},
   viewer: {
-    title: 'このアカウントは読み取り専用になりました',
-    body: '誰かがこのアカウントを管理者から閲覧者に変更しました。すべてのページは引き続き動作し、何も隠されていません。止まるのは保存だけで、それはその旨を示すメッセージとともに拒否され、黙って失敗することはありません。短いウォークスルーでは、引き続きできることと、残りについて誰に尋ねればよいかを説明します。',
-    ok: '見せて', no: 'いいえ、結構です'},
+    title: 'このアカウントは閲覧専用になりました',
+    body: 'このアカウントの権限が、管理者から閲覧者に変更されました。すべての画面はそのまま使え、隠れた項目もありません。できなくなるのは保存だけで、保存しようとすると、その理由を示すメッセージが表示されます（黙って失敗することはありません）。引き続きできることと、それ以外を誰に頼めばよいかを、短いツアーで説明します。',
+    ok: 'ツアーを見る', no: '見送る'},
 };
 
 let TOUR = null;
@@ -11176,7 +11315,7 @@ function tourPaint(el, st) {
   // as skipping the step it is on.
   card.innerHTML = `
     <h4>${esc(st.title)}</h4>
-    ${st.click ? '<span class="tour-do">ハイライトされた項目をクリックしてください</span>' : ''}
+    ${st.click ? '<span class="tour-do">強調表示された項目をクリックしてください</span>' : ''}
     <p>${esc(st.body)}</p>
     <div id="tour-foot">
       <div id="tour-dots">${TOUR.steps.map((_, n) =>

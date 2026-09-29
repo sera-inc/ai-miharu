@@ -15,7 +15,9 @@ const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '../app/static/index.html'), 'utf8');
 const card = html.slice(html.indexOf('let ACT = null, ACTMSG = null;'),
                         html.indexOf('function diagnosticsCards() {'));
-const uiErrorText = html.slice(html.indexOf('function uiErrorText('),
+// The activation tables are inside the card slice above. What uiErrorText also needs
+// (the pattern list and its helper) sits between them and the refusal helper.
+const uiErrorText = html.slice(html.indexOf('const uiApiName = '),
                                html.indexOf('// The refusal detail from a failed write'));
 const escape = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -40,7 +42,6 @@ const ACTIVE = {state: 'active', id: 'NYX-0001', org: 'Acme Group Ltd',
 test('with no key, the card says open edition and claims nothing else', () => {
   const out = render({state: 'none'});
   assert.match(out, /オープン版/);
-  assert.match(out, /オープンエディション/);
   assert.match(out, /Apache 2\.0/);
   assert.match(out, /オフライン、外部リクエストなし/);
   assert.doesNotMatch(out, /有効化済み/);
@@ -52,7 +53,7 @@ test('a failed read is not "no subscription"', () => {
   const out = render({state: 'unknown'});
   assert.match(out, /未取得/);
   assert.match(out, /有効・無効のどちらとも表示していません/);
-  assert.doesNotMatch(out, /オープンエディション/);
+  assert.doesNotMatch(out, /オープン版で動作/);
   assert.doesNotMatch(out, /アクティベーション キーを貼り付け/);
 });
 
@@ -60,7 +61,7 @@ test('an activated deployment shows what it bought, and never the key', () => {
   const out = render(ACTIVE);
   assert.match(out, /Acme Group Ltd/);
   assert.match(out, /エンタープライズ/);
-  assert.match(out, /最大 2500 デバイス/);
+  assert.match(out, /最大 2500 台/);
   assert.match(out, /2027-06-30/);
   assert.match(out, /300 日後/);
   assert.match(out, /58aa-0b39-7247/);
@@ -69,7 +70,7 @@ test('an activated deployment shows what it bought, and never the key', () => {
 
 test('moving to Nyxus is one command against this portal, with the key from the shell', () => {
   const out = render(ACTIVE);
-  assert.match(out, /このデプロイを Nyxus に移行する/);
+  assert.match(out, /この環境を Nyxus に移行する/);
   assert.match(out, /aiguardctl upgrade --edition nyxus --portal https:\/\/ai-guard-portal\.example\.com --nyxus-version &lt;version&gt; --dry-run/);
   assert.match(out, /export NYXUS_KEY=/);
   // Not the old steps: a second release on new storage, and a key on a command line.
@@ -87,9 +88,9 @@ test('a key that names no registry gets the same command, because the command re
 test('a subscription close to its end says so before it ends', () => {
   const soon = render(Object.assign({}, ACTIVE, {days_left: 20}));
   assert.match(soon, /health-note warning/);
-  assert.match(soon, /2027-06-30 に期限切れになります/);
+  assert.match(soon, /2027-06-30 に期限が切れます/);
   // And says plainly that nothing stops working, because nothing does.
-  assert.match(soon, /当日に動作が停止することはありません/);
+  assert.match(soon, /当日に動作が止まることはありません/);
   assert.doesNotMatch(render(ACTIVE), /health-note warning/);
 });
 
@@ -99,9 +100,9 @@ test('an expired key is shown as genuine and lapsed, not as a forgery', () => {
   assert.match(out, /期限切れ/);
   assert.match(out, /29 日前/);
   assert.match(out, /Acme Group Ltd/);
-  assert.match(out, /デプロイはそのまま継続します/);
+  assert.match(out, /この環境は、そのまま動き続けます/);
   // The move needs an active key, so it is named rather than offered.
-  assert.match(out, /このデプロイを Nyxus に移行するには有効なキーが必要です/);
+  assert.match(out, /この環境を Nyxus に移行するには、有効なキーが必要です/);
   assert.doesNotMatch(out, /aiguardctl upgrade --edition nyxus/);
 });
 
