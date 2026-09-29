@@ -363,7 +363,7 @@ def test_the_extension_setup_wears_the_rail_and_infers_the_early_steps():
     rather than a tick somebody presses to say they did it."""
     html = (main.STATIC / "index.html").read_text()
     assert "パッケージ化済み（拡張機能IDを確認済み）" in html
-    assert "ダウンロード済み - IDがそれを証明" in html
+    assert "ダウンロード済み（拡張機能IDを確認済み）" in html
     assert 'data-act="ext-page"' in html and "ssrail" in html
     # The numbered pill row is gone.
     assert "${i + 1} · ${t}" not in html

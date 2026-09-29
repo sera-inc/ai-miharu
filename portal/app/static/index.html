@@ -5669,12 +5669,12 @@ let SSOW = null;
 // was supposed to prove the configuration. Asking for it up front turns that
 // into a field to fill rather than a dead end to work backwards out of.
 const SSO_STEPS = [
-  {k:'emails',   t:'アカウントのメールアドレス',   d:'サインインの照合基準'},
-  {k:'register', t:'アプリケーションの登録', d:'Entra管理センターで'},
-  {k:'tenant',   t:'ご利用のテナント',             d:'プロバイダーと照合されます'},
-  {k:'client',   t:'アプリケーションとシークレット',  d:'サインイン前に検証されます'},
-  {k:'redirect', t:'サインインの戻り先',   d:'登録内容と一致する必要があります'},
-  {k:'test',     t:'検証して有効化',       d:'実際のサインインを行ってから有効化します'},
+  {k:'emails',   t:'アカウントのメールアドレス',   d:'サインインの照合に使う値'},
+  {k:'register', t:'アプリケーションの登録', d:'Entra 管理センターで作成'},
+  {k:'tenant',   t:'テナント',             d:'Microsoft に照会して確認'},
+  {k:'client',   t:'アプリケーションとシークレット',  d:'サインイン前に検証'},
+  {k:'redirect', t:'サインインの戻り先',   d:'登録内容と一致させる'},
+  {k:'test',     t:'確認して有効化',       d:'実際にサインインしてから有効化'},
 ];
 
 // Step positions by key. They were written as literals until a step was
@@ -5694,7 +5694,7 @@ async function ssoLoadUsers() {
   if (!r.ok) { SSOW.err = await _refusal(r); return false; }
   SSOW.users = (await r.json()).users || [];
   const me = ssoMe();
-  if (me && me.email) SSOW.done.emails = 'あなたの · ' + me.email;
+  if (me && me.email) SSOW.done.emails = '自分のアカウント · ' + me.email;
   else delete SSOW.done.emails;
   return true;
 }
@@ -5767,12 +5767,12 @@ async function ssoProbe(withClient) {
       // permissions, for one. Blocking a correct configuration on that
       // would be worse than saying what came back.
       SSOW.done.client = '受理済み · ' + SSOW.client;
-      SSOW.err = 'テナントはペアを受け取りましたが、チェックを拒否しました: '
+      SSOW.err = 'テナントは ID とシークレットを受け付けましたが、確認の要求は拒否しました: '
         + (out.detail ? uiErrorText(out.detail, 0) : '理由は示されていません')
-        + ' これは正常な場合もあります。最終的なテストサインインで判断されます。';
+        + ' これは正常な場合もあります。最後のテストサインインで判断します。';
     }
   } else {
-    SSOW.done.tenant = '到達済み · ' + SSOW.tenant;
+    SSOW.done.tenant = '接続を確認済み · ' + SSOW.tenant;
     SSOW.issuer = out.issuer || '';
   }
   if (SSOW.step < SSO_STEPS.length - 1) SSOW.step++;
@@ -5806,7 +5806,7 @@ window.addEventListener('message', e => {
   if (e.origin !== location.origin || !SSOW) return;
   const d = e.data || {};
   if (d.ssoTest === 'ok') {
-    SSOW.done.test = 'サインイン中のユーザー: ' + (d.username || 'あなたのアカウント');
+    SSOW.done.test = (d.username || '自分のアカウント') + ' としてサインインしました';
     SSOW.err = '';
   } else if (d.ssoTest === 'fail') {
     SSOW.err = d.detail ? uiErrorText(d.detail, 0) : 'そのサインインは拒否されました';
@@ -5826,7 +5826,7 @@ function ssoBody(k) {
         <td>${esc(u.username)}${mine
           ? ' <span class="pill p-acc">あなた</span>' : ''}</td>
         <td><span class="pill ${u.role === 'viewer' ? 'p-mut' : 'p-ok'}"
-          >${esc(u.role)}</span></td>
+          >${esc(({viewer:'閲覧者',admin:'管理者',owner:'オーナー'}[u.role]) || u.role)}</span></td>
         <td>${SSOW.eform === u.id
           ? `<input id="sso-email" class="mfield" style="min-width:210px"
                placeholder="name@example.com" value="${esc(u.email || '')}"
@@ -5836,60 +5836,59 @@ function ssoBody(k) {
              <button class="mini" data-act="sso-email-cancel">キャンセル</button>`
           : `${u.email
               ? `<span class="mono">${esc(u.email)}</span>`
-              : `<span style="color:var(--mut)">アドレスなし${mine
-                  ? ' - テストサインインはこのアカウントと一致できません' : ''}</span>`}
+              : `<span style="color:var(--mut)">メールアドレス未設定${mine
+                  ? '（テストサインインでこのアカウントと照合できません）' : ''}</span>`}
              <button class="mini" data-act="sso-email-form"
                data-key="${esc(u.id)}">${u.email ? '変更' : '追加'}</button>`}</td>
       </tr>`;
     }).join('');
     return `
-    <h4>アカウント上のアドレス</h4>
-    <p class="lede">Entraはアドレスを検証し、受信サービスはここで同じアドレスを持つアカウントを探します。アカウントは作成しません。したがって、アカウントがEntra経由でサインインできるのは、誰かが手作業でここにそのアドレスを設定した後だけです。</p>
-    <p class="lede">あなたのものが先です。このウィザードの最後の検証はサインインし <b>あなた</b> ますが、アドレスが設定されていないアカウントとは一致できません。</p>
+    <h4>アカウントのメールアドレス</h4>
+    <p class="lede">Entra が確認したメールアドレスと同じアドレスを持つアカウントを、受信サービスがここで探します。アカウントを自動で作成することはありません。そのため、Entra でサインインできるのは、ここでメールアドレスを手動で設定したアカウントだけです。</p>
+    <p class="lede">まず自分のアカウントに設定してください。このウィザードの最後の確認では<b>自分</b>がサインインするため、メールアドレスのないアカウントとは照合できません。</p>
     <table><tr><th>アカウント</th><th>ロール</th><th>メールアドレス</th></tr>${rows}</table>
-    <div class="note">1つのアカウントにアドレスを設定しないままにしておくのは、意図的に行う妥当な対応です。パスワードは Entra と併用して引き続き機能するため、ID プロバイダー自体がダウンした場合でもそのアカウントに到達できます。</div>
+    <div class="note">1つのアカウントだけ、あえてメールアドレスを設定しないでおくのは妥当な運用です。パスワードでのサインインは Entra と併用できるため、ID プロバイダーが停止した場合でもそのアカウントでサインインできます。</div>
     ${err}<div class="ssacts">
       <button class="mini" data-act="sso-emails-next"
         ${busy || !(me && me.email) ? 'disabled' : ''}>${busy
           ? '<span class="ssspin"></span>アカウント情報を再読み込みしています…'
-          : '続行'}</button>
+          : '次へ'}</button>
       ${me && me.email ? '' : `<span class="lede">まず自分のアカウントにメールアドレスを追加してください</span>`}</div>`;
   }
   if (k === 'register') return `
     <h4>アプリケーションを登録する</h4>
     <p class="lede">まず、Microsoft Entra でアプリ登録を作成する必要があります。</p>
-    <p class="lede">Entra 管理センターで、次を開きます <span class="mono">Entra ID → アプリの登録 → 新しい登録</span>。チームが認識できる名前を付け、アカウントの種類はシングル テナントのままにして、次を追加します： <b>Web</b> このリダイレクト URI を使用するプラットフォーム:</p>
+    <p class="lede">Entra 管理センターで <span class="mono">Entra ID → アプリの登録 → 新規登録</span> を開きます。チームで分かる名前を付け、サポートされるアカウントの種類はシングルテナントのままにします。プラットフォームとして <b>Web</b> を追加し、次のリダイレクト URI を設定します：</p>
     <div class="sscopy"><span class="mono">${esc(ssoRedirectGuess())}</span>
       <button class="mini" data-act="sso-copy">コピー</button></div>
     <p class="lede" style="font-size:12.5px">正確に貼り付けてください。Entra は文字単位で照合するため、末尾のスラッシュがあるだけでも別のアドレスとして扱われます。</p>
     <button class="sshelp" data-act="sso-help">必要な値はどこで確認できますか？</button>
     ${SSOW.help ? `<div class="sshelpbody"><ol>
-      <li><b>ディレクトリ (テナント) ID</b> - 登録の概要ページ。</li>
-      <li><b>アプリケーション (クライアント) ID</b> - 同じページのすぐ上。</li>
-      <li><b>クライアント シークレット</b> - 証明書とシークレット → 新しいクライアント シークレット。次をコピーします： <b>値</b> すぐに。Entra では一度だけ表示され、その後は二度と表示されません。</li></ol></div>` : ''}
+      <li><b>ディレクトリ（テナント）ID</b>：アプリ登録の「概要」ページ</li>
+      <li><b>アプリケーション（クライアント）ID</b>：同じページ（ディレクトリIDのすぐ上）</li>
+      <li><b>クライアントシークレット</b>：「証明書とシークレット → 新しいクライアントシークレット」で作成します。表示された<b>値</b>をすぐにコピーしてください。Entra では一度しか表示されません。</li></ol></div>` : ''}
     ${err}<div class="ssacts">
-      <button class="mini" data-act="sso-registered">登録済み</button></div>`;
+      <button class="mini" data-act="sso-registered">登録しました</button></div>`;
   if (k === 'tenant') return `
-    <h4>ご利用のテナント</h4>
-    <p class="lede">ご利用のテナントは、Entra 内の組織のディレクトリです。その ID をここに貼り付けてください。これは、先ほど作成した登録の [概要] ページにあり、ラベルは <b>ディレクトリ (テナント) ID</b>。そちらを使いたい場合は、テナント ドメインでも使用できます。</p>
+    <h4>テナント</h4>
+    <p class="lede">テナントは、Entra における組織のディレクトリです。先ほど作成したアプリ登録の「概要」ページにある<b>ディレクトリ（テナント）ID</b>を貼り付けてください。テナントのドメイン名でも構いません。</p>
     <p><input id="sso-tenant" class="mfield" style="min-width:340px"
       placeholder="00000000-0000-0000-0000-000000000000"
       value="${esc(SSOW.tenant)}"></p>
     <p class="lede" style="font-size:12.5px">保存される前に Microsoft に問い合わせるため、入力ミスは最後ではなくこの時点で判明します。</p>
-    ${SSOW.done.tenant && SSOW.issuer ? `<div class="note">見つかりました。サインインの発行元は <span class="mono">${esc(SSOW.issuer)}</span></div>` : ''}
+    ${SSOW.done.tenant && SSOW.issuer ? `<div class="note">確認できました。サインインは <span class="mono">${esc(SSOW.issuer)}</span> が発行します。</div>` : ''}
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-tenant"
       ${busy ? 'disabled' : ''}>${busy
         ? '<span class="ssspin"></span>Microsoft に確認中…' : '確認'}</button></div>`;
   if (k === 'client') return `
     <h4>アプリケーションとシークレット</h4>
-    <p class="lede">先ほど作成した登録の2つの値です。1つは
-      <b>アプリケーション (クライアント) ID</b> 概要ページにあるものと、[証明書とシークレット] で作成したクライアント シークレット。</p>
+    <p class="lede">先ほど作成したアプリ登録の2つの値を入力します。「概要」ページの<b>アプリケーション（クライアント）ID</b>と、「証明書とシークレット」で作成したクライアントシークレットです。</p>
     <p><input id="sso-client" class="mfield" style="min-width:340px"
-      placeholder="アプリケーション (クライアント) ID" value="${esc(SSOW.client)}"></p>
+      placeholder="アプリケーション（クライアント）ID" value="${esc(SSOW.client)}"></p>
     <p><input id="sso-secret" class="mfield" type="password"
       style="min-width:340px" autocomplete="new-password"
       placeholder="${SSOW.secretSet ? '保存済み（空欄のままなら変更しません）'
-                                    : 'クライアント シークレットの値'}"></p>
+                                    : 'クライアントシークレットの値'}"></p>
     <p class="lede" style="font-size:12.5px">作成時にシークレットをコピーしなかった場合は、新しいものを作成する必要があります。Entra では値が一度しか表示されません。ここでこれらの値を使って Microsoft にトークンを要求するため、シークレットが間違っていれば、最初にサインインしようとする人ではなく、この時点で検出されます。</p>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-client"
       ${busy ? 'disabled' : ''}>${busy
@@ -5897,7 +5896,7 @@ function ssoBody(k) {
         : 'アプリケーションを検証'}</button></div>`;
   if (k === 'redirect') return `
     <h4>サインインの戻り先</h4>
-    <p class="lede">誰かがサインインを完了すると、Entra はそのユーザーをここに戻します。これは、アプリ登録に設定した正確な URI である必要があります。以下に表示されているアドレスは、現在このポータルへのアクセスに使用しているものです。</p>
+    <p class="lede">サインインを終えた利用者を、Entra がこのアドレスに戻します。アプリ登録に設定した URI と完全に一致している必要があります。下に表示しているのは、現在このポータルにアクセスしているアドレスです。</p>
     <p><input id="sso-redirect" class="mfield" style="min-width:340px"
       value="${esc(SSOW.redirect)}"></p>
     <p class="lede" style="font-size:12.5px">チームが複数のアドレスでポータルにアクセスしている場合は、それらすべてを登録に追加し、サインインの着地点として使用するものをここに設定してください。</p>
@@ -5908,11 +5907,11 @@ function ssoBody(k) {
   const saving = SSOW.busy === 'save';
   const me = ssoMe();
   return `
-    <h4>検証して有効化</h4>
-    <p class="lede">設定を保存しました。シングルサインオンはまだ無効です。有効にするには、［サインインのテスト］をクリックして検証を完了してください。</p>
-    <p class="lede">これにより、Microsoft が新しいタブで開きます。ここに戻ると、誰としてサインインしたか、または失敗した理由が表示されます。</p>
-    <div class="note">次のユーザーとしてサインインします <b>${esc(
-      (me && me.email) || (AUTH && AUTH.username) || 'あなたのアカウント')}</b>、そして Entra が証明するアドレスは、そのアカウントのものでなければなりません。これが、このウィザードの最初の手順の目的です。</div>
+    <h4>確認して有効化</h4>
+    <p class="lede">設定を保存しました。シングルサインオンはまだ無効です。有効にするには、［テストサインイン］を押して確認を完了してください。</p>
+    <p class="lede">Microsoft のサインイン画面が新しいタブで開きます。ここに戻ると、サインインしたアカウント、または失敗した理由が表示されます。</p>
+    <div class="note"><b>${esc(
+      (me && me.email) || (AUTH && AUTH.username) || '自分のアカウント')}</b> としてサインインします。Entra が確認するメールアドレスは、このアカウントに設定したものと一致している必要があります（ウィザードの最初の手順はそのためのものです）。</div>
     ${SSOW.done.test ? `<div class="note" style="border-color:var(--pri)"
       >${esc(SSOW.done.test)}</div>` : ''}
     ${err}<div class="ssacts">
@@ -5931,7 +5930,7 @@ function ssoWizard() {
   const n = SSO_STEPS.filter(s => SSOW.done[s.k]).length;
   return `<div class="ssow">
     <div class="ssrail">
-      <h3>セットアップ</h3>
+      <h3>シングルサインオンの設定</h3>
       <ol>${SSO_STEPS.map((s, i) => {
         const d = SSOW.done[s.k], on = i === SSOW.step;
         const locked = i > reach && !on, busy = SSOW.busy === s.k;
@@ -5944,14 +5943,14 @@ function ssoWizard() {
           <span style="min-width:0"><span class="t">${esc(s.t)}</span>
           ${d && d !== 'done'
             ? `<span class="val">${esc(d)}</span>`
-            : `<span class="pend">${busy ? 'checking…' : esc(s.d)}</span>`}</span>
+            : `<span class="pend">${busy ? '確認中…' : esc(s.d)}</span>`}</span>
         </li>`;
       }).join('')}</ol>
       <div class="sssum">
-        <div class="lede" style="font-size:11.5px">${n} / ${SSO_STEPS.length} 検証済み</div>
+        <div class="lede" style="font-size:11.5px">${SSO_STEPS.length} 手順中 ${n} 手順を確認済み</div>
         <div class="barwrap"><div class="bar"
           style="width:${n / SSO_STEPS.length * 100}%"></div></div>
-        <div class="lede" style="font-size:11.5px">すべての手順にチェックが入ったときにのみ、シングルサインオンが有効になります。</div>
+        <div class="lede" style="font-size:11.5px">すべての手順を確認できた場合にだけ、シングルサインオンを有効にできます。</div>
       </div>
     </div>
     <div class="ssmain">${ssoBody(SSO_STEPS[SSOW.step].k)}
@@ -5991,9 +5990,9 @@ function accountSettings() {
   const viewer = AUTH && AUTH.role === 'viewer';
   const users = USERS === null ? '' : `
   <div class="wcard" style="margin-bottom:10px"><h3>アカウント</h3>
-    <p class="lede" style="margin-bottom:10px">オーナーは誰がサインインできるかを決め、管理者はプラットフォームを運用し、閲覧者はすべてのページを読めますが何も変更できません。監査担当者と経営幹部のために作られています。誰も、自分より上位のアカウントに対して操作したり、自分の役割より上位の役割を付与したりすることはできません。役割の変更は、そのアカウントの次回のサインインではなく、次回のリクエストに適用されます。誰もサインアウトする必要はありませんが、すでに開いているページは再読み込みするまで古いボタンを表示します。</p>
+    <p class="lede" style="margin-bottom:10px">オーナーはサインインできる人を決め、管理者はプラットフォームを運用し、閲覧者はすべてのページを見られますが変更はできません（監査担当者や経営層向け）。自分より上位のアカウントを操作したり、自分より上位のロールを付与したりはできません。ロールの変更は、次回のサインインではなく次の操作から適用されます。サインアウトは不要ですが、開いたままのページは再読み込みするまで以前のボタンが表示されます。</p>
     ${USERR ? `<div class="note">${esc(USERR)}</div>` : ''}
-    <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>招待済み</th><th>最終サインイン</th><th></th></tr>
+    <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>案内メール</th><th>最終サインイン</th><th></th></tr>
     ${USERS.map(u => {
       // The same rank rule the receiver enforces, so the page does not
       // offer a control that is going to come back 403. Equal rank is not
@@ -6003,7 +6002,7 @@ function accountSettings() {
       const may = !viewer && !overRank;
       return `<tr>
       <td>${esc(u.username)}${AUTH && AUTH.username === u.username ? ' <span class="pill p-acc">あなた</span>' : ''}${
-        u.break_glass ? ` <span class="pill p-amb" title="このデプロイのセットアップに使用したアカウント: シングルサインオンが必須の場合でも、そのパスワードは引き続き有効です">緊急用</span>` : ''}</td>
+        u.break_glass ? ` <span class="pill p-amb" title="この環境のセットアップ時に作成したアカウントです。シングルサインオンを必須にしても、パスワードでサインインできます">緊急用</span>` : ''}</td>
       <td>${UEFORM === u.id
         ? `<input id="ue-new" class="mfield" style="min-width:190px"
              placeholder="name@example.com" value="${esc(u.email || '')}"
@@ -6024,7 +6023,7 @@ function accountSettings() {
         ? `<span style="color:var(--mut)">${esc(u.invited_at.slice(0, 10))}</span>`
         : !u.email
           ? '<span style="color:var(--mut)">—</span>'
-          : `<span class="pill p-amb">未通知</span>${may
+          : `<span class="pill p-amb">未送信</span>${may
               ? ` <button class="mini" data-act="user-invite"
                    data-key="${esc(u.id)}">送信</button>` : ''}`}</td>
       <td style="color:var(--mut)">${esc((u.last_login_at || '').slice(0, 10)) || '—'}</td>
@@ -6061,19 +6060,14 @@ function accountSettings() {
       if (!missed || viewer) return '';
       const ready = ((SETTINGS && SETTINGS.settings
         && SETTINGS.settings.smtp_ready || {}).value) === '1';
-      return `<div class="note" style="margin-top:12px">${missed} 件のアカウントにまだ招待通知が送られていません。
+      return `<div class="note" style="margin-top:12px">アカウントを作成済みで、まだ案内メールを受け取っていない人が ${missed} 人います。
         ${ready ? `<button class="mini" data-act="user-invite-all"
-          style="margin-left:6px">届かなかった招待を送信</button>`
-        : `<b>設定 › 受信サービスとログ保存先</b> でメールを設定すると、ここから 1 つのボタンで送信できるようになります。`}</div>`;
+          style="margin-left:6px">まだ案内していない人に招待を送信</button>`
+        : `<b>設定 › 受信サービスとログ保存先</b> でメールを設定すると、ここからまとめて送信できます。`}</div>`;
     })()}
-    <p class="src-note">メール アドレスは、フェデレーション サインインが照合する
-    対象であり、招待の送信先でもあるため、必須です。緊急アクセス用アカウント
-    は、このデプロイのセットアップ時に使用されたもので、そのようにマークされています - アドレスの欠落から推測されることは
-    もうありません。以前ここではそれがその意味でした。アカウントを削除するとそのセッションは強制終了します。最後の所有者は
-    削除も降格もできません。ロール変更はアカウントのパスワード
-    とセッションに影響しません。ここでのすべての操作は監査証跡に記録されます。</p>
+    <p class="src-note">メールアドレスは、シングルサインオンでの照合と案内メールの送信先に使うため必須です。緊急用アカウントは、この環境のセットアップ時に作成したアカウントで、「緊急用」と表示しています（以前のようにメールアドレスの有無からは判断しません）。アカウントを削除すると、そのセッションはすべて終了します。最後のオーナーは削除もロールの変更もできません。ロールを変更しても、パスワードとセッションはそのままです。ここでの操作はすべて監査ログに記録されます。</p>
   </div>`;
-  return `${viewer ? `<div class="note">このアカウントは読み取り専用です。すべてのページは機能しますが、保存はできません。管理者はこのタブからアカウントを管理します。</div>` : ''}
+  return `${viewer ? `<div class="note">このアカウントは閲覧専用です。すべてのページを見られますが、保存はできません。アカウントの管理は管理者がこのタブで行います。</div>` : ''}
   ${users}
   ${AUTH && AUTH.role === 'owner' ? (SSOW ? ssoWizard() : `<div class="wcard"
     style="margin-bottom:10px">
@@ -6088,16 +6082,16 @@ function accountSettings() {
       // "exercised once" is a different claim from "proven".
       return `<p style="margin:0 0 6px"><span class="pill p-ok">${
         on ? 'オン' : 'オフ'}</span> <span class="pill p-amb"
-        title="これまでは実際の Entra テナント 1 つでのみ動作確認済み">ベータ</span></p>
+        title="実際の Entra テナントでの動作確認は、現時点で1件のみです">ベータ</span></p>
       <p class="lede">${!on
-        ? 'ポータルのパスワードの代わりに Microsoft Entra でサインインします。'
-          + '6ステップのガイド付きウィザードです。'
+        ? 'ポータル専用のパスワードの代わりに Microsoft Entra でサインインします。'
+          + '6つの手順のウィザードで設定できます。'
         : (SETTINGS.settings.sso_enforce || {}).value === '1'
-        ? 'メールアドレスを持つアカウントのユーザーは、Microsoft Entra でサインインします。'
-          + 'ここでは必須のため、パスワードで開けるのはブレークグラスアカウントのみです。'
-        : 'メールアドレスを持つアカウントのユーザーは、Microsoft Entra でもサインインできます。'
+        ? 'メールアドレスを設定したアカウントは Microsoft Entra でサインインします。'
+          + 'この環境では必須のため、パスワードでサインインできるのは緊急用アカウントだけです。'
+        : 'メールアドレスを設定したアカウントは Microsoft Entra でもサインインできます。'
           + 'パスワードも併用できるため、'
-          + 'メールアドレスのないアカウントも引き続き利用できます。'}</p>`;
+          + 'メールアドレスのないアカウントも引き続きサインインできます。'}</p>`;
     })()}
       <p><button class="mini" data-act="sso-open">${
         ((SETTINGS && SETTINGS.settings && SETTINGS.settings.sso_enabled
@@ -6123,16 +6117,16 @@ function ssoEnforceBlock() {
     <p style="margin:0 0 6px"><b style="font-size:13px">シングルサインオンを必須にする</b> <span class="pill ${on ? 'p-ok' : 'p-mut'}">${
       on ? 'オン' : 'オフ'}</span></p>
     <p class="lede">${on
-      ? `パスワードではもう誰もサインインできません${bg
-          ? `。ただし <span class="mono">${esc(bg)}</span> を除きます`
-          : ''}。ほかの全員は Microsoft Entra 経由でこのポータルにアクセスします。これにより、テナントの多要素ポリシーがこのポータルにも適用されます。`
-      : `これをオンにすると、1 つのアカウントを除き、すべてのアカウントでパスワードだけでは不十分になります。代わりに全員が Microsoft Entra 経由でサインインするため、テナントの多要素ポリシーがこのポータルにも適用されます。`}</p>
-    ${bg ? `<div class="note"><b>${esc(bg)}</b> は緊急アクセス用アカウントです。このデプロイのセットアップ時に使用されたアカウントで、これが有効な間もパスワードでサインインできる唯一のアカウントです。Entra に到達できないときに、この設定をオフにするため戻って入る手段になるため、パスワードは Entra を使わずに参照できる場所に保管してください。これが有効な間、このアカウントは削除も権限降格もできません。</div>`
-      : `<div class="note" style="border-color:var(--warn)">このデプロイには緊急アクセス用アカウントが指定されていないため、パスワードで戻る方法がありません。緊急アクセス用アカウントが指定されるまで、シングルサインオンの必須化は拒否されます。</div>`}
-    ${!on && !ready ? `<div class="note" style="border-color:var(--warn)">まだどのオーナーも Entra 経由でのサインインを完了していません。成功実績がないまま必須化すると緊急アクセス用アカウントしか残らないため、誰かが完了するまでこの設定はオンにできません。</div>` : ''}
+      ? `パスワードではサインインできません${bg
+          ? `（<span class="mono">${esc(bg)}</span> を除く）`
+          : ''}。ほかの全員は Microsoft Entra 経由でこのポータルにサインインするため、テナントの多要素認証ポリシーがこのポータルにも適用されます。`
+      : `オンにすると、緊急用アカウントを除くすべてのアカウントで、パスワードだけではサインインできなくなります。全員が Microsoft Entra 経由でサインインするため、テナントの多要素認証ポリシーがこのポータルにも適用されます。`}</p>
+    ${bg ? `<div class="note"><b>${esc(bg)}</b> は緊急用アカウントです。この環境のセットアップ時に作成したアカウントで、必須化している間もパスワードでサインインできる唯一のアカウントです。Entra に接続できなくなったときに、ここからサインインして必須化を解除します。そのため、パスワードは Entra を使わずに取り出せる場所に保管してください。必須化している間、このアカウントは削除もロールの変更もできません。</div>`
+      : `<div class="note" style="border-color:var(--warn)">この環境には緊急用アカウントがないため、Entra に接続できなくなったときにパスワードでサインインする手段がありません。緊急用アカウントができるまで、シングルサインオンは必須にできません。</div>`}
+    ${!on && !ready ? `<div class="note" style="border-color:var(--warn)">Entra 経由でサインインできたオーナーがまだいません。一度も成功していない状態で必須化すると、緊急用アカウントでしかサインインできなくなるため、オーナーが一度サインインするまでこの設定はオンにできません。</div>` : ''}
     <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
       <p style="margin:0 0 6px"><b style="font-size:13px">サインインを求める間隔</b></p>
-      <p class="lede">以前は、ブラウザーで Microsoft にすでにサインインしている人は、操作なしでそのままここに戻されていました。リンクをクリックすると、誰がどの AI を使っているかを表示するツールにアクセスできました。現在はサインイン時に常にアカウントの選択を求めるため、この設定で、プロバイダーが再認証を求めるまで、サインインをどれだけ古いものまで有効とみなすかを決められます。</p>
+      <p class="lede">以前は、ブラウザーで Microsoft にサインイン済みの人は、何も操作せずにこのポータルに入れていました（リンクを開くだけで、誰がどのAIを使っているかが分かる画面に入れてしまう状態でした）。現在はサインインのたびにアカウントの選択を求めます。この設定では、Microsoft でのサインインからどれだけ時間がたったら、もう一度本人確認を求めるかを決めます。</p>
       <p><select id="sso-maxage" class="mfield" style="min-width:260px">
         ${[['', '12時間ごと（既定）'], ['0', '毎回'],
            ['1', '1時間ごと'], ['4', '4時間ごと'],
@@ -6140,14 +6134,14 @@ function ssoEnforceBlock() {
            ['168', '7日ごと']].map(o => `<option value="${o[0]}"${
           v('sso_max_age_hours') === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}
       </select></p>
-      <p class="src-note" style="margin:0">12 時間は 1 勤務日です。昼食前に 2 回もサインインを求められることはありません。一方で、一晩開いたままのノート PC を翌朝そのまま使い続けることもできません。この値は Microsoft に送信され、戻ってきたときには、トークンが示す実際のサインイン時刻と照合して再確認されます。要求するだけでは制御にならないからです。</p>
+      <p class="src-note" style="margin:0">12時間は1日の勤務時間に相当します。午前中に何度もサインインを求められることはなく、一方で一晩開いたままのノートPCを翌朝そのまま使うこともできません。この値は max_age として Microsoft に送り、戻ってきたトークンの実際のサインイン時刻とも照合します。要求するだけで確認しなければ、制御にならないためです。</p>
     </div>
     <p style="margin:12px 0 0"><button class="mini" data-act="sso-enforce"
       data-key="${on ? '' : '1'}"
       ${(on || (ready && bg)) ? '' : 'disabled'}>${
       on ? '必須化を解除' : 'シングルサインオンを必須にする'}</button>
       ${on || (ready && bg) ? '' : `<span class="lede"
-        style="margin:0 0 0 8px;font-size:12.5px">まだ利用できません</span>`}</p>
+        style="margin:0 0 0 8px;font-size:12.5px">条件を満たすと押せます</span>`}</p>
   </div>`;
 }
 
@@ -6175,7 +6169,7 @@ function activationCard() {
   const state = a.state === 'active' ? ['p-ok', '有効化済み']
     : a.state === 'expired' ? ['p-warn', '期限切れ']
     : a.state === 'invalid' ? ['p-warn', '確認できません']
-    : a.state === 'unknown' ? ['p-mut', '未読み取り']
+    : a.state === 'unknown' ? ['p-mut', '未取得']
     : ['p-mut', 'オープン版'];
   const soon = a.state === 'active' && a.days_left <= 45;
 
@@ -6184,12 +6178,12 @@ function activationCard() {
   // knows what the key says, and the command does the moving - on the
   // operator's machine, approved here by an owner, like an upgrade.
   const steps = a.state !== 'active' ? '' : `<details class="how ui-how"><summary>このデプロイを Nyxus に移行する</summary><div class="ui-steps">
-    <p>1 つのコマンドで、このデプロイをインプレースで Nyxus に移行します。この受信サービスのデータベースを保持するため、アカウント、決定、登録済みデバイス、設定が引き継がれ、ログ保存先に既にある検出結果も引き続き閲覧できます。自身のマシン上で、自身の kubeconfig または Docker を使用して実行され、その前にこのページでオーナーが承認します。</p>
+    <p>1つのコマンドで、この環境をそのまま Nyxus に移行します。受信サービスのデータベースを引き継ぐため、アカウント、判断、登録済み端末、設定はそのまま残り、ログ保存先にある検出結果も引き続き閲覧できます。コマンドは自分の端末で、自分の kubeconfig または Docker を使って実行し、実行前にこのページでオーナーが承認します。</p>
     <ol class="ui-steplist">
       <li><b>aiguardctl をインストール</b><span>このデプロイをアップグレードするのと同じコマンドです。このページの「アップグレード」を参照してください。</span></li>
       <li><b>キーをシェルに設定してください。</b>${uiCommand("export NYXUS_KEY='<your activation key>'")}<span>ポータルはそれを返却しません。これは認証情報です。コマンドは使用前に、ここに保存されているキーと一致することを確認し、コマンドラインには決して出しません。</span></li>
       <li><b>計画を表示</b>${uiCommand('aiguardctl upgrade --edition nyxus --portal ' + location.origin + ' --nyxus-version <version> --dry-run')}<span>すべてのコマンドを順番に、それぞれが何を保持するかを示します。何も実行されず、何も承認されません。</span></li>
-      <li><b>実行する</b>${uiCommand('aiguardctl upgrade --edition nyxus --portal ' + location.origin + ' --nyxus-version <version>')}<span>データベースをバックアップし、既存のサービスを停止して、同じデータ上で Nyxus を起動します。Docker Compose では、次を追加します <code>--nyxus-compose-file</code> Nyxus の compose ファイルへのパスを指定します。</span></li>
+      <li><b>実行する</b>${uiCommand('aiguardctl upgrade --edition nyxus --portal ' + location.origin + ' --nyxus-version <version>')}<span>データベースをバックアップし、既存のサービスを停止して、同じデータで Nyxus を起動します。Docker Compose の場合は、<code>--nyxus-compose-file</code> に Nyxus の compose ファイルのパスを指定して追加します。</span></li>
       <li><b>次にエンドポイントです。</b><span>MDM 内の収集エージェントスクリプトを、同じポリシーで Nyxus のものに置き換えます。各マシンはそれぞれの識別情報を維持します。</span></li>
     </ol>
     <p class="src-note">このバージョンは契約に含まれます。シェル内のキーがここに保存されているものと異なる場合、コマンドは何も変更する前に停止します。</p>
@@ -6198,8 +6192,8 @@ function activationCard() {
   // A read that failed says so. "No subscription" is a statement about
   // this deployment, and one that has not been read is not entitled to it.
   if (a.state === 'unknown') {
-    return `<section class="health-card health-wide" data-tour="activation"><div class="health-card-head"><div><span>エディション</span><h3>Nyxus</h3></div><span class="pill p-mut">未読み取り</span></div>
-      <p class="health-note">このページが契約が有効化されているかを問い合わせたとき、受信サービスが応答しなかったため、どちらとも断定されません。上のログ保存先カードに、受信サービスに到達可能かどうかが表示されます。</p>
+    return `<section class="health-card health-wide" data-tour="activation"><div class="health-card-head"><div><span>エディション</span><h3>Nyxus</h3></div><span class="pill p-mut">未取得</span></div>
+      <p class="health-note">契約の有効化状態を問い合わせたときに受信サービスが応答しなかったため、有効・無効のどちらとも表示していません。受信サービスに接続できるかどうかは、上のログ保存先のカードで確認できます。</p>
     </section>`;
   }
 
@@ -6223,18 +6217,18 @@ function activationCard() {
     ? (soon ? `<p class="health-note warning">この契約は ${esc(a.expires)} に期限切れになります。更新すると、ここにあるキーが置き換わります。当日に動作が停止することはありません。ここにあるものはこのキーで有効化されたものではないからです。単にイメージをプルできなくなるだけです。</p>` : '')
     : a.state === 'expired' ? `<p class="health-note warning">このキーは ${esc(a.expires)} に期限切れになりました。デプロイはそのまま継続します。期限切れの契約は、新しいイメージとサポートが提供されないという意味であり、ポータルが停止するわけではありません。更新して新しいキーを貼り付けてください。このデプロイを Nyxus に移行するには有効なキーが必要です。</p>`
     : a.state === 'invalid' ? `<p class="health-note danger"><b>保存されていますが、このリリースでは確認できません。</b> ${esc(JA_ACTIVATION_REFUSAL[a.code] || (a.reason ? uiErrorText(a.reason, 0) : ''))} これは、その署名キーを含むリリースをまだ適用していないデプロイにおける、再発行された署名キーの見え方です。まずアップグレードし、それからキーを疑ってください。</p>`
-    : `<p class="health-note">このデプロイはオープン版を実行しており、それは完全です。このページにも他のどのページにも、キーがないために制限されているものはありません。Nyxus は同じシステムの商用版で、同じ収集エージェント、同じ証跡を備え、サポート付きの契約のもとでプライベート イメージとして配布されます。アクティベーション キーには、発行先の組織と有効期間が記載されており、ここで、このポータルがすでに保持している署名と照合して確認されます。誰にも問い合わせる必要はありません。</p>`;
+    : `<p class="health-note">この環境はオープン版で動作しており、機能はすべて使えます。キーがないために制限されている画面や機能はありません。Nyxus は原著者（Shadow AI Guard の作者）が提供する同じシステムの商用版で、サポート付きの契約でプライベートイメージとして配布されています。株式会社世良が販売・サポートするものではありません。アクティベーションキーには発行先の組織と有効期間が記載されており、このポータルが持つ署名とオフラインで照合して確認します。</p>`;
 
   const form = !owner
-    ? `<p class="src-note" style="margin-top:10px">オーナー アカウントが契約を有効化します。 ${a.state === 'none' ? 'このデプロイにはキーが保存されていません。' : '上記の詳細は、あなたのロールでは読み取り専用です。'}</p>`
+    ? `<p class="src-note" style="margin-top:10px">契約の有効化はオーナーが行います。${a.state === 'none' ? 'この環境にはキーが保存されていません。' : 'あなたのロールでは、上の内容を見ることだけができます。'}</p>`
     : a.state === 'none' || a.state === 'invalid'
     ? `<div class="act-entry">
         <input id="act-key" class="mfield" spellcheck="false" autocomplete="off"
-          placeholder="アクティベーション キーを貼り付け (nyxl_…)" value="">
+          placeholder="アクティベーションキーを貼り付け（nyxl_…）" value="">
         <button class="mini" data-act="act-save">有効化</button>
         ${a.state === 'invalid' ? '<button class="mini" data-act="act-clear">削除する</button>' : ''}
       </div>
-      <p class="src-note">ここに貼り付けられ、ここで確認され、受信サービスによって保存されます。これは資格情報であり、購入した内容の証明でもあるため、再表示されることはありません。表示されるのはフィンガープリントのみです。</p>`
+      <p class="src-note">キーはここで確認し、受信サービスに保存します。購入内容の証明であると同時に認証情報でもあるため、保存後は表示せず、フィンガープリントだけを表示します。</p>`
     : `<div class="act-entry">
         <input id="act-key" class="mfield" spellcheck="false" autocomplete="off"
           placeholder="このキーを置き換えるには、更新されたキーを貼り付けてください" value="">
@@ -6267,19 +6261,19 @@ function diagnosticsCards() {
   const passing = checks.filter(Boolean).length;
   const health = passing === checks.length;
 
-  return `<section class="health-summary ${health ? 'healthy' : 'attention'}" aria-label="システムの正常性概要">
-    <div class="health-summary-copy"><span>エステート可観測性</span>
+  return `<section class="health-summary ${health ? 'healthy' : 'attention'}" aria-label="システム状態の概要">
+    <div class="health-summary-copy"><span>環境の監視状況</span>
       <strong>${health ? 'コアサービスは正常' : '対応が必要'}</strong>
-      <p>ログ保存先の読み取りとツールレジストリに対する読み取り専用のランタイムチェック。</p>
+      <p>ログ保存先の読み込みとツールレジストリを、実行中に読み取り専用で確認した結果です。</p>
     </div>
     <dl>
-      <div><dt>${passing}/${checks.length}</dt><dd>コアチェック合格</dd></div>
+      <div><dt>${passing}/${checks.length}</dt><dd>主要な確認項目の合格数</dd></div>
       <div><dt>${ago(r.loki_last_success)}</dt><dd>最後に成功した読み取り</dd></div>
-      <div><dt>${esc(r.registry_tools)}</dt><dd>レジストリ内のツール</dd></div>
+      <div><dt>${esc(r.registry_tools)}</dt><dd>レジストリのツール数</dd></div>
     </dl>
   </section>
 
-  <p class="health-intro">以下のすべては、別途ラベル付けされたデプロイメントコンテキストを除き、ポータルによって実行時に検証されます。資格情報は表示されず、その動作状態のみが表示されます。</p>
+  <p class="health-intro">以下は、別枠の「環境の情報」を除き、ポータルが実行中に確認した結果です。認証情報そのものは表示せず、動作状態だけを表示します。</p>
 
   <div class="health-grid">
     <section class="health-card"><div class="health-card-head"><div><span>ランタイム</span><h3>アプリケーション</h3></div><span class="pill p-ok">実行中</span></div>
@@ -6289,20 +6283,20 @@ function diagnosticsCards() {
         <a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">元のリポジトリ</a></p>
     </section>
 
-    <section class="health-card ${logFresh ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>データパイプライン</span><h3>ログ保存先</h3></div>${logFresh ? '<span class="pill p-ok">レポート中</span>' : '<span class="pill p-warn">確認が必要</span>'}</div>
+    <section class="health-card ${logFresh ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>データパイプライン</span><h3>ログ保存先</h3></div>${logFresh ? '<span class="pill p-ok">読み込み正常</span>' : '<span class="pill p-warn">確認が必要</span>'}</div>
       <dl class="health-facts"><div><dt>設定済み</dt><dd>${yn(r.loki_configured)}</dd></div>
-        <div><dt>読み取りに使用</dt><dd>${esc(uiTerm(r.portal_read_credential || '—'))}</dd></div>
+        <div><dt>読み込みに使う認証情報</dt><dd>${esc(uiTerm(r.portal_read_credential || '—'))}</dd></div>
         <div><dt>最後に成功した読み取り</dt><dd>${ago(r.loki_last_success)}</dd></div>
         <div><dt>対象期間 / キャッシュ</dt><dd>${esc(r.lookback_hours)}時間 <span>·</span> ${esc(r.cache_ttl_seconds)}秒</dd></div></dl>
-      ${r.portal_read_credential === 'the signed-in account' ? `<p class="health-note warning">このポータルには独自のログ保存先資格情報がありません。ビューアーの読み取りは拒否されます。設定するには、 <span class="mono">RECEIVER_ADMIN_TOKEN</span> または独自の <span class="mono">LOKI_URL</span> と資格情報を設定してください。</p>` : ''}
-      ${r.loki_last_error ? `<p class="health-note danger"><b>最後のエラー</b> ${esc(r.loki_last_error)}${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
+      ${r.portal_read_credential === 'the signed-in account' ? `<p class="health-note warning">このポータル自身にはログ保存先の認証情報がないため、閲覧者の読み込みは拒否されます。<span class="mono">RECEIVER_ADMIN_TOKEN</span>、またはポータル用の <span class="mono">LOKI_URL</span> と認証情報を設定してください。</p>` : ''}
+      ${r.loki_last_error ? `<p class="health-note danger"><b>直近のエラー</b> ${esc(r.loki_last_error)}${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
     </section>
 
     <section class="health-card ${r.registry_loaded ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>参照データ</span><h3>ツールレジストリ</h3></div>${r.registry_loaded ? '<span class="pill p-ok">読み込み済み</span>' : '<span class="pill p-warn">利用不可</span>'}</div>
       <dl class="health-facts"><div><dt>ツール</dt><dd>${esc(r.registry_tools)}${r.registry_tools_with_domains != null && r.registry_tools_with_domains !== r.registry_tools ? ` <span>· ${esc(r.registry_tools_with_domains)}（ドメインあり）</span>` : ''}</dd></div>
         <div><dt>レジストリパス</dt><dd class="mono">${esc(r.registry_path)}</dd></div></dl>
       ${r.registry_error ? `<p class="health-note danger"><b>エラー</b> ${esc(r.registry_error)}</p>` : ''}
-      ${!r.registry_loaded ? `<p class="health-note warning">レジストリがない場合、観測をまたいでツール名を正規化できません。</p>` : ''}
+      ${!r.registry_loaded ? `<p class="health-note warning">レジストリがないと、検出ソースごとに異なるツール名を1つにまとめられません。</p>` : ''}
     </section>
 
     <section class="health-card"><div class="health-card-head"><div><span>ポータル機能</span><h3>アクセスと連携</h3></div><span class="pill p-mut">構成</span></div>
@@ -6342,25 +6336,26 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
       return `<section class="health-card health-wide ${u.available === true ? 'needs-attention' : ''}" data-tour="updates"><div class="health-card-head"><div><span>リリース</span><h3>更新</h3></div><span class="pill ${state[0]}">${state[1]}</span></div>
       <dl class="health-facts"><div><dt>実行中</dt><dd>${esc(u.current || '—')}</dd></div>
         <div><dt>最新リリース</dt><dd>${u.latest ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.latest)}</a>${u.published_at ? ` <span>· ${esc(String(u.published_at).slice(0, 10))}</span>` : ''}` : '—'}</dd></div>
-        <div><dt>デプロイ実行者</dt><dd>${esc(route)}${d.chart_version ? ` <span>· ${esc(d.chart_version)}</span>` : ''}</dd></div>
-        <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ' : '未確認')}</dd></div></dl>
+        <div><dt>導入方法</dt><dd>${esc(route)}${d.chart_version ? ` <span>· ${esc(d.chart_version)}</span>` : ''}</dd></div>
+        <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ確認していません' : '確認しない設定')}</dd></div></dl>
       ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(uiErrorText(u.error,0))}</p>` : ''}
-      ${!u.enabled ? `<p class="health-note">チェックはオフになっています（<span class="mono">UPDATE_CHECK=off</span>）、そのためこのポータルは外部へのリクエストを行いません。リリースは以下に掲載されています。 <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">github.com</a>。</p>` : ''}
-      ${!u.comparable && u.enabled ? `<p class="health-note">このポータルはリリース番号を報告しないため、最新リリースは表示されますが比較されません。</p>` : ''}
-      ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードすると受信サービスとポータルが再起動します。保存されているものは変更されず、収集エージェントはそれを介して報告を続けます。</p>
+      ${!u.enabled ? `<p class="health-note">更新の確認はオフです（<span class="mono">UPDATE_CHECK=off</span>）。このポータルは外部に問い合わせません。原著のリリースは <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">GitHub</a> で確認できます。</p>` : ''}
+      <p class="health-note">この更新確認は、原著 Shadow AI Guard（英語版）のリリースを対象にしています。原著のイメージに更新すると、世良AIガバナンスの日本語画面は原著の画面に置き換わります。世良AIガバナンスの変更は<a href="https://github.com/sera-inc/sera-ai-governance" target="_blank" rel="noopener">公開リポジトリ</a>で確認してください。</p>
+      ${!u.comparable && u.enabled ? `<p class="health-note">このポータルはリリース番号を持たないため、最新リリースを表示するだけで比較はしません。</p>` : ''}
+      ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードすると受信サービスとポータルが再起動します。保存済みのデータは変更されず、収集エージェントはその間も報告を続けます。</p>
       <details class="how"><summary>${esc(route)} でのアップグレード方法</summary><div>
         <pre class="mono" style="white-space:pre-wrap">${esc(cmd)}</pre>
-        ${cron ? `<p class="src-note">スキャナーまたは検出結果がCronJobとして実行される場合、それらはチャートの外部にあるため、イメージタグも設定してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">もし <span class="mono">IMAGE_TAG</span> が compose 環境で固定されている場合は、まず ${esc(ver || '新しいバージョン')} に変更してください。変更するまでプルしても何も変わりません。</p>`}
-        <p class="src-note">その後、このページの「実行中」に ${esc(u.latest)} と表示され、「ソース」には同じ収集エージェントが報告していることが表示されるはずです。</p>
+        ${cron ? `<p class="src-note">スキャナーや Discovery を CronJob として実行している場合は、チャートの管理外なので、それらのイメージタグも更新してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">もし <span class="mono">IMAGE_TAG</span> が compose 環境で固定されている場合は、まず ${esc(ver || '新しいバージョン')} に変更してください。変更するまでプルしても何も変わりません。</p>`}
+        <p class="src-note">更新後、このページの「実行中」が ${esc(u.latest)} になり、「検出ソース」画面で同じ収集エージェントが報告していることを確認してください。</p>
       </div></details>
       ${u.notes ? `<details class="how"><summary>リリースノート</summary><div><pre class="mono" style="white-space:pre-wrap;max-height:320px;overflow:auto">${esc(u.notes)}</pre></div></details>` : ''}` : ''}
       ${CFG.managed && CFG.managed.enabled ? `<details class="how ui-how"><summary>お使いのマシンからアップグレード</summary><div class="ui-steps">
         <p>このコマンドは、お使いのkubeconfigまたはDockerコンテキストで実行され、進行状況をここに報告します。ポータル自体は何もアップグレードしません。ポータルはリクエストを承認し（オーナーのみ）、実行状況を表示します。</p>
         <ol class="ui-steplist">
-          <li><b>お使いのマシンにPython 3.10以降とpipxを用意してください。</b><span>Macでは、 <code>brew install pipx</code>、それ以外では、 <code>pip install --user pipx</code>.</span></li>
+          <li><b>お使いのマシンにPython 3.10以降とpipxを用意してください。</b><span>Mac では <code>brew install pipx</code>、それ以外では <code>pip install --user pipx</code> を実行します。</span></li>
           <li><b>タグ付きリリースから、このコマンドを一度インストールしてください。</b>${uiCommand(`pipx install -q "git+https://github.com/AmanSK5/shadow-ai-guard@${u.latest || 'v0.35.0'}#subdirectory=cli"`)}</li>
           <li><b>PATHに追加してください。</b>${uiCommand('pipx ensurepath')}<span>これより前に開いたシェルでは、開き直すまでこのコマンドが見つかりません。</span></li>
-          <li><b>実行する</b>${uiCommand('aiguardctl upgrade --portal ' + location.origin)}<span>ブラウザーでこのポータルが開き、リクエストを承認します。表示されるコードをターミナルと照合してください。 <code>--dry-run</code> すべてのコマンドを実行せずに表示します。</span></li>
+          <li><b>実行する</b>${uiCommand('aiguardctl upgrade --portal ' + location.origin)}<span>ブラウザーでこのポータルが開き、リクエストを承認します。表示されるコードがターミナルと同じか確認してください。<code>--dry-run</code> を付けると、実行せずにすべてのコマンドを表示します。</span></li>
         </ol>
       </div></details>` : ''}
       ${u.enabled ? `<p class="src-note" style="margin-top:8px"><button class="mini" data-act="update-check">今すぐ確認</button></p>` : ''}
@@ -6371,14 +6366,14 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
     ${CFG.managed && CFG.managed.enabled ? activationCard() : ''}
   </div>
 
-  <section class="health-deployment"><div><span>デプロイコンテキスト</span><h3>構成により提供</h3>
-    <p>ポータルはこれらの値を検証できません。これらはサポートとリリースの追跡のために保持され、実行時の証拠として扱われることはありません。</p></div>
+  <section class="health-deployment"><div><span>環境の情報</span><h3>設定から取得した値</h3>
+    <p>ポータルはこれらの値を検証できません。サポートやリリースの追跡のために表示しているもので、実行状態の根拠としては扱いません。</p></div>
     <dl><div><dt>チャートバージョン</dt><dd>${esc(d.chart_version) || '—'}</dd></div>
       <div><dt>リリース</dt><dd>${esc(d.release) || '—'}</dd></div>
       <div><dt>名前空間</dt><dd>${esc(d.namespace) || '—'}</dd></div></dl>
   </section>
 
-  ${AUDITLOG === null ? '' : `<section class="health-activity"><div class="health-card-head"><div><span>トレーサビリティ</span><h3>最近の管理者アクティビティ</h3></div><span>${AUDITLOG.length}件記録済み</span></div>
+  ${AUDITLOG === null ? '' : `<section class="health-activity"><div class="health-card-head"><div><span>監査ログ</span><h3>最近の管理操作</h3></div><span>${AUDITLOG.length} 件</span></div>
   ${AUDITLOG.length ? `<table><tr><th>日時</th><th>内容</th><th>実行者</th></tr>
   ${AUDITLOG.map(e => `<tr>
     <td class="nw" style="color:var(--mut)">${esc((e.at||'').replace('T',' ').slice(0,16))}</td>
@@ -6386,7 +6381,7 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
       ? ` <span class="mono" style="color:var(--mut)">${esc(String(e.detail.key || e.detail.tool).slice(0,60))}</span>` : ''}</td>
     <td>${esc((e.detail && (e.detail.by || e.detail.username)) || '')}</td>
   </tr>`).join('')}</table>` : '<p class="lede">まだ何も記録されていません。</p>'}
-  <p class="health-note">ポータルを通じて行われたすべての変更は、発生時点で受信サービスによって記録されます。この履歴はサインアウト後も保持され、ここから編集することはできません。</p></section>`}`;
+  <p class="health-note">ポータルでの変更はすべて、その時点で受信サービスが記録します。記録はサインアウト後も残り、この画面から編集することはできません。</p></section>`}`;
 }
 
 // System health belongs to the estate context, not inside the place an
@@ -6412,7 +6407,7 @@ async function cliApprove() {
   if (!managed || !(AUTH && AUTH.mode === 'login'))
     return head + `<p class="lede">このデプロイにはアカウントがないため、ここで承認できるものはありません。</p>`;
   if (!CLICODE) return head + `<p class="lede">そのリンクにはリクエストコードが含まれていません。コマンドを再実行し、表示されるリンクを開いてください。</p>`;
-  if (!owner) return head + `<p class="lede">コード <b class="mono">${esc(CLICODE)}</b> のリクエストが待機しています。このエステートをアップグレードするコマンドを承認できるのはオーナーだけです。オーナーにこのリンクを開くよう依頼してください。</p>`;
+  if (!owner) return head + `<p class="lede">コード <b class="mono">${esc(CLICODE)}</b> のリクエストが承認を待っています。この環境をアップグレードするコマンドを承認できるのはオーナーだけです。オーナーにこのリンクを開くよう依頼してください。</p>`;
   if (CLIDONE) return head + `<div class="note">${esc(CLIDONE)}</div>
     <p class="lede">このタブは閉じてもかまいません。コマンドはターミナルで継続され、進行状況は「システム状態」に表示されます。</p>
     <p><button class="mini" data-nav="diagnostics">システム状態を開く</button></p>`;
@@ -6425,9 +6420,9 @@ async function cliApprove() {
   if (g.error) return head + `<div class="note">${esc(g.error)}</div>
     <p class="lede">コードはコマンドが要求してから10分で失効します。新しいコードが必要な場合は、コマンドを再実行してください。</p>`;
   if (g.status !== 'pending') return head + `<div class="note">このリクエストはすでに${esc({pending:'保留中',approved:'承認済み',denied:'拒否済み',expired:'期限切れ',issued:'発行済み',running:'実行中',consumed:'消費済み'}[g.status] || '不明')}です。</div>`;
-  return head + `<p class="lede">誰かがこのポータルに対してアップグレードコマンドを実行しました。何かを行う前に、オーナーが承認するのを待っています。</p>
+  return head + `<p class="lede">このポータルを対象にアップグレードコマンドが実行されました。オーナーが承認するまで、コマンドは何も実行しません。</p>
   <section class="health-card health-wide needs-attention cli-grant">
-    <div class="health-card-head"><div><span>コマンドの承認</span><h3>アップグレードがオーナーの判断を待っています</h3></div><span class="pill p-amb">決定待ち</span></div>
+    <div class="health-card-head"><div><span>コマンドの承認</span><h3>アップグレードがオーナーの判断を待っています</h3></div><span class="pill p-amb">承認待ち</span></div>
     <div class="cli-grant-body">
       <div class="cli-grant-code">
         <p class="kicker">リクエストコード</p>
@@ -6441,11 +6436,11 @@ async function cliApprove() {
         <div><dt>クライアント</dt><dd>${esc(g.requester || '未記載')}</dd></div>
       </dl>
     </div>
-    <p class="health-note"><b>承認すると付与されるのは</b> 45分間有効なトークン1つで、コマンドがこの実行の進行状況をここに報告できるようにします。このポータル上の他の何も開かず、クラスタやホスト上の何も開きません。アップグレード自体は要求者の認証情報で実行され、チャートまたは compose ファイルがデプロイするすべてを対象とします。</p>
+    <p class="health-note"><b>承認すると</b>、45分間有効なトークンが1つ発行されます。このトークンで許可されるのは、コマンドがこの実行の進行状況をここに報告することだけです。ポータルのほかの機能や、クラスター・ホストへのアクセス権は付与しません。アップグレード自体は要求者の認証情報で実行され、チャートまたは compose ファイルがデプロイするすべてを対象とします。</p>
     <div class="cli-grant-actions">
       <button class="mini pri" data-act="cli-approve">承認</button>
       <button class="mini" data-act="cli-deny">拒否</button>
-      <span class="src-note">直前に <span class="mono">aiguardctl upgrade</span>を実行していない場合は、拒否してください。どちらの判断もあなたの名前とともに記録されます。</span>
+      <span class="src-note">直前に <span class="mono">aiguardctl upgrade</span> を実行していない場合は拒否してください。承認・拒否のどちらも、あなたの名前で記録されます。</span>
     </div>
   </section>`;
 }
@@ -6482,7 +6477,7 @@ function upgradeWatch() {
 }
 function upgradeTracker() {
   const r = UPRUN;
-  if (UPDOWN) return `<div id="upgrade-tracker" class="health-note warning"><b>ポータルを再起動中</b> - 現在このページからそれに到達できませんが、展開中は想定内です。試行を続けます。</div>`;
+  if (UPDOWN) return `<div id="upgrade-tracker" class="health-note warning"><b>ポータルを再起動中です。</b>更新中は一時的に接続できませんが、想定どおりです。接続を再試行しています。</div>`;
   if (!r) return `<div id="upgrade-tracker"></div>`;
   const pill = r.status === 'running' ? '<span class="pill p-amb">実行中</span>'
     : r.status === 'stale' ? '<span class="pill p-warn">未確認</span>'
@@ -6537,7 +6532,7 @@ function upgradeTracker() {
   }
   return `<div id="upgrade-tracker" class="upgrade-run">
     <div class="upgrade-run-head"><b>アップグレード ${esc(r.from_version)} → ${esc(r.to_version)}</b> ${pill}
-      <span>${esc(r.route)} · 開始: ${when(r.started_at)}（実行者: ${esc(r.started_by_name || '所有者')}）</span></div>
+      <span>${esc(r.route)} · 開始: ${when(r.started_at)}（実行者: ${esc(r.started_by_name || 'オーナー')}）</span></div>
     ${note ? `<p class="health-note warning">${note}</p>` : ''}
     <ol class="upgrade-steps">${latest.map(s => `<li><span class="pill ${stat(s.status)}">${esc(statusLabel(s.status))}</span> <span class="upgrade-step" title="${esc(translateStep(s.step))}">${esc(translateStep(s.step))}</span>${s.detail ? ` <span>· ${esc(translateDetail(s.detail))}</span>` : ''}</li>`).join('')
       || '<li><span class="pill p-amb">実行中</span> 最初のステップを待っています</li>'}</ol>
@@ -6567,7 +6562,7 @@ async function diagnostics() {
       if (ar.ok) AUDITLOG = (await ar.json()).events || [];
     } catch (e) { /* activity is useful context, never a prerequisite */ }
   }
-  return `<div data-tour="system-health"><h2>システム状態</h2><p class="lede">ポータルが現在自身について確認できること：ログ保存先、レジストリ、アクセス設定。設定を変更するとポリシーが変わりますが、このページは報告のみを行います。</p></div>
+  return `<div data-tour="system-health"><h2>システム状態</h2><p class="lede">ポータルが自身について現在確認できる内容（ログ保存先、レジストリ、アクセス設定）を表示します。設定の変更は「設定」画面で行い、この画面は状態の表示だけを行います。</p></div>
     ${diagnosticsCards()}`;
 }
 
@@ -6622,7 +6617,7 @@ async function settings() {
       if (ur.ok) USERS = (await ur.json()).users || [];
     } catch (e) { /* the accounts card simply stays absent */ }
   }
-  if (!managed || !SETTINGS) return `<h2>設定</h2><p class="lede">このデプロイには集中管理された設定がありません。システム状態は、ロゴの下にあるエステート名の下にあります。</p>${windowSettings()}`;
+  if (!managed || !SETTINGS) return `<h2>設定</h2><p class="lede">この環境には、ポータルで管理する設定がありません。システム状態は、サイドバーのロゴの下にある組織名から開けます。</p>${windowSettings()}`;
 
   // Named outright rather than looked up by a key that came from the URL.
   // SETTAB is allow-listed where it enters, in fromHash(), so it can only
@@ -6636,7 +6631,7 @@ async function settings() {
   else { SETTAB = 'fleet'; body = fleetSettings(); }
   return `<h2>設定</h2>
   ${settingsChangedNote()}
-  <p class="lede">中央設定はここで編集できます。保存した値は実行時に管理対象端末へ適用され、対応する環境変数より優先されます。</p>
+  <p class="lede">ここで保存した設定は、再起動なしで各端末と受信サービスに反映され、対応する環境変数より優先されます。</p>
   ${SETMSG ? `<div class="note">${esc(SETMSG)}</div>` : ''}
   <div class="tabs">${STABS.map(([id, lbl]) =>
     `<button data-settab="${id}" class="${SETTAB===id?'on':''}">${lbl}</button>`).join('')}</div>
@@ -6657,28 +6652,26 @@ const docUrl = d => 'https://github.com/AmanSK5/shadow-ai-guard/blob/'
   + '/' + d;
 
 function setup() {
-  if (loadError) return `<h2>ソース</h2>
-    <div class="note">検出結果を読み取れませんでした: ${esc(uiErrorText(loadError, 0))}</div>
-    <p class="lede">ポータルはLokiから読み取ります。自身では何も収集しません。設定するには、 <code>LOKI_URL</code> 受信サービスが書き込むのと同じLokiを指定します。</p>`;
-  if (!S) return '<h2>ソース</h2><p class="lede">利用可能なステータスがありません。</p>';
+  if (loadError) return `<h2>検出ソース</h2>
+    <div class="note">検出結果を読み込めませんでした: ${esc(uiErrorText(loadError, 0))}</div>
+    <p class="lede">ポータルは Loki から検出結果を読み込むだけで、自身では何も収集しません。<code>LOKI_URL</code> に、受信サービスが書き込むのと同じ Loki を指定してください。</p>`;
+  if (!S) return '<h2>検出ソース</h2><p class="lede">状態を取得できません。</p>';
 
   const g = S.groups || [];
-  return `<h2>ソース</h2>
-  <p class="lede">どの検出ソースが報告していてどれが沈黙しているかを、設定ではなく実際の検出結果から判断します。沈黙している各ソースは開くと、報告を開始するために正確に何が必要かが表示されます。</p>
+  return `<h2>検出ソース</h2>
+  <p class="lede">各検出ソースが報告しているかどうかを、設定内容ではなく実際に届いた検出結果から判定します。報告のないソースは、開くと報告を始めるために必要な設定を確認できます。</p>
 
   <dl class="stats" data-tour="source-overview">
     ${g.map(x => `<div><dt>${x.reporting}/${x.total}</dt><dd>${esc(uiTerm(x.group))}</dd></div>`).join('')}
   </dl>
 
-  ${S.reporting === 0 ? `<div class="note">過去
-  ${esc(S.hours)} 時間以内に何も報告されていません。インストールしたばかりの場合は想定内です - 収集エージェントを1つ実行してください
-  （「はじめに」で手順を説明しています）。ここに表示されます。</div>` : ''}
+  ${S.reporting === 0 ? `<div class="note">過去 ${esc(S.hours)} 時間に報告はありません。導入直後であれば想定どおりです。収集エージェントを1台で実行すると（手順は「設定 › はじめに」）、ここに表示されます。</div>` : ''}
 
   ${g.map(x => `
     <div class="tcard source-group" data-tour="source-table">
     <div class="cardhead"><h3>${esc(uiTerm(x.group))}</h3>
       <span class="pill ${x.reporting ? 'p-ok' : 'p-mut'}">${x.reporting}／${x.total}</span></div>
-    <table class="source-table"><tr><th>ソース</th><th>ステータス</th><th>検出結果</th><th>デバイス</th><th>最終確認</th></tr>
+    <table class="source-table"><tr><th>検出ソース</th><th>状態</th><th>検出件数</th><th>端末数</th><th>最終確認</th></tr>
     ${x.sources.map(r => `<tr>
       <td>${esc(uiSourceLabel(r.source))}
         ${r.reporting ? '' : `<details class="how"><summary>設定方法</summary>
@@ -6687,34 +6680,32 @@ function setup() {
             href="${esc(docUrl(r.doc))}" target="_blank"
             rel="noopener noreferrer">設定ガイドを読む</a></div></details>`}
         ${r.artifact && CFG.managed && CFG.managed.artifacts_ready ? `<div style="margin-top:6px">
-          <button class="mini" data-act="artifact" data-key="${esc(r.artifact)}">事前設定済みアーティファクトをダウンロード</button></div>` : ''}</td>
-      <td>${r.reporting ? '<span class="pill p-ok">レポート中</span>'
+          <button class="mini" data-act="artifact" data-key="${esc(r.artifact)}">設定済みの配布用ファイルをダウンロード</button></div>` : ''}</td>
+      <td>${r.reporting ? '<span class="pill p-ok">報告中</span>'
                         : '<span class="pill p-mut">未報告</span>'}</td>
       <td>${r.findings || '—'}</td><td>${r.devices || '—'}</td>
       <td class="nw">${stamp(r.last_seen)}</td>
     </tr>`).join('')}</table></div>`).join('')}
 
   <div class="tcard" style="padding-bottom:14px">
-  <div class="cardhead"><h3>人とデバイスの紐付け</h3>
+  <div class="cardhead"><h3>利用者と端末の紐付け</h3>
     <span class="pill ${CFG.identity_map_configured ? 'p-ok' : 'p-mut'}">${
       CFG.identity_map_configured ? '対応表設定済み' : '対応表なし'}</span></div>
   <p class="lede">エンドポイントの検出結果から分かるのは、端末とローカルユーザー名です。クラウドの検出結果から分かるのは人物ですが、その人物が使う端末までは特定できません。「この端末はこの人のもの」と紐づけるには、MDM、RMM、CMDB、またはスプレッドシートなどの対応表が必要です。この画面から対応表のひな形を作成できます。</p>
   ${CFG.identity_map_configured ? `<p class="lede">対応表が設定されています。
   ${(() => {
     const un = ents(G.devices || {}).filter(([, d]) => !d.person);
-    if (!un.length) return '対象となるすべてのデバイスに担当者が紐付いています。';
-return `利用者対応表がそれらをカバーしていないため、${ents(G.devices || {}).length} 台のデバイスのうち <strong>${un.length}</strong> 台が未割り当てのままです。この状態は対応表を編集して解消できます。<button class="mini" data-nav="people">人物ページで対応表を編集</button>`;
+    if (!un.length) return 'すべての端末に利用者が紐付いています。';
+return `端末 ${ents(G.devices || {}).length} 台のうち <strong>${un.length}</strong> 台は対応表に含まれていないため、利用者が未登録です。対応表を編集すると減らせます。<button class="mini" data-nav="people">「利用者」画面で対応表を編集</button>`;
   })()}</p>`
   : `<details class="how map-help"><summary>対応表の作成方法</summary><div>
   <ol style="padding-left:18px;line-height:2;margin:6px 0">
     <li><a href="/api/suggest-identities?fmt=csv" style="color:var(--pri)">提案された対応表をダウンロード</a>。ローカルのユーザー名をクラウドソースの ID と照合し、一致しなかったものは入力できるよう一覧表示します。</li>
     <li>すべての行を確認してください。これらは文字列一致であり、1つ間違えると、別人のアクティビティに誤った人物名が紐づきます。</li>
     <li>このファイルはこのリポジトリの外に保管してください。名前付きの人物をマシンに紐づけるため、個人データです。gitではなく、デプロイ設定と一緒に保存してください。</li>
-    <li>設定 <code>IDENTITY_MAP</code> そのパスに設定します。Dockerでは読み取り専用でマウントし、KubernetesではConfigMapまたはSecretをファイルとしてマウントします。</li>
+    <li><code>IDENTITY_MAP</code> にそのファイルのパスを設定します。Docker では読み取り専用でマウントし、Kubernetes では ConfigMap または Secret をファイルとしてマウントします。</li>
   </ol>
-  このファイルは自動的に再読み込みされるため、編集は
-  ${esc(CFG.cache_ttl_seconds || 300)} 秒以内に反映されます。再起動は不要です。対応付けのないデバイス
-  は未割り当てとして表示されます。</div></details>`}</div>
+  このファイルは自動で再読み込みされるため、編集内容は ${esc(CFG.cache_ttl_seconds || 300)} 秒以内に反映されます。再起動は不要です。対応表にない端末は「利用者未登録」と表示されます。</div></details>`}</div>
 
   ${(S.unexpected || []).length ? `<div class="tcard">
   <div class="cardhead"><h3>未認識のソース</h3>

@@ -50,8 +50,8 @@ test('a failed read is not "no subscription"', () => {
   // The bug this exists to stop: answering the question from a read that
   // never happened, and telling a paying customer they have no licence.
   const out = render({state: 'unknown'});
-  assert.match(out, /未読み取り/);
-  assert.match(out, /どちらとも断定されません/);
+  assert.match(out, /未取得/);
+  assert.match(out, /有効・無効のどちらとも表示していません/);
   assert.doesNotMatch(out, /オープンエディション/);
   assert.doesNotMatch(out, /アクティベーション キーを貼り付け/);
 });
@@ -121,7 +121,7 @@ test('only an owner is offered the field', () => {
   for (const role of ['admin', 'viewer']) {
     const out = render({state: 'none'}, {role});
     assert.doesNotMatch(out, /data-act="act-save"/);
-    assert.match(out, /オーナー アカウントが契約を有効化します/);
+    assert.match(out, /契約の有効化はオーナーが行います/);
   }
   assert.match(render({state: 'none'}, {role: 'owner'}), /data-act="act-save"/);
 });
