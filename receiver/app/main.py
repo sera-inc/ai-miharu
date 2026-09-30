@@ -1429,8 +1429,8 @@ def test_mail(req: MailTest, authorization: str = Header(default="")):
     if not conf["ready"]:
         raise HTTPException(400, "a server and a from address are needed first")
     why = _smtp_send(
-        req.to.strip(), "世良AIガバナンス: テストメール",
-        "これは世良AIガバナンスのポータルから送信したテストメールです。\n\n"
+        req.to.strip(), "AIミハル: テストメール",
+        "これはAIミハルのポータルから送信したテストメールです。\n\n"
         "このメールが読めていれば、招待メールも相手に届きます。\n")
     if why:
         return {"ok": False, "detail": why}
@@ -3037,7 +3037,7 @@ def _smtp_send(to: str, subject: str, body: str) -> str:
     return ""
 
 
-INVITE_SUBJECT = "世良AIガバナンスを利用できるようになりました"
+INVITE_SUBJECT = "AIミハルを利用できるようになりました"
 
 # The default, and the thing an estate edits rather than replaces from
 # nothing. Two placeholders, both filled in below.
@@ -3069,7 +3069,7 @@ def _invite_text(username: str) -> tuple[str, str]:
     subject = g("invite_subject", INVITE_SUBJECT)
     body = g("invite_body", INVITE_BODY)
     fields = {"username": username,
-              "portal_url": conf["portal_url"] or "世良AIガバナンスのポータル"}
+              "portal_url": conf["portal_url"] or "AIミハルのポータル"}
     for k, v in fields.items():
         # Plain replacement rather than str.format: a body somebody typed
         # will contain a stray brace sooner or later, and losing an invite
@@ -3142,7 +3142,7 @@ def post_candidates(req: CandidatesPost, request: Request,
         accepted += 1
     if new_names:
         _notify_webhook(
-            "世良AIガバナンス: 新しい AIツール %d 件が確認待ちに入りました: %s"
+            "AIミハル: 新しい AIツール %d 件が確認待ちに入りました: %s"
             % (len(new_names), "、".join(sorted(new_names)[:10])))
     return {"accepted": accepted}
 
@@ -3179,7 +3179,7 @@ def _note_mcp_candidates(f: Finding):
                 "MCP server defined in %s config" % f.tool, "endpoint",
                 f.device if f.device != "unknown" else ""):
             _notify_webhook(
-                "世良AIガバナンス: 未登録の MCP サーバー %r が %s の設定で"
+                "AIミハル: 未登録の MCP サーバー %r が %s の設定で"
                 "見つかり、確認待ちに入りました" % (name, f.tool))
 
 
@@ -3240,7 +3240,7 @@ def _note_process_candidates(f: Finding):
             suggested_tool=(f.tool or "") if (f.tool or "") in _REGISTRY_IDS
             else ""):
         _notify_webhook(
-            "世良AIガバナンス: %r が AI モデルのホストに接続しましたが、既知の"
+            "AIミハル: %r が AI モデルのホストに接続しましたが、既知の"
             "ツール・ブラウザー・システムプロセスのいずれでもないため、"
             "確認待ちに入りました" % (name,))
 

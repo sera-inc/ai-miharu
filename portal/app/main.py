@@ -2565,7 +2565,7 @@ def digest_text(g, s, hours):
                   for k, v in (g.get("tools") or {}).items()),
                  key=lambda kv: (-kv[1], kv[0]))[:5]
     n = len(pa)
-    lines = ["*世良AIガバナンス: 直近 %d 日間*" % round(hours / 24),
+    lines = ["*AIミハル: 直近 %d 日間*" % round(hours / 24),
              "• 個人アカウント %d 件（%d 人）" % (n, len(people)),
              "• 使用中のツール %d 件、端末 %d 台"
              % (counts.get("tools", 0), counts.get("devices", 0))]
@@ -3419,23 +3419,23 @@ def logo(_=Depends(require_page_auth)):
     return FileResponse(STATIC / "logo.png", media_type="image/png")
 
 
-@app.get("/sera-ai-governance-symbol.png")
+@app.get("/ai-miharu-symbol.png")
 def sera_ai_governance_symbol(_=Depends(require_page_auth)):
-    return FileResponse(STATIC / "sera-ai-governance-symbol.png", media_type="image/png")
+    return FileResponse(STATIC / "ai-miharu-symbol.png", media_type="image/png")
 
 
 # The rest of the brand set, each named for the same reason: the page links a
 # fixed handful of files, and nothing here resolves a caller-supplied path.
 # The SVGs are the source of truth (assets/brand/); the colour mark is for
 # light surfaces and the white one for the blue sidebar and the dark theme.
-@app.get("/sera-ai-governance-symbol.svg")
+@app.get("/ai-miharu-symbol.svg")
 def sera_ai_governance_symbol_svg(_=Depends(require_page_auth)):
-    return FileResponse(STATIC / "sera-ai-governance-symbol.svg", media_type="image/svg+xml")
+    return FileResponse(STATIC / "ai-miharu-symbol.svg", media_type="image/svg+xml")
 
 
-@app.get("/sera-ai-governance-symbol-white.svg")
+@app.get("/ai-miharu-symbol-white.svg")
 def sera_ai_governance_symbol_white_svg(_=Depends(require_page_auth)):
-    return FileResponse(STATIC / "sera-ai-governance-symbol-white.svg", media_type="image/svg+xml")
+    return FileResponse(STATIC / "ai-miharu-symbol-white.svg", media_type="image/svg+xml")
 
 
 @app.get("/favicon.ico")

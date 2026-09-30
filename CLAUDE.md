@@ -1,4 +1,4 @@
-# CLAUDE.md — Sera AI Governance 移行
+# CLAUDE.md — AIミハル 移行
 
 このリポジトリは `sera-inc/digital-design-system`（DADS v2.17.1 基盤）への段階移行中。現在は **Phase 1**。正典はデザインシステムの `docs/01_SaaS向けデザインシステム拡張_設計書.md` §6 と `docs/03_移行手順チェックリスト.md`。
 

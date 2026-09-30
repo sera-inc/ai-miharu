@@ -2,13 +2,13 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/sera-ai-governance-lockup-dark.png">
-    <img src="assets/brand/sera-ai-governance-lockup-light.png" alt="世良AIガバナンス" width="640">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/ai-miharu-lockup-dark.png">
+    <img src="assets/brand/ai-miharu-lockup-light.png" alt="AIミハル" width="640">
   </picture>
 </p>
 
 <p align="center">
-  <strong>組織で使われている AI を、端末・アカウント・費用まで見える化する、自社運用のオープンソース</strong><br>
+  <strong>社内AIの利用を見える化・管理する、自社運用のオープンソース</strong><br>
   ブラウザー・CLI・IDE・デスクトップ・ネットワーク・クラウド・MCP
 </p>
 
@@ -20,19 +20,19 @@
 </p>
 
 > **この版について**: 株式会社世良が、Aman Karir 氏の [Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard)（Apache License 2.0）をもとに、
-> 画面とメッセージの日本語化、デジタル庁デザインシステム（DADS）に基づく画面、「世良AIガバナンス」としての名称・シンボルを加えた**派生版**です。
+> 画面とメッセージの日本語化、デジタル庁デザインシステム（DADS）に基づく画面、「AIミハル」としての名称・シンボルを加えた**派生版**です。
 > 試験段階のオープンソースで、**ホステッド SaaS と有償サポートは現時点で提供していません**。
 > 原著プロジェクトが運営・推奨・サポートするものではありません。詳しくは[原著・ライセンス・商標](#attribution)を参照してください。
 
 <p align="center">
-  <img src="assets/screenshots/overview.webp" alt="世良AIガバナンスの概要画面。全体状況、未解決の個人アカウント、観測したAIツール、収集エージェントのカバー率、AI台帳の判断記録を表示（サンプルデータ）" width="100%">
+  <img src="assets/screenshots/overview.webp" alt="AIミハルの概要画面。全体状況、未解決の個人アカウント、観測したAIツール、収集エージェントのカバー率、AI台帳の判断記録を表示（サンプルデータ）" width="100%">
 </p>
 <p align="center"><sub>概要画面の例（サンプルデータ）。画面はすべて、この README の手順で起動できるデモから撮影しています。</sub></p>
 
 ## 何ができるか
 
 AI の利用は、ブラウザーの拡張機能、開発者の CLI、IDE のプラグイン、デスクトップアプリ、ネットワーク、クラウドのサインインなど、複数の場所に現れます。
-世良AIガバナンスは、それらを同じ形の「検出結果」にそろえて集め、**どのツールが、どの端末・アカウントで使われているか**、**誰が何を判断したか**、
+AIミハルは、それらを同じ形の「検出結果」にそろえて集め、**どのツールが、どの端末・アカウントで使われているか**、**誰が何を判断したか**、
 **有償契約と実際の利用が合っているか**を、ひとつのポータルで確認できるようにします。
 
 | 利用環境 | 観測できるもの |
@@ -66,8 +66,8 @@ AI の利用は、ブラウザーの拡張機能、開発者の CLI、IDE のプ
 Docker（Compose v2）があれば、クラスターや認証情報なしで、実物のポータル・受信サービス・ログ保存先・Grafana を架空のデータで動かせます。
 
 ```bash
-git clone https://github.com/sera-inc/sera-ai-governance.git
-cd sera-ai-governance/demo
+git clone https://github.com/sera-inc/ai-miharu.git
+cd ai-miharu/demo
 docker compose up -d --build
 ```
 
@@ -89,8 +89,8 @@ docker compose up -d --build
 原著のイメージは取得しません。
 
 ```bash
-git clone https://github.com/sera-inc/sera-ai-governance.git
-cd sera-ai-governance/deploy/compose
+git clone https://github.com/sera-inc/ai-miharu.git
+cd ai-miharu/deploy/compose
 cp .env.example .env
 mkdir -p secrets && openssl rand -hex 32 > secrets/auth_token
 chmod 700 secrets && chmod 640 secrets/* && sudo chown :65532 secrets/*
@@ -132,7 +132,7 @@ docker compose logs receiver | grep setup_code
 
 ## 既知の制限
 
-- 世良AIガバナンスは試験段階の OSS です。可用性・サポート水準・特定の規格への適合を保証しません。
+- AIミハルは試験段階の OSS です。可用性・サポート水準・特定の規格への適合を保証しません。
 - 最小の Compose 構成のスキャナーは、クラウド側の認証情報（Entra、Jamf、SentinelOne など。`scanner.env`）を設定するまで検出を実行しません。そのあいだ、ログに `no scanner ran: check credentials and policy.yaml` と出て、`docker compose ps` では `unhealthy` と表示されます（2026-09-30 に手元のビルドで確認）。未設定の状態を示す表示で、ほかのサービスはこのコンテナに依存しません。
 - ポータルの「更新」カードは原著のリリース情報を参照する作りのため、この派生版の Compose 構成では既定でオフにしています（`UPDATE_CHECK`）。更新は `git pull` と `docker compose up -d --build` です。
 - Kubernetes（Helm）の経路、Jamf・Intune・SentinelOne などの外部サービスとの実接続は、この環境では確認していません（疑似の ID プロバイダーとサンプルデータで確認）。
@@ -169,7 +169,7 @@ docker compose logs receiver | grep setup_code
 
 - **原著**: Shadow AI Guard（作者 Aman Karir 氏）<https://github.com/AmanSK5/shadow-ai-guard>。著作権表示は [NOTICE](NOTICE) とソースファイルの表示にあり、削除・変更していません。
 - **ライセンス**: [Apache License 2.0](LICENSE)。この派生版も同じライセンスで公開します。改変の内容は、このリポジトリの git 履歴と [NOTICE](NOTICE) に記載しています。
-- **独立した提供**: 世良AIガバナンスは株式会社世良が独立して提供する派生版で、Shadow AI Guard プロジェクトが運営・推奨・サポートするものではありません。
+- **独立した提供**: AIミハルは株式会社世良が独立して提供する派生版で、Shadow AI Guard プロジェクトが運営・推奨・サポートするものではありません。
   原著のソフトウェアは、公式のリポジトリから無償で入手できます。
 - **名称とロゴ**: 「Shadow AI Guard」の名称とロゴは原著の作者が商標として主張しています（[TRADEMARKS.md](TRADEMARKS.md)）。この派生版は原著のロゴを使わず、別の名称とシンボルを使います。
   シンボルの由来は [assets/brand/README.md](assets/brand/README.md) に記録しています。
@@ -181,12 +181,12 @@ docker compose logs receiver | grep setup_code
 
 ## English summary
 
-**Sera AI Governance (世良AIガバナンス)** is a Japanese-language, self-hosted open-source derivative of
+**AIミハル** is a Japanese-language, self-hosted open-source derivative of
 [Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard) by Aman Karir (Apache License 2.0), modified by Sera Inc. (株式会社世良).
 It shows which AI tools are used across browsers, CLIs, IDEs, desktop apps, the network, the cloud and MCP, on which devices and accounts,
 what the organisation decided about each tool, and whether paid seats match real use.
 
-- Try it: `git clone https://github.com/sera-inc/sera-ai-governance.git && cd sera-ai-governance/demo && docker compose up -d --build`, then open <http://localhost:8091> (`admin` / `admin-demo-portal`, demo-only). All data is fictional.
+- Try it: `git clone https://github.com/sera-inc/ai-miharu.git && cd ai-miharu/demo && docker compose up -d --build`, then open <http://localhost:8091> (`admin` / `admin-demo-portal`, demo-only). All data is fictional.
 - Deploy: Docker Compose under [`deploy/compose`](deploy/compose/README.md), built from this checkout. The Helm chart is included but points at the upstream project's English images by default; that route is unverified for this fork.
 - Status: an experimental OSS release. No hosted service and no paid support are offered. Not operated, supported or endorsed by the Shadow AI Guard project or the Digital Agency of Japan.
 - Upstream README: [docs/upstream-README.md](docs/upstream-README.md). Licence and attribution: [LICENSE](LICENSE), [NOTICE](NOTICE), [TRADEMARKS.md](TRADEMARKS.md).

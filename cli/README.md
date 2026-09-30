@@ -1,6 +1,6 @@
 # aiguardctl
 
-> **世良AIガバナンス（派生版）の注意**: この文書は原著 Shadow AI Guard の英語のドキュメントを引き継いでいます。
+> **AIミハル（派生版）の注意**: この文書は原著 Shadow AI Guard の英語のドキュメントを引き継いでいます。
 > 文中の `ghcr.io/amansk5/shadow-ai-guard/...` のイメージ・Helm チャートと、`AmanSK5/shadow-ai-guard` のタグは、
 > **原著（英語版の画面）の公開物**を指します。この派生版のイメージとチャートは公開していないため、そのまま実行すると
 > 日本語版ではなく原著が入ります。この派生版で動作を確認している手順は **Docker Compose** です（[deploy/compose/README.md](../deploy/compose/README.md)）。

@@ -20,7 +20,7 @@ npm run paste-guard -- --out ./out         # 貼り付けガードの動画（We
 
 - サインインは、デモの公開の値（`admin` / `admin-demo-portal`）が既定です。`PORTAL_URL`、`PORTAL_USER`、`PORTAL_PASSWORD`、`GUARD_DEMO_URL` で変更できます。
 - 画面は日本語のフォントに依存します（Noto Sans CJK JP など）。フォントの違いで、文字の幅が少し変わります。
-- 出力を、LP（サイトの `public/images/ai-governance/screens/`、`public/videos/ai-governance/`）と README（`assets/screenshots/`）にコピーします。手順の詳細はサイト側の `docs/sera-ai-governance-lp.md` にあります。
+- 出力を、LP（サイトの `public/images/ai-governance/screens/`、`public/videos/ai-governance/`）と README（`assets/screenshots/`）にコピーします。手順の詳細はサイト側の `docs/ai-miharu-lp.md` にあります。
 
 ## 撮影したものについて
 

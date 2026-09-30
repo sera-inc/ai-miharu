@@ -351,7 +351,7 @@ The extension point is always the finding. A new detection source emits the
 schema and posts to the receiver; nothing else changes. See
 `docs/writing-a-scanner.md` for the concrete steps.
 
-## 世良AIガバナンス（派生版）: 動作確認済みの構成と常駐メモリ（2026-09-30）
+## AIミハル（派生版）: 動作確認済みの構成と常駐メモリ（2026-09-30）
 
 **動作を確認している構成は Docker Compose です。** 本番向けの最小構成は [`deploy/compose`](../deploy/compose/README.md)（受信サービス、ポータル、スキャナー。ログ保存先と Grafana は `with-logs` プロファイル）で、
 イメージはクローンしたこのリポジトリからビルドされる。`demo/` はサンプルデータ、疑似の Entra、メール受信箱（Mailpit）、拡張機能のデモを含む**デモ専用**で、本番の構成に含めない。

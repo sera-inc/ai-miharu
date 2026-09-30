@@ -8,9 +8,9 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>世良AIガバナンス</title>
+<title>AIミハル</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="/sera-ai-governance-symbol.svg">
+<link rel="icon" type="image/svg+xml" href="/ai-miharu-symbol.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 /* Light is the default and dark is the [data-theme=dark] overlay. The
@@ -979,7 +979,7 @@ a.libtn:hover{border-color:var(--pri)}
 <div class="shell" id="shell">
   <aside id="app-sidebar" tabindex="-1">
     <button class="brand" id="brand-home" type="button"
-      aria-label="概要へ移動"><img src="/sera-ai-governance-symbol-white.svg" alt=""><span>世良AIガバナンス</span></button>
+      aria-label="概要へ移動"><img src="/ai-miharu-symbol-white.svg" alt=""><span>AIミハル</span></button>
     <div class="brandline"></div>
     <button class="tenant-switch" id="estate-status" type="button"
       aria-label="システム状態を開く">
@@ -993,13 +993,13 @@ a.libtn:hover{border-color:var(--pri)}
       <div class="mono" id="footver">v</div>
       <div>株式会社世良</div>
       <div><a href="mailto:info@sera-inc.co.jp">お問い合わせ</a></div>
-      <div><a href="https://github.com/sera-inc/sera-ai-governance" target="_blank" rel="noopener">世良AIガバナンスの公開リポジトリ</a></div>
+      <div><a href="https://github.com/sera-inc/ai-miharu" target="_blank" rel="noopener">AIミハルの公開リポジトリ</a></div>
       <div><a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank" rel="noopener">原著ソース（Shadow AI Guard）</a></div>
     </span></div>
   </aside>
   <div>
     <div class="topbar" role="banner">
-      <h1 class="sr-only">世良AIガバナンス</h1>
+      <h1 class="sr-only">AIミハル</h1>
       <button class="mobile-nav" id="mobile-nav" type="button" title="ナビゲーションを開く"
         aria-label="ナビゲーションを開く" aria-controls="app-sidebar" aria-expanded="false">
   <svg class="mobile-nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -1501,7 +1501,7 @@ function showLogin(msg) {
       create ? 'アカウントを作成' : 'サインイン'}</button>`;
   app.innerHTML = `<div style="max-width:470px;margin:9vh auto 0">
     <div class="wcard licard" style="padding:28px 30px">
-    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img class="mark-on-light" src="/sera-ai-governance-symbol.svg" alt="" style="width:52px;height:52px;object-fit:contain"><img class="mark-on-dark" src="/sera-ai-governance-symbol-white.svg" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">世良AIガバナンス</strong></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img class="mark-on-light" src="/ai-miharu-symbol.svg" alt="" style="width:52px;height:52px;object-fit:contain"><img class="mark-on-dark" src="/ai-miharu-symbol-white.svg" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">AIミハル</strong></div>
     <h2>${create ? '管理者アカウントを作成' : 'サインイン'}</h2>
     <p class="lede">${create
       ? `管理者アカウントはまだありません。受信サービスが起動時に1回限りのセットアップコードをログへ出力しています。<code>kubectl logs deploy/&lt;release&gt;-ai-guard | grep setup_code</code> または <code>docker compose logs receiver</code> で確認してください。コードは1回だけ使えます。分からなくなった場合は、受信サービスを再起動すると新しいコードが発行されます。`
@@ -1527,8 +1527,8 @@ function showLogin(msg) {
   </div>
   <p class="src-note" style="text-align:center;margin-top:14px">株式会社世良 ·
     <a href="mailto:info@sera-inc.co.jp" style="color:inherit">お問い合わせ</a> ·
-    <a href="https://github.com/sera-inc/sera-ai-governance" target="_blank"
-       rel="noopener" style="color:inherit">世良AIガバナンスの公開リポジトリ</a> ·
+    <a href="https://github.com/sera-inc/ai-miharu" target="_blank"
+       rel="noopener" style="color:inherit">AIミハルの公開リポジトリ</a> ·
     <a href="https://github.com/AmanSK5/shadow-ai-guard" target="_blank"
        rel="noopener" style="color:inherit">原著ソース（Shadow AI Guard）</a></p>
   </div>`;
@@ -4526,7 +4526,7 @@ async function iso() {
     ? Math.round((e.sources_reporting || 0) / e.sources_known * 100) : 0;
 
   return `<h2>ISO/IEC 42001 証跡</h2>
-  <p class="lede">世良AIガバナンスが提示できる記録と保管場所の一覧です。適合状況の点数化や規格条項との対応付けは行わず、管理策が満たされているかを判断するものでもありません。</p>
+  <p class="lede">AIミハルが提示できる記録と保管場所の一覧です。適合状況の点数化や規格条項との対応付けは行わず、管理策が満たされているかを判断するものでもありません。</p>
 
   <section class="evidence-summary" aria-label="証跡の概要">
     <div class="evidence-summary-lead">
@@ -4731,7 +4731,7 @@ function uiTestText(raw) {
     return 'クラスター内から ' + m[1] + '/healthz に到達できませんでした（' + m[2] + '）。この状態は正常な場合があります。URL が端末の VPN または Tailscale ネットワークからしか到達できない場合は、管理対象端末で curl ' + m[1] + '/healthz を実行して確認してください。';
   }
   if ((m = s.match(/^(.+?) answered, but not like an ai-guard receiver$/))) {
-    return m[1] + ' は応答しましたが、世良AIガバナンスの受信サービスとして認識できません。';
+    return m[1] + ' は応答しましたが、AIミハルの受信サービスとして認識できません。';
   }
   if (s === 'the host has no dot: machines other than this one cannot resolve a short name. On Tailscale use the full .ts.net address, not the ingress short name.') {
     return 'ホスト名にドットがありません。この端末以外では短い名前を解決できません。Tailscale では短い名前ではなく、完全な .ts.net アドレスを使用してください。';
@@ -5510,7 +5510,7 @@ async function mailSave() {
 // caret with it, which makes the box unusable to actually type in.
 function mailPreviewHtml() {
   const name = displayAccountName((AUTH && AUTH.username) || '利用者');
-  const portal = (MAILW.portal || '').trim() || '世良AIガバナンスポータル';
+  const portal = (MAILW.portal || '').trim() || 'AIミハルポータル';
   const fill = t => (t || '').split('{username}').join(name)
                              .split('{portal_url}').join(portal);
   // The HOST, compared exactly - not a substring of the URL. A substring
@@ -6435,7 +6435,7 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
         <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ確認していません' : '確認しない設定')}</dd></div></dl>
       ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(uiErrorText(u.error,0))}</p>` : ''}
       ${!u.enabled ? `<p class="health-note">更新の確認はオフです（<span class="mono">UPDATE_CHECK=off</span>）。このポータルは外部に問い合わせません。原著のリリースは <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">GitHub</a> で確認できます。</p>` : ''}
-      <p class="health-note">この更新確認は、原著 Shadow AI Guard（英語版）のリリースを対象にしています。原著のイメージに更新すると、世良AIガバナンスの日本語画面は原著の画面に置き換わります。世良AIガバナンスの変更は<a href="https://github.com/sera-inc/sera-ai-governance" target="_blank" rel="noopener">公開リポジトリ</a>で確認してください。</p>
+      <p class="health-note">この更新確認は、原著 Shadow AI Guard（英語版）のリリースを対象にしています。原著のイメージに更新すると、AIミハルの日本語画面は原著の画面に置き換わります。AIミハルの変更は<a href="https://github.com/sera-inc/ai-miharu" target="_blank" rel="noopener">公開リポジトリ</a>で確認してください。</p>
       ${!u.comparable && u.enabled ? `<p class="health-note">このポータルはリリース番号を持たないため、最新リリースを表示するだけで比較はしません。</p>` : ''}
       ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードすると受信サービスとポータルが再起動します。保存済みのデータは変更されず、収集エージェントはその間も報告を続けます。</p>
       <details class="how"><summary>${esc(route)} でのアップグレード方法</summary><div>
@@ -8193,7 +8193,7 @@ function budgetReport() {
   </div>
   <div class="rep-head">
     <h2 style="margin-bottom:4px">AI支出とシート利用</h2>
-    <p class="src-note" style="margin-top:0">${esc(stamp)} UTC に世良AIガバナンス${CFG.version ? ' ' + (CFG.version === 'dev' ? '（開発版）' : esc(CFG.version)) : ''}で作成 · 集計期間: 直近 ${days} 日間${BRNAMES ? '' : ' · 氏名は非表示'}</p>
+    <p class="src-note" style="margin-top:0">${esc(stamp)} UTC にAIミハル${CFG.version ? ' ' + (CFG.version === 'dev' ? '（開発版）' : esc(CFG.version)) : ''}で作成 · 集計期間: 直近 ${days} 日間${BRNAMES ? '' : ' · 氏名は非表示'}</p>
   </div>
   <dl class="stats">
     <div><dt>${conv ? bMoney(conv.total, bPrefCur()) : (spendParts.join(' + ') || '0')}</dt>
@@ -10978,7 +10978,7 @@ const TOUR_VERSION = '2';
 //   no    - label for the leave button, same reason
 const TOURS = {
   admin: [
-    {title: '世良AIガバナンスへようこそ',
+    {title: 'AIミハルへようこそ',
      body: 'ポータルの主な画面を、約2分のツアーでご案内します。途中でいつでも終了できます。',
      ok: '開始'},
     {view: 'overview', sel: '[data-area="discovery"]',
@@ -11025,7 +11025,7 @@ const TOURS = {
      body: 'ロゴの下の環境名をクリックすると開きます。ポータルがログ保存先とレジストリに接続できているか、データがどれだけ新しいかを確認できます。'},
   ],
   viewer: [
-    {title: '世良AIガバナンスへようこそ',
+    {title: 'AIミハルへようこそ',
      body: 'ポータルの主な画面を、約2分のツアーでご案内します。このアカウントは、すべての画面を閲覧できますが、変更はできません。監査担当者やレビュー担当者に向いた権限です。',
      ok: '開始'},
     {view: 'overview', sel: '[data-area="discovery"]',

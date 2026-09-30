@@ -45,6 +45,10 @@ logged with the likely cause. If collectors report POST failures, check
 Edit `.env` only if you need to. The four images are built from this checkout
 (`IMAGE_REPO=sera-ai-governance`, `IMAGE_TAG=local`), so the first start takes a
 few minutes to build. Everything else can wait for the portal.
+The local image prefix remains `sera-ai-governance` for existing Compose
+deployments; it is a compatibility label, not the AIミハル service name. CI
+publishes images under `ghcr.io/sera-inc/ai-miharu/` after a successful main
+build. Set `IMAGE_REPO` explicitly only if you intend to pull from a registry.
 
     docker compose up -d --build
     docker compose logs receiver | grep setup_code

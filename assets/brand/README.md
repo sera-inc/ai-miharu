@@ -1,18 +1,18 @@
-# 世良AIガバナンスのブランド素材
+# AIミハルのブランド素材
 
 | ファイル | 内容 |
 |---|---|
-| `sera-ai-governance-symbol.svg` | シンボル（カラー）。**原本**。ほかの画像はここから生成する |
-| `sera-ai-governance-symbol-white.svg` | シンボル（白）。青地のサイドバーと、ダーク表示のサインイン画面で使う |
-| `sera-ai-governance-symbol-512.png` | 512px の PNG（原本から生成）。README、プレビュー、`/logo.png` などの互換用 |
-| `sera-ai-governance-lockup-light.png` / `-dark.png` | シンボルと名称を並べた横長の画像（README 用。明るい面・暗い面） |
+| `ai-miharu-symbol.svg` | シンボル（カラー）。**原本**。ほかの画像はここから生成する |
+| `ai-miharu-symbol-white.svg` | シンボル（白）。青地のサイドバーと、ダーク表示のサインイン画面で使う |
+| `ai-miharu-symbol-512.png` | 512px の PNG（原本から生成）。README、プレビュー、`/logo.png` などの互換用 |
+| `ai-miharu-lockup-light.png` / `-dark.png` | シンボルと名称を並べた横長の画像（README 用。明るい面・暗い面） |
 
-ポータルは、`portal/app/static/` にある複製（`sera-ai-governance-symbol.svg`、`-white.svg`、`.png`、`favicon.ico`、`apple-touch-icon.png`、`logo.png`）を配信する。
+ポータルは、`portal/app/static/` にある複製（`ai-miharu-symbol.svg`、`-white.svg`、`.png`、`favicon.ico`、`apple-touch-icon.png`、`logo.png`）を配信する。
 複製は `node tools/brand-render.cjs`（ヘッドレス Chromium と `playwright-core` が要る）が SVG から作り直す。SVG を直したら、この手順で PNG・ICO を作り直し、テスト（`portal/tests/test_brand_assets.py`）を通す。
 
 ## 由来
 
-- 2026-09-29〜30 に、株式会社世良の「世良AIガバナンス」のために作成した。円を基調に、「記録」を表す 3 本の線と、「確認」を表すチェックマークを組み合わせている。
+- 2026-09-29〜30 に、株式会社世良の「AIミハル」のために作成した。円を基調に、「記録」を表す 3 本の線と、「確認」を表すチェックマークを組み合わせている。
 - **作り方**: 画像生成モデル（OpenAI の Image 2.5。Codex 経由）で出した候補画像をもとに、同じ構図を **SVG のパスとして描き直した**。生成画像のピクセルは使っていない。
   描き直した SVG と候補画像の輪郭は、重ね合わせでほぼ一致することを確認した（差は輪郭の細い縁だけ）。16px・32px・48px と、明るい面・青地・暗い面で、旧シンボルよりも判別しやすいことを目視で確認した。
 - **原著の Shadow AI Guard のロゴ・名称のデザインは使っていない**（フード付きの人物のロゴは、この派生版から取り除いた）。政府・公的機関の紋章や、既存の企業ロゴを模してもいない。

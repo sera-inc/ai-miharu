@@ -18,9 +18,9 @@ HTML = (main.STATIC / "index.html").read_text(encoding="utf-8")
 ROUTES = {
     "/favicon.ico": ("favicon.ico", "image/x-icon"),
     "/apple-touch-icon.png": ("apple-touch-icon.png", "image/png"),
-    "/sera-ai-governance-symbol.svg": ("sera-ai-governance-symbol.svg", "image/svg+xml"),
-    "/sera-ai-governance-symbol-white.svg": ("sera-ai-governance-symbol-white.svg", "image/svg+xml"),
-    "/sera-ai-governance-symbol.png": ("sera-ai-governance-symbol.png", "image/png"),
+    "/ai-miharu-symbol.svg": ("ai-miharu-symbol.svg", "image/svg+xml"),
+    "/ai-miharu-symbol-white.svg": ("ai-miharu-symbol-white.svg", "image/svg+xml"),
+    "/ai-miharu-symbol.png": ("ai-miharu-symbol.png", "image/png"),
     "/logo.png": ("logo.png", "image/png"),
 }
 
@@ -47,24 +47,24 @@ def test_the_page_links_only_routes_that_exist():
     assert links, "the page should declare its icons"
     assert set(links) <= served
     assert "/favicon.ico" in links and "/apple-touch-icon.png" in links
-    assert "/sera-ai-governance-symbol.svg" in links
+    assert "/ai-miharu-symbol.svg" in links
 
 
 def test_the_public_logo_route_is_the_current_mark_not_the_upstream_logo():
     # The route survives for old bookmarks and READMEs; it serves the same
     # bytes as the symbol, never the hooded Shadow AI Guard logo.
-    assert (main.STATIC / "logo.png").read_bytes() == (main.STATIC / "sera-ai-governance-symbol.png").read_bytes()
+    assert (main.STATIC / "logo.png").read_bytes() == (main.STATIC / "ai-miharu-symbol.png").read_bytes()
 
 
 def test_the_sidebar_uses_the_white_mark_and_the_sign_in_card_has_both():
-    assert re.search(r'id="brand-home"[^>]*>\s*<img src="/sera-ai-governance-symbol-white\.svg"', HTML)
-    assert 'class="mark-on-light" src="/sera-ai-governance-symbol.svg"' in HTML
-    assert 'class="mark-on-dark" src="/sera-ai-governance-symbol-white.svg"' in HTML
+    assert re.search(r'id="brand-home"[^>]*>\s*<img src="/ai-miharu-symbol-white\.svg"', HTML)
+    assert 'class="mark-on-light" src="/ai-miharu-symbol.svg"' in HTML
+    assert 'class="mark-on-dark" src="/ai-miharu-symbol-white.svg"' in HTML
     assert "[data-theme=dark] .mark-on-light{display:none}" in HTML
 
 
 def test_the_svg_sources_carry_an_accessible_title_and_no_script():
-    for name in ("sera-ai-governance-symbol.svg", "sera-ai-governance-symbol-white.svg"):
+    for name in ("ai-miharu-symbol.svg", "ai-miharu-symbol-white.svg"):
         svg = (main.STATIC / name).read_text(encoding="utf-8")
-        assert "<title" in svg and "世良AIガバナンス" in svg
+        assert "<title" in svg and "AIミハル" in svg
         assert "<script" not in svg and "onload" not in svg.lower()

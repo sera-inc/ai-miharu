@@ -4,7 +4,7 @@
 
 # ai-guard, deployed with Docker Compose.
 #
-# Sera AI Governance (世良AIガバナンス) fork: the four images are BUILT from this
+# AIミハル fork: the four images are BUILT from this
 # checkout by default, so a plain clone runs this repository's code - the
 # Japanese portal and the bundled DADS design tokens - rather than the upstream
 # project's English images. `docker compose up -d --build` builds and starts.

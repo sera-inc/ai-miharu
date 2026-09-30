@@ -2,7 +2,7 @@
 
 # Shadow AI Guard — upstream README (English)
 
-> **世良AIガバナンスのリポジトリでの位置づけ**: このファイルは、原著 [Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard)（Aman Karir 氏、Apache License 2.0）の README を、由来を示す資料と英語のドキュメントとして残したものです。
+> **AIミハルのリポジトリでの位置づけ**: このファイルは、原著 [Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard)（Aman Karir 氏、Apache License 2.0）の README を、由来を示す資料と英語のドキュメントとして残したものです。
 > 本文の `git clone` / `helm install` の手順は**原著の公開物**（英語版の画面）を指します。この派生版の入口は [トップの README.md](../README.md) です。
 > 原著のロゴ画像はこの派生版では使用しません。
 >

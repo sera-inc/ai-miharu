@@ -13,13 +13,13 @@ or binary form and whether or not modified, must retain this NOTICE file,
 the copyright notice above and the attribution notices in the source files.
 A derivative work may add its own notices; it may not remove or alter these.
 
-世良AIガバナンス (Sera AI Governance)
+AIミハル
 This derivative work is published by 株式会社世良 (Sera Inc.) at
-https://github.com/sera-inc/sera-ai-governance. It is based on Shadow AI Guard by
+https://github.com/sera-inc/ai-miharu. It is based on Shadow AI Guard by
 Aman Karir, whose notice appears at the top of this file and is unchanged.
 株式会社世良 modified the software in 2026: Japanese-language text in the portal, the
 browser extension and the demo; a portal interface based on the DADS design tokens
-(below); the name 世良AIガバナンス and its symbol (assets/brand/); a Docker Compose route
+(below); the name AIミハル and its symbol (assets/brand/); a Docker Compose route
 that builds the images from this repository; and sample data. The changes are recorded in
 the git history of this repository.
 This derivative work is provided independently by 株式会社世良. It is not operated,

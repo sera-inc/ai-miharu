@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Renders the PNG / ICO exports of the Sera AI Governance symbol from the SVG sources
+// Renders the PNG / ICO exports of the AIミハル symbol from the SVG sources
 // in assets/brand/. The SVG files are the source of truth; nothing here draws the mark.
 //
 //   node tools/brand-render.cjs [--chromium /path/to/chrome] [--playwright /path/to/node_modules]
@@ -32,7 +32,7 @@ function ico(pngs) {
 (async () => {
   const browser = await chromium.launch({ executablePath: arg('--chromium'), args: ['--no-sandbox'] });
   const svg = f => 'data:image/svg+xml;base64,' + fs.readFileSync(path.join(brand, f)).toString('base64');
-  const color = svg('sera-ai-governance-symbol.svg'), white = svg('sera-ai-governance-symbol-white.svg');
+  const color = svg('ai-miharu-symbol.svg'), white = svg('ai-miharu-symbol-white.svg');
   async function shot(html, w, h, transparent = true, scale = 1) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: scale });
     const page = await ctx.newPage();
@@ -45,8 +45,8 @@ function ico(pngs) {
   const write = (file, buf) => { fs.writeFileSync(file, buf); fs.chmodSync(file, 0o644); console.log('wrote', path.relative(process.cwd(), file), buf.length); };
 
   const png512 = await shot(mark(color, 512), 512, 512);
-  write(path.join(brand, 'sera-ai-governance-symbol-512.png'), png512);
-  write(path.join(staticDir, 'sera-ai-governance-symbol.png'), png512);
+  write(path.join(brand, 'ai-miharu-symbol-512.png'), png512);
+  write(path.join(staticDir, 'ai-miharu-symbol.png'), png512);
   write(path.join(staticDir, 'logo.png'), png512);           // /logo.png: the old upstream logo is gone
 
   // Apple touch icon: opaque, mark centred with margin (iOS rounds the corners itself).
@@ -60,9 +60,9 @@ function ico(pngs) {
 
   // Lockups for READMEs (light and dark surfaces). Text is rendered here, so viewers need no font.
   const lockup = (src, ink) => `<div style="width:1200px;height:300px;display:flex;align-items:center;gap:36px;padding:0 24px;box-sizing:border-box;font-family:'Noto Sans JP','Noto Sans CJK JP','Hiragino Sans','Yu Gothic',sans-serif">
-    ${mark(src, 220)}<div style="color:${ink};line-height:1.15"><div style="font-size:92px;font-weight:800;letter-spacing:.01em">世良AIガバナンス</div>
-    <div style="font-size:34px;font-weight:500;opacity:.8;margin-top:10px">組織で使われている AI を、端末・アカウント・費用まで見える化</div></div></div>`;
-  write(path.join(brand, 'sera-ai-governance-lockup-light.png'), await shot(lockup(color, '#1a1a1a'), 1200, 300));
-  write(path.join(brand, 'sera-ai-governance-lockup-dark.png'), await shot(lockup(white, '#ffffff'), 1200, 300));
+    ${mark(src, 220)}<div style="color:${ink};line-height:1.15"><div style="font-size:92px;font-weight:800;letter-spacing:.01em">AIミハル</div>
+    <div style="font-size:34px;font-weight:500;opacity:.8;margin-top:10px">社内AIの利用を見える化・管理</div></div></div>`;
+  write(path.join(brand, 'ai-miharu-lockup-light.png'), await shot(lockup(color, '#1a1a1a'), 1200, 300));
+  write(path.join(brand, 'ai-miharu-lockup-dark.png'), await shot(lockup(white, '#ffffff'), 1200, 300));
   await browser.close();
 })();

@@ -27,14 +27,14 @@ def test_the_stylesheet_is_one_named_route_behind_page_auth():
 
 
 def test_service_symbol_uses_the_page_auth_boundary():
-    route = next(r for r in main.app.routes if getattr(r, "path", "") == "/sera-ai-governance-symbol.png")
+    route = next(r for r in main.app.routes if getattr(r, "path", "") == "/ai-miharu-symbol.png")
     assert main.require_page_auth in [d.call for d in route.dependant.dependencies]
     resp = route.endpoint()
-    assert str(resp.path) == str(main.STATIC / "sera-ai-governance-symbol.png")
+    assert str(resp.path) == str(main.STATIC / "ai-miharu-symbol.png")
     assert resp.media_type == "image/png"
     # The page itself draws the mark from the SVG sources (test_brand_assets.py
     # covers them); the PNG stays served for READMEs, previews and old links.
-    assert "/sera-ai-governance-symbol.svg" in HTML
+    assert "/ai-miharu-symbol.svg" in HTML
 
 
 def test_pinned_destinations_are_stored_as_a_string():

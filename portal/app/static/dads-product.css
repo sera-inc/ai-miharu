@@ -1,4 +1,4 @@
-/* 世良AIガバナンス 製品アダプター: DADS Layer 1（--dads-*）の上に載る、製品ローカルの Layer 2 拡張案（--app-sg-*）。 */
+/* AIミハル 製品アダプター: DADS Layer 1（--dads-*）の上に載る、製品ローカルの Layer 2 拡張案（--app-sg-*）。 */
 /* マッピング案は DeepSeek v4.1 Flash の出力（deepseek-v4.1-flash:cloud）で、人間による承認ではない。詳細は docs/mapping.md。 */
 /* Layer 1 は tools/dads の生成物または外部マウントで、この製品は改変しない。ダーク表示は維持する。 */
 
