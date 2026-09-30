@@ -24,6 +24,9 @@ ENV TZ=UTC
 
 WORKDIR /srv
 
+# The base image's pip 25.0.1 has fixed-version advisories; keep the build
+# installer at or above the first version that contains all current fixes.
+RUN python -m pip install --no-cache-dir --upgrade 'pip==26.2.1'
 COPY requirements.lock ./
 # Hash-verified dependency install first, then the package itself with no
 # dependency resolution: the lockfile is the source of truth for what runs.
