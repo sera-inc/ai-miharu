@@ -39,3 +39,7 @@ identity-map.csv
 
 # DADS token generator dependencies (installed by `npm ci` in tools/dads)
 tools/dads/node_modules/
+
+# Screenshot tooling dependencies (installed by `npm ci` in tools/screenshots)
+tools/screenshots/node_modules/
+tools/screenshots/out/

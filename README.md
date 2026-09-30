@@ -155,6 +155,7 @@ docker compose logs receiver | grep setup_code
 | DADS の適用範囲と限界 | [docs/dads-runtime-mount.md](docs/dads-runtime-mount.md)、[docs/mapping.md](docs/mapping.md)、[docs/deviations.md](docs/deviations.md) |
 | 日本語表記の方針 | [docs/ja-ui-copy-review.md](docs/ja-ui-copy-review.md) |
 | ブランド素材と由来 | [assets/brand/README.md](assets/brand/README.md) |
+| 画面と動画の撮影（開発者向け） | [tools/screenshots/README.md](tools/screenshots/README.md) |
 | セキュリティモデル | [SECURITY.md](SECURITY.md) |
 | 原著の README（英語） | [docs/upstream-README.md](docs/upstream-README.md) |
 
