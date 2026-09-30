@@ -21,8 +21,8 @@
 #                           dashboard.
 #
 # Both read the same findings and neither needs the other. Everything is fake:
-# demo users are named after Pokemon, findings are seeded by the `seeder`
-# service below.
+# demo users carry common Japanese surnames, findings are seeded by the
+# `seeder` service below.
 #
 # Stop and wipe with:  docker compose down -v
 
@@ -159,9 +159,9 @@ services:
       # Budget plans and enrolls three devices, so no page is empty. All
       # fake, all in README.md.
       SETUP_CODE: "demo-setup-code"
-      OWNER_USER: "gengar"
-      OWNER_PASSWORD: "gengar-demo-portal"
-      OWNER_EMAIL: "gengar@example.com"
+      OWNER_USER: "admin"
+      OWNER_PASSWORD: "admin-demo-portal"
+      OWNER_EMAIL: "admin@example.com"
       ORG_NAME: "株式会社世良（デモ環境）"
       PORTAL_URL: "http://localhost:8091"
     volumes:
@@ -238,7 +238,7 @@ services:
       LOKI_URL: "http://loki:3100"
       # Managed mode, same as a real deployment: admin actions proxy to the
       # receiver and the portal gets a real login. The seeder has created
-      # the owner account (gengar) and switched single sign-on on, so the
+      # the owner account (admin) and switched single sign-on on, so the
       # login screen offers "Sign in with Microsoft" against the stand-in
       # provider as well as the password in README.md. Signed in, you have
       # the settings, the wizard (#wizard), fleet and enrollment tokens -
@@ -254,6 +254,9 @@ services:
       # wants the default 300 so a seven-day query is not rerun per page load.
       CACHE_TTL_SECONDS: "10"
       LOOKBACK_HOURS: "168"
+      # The update card reads the original project's release feed, which says
+      # nothing about this repository. A demo has no reason to call out.
+      UPDATE_CHECK: "off"
       # Which widgets the overview draws, in order. Set here so the demo shows
       # the feature rather than the default, and overridable from the shell:
       #   OVERVIEW_WIDGETS=stat_row,top_tools docker compose up -d --force-recreate portal
@@ -274,12 +277,12 @@ services:
       # instead to embed the whole thing in one frame, which needs no ids and
       # survives someone rearranging them.
       GRAFANA_PANELS: >-
-        ai-guard:2:報告デバイス（24時間）;
-        ai-guard:6:上位ツール（デバイス数、7日）;
-        ai-guard:5:検出面別の検出（7日）;
-        ai-guard:4:重要度別の検出（レート）;
-        ai-guard:10:検出のあるデバイス（OS別）;
-        ai-guard:31:停止したペースト（7日）
+        ai-guard:2:24時間以内に報告した端末;
+        ai-guard:6:AIツール別の端末数（過去7日間）;
+        ai-guard:5:利用環境別の検出結果（過去7日間）;
+        ai-guard:10:OS別・検出結果のある端末;
+        ai-guard:31:貼り付けを遮断した回数（過去7日間）;
+        ai-guard:4:重大度別の検出結果
     volumes:
       - registry-dist:/etc/ai-guard:ro
       # A distinct path rather than inside the registry volume: /etc/ai-guard

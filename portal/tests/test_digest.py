@@ -60,17 +60,17 @@ def test_digest_text_carries_the_numbers_the_pages_show():
                                        {"source": "z", "reporting": False}]},
     ]}
     text = main.digest_text(g, s, 168)
-    assert "last 7 days" in text
-    assert "2 personal accounts across 2 people" in text
-    assert "9 tools in use on 61 devices" in text
-    assert "chatgpt (2)" in text
-    assert "2 detection sources silent" in text
+    assert "直近 7 日間" in text
+    assert "個人アカウント 2 件（2 人）" in text
+    assert "使用中のツール 9 件、端末 61 台" in text
+    assert "chatgpt（2 台）" in text
+    assert "報告のない検出ソース 2 件" in text
 
 
 def test_digest_text_singular_forms_and_empty_estate():
     g = {"personal_accounts": [{"user": "kaya", "device": "", "tool": "t"}],
          "counts": {"tools": 0, "devices": 0}, "tools": {}}
     text = main.digest_text(g, {"groups": []}, 24)
-    assert "1 personal account across 1 person" in text
-    assert "top tools" not in text
-    assert "silent" not in text
+    assert "個人アカウント 1 件（1 人）" in text
+    assert "利用端末数の多いツール" not in text
+    assert "報告のない検出ソース" not in text

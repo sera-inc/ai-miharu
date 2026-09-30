@@ -113,7 +113,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "24時間合計のうち、検出結果に端末レベルのmacOS証跡（MDM一覧またはエンドポイントコレクタ）が含まれる端末。",
+      "description": "24時間合計のうち、検出結果に端末レベルのmacOS証跡（MDMの端末一覧、または端末の収集エージェント）が含まれる端末。",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -363,7 +363,7 @@
       "pluginVersion": "11.1.0",
       "targets": [
         {
-          "expr": "topk(10, count by (tool_display) (count by (tool_display, device) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | device != \"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude Codeのモデルコンテキストプロトコル連携{{ else if eq \"codex-cli\" .tool }}Codex コマンドライン{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}ペーストガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [7d]))))",
+          "expr": "topk(10, count by (tool_display) (count by (tool_display, device) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | device != \"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude CodeのMCP連携{{ else if eq \"codex-cli\" .tool }}Codex CLI{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}貼り付けガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [7d]))))",
           "instant": true,
           "legendFormat": "{{tool_display}}",
           "queryType": "instant",
@@ -392,7 +392,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "過去7日間に確認されたすべての利用者／ツール／端末。期間は7日間に固定されており、ダッシュボードの期間選択では変更されません。上部のツールとアカウント種別の選択で絞り込めます。`account_type` の `personal` は法人以外のアカウントでサインインした状態（要対応）、`work` は法人アカウント（問題なし）、`none` はツールは存在するもののアカウントを読み取れなかった状態（例：統合開発環境にインストールされた拡張機能）を表します。「アカウントなし」とは異なります。",
+      "description": "過去7日間に確認されたすべての利用者／ツール／端末。期間は7日間に固定されており、ダッシュボードの期間選択では変更されません。上部のツールとアカウント種別の選択で絞り込めます。`account_type` の `personal` は法人以外のアカウントでサインインした状態（要対応）、`work` は法人アカウント（問題なし）、`none` はツールは存在するもののアカウントを読み取れなかった状態（例：IDEにインストールされた拡張機能）を表します。「アカウントなし」とは異なります。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -474,32 +474,32 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "desktop": {
                         "text": "デスクトップ",
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
                       },
                       "CLI": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "IDE": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       }
                     }
                   }
@@ -555,10 +555,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -573,13 +573,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -676,7 +676,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "証跡の取得元：`browser` はログインページ、`cli`（コマンドライン）／`ide`（統合開発環境）／`mcp`（モデルコンテキストプロトコル）／`desktop`（デスクトップアプリ）は端末上、`network`（ネットワーク）は名前解決通信、`cloud`（クラウド）はマイクロソフト365の記録です。",
+      "description": "証跡の取得元：`browser` はログインページ、`cli`（CLI）／`ide`（IDE）／`mcp`（MCP）／`desktop`（デスクトップアプリ）は端末上、`network`（ネットワーク）は名前解決通信、`cloud`（クラウド）はマイクロソフト365の記録です。",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -700,7 +700,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "コマンドライン"
+                "value": "CLI"
               }
             ]
           },
@@ -712,7 +712,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "ブラウザ"
+                "value": "ブラウザー"
               }
             ]
           },
@@ -760,7 +760,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "モデルコンテキストプロトコル"
+                "value": "MCP"
               }
             ]
           },
@@ -772,7 +772,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "統合開発環境"
+                "value": "IDE"
               }
             ]
           },
@@ -789,16 +789,16 @@
                     "type": "value",
                     "options": {
                       "CLI": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "IDE": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       },
                       "cli": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "ide": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       }
                     }
                   }
@@ -814,7 +814,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "コマンドライン"
+                "value": "CLI"
               }
             ]
           },
@@ -826,7 +826,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "統合開発環境"
+                "value": "IDE"
               }
             ]
           },
@@ -838,7 +838,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "モデルコンテキストプロトコル"
+                "value": "MCP"
               }
             ]
           }
@@ -1052,32 +1052,32 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "desktop": {
                         "text": "デスクトップ",
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       },
                       "cloud": {
                         "text": "クラウド",
                         "index": 6
                       },
                       "CLI": {
-                        "text": "コマンドライン"
+                        "text": "CLI"
                       },
                       "IDE": {
-                        "text": "統合開発環境"
+                        "text": "IDE"
                       }
                     }
                   }
@@ -1296,10 +1296,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -1314,13 +1314,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1464,7 +1464,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "ユーザーがAIツールに接続したモデルコンテキストプロトコル連携：どの連携を、誰が、どの端末で。既定では警告対象ではありません。レビュー用の一覧です。",
+      "description": "ユーザーがAIツールに接続したMCP連携：どの連携を、誰が、どの端末で。既定では警告対象ではありません。レビュー用の一覧です。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1512,10 +1512,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -1530,13 +1530,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1579,7 +1579,7 @@
           "refId": "A"
         }
       ],
-      "title": "モデルコンテキストプロトコルの連携（誰が何を接続したか、7日）",
+      "title": "MCPの連携（誰が何を接続したか、7日）",
       "transformations": [
         {
           "id": "organize",
@@ -1635,7 +1635,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "Claudeの全利用環境をまとめています。ツール欄には、1つの製品が複数の名称で検出される理由を示しています。`claude.ai` はドメインを報告するブラウザー拡張機能、`claude-code` はコマンドラインおよび統合開発環境の拡張機能、`claude` はデスクトップアプリ、`anthropic.claude-code` は名称を統一する前のコードエディター拡張機能の識別子です（7日間の表示期間を過ぎると自然に一覧から外れます）。承認済みツールのため、法人アカウントは想定内です。対応が必要なのは個人アカウントです。",
+      "description": "Claudeの全利用環境をまとめています。ツール欄には、1つの製品が複数の名称で検出される理由を示しています。`claude.ai` はドメインを報告するブラウザー拡張機能、`claude-code` はCLIおよびIDEの拡張機能、`claude` はデスクトップアプリ、`anthropic.claude-code` は名称を統一する前のコードエディター拡張機能の識別子です（7日間の表示期間を過ぎると自然に一覧から外れます）。承認済みツールのため、法人アカウントは想定内です。対応が必要なのは個人アカウントです。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1717,7 +1717,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン",
+                        "text": "CLI",
                         "index": 1
                       },
                       "desktop": {
@@ -1725,15 +1725,15 @@
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境",
+                        "text": "IDE",
                         "index": 5
                       },
                       "cloud": {
@@ -1768,10 +1768,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -1786,13 +1786,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -1887,7 +1887,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "`chatgpt.com` はドメインを報告するブラウザー拡張機能、`chatgpt` はデスクトップアプリまたは統合開発環境の拡張機能です。ChatGPTは既定でレジストリ上の `approved: false`（未承認）に設定されているため、承認判断が下されるまでは、ここに表示される存在警告は参考情報です。実際に対応が必要な兆候は個人アカウントです。",
+      "description": "`chatgpt.com` はドメインを報告するブラウザー拡張機能、`chatgpt` はデスクトップアプリまたはIDEの拡張機能です。ChatGPTは既定でレジストリ上の `approved: false`（未承認）に設定されているため、承認判断が下されるまでは、ここに表示される存在警告は参考情報です。実際に対応が必要な兆候は個人アカウントです。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1969,7 +1969,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン",
+                        "text": "CLI",
                         "index": 1
                       },
                       "desktop": {
@@ -1977,15 +1977,15 @@
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境",
+                        "text": "IDE",
                         "index": 5
                       },
                       "cloud": {
@@ -2020,10 +2020,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -2038,13 +2038,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -2139,7 +2139,7 @@
         "type": "loki",
         "uid": "loki"
       },
-      "description": "アカウント識別子は `~/.codex/auth.json` 内の `id_token`（署名付き認証トークン）から取得するため、アカウントドメインにはコマンドラインで実際にサインインしているアカウントが表示されます。開発者の端末で個人アカウントが使われる主な経路です。",
+      "description": "アカウント識別子は `~/.codex/auth.json` 内の `id_token`（署名付き認証トークン）から取得するため、アカウントドメインにはCLIで実際にサインインしているアカウントが表示されます。開発者の端末で個人アカウントが使われる主な経路です。",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -2221,7 +2221,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン",
+                        "text": "CLI",
                         "index": 1
                       },
                       "desktop": {
@@ -2229,15 +2229,15 @@
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境",
+                        "text": "IDE",
                         "index": 5
                       },
                       "cloud": {
@@ -2272,10 +2272,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -2290,13 +2290,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -2340,7 +2340,7 @@
         }
       ],
       "timeFrom": "7d",
-      "title": "Codex コマンドライン（OpenAI）",
+      "title": "Codex CLI（OpenAI）",
       "transformations": [
         {
           "id": "organize",
@@ -2473,7 +2473,7 @@
                         "index": 0
                       },
                       "cli": {
-                        "text": "コマンドライン",
+                        "text": "CLI",
                         "index": 1
                       },
                       "desktop": {
@@ -2481,15 +2481,15 @@
                         "index": 2
                       },
                       "browser": {
-                        "text": "ブラウザ",
+                        "text": "ブラウザー",
                         "index": 3
                       },
                       "mcp": {
-                        "text": "モデルコンテキストプロトコル",
+                        "text": "MCP",
                         "index": 4
                       },
                       "ide": {
-                        "text": "統合開発環境",
+                        "text": "IDE",
                         "index": 5
                       },
                       "cloud": {
@@ -2524,10 +2524,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -2542,13 +2542,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -2640,7 +2640,7 @@
     },
     {
       "type": "row",
-      "title": "ペーストガード",
+      "title": "貼り付けガード",
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -2653,7 +2653,7 @@
     },
     {
       "type": "stat",
-      "title": "停止したペースト（7日）",
+      "title": "停止した貼り付け（7日）",
       "id": 31,
       "gridPos": {
         "h": 5,
@@ -2694,11 +2694,11 @@
             "fixedColor": "orange"
           },
           "decimals": 0,
-          "displayName": "停止したペースト"
+          "displayName": "停止した貼り付け"
         },
         "overrides": []
       },
-      "description": "ブラウザ拡張機能のペーストガードが秘密情報パターンを傍受したペースト／ドロップイベント。"
+      "description": "ブラウザー拡張機能の貼り付けガードが秘密情報パターンを傍受した貼り付け／ドロップイベント。"
     },
     {
       "type": "stat",
@@ -2763,11 +2763,11 @@
         },
         "overrides": []
       },
-      "description": "警告後にユーザーがそれでもペーストをクリックした回数。この数値がwarnをblockに切り替える判断材料になります。"
+      "description": "警告後にユーザーがそれでも貼り付けをクリックした回数。この数値がwarnをblockに切り替える判断材料になります。"
     },
     {
       "type": "stat",
-      "title": "ペーストガード：アクティブ端末（24時間）",
+      "title": "貼り付けガード：アクティブ端末（24時間）",
       "id": 33,
       "gridPos": {
         "h": 5,
@@ -2808,15 +2808,15 @@
             "fixedColor": "green"
           },
           "decimals": 0,
-          "displayName": "ペーストガード：アクティブ端末（24時間）"
+          "displayName": "貼り付けガード：アクティブ端末（24時間）"
         },
         "overrides": []
       },
-      "description": "過去24時間にペーストガードがハートビートを送信した端末。ハートビートはその端末でチェーン全体が動作していることを証明します。MDMの対象台数と比較してください。"
+      "description": "過去24時間に貼り付けガードがハートビートを送信した端末。ハートビートはその端末でチェーン全体が動作していることを証明します。MDMの対象台数と比較してください。"
     },
     {
       "type": "timeseries",
-      "title": "ツール別のペーストガードイベント",
+      "title": "ツール別の貼り付けガードイベント",
       "id": 34,
       "gridPos": {
         "h": 8,
@@ -2831,7 +2831,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (tool_display) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | source=`paste_guard` | regexp `paste (?P<action>\\w+): (?P<detectors>[^\\\"]*)` | action!=\"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude Codeのモデルコンテキストプロトコル連携{{ else if eq \"codex-cli\" .tool }}Codex コマンドライン{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}ペーストガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [$__auto]))",
+          "expr": "sum by (tool_display) (count_over_time({app=\"ai-guard-receiver\", kind=\"finding\"} | json | source=`paste_guard` | regexp `paste (?P<action>\\w+): (?P<detectors>[^\\\"]*)` | action!=\"\" | label_format tool_display=`{{ if eq \"claude\" .tool }}Claude{{ else if eq \"claude-code\" .tool }}Claude Code{{ else if eq \"chatgpt\" .tool }}ChatGPT{{ else if hasPrefix \"claude-code-mcp\" .tool }}Claude CodeのMCP連携{{ else if eq \"codex-cli\" .tool }}Codex CLI{{ else if eq \"cursor\" .tool }}Cursor{{ else if eq \"deepseek\" .tool }}DeepSeek{{ else if eq \"github-copilot\" .tool }}GitHub Copilot{{ else if eq \"paste-guard\" .tool }}貼り付けガード{{ else if eq \"ollama\" .tool }}Ollama{{ else if eq \"some-unregistered-tool\" .tool }}未登録のサンプルAI{{ else }}未登録のAIツール（{{ .tool }}）{{ end }}` [$__auto]))",
           "datasource": {
             "type": "loki",
             "uid": "loki"
@@ -2863,7 +2863,7 @@
     },
     {
       "type": "table",
-      "title": "ペーストガード詳細（7日）",
+      "title": "貼り付けガード詳細（7日）",
       "id": 35,
       "gridPos": {
         "h": 8,
@@ -2913,7 +2913,7 @@
           }
         ]
       },
-      "description": "複数検出器のペーストはカンマ結合のdetectors値として表示されます。これは拡張機能のレポート形式です。",
+      "description": "複数の検出ルールに該当した貼り付けは、ルールの識別子をカンマで区切った1行として表示されます。これは拡張機能の報告形式です。",
       "fieldConfig": {
         "overrides": [
           {
@@ -2938,10 +2938,10 @@
                         "text": "ChatGPT"
                       },
                       "claude-code-mcp": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携"
+                        "text": "Claude CodeのMCP連携"
                       },
                       "codex-cli": {
-                        "text": "Codex コマンドライン"
+                        "text": "Codex CLI"
                       },
                       "cursor": {
                         "text": "Cursor"
@@ -2956,13 +2956,13 @@
                         "text": "Ollama"
                       },
                       "paste-guard": {
-                        "text": "ペーストガード"
+                        "text": "貼り付けガード"
                       },
                       "some-unregistered-tool": {
                         "text": "未登録のサンプルAI"
                       },
                       "claude-code-mcp:atlassian,figma": {
-                        "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）"
+                        "text": "Claude CodeのMCP連携（Atlassian、Figma）"
                       }
                     }
                   }
@@ -2975,7 +2975,7 @@
     },
     {
       "type": "table",
-      "title": "ペーストガード：端末カバレッジ（24時間）",
+      "title": "貼り付けガード：端末カバレッジ（24時間）",
       "id": 36,
       "gridPos": {
         "h": 8,
@@ -3026,7 +3026,7 @@
           }
         ]
       },
-      "description": "ハートビートからの端末別ペーストガード状態：実行中の拡張機能バージョンとそのモード。"
+      "description": "ハートビートからの端末別貼り付けガード状態：実行中の拡張機能バージョンとそのモード。"
     }
   ],
   "refresh": "5m",
@@ -3079,7 +3079,7 @@
             "value": "claude"
           },
           {
-            "text": "Claude（ブラウザ）",
+            "text": "Claude（ブラウザー）",
             "value": "claude\\.ai"
           },
           {
@@ -3087,11 +3087,11 @@
             "value": "claude-code"
           },
           {
-            "text": "Claude Codeのモデルコンテキストプロトコル連携",
+            "text": "Claude CodeのMCP連携",
             "value": "claude-code-mcp"
           },
           {
-            "text": "Claude Codeのモデルコンテキストプロトコル連携（Atlassian、Figma）",
+            "text": "Claude CodeのMCP連携（Atlassian、Figma）",
             "value": "claude-code-mcp:atlassian,figma"
           },
           {
@@ -3099,11 +3099,11 @@
             "value": "chatgpt"
           },
           {
-            "text": "ChatGPT（ブラウザ）",
+            "text": "ChatGPT（ブラウザー）",
             "value": "chatgpt\\.com"
           },
           {
-            "text": "Codex コマンドライン",
+            "text": "Codex CLI",
             "value": "codex-cli"
           },
           {
@@ -3127,7 +3127,7 @@
             "value": "ollama"
           },
           {
-            "text": "ペーストガード",
+            "text": "貼り付けガード",
             "value": "paste-guard"
           },
           {

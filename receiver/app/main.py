@@ -1429,9 +1429,9 @@ def test_mail(req: MailTest, authorization: str = Header(default="")):
     if not conf["ready"]:
         raise HTTPException(400, "a server and a from address are needed first")
     why = _smtp_send(
-        req.to.strip(), "Shadow AI Guard: test message",
-        "This is a test from the Shadow AI Guard portal.\n\n"
-        "If you are reading it, invites will reach people.\n")
+        req.to.strip(), "世良AIガバナンス: テストメール",
+        "これは世良AIガバナンスのポータルから送信したテストメールです。\n\n"
+        "このメールが読めていれば、招待メールも相手に届きます。\n")
     if why:
         return {"ok": False, "detail": why}
     return {"ok": True, "detail": "sent to %s" % req.to.strip()}
@@ -3037,19 +3037,20 @@ def _smtp_send(to: str, subject: str, body: str) -> str:
     return ""
 
 
-INVITE_SUBJECT = "You have access to Shadow AI Guard"
+INVITE_SUBJECT = "世良AIガバナンスを利用できるようになりました"
 
 # The default, and the thing an estate edits rather than replaces from
 # nothing. Two placeholders, both filled in below.
-INVITE_BODY = """An account has been created for you.
+INVITE_BODY = """あなたのアカウントを作成しました。
 
-Username: {username}
-Where: {portal_url}
+ユーザー名: {username}
+アクセス先: {portal_url}
 
-Sign in with your work email address. If single sign-on is not set up for
-you, whoever created the account will give you a password separately.
+会社のメールアドレスでサインインしてください。シングルサインオンが
+設定されていない場合は、アカウントを作成した担当者から、パスワードを
+別にお伝えします。
 
-Nothing in this message is secret, and it grants no access on its own.
+このメールに秘密情報は含まれておらず、このメールだけではアクセスできません。
 """
 
 
@@ -3068,7 +3069,7 @@ def _invite_text(username: str) -> tuple[str, str]:
     subject = g("invite_subject", INVITE_SUBJECT)
     body = g("invite_body", INVITE_BODY)
     fields = {"username": username,
-              "portal_url": conf["portal_url"] or "the Shadow AI Guard portal"}
+              "portal_url": conf["portal_url"] or "世良AIガバナンスのポータル"}
     for k, v in fields.items():
         # Plain replacement rather than str.format: a body somebody typed
         # will contain a stray brace sooner or later, and losing an invite
@@ -3141,9 +3142,8 @@ def post_candidates(req: CandidatesPost, request: Request,
         accepted += 1
     if new_names:
         _notify_webhook(
-            "ai-guard: %d new AI tool%s in the review queue: %s"
-            % (len(new_names), "" if len(new_names) == 1 else "s",
-               ", ".join(sorted(new_names)[:10])))
+            "世良AIガバナンス: 新しい AIツール %d 件が確認待ちに入りました: %s"
+            % (len(new_names), "、".join(sorted(new_names)[:10])))
     return {"accepted": accepted}
 
 
@@ -3179,8 +3179,8 @@ def _note_mcp_candidates(f: Finding):
                 "MCP server defined in %s config" % f.tool, "endpoint",
                 f.device if f.device != "unknown" else ""):
             _notify_webhook(
-                "ai-guard: unknown MCP server %r seen in a %s config - now"
-                " in the review queue" % (name, f.tool))
+                "世良AIガバナンス: 未登録の MCP サーバー %r が %s の設定で"
+                "見つかり、確認待ちに入りました" % (name, f.tool))
 
 
 def _note_process_candidates(f: Finding):
@@ -3240,9 +3240,9 @@ def _note_process_candidates(f: Finding):
             suggested_tool=(f.tool or "") if (f.tool or "") in _REGISTRY_IDS
             else ""):
         _notify_webhook(
-            "ai-guard: %r reached a model host and is not a tool, a browser"
-            " or a system process this knows - now in the review queue"
-            % (name,))
+            "世良AIガバナンス: %r が AI モデルのホストに接続しましたが、既知の"
+            "ツール・ブラウザー・システムプロセスのいずれでもないため、"
+            "確認待ちに入りました" % (name,))
 
 
 @app.get("/admin/candidates")

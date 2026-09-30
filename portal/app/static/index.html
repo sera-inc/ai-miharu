@@ -9,7 +9,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>世良AIガバナンス</title>
-<link rel="icon" type="image/png" href="/sera-ai-governance-symbol.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/sera-ai-governance-symbol.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 /* Light is the default and dark is the [data-theme=dark] overlay. The
    variable names are load-bearing: views reference them inline, so both
@@ -74,8 +76,13 @@ aside{background:var(--side);color:var(--side-ink);padding:16px 0 14px;
    as a single block, and the mark is a header rather than a first item. */
 .brandline{border-bottom:1px solid var(--side-line);margin:0 10px 8px}
 .brand img{display:block;width:38px;height:38px;object-fit:contain;flex:none}
+/* Two marks, one per surface: the colour symbol on light cards, the white one
+   on dark. The sign-in card carries both and the theme picks which shows. */
+.mark-on-dark{display:none}
+[data-theme=dark] .mark-on-light{display:none}
+[data-theme=dark] .mark-on-dark{display:inline}
 .brand span{font-size:15px;font-weight:750;line-height:1.3;letter-spacing:.01em;margin-left:8px;white-space:nowrap;color:var(--side-ink)}
-/* Collapsed, the wordmark crops down to the hooded-figure mark. */
+/* Collapsed, the wordmark is hidden and only the symbol remains. */
 .collapsed .brand{padding:2px 0 12px;justify-content:center}
 .collapsed .brand{padding:2px 0 12px}
 .collapsed .brandline{margin:0 12px 8px}
@@ -105,7 +112,7 @@ nav .count{margin-left:auto;font-size:12px;font-variant-numeric:tabular-nums;opa
   pointer-events:none;opacity:0;transition:opacity .1s ease}
 #navtip.on{opacity:1}
 @media (prefers-reduced-motion:reduce){#navtip{transition:none}}
-.foot a{color:var(--side-mut);text-decoration:none;border-bottom:1px solid transparent}
+.foot a{color:var(--side-mut);text-decoration:none;border-bottom:1px solid transparent;display:inline-block;padding:3px 0;line-height:18px}
 .foot a:hover{color:var(--side-on-ink);border-bottom-color:var(--app-sg-border-selected-subtle)}
 .topbar{display:flex;gap:14px;align-items:center;padding:10px 24px;border-bottom:1px solid var(--bd);
   position:sticky;top:0;background:var(--sf);z-index:5}
@@ -203,7 +210,7 @@ tr[data-open]:hover td{background:color-mix(in srgb,var(--pri-soft) 45%,transpar
 /* Expired, and still shown. Quieter, because it is history rather than
    something currently applying, and struck through would be too loud for a
    record somebody may still want to read. */
-.exc-old{opacity:.55}
+.exc-old .mono,.exc-old .exc-scope,.exc-old .exc-why{color:var(--mut)}
 .exc-old .exc-when{color:var(--dstr)}
 /* Label and value, with the label beside its own value rather than three
    columns away from it. */
@@ -228,7 +235,7 @@ tr[data-open]:hover td{background:color-mix(in srgb,var(--pri-soft) 45%,transpar
 main a{color:var(--pri)}
 /* No fill, barely-there text. Absence of governance, not a state with equal
    weight to approved or reviewing. */
-.none{color:color-mix(in srgb,var(--mut) 70%,transparent);font-size:12px;white-space:nowrap}
+.none{color:var(--mut);font-size:12px;white-space:nowrap}
 /* A zero is the absence of something and should not compete with a real
    count. Without this a row of zeros is as loud as a row of findings. */
 td.n .z{color:color-mix(in srgb,var(--mut) 55%,transparent)}
@@ -972,7 +979,7 @@ a.libtn:hover{border-color:var(--pri)}
 <div class="shell" id="shell">
   <aside id="app-sidebar" tabindex="-1">
     <button class="brand" id="brand-home" type="button"
-      aria-label="概要へ移動"><img src="/sera-ai-governance-symbol.png" alt=""><span>世良AIガバナンス</span></button>
+      aria-label="概要へ移動"><img src="/sera-ai-governance-symbol-white.svg" alt=""><span>世良AIガバナンス</span></button>
     <div class="brandline"></div>
     <button class="tenant-switch" id="estate-status" type="button"
       aria-label="システム状態を開く">
@@ -991,7 +998,8 @@ a.libtn:hover{border-color:var(--pri)}
     </span></div>
   </aside>
   <div>
-    <div class="topbar">
+    <div class="topbar" role="banner">
+      <h1 class="sr-only">世良AIガバナンス</h1>
       <button class="mobile-nav" id="mobile-nav" type="button" title="ナビゲーションを開く"
         aria-label="ナビゲーションを開く" aria-controls="app-sidebar" aria-expanded="false">
   <svg class="mobile-nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -1001,7 +1009,7 @@ a.libtn:hover{border-color:var(--pri)}
   <span class="mobile-nav__label">メニュー</span>
 </button>
       <span class="top-context"><b id="topctx-name">ポータル</b><span id="topctx-sub">検出ソースを確認中…</span></span>
-      <div class="search">
+      <div class="search" role="search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
         <input id="q" placeholder="この画面内を検索、またはページ・ツール・端末へ移動…"
           autocomplete="off" aria-label="ツール、端末、ページを検索"
@@ -1267,14 +1275,11 @@ async function prefSet(k, v) {
 // recovered.
 let MINTED = null;
 
-// Demo login IDs are identifiers, but showing the fixture names as prose makes
-// the Japanese demo UI look unfinished. Keep the stored username unchanged and
-// localize only its human-facing label.
+// The label for an account name. The stored username never changes; this only
+// makes 'jo.bloggs' read as 'Jo Bloggs' where a name is shown as prose.
 function displayAccountName(username) {
   const value = String(username || '');
-  const demoNames = {gengar: '管理者', snorlax: '運用担当者', nobody: '未登録ユーザー'};
-  return demoNames[value.toLowerCase()] || value.replace(/[._-]+/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+  return value.replace(/[._-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
 // The login screen replaces the whole page, so the chrome around it (nav,
@@ -1496,7 +1501,7 @@ function showLogin(msg) {
       create ? 'アカウントを作成' : 'サインイン'}</button>`;
   app.innerHTML = `<div style="max-width:470px;margin:9vh auto 0">
     <div class="wcard licard" style="padding:28px 30px">
-    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img src="/sera-ai-governance-symbol.png" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">世良AIガバナンス</strong></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img class="mark-on-light" src="/sera-ai-governance-symbol.svg" alt="" style="width:52px;height:52px;object-fit:contain"><img class="mark-on-dark" src="/sera-ai-governance-symbol-white.svg" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">世良AIガバナンス</strong></div>
     <h2>${create ? '管理者アカウントを作成' : 'サインイン'}</h2>
     <p class="lede">${create
       ? `管理者アカウントはまだありません。受信サービスが起動時に1回限りのセットアップコードをログへ出力しています。<code>kubectl logs deploy/&lt;release&gt;-ai-guard | grep setup_code</code> または <code>docker compose logs receiver</code> で確認してください。コードは1回だけ使えます。分からなくなった場合は、受信サービスを再起動すると新しいコードが発行されます。`
@@ -2287,7 +2292,7 @@ function trendChart(days, a, b, aLabel, bLabel) {
 // the console layer presentation helpers: use the same graph, lifecycle and register reads
 // as the working views. No demo fixtures or network calls live in renderers.
 let UI_PERSONAL_TOOLS = false;
-const UI_TERMS = Object.freeze({"Workspace":"ワークスペース","Discovery":"検出","Governance":"ガバナンス","Financial governance":"財務ガバナンス","Autonomous activity":"自律AIの活動","Coverage":"カバレッジ","Fleet operations":"端末管理","Administration":"管理","Managed estate":"管理対象環境","Standalone portal":"単独ポータル","Monitoring active":"監視中","Owner":"オーナー","Reporting window":"集計期間","24 hours":"24時間","3 days":"3日","7 days":"7日","14 days":"14日","30 days":"30日","90 days":"90日","just now":"たった今","m ago":"分前","h ago":"時間前","d ago":"日前","Unassigned":"未割り当て","high":"高","medium":"中","low":"低","approved":"承認済み","reviewing":"レビュー中","rejected":"拒否済み","unapproved":"未承認","coding":"コーディング","assistant":"アシスタント","deepseek":"DeepSeek","productivity":"生産性","browser":"ブラウザー","desktop":"デスクトップ","network":"ネットワーク","cloud":"クラウド","ide":"IDE","cli":"CLI","mcp":"MCP","MCP":"MCP","None":"なし","Unattributed":"利用者未登録","never":"一度もなし","personal":"個人用","corporate":"会社用","last":"最終","exported":"エクスポート済み","endpoint":"端末の収集エージェント","fleet":"端末管理（MDM）","required":"必須","recommended":"推奨","optional":"任意","ready":"準備完了","open":"未解決","healthy":"正常","silent":"報告なし","unknown":"不明","source":"検出ソース","installed":"インストール済み","using":"使用中","findings":"検出結果","device":"端末","devices":"端末","users":"ユーザー","account":"アカウント","accounts":"アカウント","stale":"未更新","expiring":"期限が近い","expired":"期限切れ","unseated":"シートなし","idle":"利用なし","reporting":"報告中","own log store": "独自のログ保存先", "the signed-in account": "サインイン中のアカウント", "login": "サインイン", "none": "なし", "enterprise": "エンタープライズ", "trial": "トライアル", "transcription": "文字起こし", "writing": "文章作成", "image": "画像", "search": "検索", "local-model": "ローカルモデル", "voice": "音声", "platform": "プラットフォーム", "agent": "エージェント", "other": "その他", "unreviewed": "未レビュー", "project": "プロジェクト", "team": "チーム", "person": "個人", "macos": "macOS", "linux": "Linux", "demo": "デモ", "launchd, at login": "launchd、ログイン時", "systemd timer, every 15 min": "systemdタイマー、15分ごと", "launchd, every 6 hours": "launchd、6時間ごと", "member": "メンバー", "admin": "管理者", "viewer": "閲覧者", "owner": "オーナー","windows": "Windows", "active": "有効", "revoked": "失効済み", "warn": "警告", "block": "ブロック", "off": "オフ", ".mcp.json in a repository": ".mcp.json（リポジトリ内）", "Windsurf / Devin Desktop": "Windsurf／Devinデスクトップ版", "JetBrains IDEs": "JetBrains製IDE", "aws_access_key": "AWS アクセスキー", "private_key": "秘密鍵", "gitlab_pat": "GitLab パーソナルアクセストークン", "github_token": "GitHub トークン", "anthropic_key": "Anthropic API キー", "openai_key": "OpenAI API キー", "slack_token": "Slack トークン", "jwt": "JWT", "google_api_key": "Google API キー", "azure_storage_secret": "Azure ストレージシークレット", "stripe_live_key": "Stripe 本番用シークレットキー", "mailchimp_key": "Mailchimp API キー", "hubspot_token": "HubSpot アクセストークン", "sendgrid_key": "SendGrid API キー", "meta_access_token": "Meta アクセストークン", "password_assignment": "パスワード", "payment_card": "カード番号", "uk_nino": "英国の国民保険番号（NINO）", "iban": "IBAN", "bulk_emails": "メールアドレスの大量リスト", "classification_marking": "機密表示"});
+const UI_TERMS = Object.freeze({"Workspace":"ワークスペース","Discovery":"検出","Governance":"ガバナンス","Financial governance":"財務ガバナンス","Autonomous activity":"自律AIの活動","Coverage":"カバレッジ","Fleet operations":"端末管理","Administration":"管理","Managed estate":"管理対象環境","Standalone portal":"単独ポータル","Monitoring active":"監視中","Owner":"オーナー","Reporting window":"集計期間","24 hours":"24時間","3 days":"3日","7 days":"7日","14 days":"14日","30 days":"30日","90 days":"90日","just now":"たった今","m ago":"分前","h ago":"時間前","d ago":"日前","Unassigned":"未割り当て","high":"高","medium":"中","low":"低","approved":"承認済み","reviewing":"レビュー中","rejected":"拒否済み","unapproved":"未承認","coding":"コーディング","assistant":"アシスタント","deepseek":"DeepSeek","productivity":"生産性","browser":"ブラウザー","desktop":"デスクトップ","network":"ネットワーク","cloud":"クラウド","ide":"IDE","cli":"CLI","mcp":"MCP","MCP":"MCP","None":"なし","Unattributed":"利用者未登録","never":"一度もなし","personal":"個人","corporate":"法人","last":"最終","exported":"エクスポート済み","endpoint":"端末の収集エージェント","fleet":"端末管理（MDM）","required":"必須","recommended":"推奨","optional":"任意","ready":"準備完了","open":"未解決","healthy":"正常","silent":"報告なし","unknown":"不明","source":"検出ソース","installed":"インストール済み","using":"使用中","findings":"検出結果","device":"端末","devices":"端末","users":"ユーザー","account":"アカウント","accounts":"アカウント","stale":"未更新","expiring":"期限が近い","expired":"期限切れ","unseated":"シートなし","idle":"利用なし","reporting":"報告中","own log store": "独自のログ保存先", "the signed-in account": "サインイン中のアカウント", "login": "サインイン", "none": "なし", "enterprise": "エンタープライズ", "trial": "トライアル", "transcription": "文字起こし", "writing": "文章作成", "image": "画像", "search": "検索", "local-model": "ローカルモデル", "voice": "音声", "platform": "プラットフォーム", "agent": "エージェント", "other": "その他", "unreviewed": "未レビュー", "project": "プロジェクト", "team": "チーム", "person": "個人", "macos": "macOS", "linux": "Linux", "demo": "デモ", "launchd, at login": "launchd、ログイン時", "systemd timer, every 15 min": "systemdタイマー、15分ごと", "launchd, every 6 hours": "launchd、6時間ごと", "member": "メンバー", "admin": "管理者", "viewer": "閲覧者", "owner": "オーナー","windows": "Windows", "active": "有効", "revoked": "失効済み", "warn": "警告", "block": "ブロック", "off": "オフ", ".mcp.json in a repository": ".mcp.json（リポジトリ内）", "Windsurf / Devin Desktop": "Windsurf／Devinデスクトップ版", "JetBrains IDEs": "JetBrains製IDE", "aws_access_key": "AWS アクセスキー", "private_key": "秘密鍵", "gitlab_pat": "GitLab パーソナルアクセストークン", "github_token": "GitHub トークン", "anthropic_key": "Anthropic API キー", "openai_key": "OpenAI API キー", "slack_token": "Slack トークン", "jwt": "JWT", "google_api_key": "Google API キー", "azure_storage_secret": "Azure ストレージシークレット", "stripe_live_key": "Stripe 本番用シークレットキー", "mailchimp_key": "Mailchimp API キー", "hubspot_token": "HubSpot アクセストークン", "sendgrid_key": "SendGrid API キー", "meta_access_token": "Meta アクセストークン", "password_assignment": "パスワード", "payment_card": "カード番号", "uk_nino": "英国の国民保険番号（NINO）", "iban": "IBAN", "bulk_emails": "メールアドレスの大量リスト", "classification_marking": "機密表示"});
 const UI_GRAFANA_PANEL_NAMES = Object.freeze({"Devices reporting (24h)":"24時間以内に報告した端末","Top tools (devices, 7d)":"AIツール別の端末数（過去7日間）","Findings by surface (7d)":"利用環境別の検出結果（過去7日間）","Findings by severity (rate)":"重大度別の検出結果","Devices with findings, by OS":"OS別・検出結果のある端末","Pastes stopped (7d)":"貼り付けを遮断した回数（過去7日間）"});
 const UI_TERMS_CASEFOLD = Object.freeze(Object.fromEntries(
   Object.entries(UI_TERMS).map(([key, label]) => [key.toLowerCase(), label])));
@@ -2315,7 +2320,7 @@ const JA_SOURCE_CATALOG = Object.freeze({
   'browser_extension': {label: 'ブラウザー拡張機能: アカウント',
     needs: 'ブラウザーで、各 AI サイトにどのアカウントでサインインしているかを表示します。拡張機能を一度パッケージ化し（extension/README.md を参照）、下から利用するプラットフォーム向けの設定済みポリシーをダウンロードしてください。macOS 向けの Chromium ポリシー、Windows 向けの配布スクリプト、およびそれぞれの Firefox 版があります。URL、登録トークン、自社ドメイン、貼り付けガードの設定は、すべて組み込み済みです。'},
   'paste_guard': {label: 'ブラウザー拡張機能: 貼り付けガード',
-    needs: '上のアカウントと同じ拡張機能の機能なので、追加のインストールは不要です。機密表示のある文書が AI ツールに貼り付けられると、警告またはブロックします。モードと機密表示は「設定」で指定します。上のアカウントの行は報告しているのにこの行が静かな場合は、ガードは動いていて、危険な貼り付けが行われていないということです。'},
+    needs: '上のアカウントと同じ拡張機能の機能なので、追加のインストールは不要です。機密表示のある文書が AIツールに貼り付けられると、警告またはブロックします。モードと機密表示は「設定」で指定します。上のアカウントの行は報告しているのにこの行が静かな場合は、ガードは動いていて、危険な貼り付けが行われていないということです。'},
   'entra_sign_in': {label: 'Entra のサインイン',
     needs: 'Entra でアプリを登録し、AuditLog.Read.All と Directory.Read.All の権限を付与します。そのうえで、スキャナーに AIGUARD_ENTRA_TENANT_ID、AIGUARD_ENTRA_CLIENT_ID、AIGUARD_ENTRA_CLIENT_SECRET を設定してください。'},
   'entra_delegated_access': {label: 'Entra の委任アクセス',
@@ -2339,9 +2344,9 @@ const JA_SOURCE_CATALOG = Object.freeze({
   'sentinelone_network': {label: 'SentinelOne のネットワーク',
     needs: '同じ SentinelOne トークンを使います。ブラウザーを経由しない、端末上のプロセスによる AI 通信を検出します。'},
   'sentinelone_bridge': {label: 'SentinelOne の接続先',
-    needs: '同じ SentinelOne トークンを使います。AI ツールがどこに接続したか（インストールされているソフトウェアではなく、通信の宛先）を表示します。'},
+    needs: '同じ SentinelOne トークンを使います。AIツールがどこに接続したか（インストールされているソフトウェアではなく、通信の宛先）を表示します。'},
   'mcp_scan': {label: 'MCP 連携の検出',
-    needs: '端末の収集エージェントが AI ツールの設定ファイルを読み取って検出するため、別のセットアップは不要です。収集エージェントは報告しているのにこの行が静かな場合は、MCP サーバーがまだ誰にも設定されていないということです。'}
+    needs: '端末の収集エージェントが AIツールの設定ファイルを読み取って検出するため、別のセットアップは不要です。収集エージェントは報告しているのにこの行が静かな場合は、MCP サーバーがまだ誰にも設定されていないということです。'}
 });
 const JA_AUDIT_KINDS = Object.freeze({
   admin_created: '管理者アカウントを作成',
@@ -2765,15 +2770,15 @@ const WIDGETS = {
       </section>
       <dl class="executive-metrics">
         <div><dt${open.length ? ' class="risk"' : ''}>${value(open.length)}${f.known ? trendChip(tr.personal, true) : ''}</dt>
-          <dd>未解決の個人アカウント</dd><small>${f.known ? `過去 ${fmtWindow(freshH)} の初検出 ${fresh} 件${
-            open.length !== f.personal.length ? ` · 許容済み ${f.personal.length - open.length} 件` : ''}` : '検出結果を取得できません'}</small></div>
+          <dd>未解決の個人アカウント</dd><dd class="ui-metric-note">${f.known ? `過去 ${fmtWindow(freshH)} の初検出 ${fresh} 件${
+            open.length !== f.personal.length ? ` · 許容済み ${f.personal.length - open.length} 件` : ''}` : '検出結果を取得できません'}</dd></div>
         <div><dt>${value(f.toolIds.length)}</dt><dd>観測されたAIツール</dd>
-          <small>端末、ブラウザー、クラウドの各検出ソースから集計</small></div>
+          <dd class="ui-metric-note">端末、ブラウザー、クラウドの各検出ソースから集計</dd></div>
         <div><dt>${f.known && f.coverage !== null ? f.coverage + '<span class="ui-percent">%</span>' : '—'}</dt>
-          <dd>収集エージェントのカバー率</dd><small>${f.known ? `観測した端末 ${f.devices.length} 台中 ${f.collectors} 台` : '検出結果を取得できません'}</small></div>
+          <dd>収集エージェントのカバー率</dd><dd class="ui-metric-note">${f.known ? `観測した端末 ${f.devices.length} 台中 ${f.collectors} 台` : '検出結果を取得できません'}</dd></div>
         <div><dt>${f.known && f.recorded ? f.recorded.length + '<span class="ui-denominator">/ ' + f.toolIds.length + '</span>' : '—'}</dt>
-          <dd>AI台帳の判断記録</dd><small>${!f.known || !f.recorded ? 'AI台帳のデータを取得できません'
-            : `判断が未記録のツール ${f.undecided} 件`}</small></div>
+          <dd>AI台帳の判断記録</dd><dd class="ui-metric-note">${!f.known || !f.recorded ? 'AI台帳のデータを取得できません'
+            : `判断が未記録のツール ${f.undecided} 件`}</dd></div>
       </dl>
     </div>`;
   },
@@ -3367,7 +3372,7 @@ function identityMapEditor() {
         ${p.commented.length} 行はコメント行のため保存されません（名前は入っています）。ダウンロードしたファイルでは候補と空欄がコメント行になっているので、残したい行は先頭の # を削除してください：
         ${p.commented.slice(0, 6).map(c => `${c.n} 行目 <span class="mono">${esc(c.key)}</span>`).join('、')}${
           p.commented.length > 6 ? '、ほか ' + (p.commented.length - 6) + ' 件' : ''}。</p>` : ''}
-      ${p.rows.length ? `<table><tr><th>キー</th><th>利用者</th><th></th></tr>
+      ${p.rows.length ? `<table><tr><th>キー</th><th>利用者</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
       ${p.rows.slice(0, 8).map(r => `<tr><td class="mono">${esc(r.key)}</td><td>${esc(r.identity)}</td>
         <td>${known.has(r.key) ? '<span class="pill p-ok">観測あり</span>' : '<span class="pill p-mut">未観測</span>'}</td></tr>`).join('')}
       ${p.rows.length > 8 ? `<tr><td colspan="3" style="color:var(--mut)">… ほか ${p.rows.length - 8} 件</td></tr>` : ''}</table>` : ''}` : ''}
@@ -4089,7 +4094,7 @@ async function registryView() {
 
   <h2 style="font-size:16px">この環境で追加したツール（${RENTRIES.length}）</h2>
   ${RENTRIES.length ? `<table>
-  <tr><th>識別子</th><th>名前</th><th>提供元</th><th>検出用識別子の数</th><th>更新日時</th><th></th></tr>
+  <tr><th>識別子</th><th>名前</th><th>提供元</th><th>検出用識別子の数</th><th>更新日時</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${RENTRIES.map(x => {
     const e = x.entry;
     const n = (e.domains || []).length + (e.app_names || []).length
@@ -4142,7 +4147,7 @@ function watchlistBlock(observedIds) {
     <input id="wiz-review" class="mfield" style="min-width:170px"
       value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
-  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th></th></tr>
+  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${rows.map(t => {
     const d = decided[t.id];
     const state = d && LBL[d]
@@ -4414,7 +4419,7 @@ async function paste() {
 
   ${(PG.guard_modes || []).some(m => m.mode === 'warn') && (PG.warned || 0) ? `
   <div class="wcard" style="margin-bottom:14px"><h3>ブロックモードにした場合</h3>
-    <p class="lede" style="margin-bottom:10px">この期間に警告した貼り付けは、ブロックモードなら確認を求めずにすべて止められていました。同じ記録にブロックモードを当てはめた試算です。警告モードで止められないのは「警告後に続行」の件数で、ブロックモードには「そのまま貼り付ける」選択肢がありません。</p>
+    <p class="lede" style="margin-bottom:10px">この期間に警告した貼り付けは、ブロックモードなら確認を求めずにすべて止められていました。同じ記録にブロックモードを当てはめた試算です。警告モードで止められないのは「警告後に続行」の件数で、ブロックモードには「それでも貼り付ける」選択肢がありません。</p>
     ${(PG.rows || []).filter(r => r.warned).map(r =>
       `<div class="covrow" style="grid-template-columns:140px auto 1fr">
         <span>${esc(uiToolName(r.tool))}</span>
@@ -4458,7 +4463,7 @@ async function iso() {
   // wording is not ours to do.
   const rows = [
     ['ツールの利用状況',
-     `利用が確認されたツールは ${n(e.tools_observed)} 件、検知対象に登録されたツールは ${n(e.tools_watched_for)} 件`
+     `利用が確認されたツールは ${n(e.tools_observed)} 件、検出対象に登録されたツールは ${n(e.tools_watched_for)} 件`
      + (e.tools_not_in_registry
         ? `、${n(e.tools_not_in_registry)} 件はレジストリ未登録` : ''),
      'register', 'AI台帳'],
@@ -4688,7 +4693,7 @@ function pasteGuardBehaviourFields(batch) {
   const opt = (v, label) => `<option value="${v}"${mode === v ? ' selected' : ''}>${label}</option>`;
   return `
     <dt>貼り付けガードモード${INFO}</dt><dd>
-      <select id="set-paste_guard_mode" class="mfield"
+      <select id="set-paste_guard_mode" class="mfield" aria-label="貼り付けガードモード"
         ${batch ? `data-sfield="paste_guard_mode" data-sinit="${esc(mode)}"` : ''}>
         <option value=""${mode ? '' : ' selected'}>警告（既定）</option>
         ${opt('off', 'オフ')}${opt('warn', '警告')}${opt('block', 'ブロック')}
@@ -5196,7 +5201,7 @@ async function wizard() {
     <input id="wiz-review" class="mfield" style="min-width:170px"
       value="${esc(WIZREVIEW || yearOut)}" title="承認のレビュー期限">
   </div>
-  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th></th></tr>
+  <table><tr><th>ツール</th><th>提供元</th><th>判断</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${REGTOOLS.map(toolRow).join('')}</table>`;
   if (WIZSTEP === 5) body = `<h4>ブラウザー拡張機能と貼り付けガード</h4>
   <p class="lede" style="margin-bottom:10px">1つの拡張機能で、AIサイトへのサインインに使われたアカウントを報告し、危険な貼り付けを警告またはブロックします。一度パッケージ化して配布先に置けば利用できます。ガイド付きセットアップが手順を1つずつ案内します。ここから設定済みのソースをダウンロードでき、リポジトリからコードを取得する必要はありません。保存した値はすべて、手順7でダウンロードする設定済みのポリシーに組み込まれます。最初は飛ばして、後から設定しても構いません。</p>
@@ -6081,7 +6086,7 @@ function accountSettings() {
   <div class="wcard" style="margin-bottom:10px"><h3>アカウント</h3>
     <p class="lede" style="margin-bottom:10px">オーナーはサインインできる人を決め、管理者はプラットフォームを運用し、閲覧者はすべてのページを見られますが変更はできません（監査担当者や経営層向け）。自分より上位のアカウントを操作したり、自分より上位のロールを付与したりはできません。ロールの変更は、次回のサインインではなく次の操作から適用されます。サインアウトは不要ですが、開いたままのページは再読み込みするまで以前のボタンが表示されます。</p>
     ${USERR ? `<div class="note">${esc(USERR)}</div>` : ''}
-    <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>案内メール</th><th>最終サインイン</th><th></th></tr>
+    <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>案内メール</th><th>最終サインイン</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
     ${USERS.map(u => {
       // The same rank rule the receiver enforces, so the page does not
       // offer a control that is going to come back 403. Equal rank is not
@@ -6417,8 +6422,8 @@ function diagnosticsCards() {
         : u.route === 'kubernetes'
         ? `kubectl -n ${ns} set image deployment/<receiver> receiver=ghcr.io/amansk5/shadow-ai-guard/receiver:${ver || '<version>'}
 kubectl -n ${ns} set image deployment/<portal> portal=ghcr.io/amansk5/shadow-ai-guard/portal:${ver || '<version>'}`
-        : `docker compose pull
-docker compose up -d`;
+        : `git pull
+docker compose up -d --build`;
       const cron = u.route === 'helm' || u.route === 'kubernetes'
         ? `kubectl -n ${ns} set image cronjob/<scanner> scanner=ghcr.io/amansk5/shadow-ai-guard/scanner:${ver || '<version>'}
 kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-ai-guard/discovery:${ver || '<version>'}` : '';
@@ -6426,6 +6431,7 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
       <dl class="health-facts"><div><dt>実行中</dt><dd>${esc(u.current || '—')}</dd></div>
         <div><dt>最新リリース</dt><dd>${u.latest ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.latest)}</a>${u.published_at ? ` <span>· ${esc(String(u.published_at).slice(0, 10))}</span>` : ''}` : '—'}</dd></div>
         <div><dt>導入方法</dt><dd>${esc(route)}${d.chart_version ? ` <span>· ${esc(d.chart_version)}</span>` : ''}</dd></div>
+        <div><dt>デザイントークン</dt><dd>${CFG.dads_tokens === 'mounted' ? '外部マウント（組織のトークンディレクトリ）' : '同梱（デジタル庁デザインシステムの公開トークン）'}</dd></div>
         <div><dt>最終確認</dt><dd>${u.checked_at ? ago(u.checked_at) : (u.enabled ? 'まだ確認していません' : '確認しない設定')}</dd></div></dl>
       ${u.error ? `<p class="health-note warning"><b>前回の確認に失敗</b> ${esc(uiErrorText(u.error,0))}</p>` : ''}
       ${!u.enabled ? `<p class="health-note">更新の確認はオフです（<span class="mono">UPDATE_CHECK=off</span>）。このポータルは外部に問い合わせません。原著のリリースは <a href="https://github.com/AmanSK5/shadow-ai-guard/releases" target="_blank" rel="noopener">GitHub</a> で確認できます。</p>` : ''}
@@ -6434,7 +6440,7 @@ kubectl -n ${ns} set image cronjob/<discovery> discovery=ghcr.io/amansk5/shadow-
       ${u.available === true ? `<p class="health-note warning"><b>${esc(u.name || u.latest)}</b> が公開されています。アップグレードすると受信サービスとポータルが再起動します。保存済みのデータは変更されず、収集エージェントはその間も報告を続けます。</p>
       <details class="how"><summary>${esc(route)} でのアップグレード方法</summary><div>
         <pre class="mono" style="white-space:pre-wrap">${esc(cmd)}</pre>
-        ${cron ? `<p class="src-note">スキャナーや Discovery を CronJob として実行している場合は、チャートの管理外なので、それらのイメージタグも更新してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">もし <span class="mono">IMAGE_TAG</span> が compose 環境で固定されている場合は、まず ${esc(ver || '新しいバージョン')} に変更してください。変更するまでプルしても何も変わりません。</p>`}
+        ${cron ? `<p class="src-note">スキャナーや Discovery を CronJob として実行している場合は、チャートの管理外なので、それらのイメージタグも更新してください。</p><pre class="mono" style="white-space:pre-wrap">${esc(cron)}</pre>` : `<p class="src-note">複製した公開リポジトリからイメージをビルドしている場合は、上のコマンドで更新できます。自組織のレジストリのイメージを使っている場合（<span class="mono">IMAGE_REPO</span> を設定している場合）は、新しいイメージをビルドして公開し、<span class="mono">IMAGE_TAG</span> を ${esc(ver || '新しいバージョン')} などに変更してから <span class="mono">docker compose pull</span> を実行してください。</p>`}
         <p class="src-note">更新後、このページの「実行中」が ${esc(u.latest)} になり、「検出ソース」画面で同じ収集エージェントが報告していることを確認してください。</p>
       </div></details>
       ${u.notes ? `<details class="how"><summary>リリースノート</summary><div><pre class="mono" style="white-space:pre-wrap;max-height:320px;overflow:auto">${esc(u.notes)}</pre></div></details>` : ''}` : ''}
@@ -6885,7 +6891,7 @@ async function fleet() {
   return `<h2 data-tour="fleet">登録済み端末</h2>
   <p class="lede">認証情報を発行済みのすべての端末の一覧です。「検出結果」の「端末」画面は別のもので、そちらには実際に検出結果を報告した端末が表示されます。失効させると、その1台だけを遮断でき、この状態は維持されます。失効した端末のシリアル番号は、有効なトークンを使っても登録を拒否されます。再イメージ化や交換のために管理者が再登録を許可するまで、登録できません。再イメージ化したノートPCや、実行のたびに登録するスキャナーのように、稼働中の端末が再登録した場合は、同じ行のまま「登録日時」の欄に再登録の履歴が記録されます。</p>
   ${ds.length ? `<table><tr><th>端末</th><th>OS</th><th>シリアル番号</th>
-    <th>登録日時</th><th>最終確認</th><th>エージェントのバージョン</th><th>状態</th><th></th></tr>
+    <th>登録日時</th><th>最終確認</th><th>エージェントのバージョン</th><th>状態</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${ds.map(d => `<tr>
     <td>${esc(d.hostname || d.serial)}<br><span class="mono" style="font-size:11px;color:var(--mut)">${esc(d.id)}</span></td>
     <td>${esc(uiTerm(d.platform))}</td><td class="mono">${esc(d.serial)}</td>
@@ -6922,7 +6928,7 @@ async function tokens() {
   const state = t => t.revoked_at ? ['revoked', 'p-mut']
     : t.expires_at <= nowIso ? ['expired', 'p-mut'] : ['active', 'p-ok'];
   return `<h2>登録トークン</h2>
-  <p class="lede">登録トークンは、MDM や RMM に設定して使います（Jamf のパラメータ、Intune のスクリプト、RMM の変数など）。各端末は、このトークンを1回だけ使って、その端末専用の認証情報と交換します。トークンでできるのは端末の登録だけで、検出結果は送信できません。そのため、MDM の配布物に有効期限の長いトークンを入れても問題ありません。展開が終わったとき、またはトークンが漏えいしたときは、ここで失効させてください。</p>
+  <p class="lede">登録トークンは、MDM や RMM に設定して使います（Jamf のパラメーター、Intune のスクリプト、RMM の変数など）。各端末は、このトークンを1回だけ使って、その端末専用の認証情報と交換します。トークンでできるのは端末の登録だけで、検出結果は送信できません。そのため、MDM の配布物に有効期限の長いトークンを入れても問題ありません。展開が終わったとき、またはトークンが漏えいしたときは、ここで失効させてください。</p>
   ${MINTED ? (MINTED.error
     ? `<div class="note">${esc(MINTED.error)}
        <button class="mini" data-act="dismiss-minted">閉じる</button></div>`
@@ -6939,9 +6945,9 @@ async function tokens() {
         title="このトークンが機能しなくなるまでの日数"> 日</label>
     <button class="mini" data-act="mint">トークンを発行</button>
   </div>
-  ${ts.length ? `<table><tr><th>ID</th><th>メモ</th><th>作成日</th><th>有効期限</th><th>状態</th><th></th></tr>
+  ${ts.length ? `<table><tr><th>ID</th><th>メモ</th><th>作成日</th><th>有効期限</th><th>状態</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${ts.map(t => { const [lbl, cls] = state(t); return `<tr>
-    <td class="mono">${esc(t.id)}</td><td>${esc(t.note === 'Demo rollout (Jamf and Intune)' ? 'デモ配布（Jamf と Intune）' : (t.note || '—'))}</td>
+    <td class="mono">${esc(t.id)}</td><td>${esc(t.note || '—')}</td>
     <td>${when(t.created_at)}</td><td>${when(t.expires_at)}</td>
     <td><span class="pill ${cls}">${esc(uiTerm(lbl))}</span></td>
     <td>${lbl === 'active' ? `<button class="mini" data-act="revoke-token" data-key="${esc(t.id)}">失効させる</button>` : ''}</td>
@@ -8203,7 +8209,7 @@ function budgetReport() {
     : '<div class="note">契約はまだ登録されていません。</div>'}
   <div class="wcard" style="margin-top:14px"><h3 style="margin-top:0">この画面の見方</h3>
   <p class="src-note" style="margin-top:0">
-  支出は、組織が支払っていると記録した金額です。それ以外の数値はすべて、検出した結果にもとづきます。この製品は、ブラウザー、CLI、IDE、デスクトップアプリ、ネットワーク、クラウドのサインインをまたいで AI ツールを検出し、その結果を、各ライセンスに登録された人と名前で照合します。<strong>利用確認済み</strong>とは、上の期間内に、そのライセンスが対象とするツールのうち少なくとも1つで、その人が確認されたことを意味します。バンドルの中の1つのツールで利用がなくても、利用未確認にはなりません。<strong>利用未確認</strong>とは、どの検出ソースでもその人を確認できなかったことを意味します。未使用シートの有力な手がかりですが、証拠ではありません。すべての端末に展開されていない検出ソースは、利用がないのと同じに見えます。休暇中の人も、一度もサインインしない人と同じに見えます。確認のきっかけとして使い、請求の根拠にはしないでください。</p></div>`;
+  支出は、組織が支払っていると記録した金額です。それ以外の数値はすべて、検出した結果にもとづきます。この製品は、ブラウザー、CLI、IDE、デスクトップアプリ、ネットワーク、クラウドのサインインをまたいで AIツールを検出し、その結果を、各ライセンスに登録された人と名前で照合します。<strong>利用確認済み</strong>とは、上の期間内に、そのライセンスが対象とするツールのうち少なくとも1つで、その人が確認されたことを意味します。バンドルの中の1つのツールで利用がなくても、利用未確認にはなりません。<strong>利用未確認</strong>とは、どの検出ソースでもその人を確認できなかったことを意味します。未使用シートの有力な手がかりですが、証拠ではありません。すべての端末に展開されていない検出ソースは、利用がないのと同じに見えます。休暇中の人も、一度もサインインしない人と同じに見えます。確認のきっかけとして使い、請求の根拠にはしないでください。</p></div>`;
 }
 
 async function budget() {
@@ -8512,7 +8518,7 @@ const EN_ERROR_PATTERNS = [
   [/^the Devin API answered 403: the service user needs the ViewOrgMembership permission on this organisation$/,
     () => 'Devin API が 403 を返しました。サービスユーザーに、この組織の ViewOrgMembership 権限が必要です。'],
   [/^the Devin API answered 404: no organisation (.+) - check the id on Settings > Service Users$/,
-    m => `Devin API が 404 を返しました。組織 ${m[1]} が見つかりません。Settings > Service Users で ID を確認してください。`],
+    m => `Devin API が 404 を返しました。組織 ${m[1]} が見つかりません。Devin の画面「Settings」>「Service Users」（サービスユーザーの管理ページ）で ID を確認してください。`],
   [/^(.+) answered 200, but not with JSON$/,
     m => `${uiApiName(m[1])}が 200 を返しましたが、JSON 形式ではありませんでした。`],
   [/^(.+) answered HTTP (\d+)$/,
@@ -8530,9 +8536,9 @@ const EN_ERROR_PATTERNS = [
   [/^(.+) answered without a SCIM Resources list - check the base URL is the SCIM one$/,
     m => `${uiApiName(m[1])}の応答に SCIM の Resources 一覧がありません。ベース URL が SCIM 用のものか確認してください。`],
   [/^the Devin key needs the organisation id with it, as org-xxxx:cog_xxxx - both are on Settings > Service Users$/,
-    () => 'Devin のキーには組織 ID を併記する必要があります（org-xxxx:cog_xxxx の形式）。どちらも Settings > Service Users にあります。'],
+    () => 'Devin のキーには組織 ID を併記する必要があります（org-xxxx:cog_xxxx の形式）。どちらも Devin の画面「Settings」>「Service Users」（サービスユーザーの管理ページ）に表示されます。'],
   [/^(.+) is not a Devin organisation id: it should look like org-xxxx, from Settings > Service Users$/,
-    m => `${m[1]} は Devin の組織 ID ではありません。org-xxxx の形式で、Settings > Service Users に表示されます。`],
+    m => `${m[1]} は Devin の組織 ID ではありません。org-xxxx の形式で、Devin の画面「Settings」>「Service Users」（サービスユーザーの管理ページ）に表示されます。`],
   [/^the ECB publishes no reference rate for (.+)$/,
     m => `欧州中央銀行（ECB）は ${m[1]} の参考レートを公表していません。`],
   [/^malformed tool id: (.*)$/, m => `ツール ID の形式が正しくありません: ${m[1]}`],
@@ -8577,9 +8583,11 @@ function uiErrorText(raw, status) {
 function uiRelayText(detail) {
   const s = String(detail == null ? '' : detail).trim();
   if (!s) return 'メールサーバーから理由は示されませんでした。';
-  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
   if (s === 'no mail server is configured') return 'メールサーバーが設定されていません。';
+  // 3桁の応答コードで始まる文は、宛先や名前に日本語が含まれていても中継サーバーの応答そのもの。
+  // 何の文言かを日本語で示したうえで、原文を変えずに残す。
   if (/^\d{3}\b/.test(s)) return 'メールサーバーの応答: ' + s;
+  if (/[ぁ-んァ-ヶ一-龯]/.test(s)) return s;
   if (/^[A-Za-z_.]+$/.test(s)) return 'メールサーバーとの通信に失敗しました（' + s + '）。';
   return 'メールサーバーの応答: ' + s;
 }
@@ -9970,9 +9978,9 @@ async function agentic() {
   // as an unsupervised agent.
   const nAuto = c.autonomous || 0, nUnrec = c.unrecognised || 0;
   const strong = nAuto
-    ? `<h1 class="ag-verdict">人の操作なしに動いているものが ${nAuto} 件あります。${
-        c.unaccountable ? ` <em>うち ${c.unaccountable} 件は、責任者を特定できません。</em>` : ''}</h1>`
-    : `<h1 class="ag-verdict">人の操作なしに動いていると報告されているものは、ありません。</h1>`;
+    ? `<h2 class="ag-verdict">人の操作なしに動いているものが ${nAuto} 件あります。${
+        c.unaccountable ? ` <em>うち ${c.unaccountable} 件は、責任者を特定できません。</em>` : ''}</h2>`
+    : `<h2 class="ag-verdict">人の操作なしに動いていると報告されているものは、ありません。</h2>`;
   // "Nothing reported it" is only an answer from devices that looked. A
   // collector too old to read a scheduler produces the same silence as an
   // estate that schedules nothing, and the difference is the whole question.

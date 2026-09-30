@@ -61,10 +61,10 @@ PORT = int(os.environ.get("MOCK_PORT", "8092"))
 # these have to be the addresses on the demo's accounts.
 PEOPLE = [
     {"oid": "00000000-0000-0000-0000-0000000000a1",
-     "name": "管理者", "email": "gengar@example.com",
+     "name": "管理者", "email": "admin@example.com",
      "note": "デモで作成されるオーナーアカウントです"},
     {"oid": "00000000-0000-0000-0000-0000000000a2",
-     "name": "運用担当者", "email": "snorlax@example.com",
+     "name": "運用担当者", "email": "operator@example.com",
      "note": "追加の管理者アカウントです（作成済みの場合）"},
     {"oid": "00000000-0000-0000-0000-0000000000a3",
      "name": "未登録ユーザー", "email": "nobody@example.com",

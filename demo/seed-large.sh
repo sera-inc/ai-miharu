@@ -7,8 +7,8 @@
 # well over a dozen tools, fifteen personal accounts, seven subscriptions. The point is not the
 # story of any one finding but the shape of the pages when there is a lot of
 # them - which is what a real estate looks like and what the demo's handful
-# of findings cannot show. Everything is fake: users are Pokemon, domains
-# are example / gmail / outlook, devices are made up. Safe to re-run.
+# of findings cannot show. Everything is fake: users carry common Japanese surnames,
+# domains are example / gmail / outlook, devices are made up. Safe to re-run.
 #
 #   docker compose run --rm --entrypoint "/bin/sh /seed-large.sh" seeder
 # shellcheck disable=SC2088  # evidence strings are data, not paths to expand
@@ -28,9 +28,9 @@ f() {
 echo "seeding a large synthetic estate -> $R"
 
 # --- the fleet: macOS, Windows and Linux machines with a local user each ---
-MAC="abra alakazam arbok arcanine"
-WIN="dratini drowzee dugtrio"
-NIX="goldeen golem"
+MAC="yamada yamaguchi saito inoue"
+WIN="matsuda ikeda hashimoto"
+NIX="abe ishikawa"
 
 # Endpoint collectors see the tools people installed. The mix leans the way
 # real estates do: a few tools everywhere, a long tail on one or two machines.
@@ -68,9 +68,9 @@ done
 
 # --- personal accounts: eleven, across the tools people actually use ---
 p=0
-for pair in abra:chatgpt alakazam:chatgpt arbok:chatgpt arcanine:gemini abra:codex-cli \
-            dratini:chatgpt drowzee:claude dugtrio:claude-code dratini:claude-code \
-            goldeen:codex-cli golem:claude-code; do
+for pair in yamada:chatgpt yamaguchi:chatgpt saito:chatgpt inoue:gemini yamada:codex-cli \
+            matsuda:chatgpt ikeda:claude hashimoto:claude-code matsuda:claude-code \
+            abe:codex-cli ishikawa:claude-code; do
   u=${pair%%:*}; t=${pair##*:}; p=$((p+1))
   case "$u" in
     drat*|drow*|dugt*|ekan*) d="WIN-$(echo "$u" | tr "[:lower:]" "[:upper:]")"; os=windows; src=collector-windows;;
@@ -90,15 +90,15 @@ for u in $MAC $WIN; do
   case "$u" in c*|e*|f*) f fireflies cloud unknown example.com "" "$u" "interactive sign-in to Fireflies" info entra_sign_in;; esac
   case "$u" in g*) f github-copilot cloud unknown example.com "" "$u" "interactive sign-in to GitHub" info entra_sign_in;; esac
 done
-for u in abra dratini; do
+for u in yamada matsuda; do
   f openai-api-platform cloud unknown example.com "" "$u" "consent grant: OpenAI API" info entra_consent_grant
 done
-for u in arbok drowzee; do
+for u in saito ikeda; do
   f atlassian-rovo cloud unknown example.com "" "$u" "interactive sign-in to Atlassian" info entra_sign_in
 done
 
 # --- machines only the scanners know: the coverage gaps ---
-GAP="jigglypuff jolteon"
+GAP="hayashi ogawa"
 g=0
 for u in $GAP; do
   g=$((g+1)); d="LT-$(echo "$u" | tr "[:lower:]" "[:upper:]")"
@@ -118,18 +118,18 @@ for u in $MAC $WIN; do
     f paste-guard browser "$os" "" "$d" "" "heartbeat version=1.1.1 mode=warn" info paste_guard;;
   esac
 done
-f chatgpt.com browser macos "" MBP-ABRA "" "paste warned: aws_access_key" warn paste_guard
-f claude.ai browser windows "" WIN-DRATINI "" "paste warned: classification_marking" warn paste_guard
+f chatgpt.com browser macos "" MBP-YAMADA "" "paste warned: aws_access_key" warn paste_guard
+f claude.ai browser windows "" WIN-MATSUDA "" "paste warned: classification_marking" warn paste_guard
 
 # --- what runs without a person ---
-f claude-code cli linux "" NIX-GOLDEEN "" "/etc/systemd/system/nightly-triage.service" warn collector-linux '"mode":"autonomous","identity":"machine","trigger":"systemd timer, every 15 min","schedule":"oncalendar:*:0/15"'
-f claude-code cli macos "" MBP-ARBOK "" "~/Library/LaunchAgents/ai.helper.plist" warn collector-macos '"mode":"autonomous","identity":"machine","trigger":"launchd, at login","schedule":"atlogin"'
-f claude-code cli macos example.com MBP-ABRA abra "~/Library/LaunchAgents/daily-notes.plist" info collector-macos '"mode":"autonomous","identity":"person","trigger":"launchd, every 6 hours","schedule":"interval:21600"'
-f claude network linux "" NIX-GOLEM "" "DNS lookup for api.anthropic.com (via python3)" warn sentinelone_dns '"trigger":"cron, 0 2 * * *","schedule":"cron:0 2 * * *"'
+f claude-code cli linux "" NIX-ABE "" "/etc/systemd/system/nightly-triage.service" warn collector-linux '"mode":"autonomous","identity":"machine","trigger":"systemd timer, every 15 min","schedule":"oncalendar:*:0/15"'
+f claude-code cli macos "" MBP-SAITO "" "~/Library/LaunchAgents/ai.helper.plist" warn collector-macos '"mode":"autonomous","identity":"machine","trigger":"launchd, at login","schedule":"atlogin"'
+f claude-code cli macos example.com MBP-YAMADA yamada "~/Library/LaunchAgents/daily-notes.plist" info collector-macos '"mode":"autonomous","identity":"person","trigger":"launchd, every 6 hours","schedule":"interval:21600"'
+f claude network linux "" NIX-ISHIKAWA "" "DNS lookup for api.anthropic.com (via python3)" warn sentinelone_dns '"trigger":"cron, 0 2 * * *","schedule":"cron:0 2 * * *"'
 
 echo ""
 # --- six subscriptions, with the seat lists a vendor export would carry ---
-U="${OWNER_USER:-gengar}"; PW="${OWNER_PASSWORD:-gengar-demo-portal}"
+U="${OWNER_USER:-admin}"; PW="${OWNER_PASSWORD:-admin-demo-portal}"
 sess=$(curl -s -X POST "$A/admin/login" -H 'Content-Type: application/json' \
   --data "{\"username\":\"$U\",\"password\":\"$PW\"}")
 tok=$(printf '%s' "$sess" | sed -n 's/.*"token": *"\([^"]*\)".*/\1/p')
@@ -150,9 +150,9 @@ put /admin/budget/subscription '{"tool_id":"claude","plan_key":"max-5","vendor":
 put /admin/budget/subscription '{"tool_id":"cursor","plan_key":"teams","vendor":"Anysphere","plan":"Teams","currency":"USD","renewal_date":"2026-10-01","owner":"Engineering","seat_tiers":[{"name":"Teams","seats":1,"unit_price_monthly":40}]}'
 put /admin/budget/subscription '{"tool_id":"fireflies","plan_key":"enterprise","vendor":"Fireflies","plan":"Enterprise","currency":"USD","renewal_date":"2027-07-14","owner":"Operations","seat_tiers":[{"name":"Enterprise","seats":14,"unit_price_monthly":39}]}'
 echo; printf 'budget members: '
-members chatgpt business Business abra alakazam arbok arcanine beedrill bellsprout blastoise butterfree caterpie chansey clefable clefairy cloyster
-members claude team Standard abra dratini drowzee dugtrio ekans electabuzz electrode exeggcute exeggutor farfetchd
-members claude max-20 "Max 20" goldeen golem graveler grimer
+members chatgpt business Business yamada yamaguchi saito inoue beedrill bellsprout blastoise butterfree caterpie chansey clefable clefairy cloyster
+members claude team Standard yamada matsuda ikeda hashimoto ekans electabuzz electrode exeggcute exeggutor farfetchd
+members claude max-20 "Max 20" abe ishikawa graveler grimer
 members claude max-5 "Max 5" growlithe gyarados haunter hitmonchan hitmonlee horsea
 members cursor teams Teams cubone
 members fireflies enterprise Enterprise caterpie chansey clefable clefairy cloyster cubone dewgong diglett dodrio doduo dragonair dragonite ekans electabuzz

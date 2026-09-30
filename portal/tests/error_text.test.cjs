@@ -60,6 +60,33 @@ test('a Japanese message passes through untouched, and an unknown English one do
   assert.equal(uiErrorText(null, 404), '処理できませんでした（HTTP 404）。');
 });
 
+test('an English sentence with a Japanese organisation name is translated, and a Japanese one is not touched twice', () => {
+  // The vendor refused, and the organisation happens to have a Japanese name:
+  // the sentence is still English, so it must still be translated.
+  assert.equal(uiErrorText('the Anthropic API answered 401: the key is wrong, expired or revoked', 401)
+                 .startsWith('Anthropic API が 401 を返しました'), true);
+  assert.match(uiErrorText('the Devin API answered 404: no organisation org-世良 - check the id on Settings > Service Users', 404),
+               /^Devin API が 404 を返しました。組織 org-世良 が見つかりません。/);
+  // A message that is already Japanese and matches no English pattern stays as it is.
+  assert.equal(uiErrorText('世良チームの契約が見つかりません。', 404), '世良チームの契約が見つかりません。');
+});
+
+test('Devin refusals point at the vendor screen by its English labels, inside Japanese quotes', () => {
+  // Devin's console is English-only, so an administrator has to look for the
+  // labels exactly as Devin prints them. They are quoted as labels and
+  // explained in Japanese instead of being left as a bare "A > B" path.
+  const msgs = [
+    uiErrorText('the Devin API answered 404: no organisation org-abc123 - check the id on Settings > Service Users', 404),
+    uiErrorText('the Devin key needs the organisation id with it, as org-xxxx:cog_xxxx - both are on Settings > Service Users', 400),
+    uiErrorText('cog_abcd is not a Devin organisation id: it should look like org-xxxx, from Settings > Service Users', 400),
+  ];
+  for (const m of msgs) {
+    assert.match(m, /「Settings」>「Service Users」（サービスユーザーの管理ページ）/);
+    assert.doesNotMatch(m, /[^「]Settings > Service Users/);
+  }
+  assert.match(msgs[0], /org-abc123 が見つかりません/);
+});
+
 test('activation refusals still map to their Japanese explanations', () => {
   assert.match(uiErrorText('no key was given', 400), /キーが入力されていません/);
 });
@@ -74,4 +101,13 @@ test('the mail server\'s own words are kept as evidence, under a Japanese lead-i
   assert.equal(uiRelayText('no mail server is configured'), 'メールサーバーが設定されていません。');
   assert.equal(uiRelayText(''), 'メールサーバーから理由は示されませんでした。');
   assert.equal(uiRelayText('メールサーバーが応答しません'), 'メールサーバーが応答しません');
+});
+
+test('a relay reply that quotes a Japanese name is still labelled as the mail server\'s answer', () => {
+  // The reply starts with the SMTP code, so it is the relay's own text even
+  // though the address it refuses contains Japanese. It is kept verbatim.
+  assert.equal(uiRelayText('550 5.1.1 <山田太郎@example.co.jp>: Recipient address rejected: User unknown'),
+               'メールサーバーの応答: 550 5.1.1 <山田太郎@example.co.jp>: Recipient address rejected: User unknown');
+  // A reply with no code that is entirely Japanese is passed through as it is.
+  assert.equal(uiRelayText('宛先が拒否されました'), '宛先が拒否されました');
 });

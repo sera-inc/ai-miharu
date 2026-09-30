@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="137 146 980 980" width="256" height="256" role="img" aria-labelledby="t">
+  <title id="t">世良AIガバナンスのシンボル</title>
+  <defs>
+    <linearGradient id="sera-g" gradientUnits="userSpaceOnUse" x1="180" y1="300" x2="1050" y2="1020">
+      <stop offset="0" stop-color="#012a72"/>
+      <stop offset="0.45" stop-color="#01449c"/>
+      <stop offset="0.72" stop-color="#0166d5"/>
+      <stop offset="1" stop-color="#00a0ff"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#sera-g)" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="98" d="M 949.6 392.9 A 404 404 0 1 0 1013.3 517.9"/>
+    <path stroke-width="84" d="M 407 502 H 796 M 407 635 H 666 M 407 767 H 538"/>
+    <path stroke-width="86" d="M 641 748 L 719 828 L 1013.3 517.9"/>
+  </g>
+</svg>

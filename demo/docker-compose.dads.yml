@@ -1,6 +1,10 @@
-# Optional development overlay for the private digital-design-system token package.
-# Run with DADS_TOKENS_DIR set to an absolute path in a checked-out, pinned revision.
-# The product image remains buildable without this overlay or private credentials.
+# OPTIONAL overlay: serve your organisation's own DADS token directory instead of the
+# tokens bundled with the portal. You do NOT need it to see the DADS-based design: the portal
+# bundles the public Digital Agency tokens (MIT) and uses them by default.
+# The directory must hold all four files (index.css, dads.css, brand.css, semantic.css); an
+# incomplete one is ignored with a warning and the bundled tokens are used.
+# Run with DADS_TOKENS_DIR set to an absolute path of a checked-out, pinned revision. The mount
+# is read-only and nothing from it is copied into the image.
 services:
   portal:
     environment:

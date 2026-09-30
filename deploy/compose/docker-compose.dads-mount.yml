@@ -1,0 +1,30 @@
+# Copyright 2026 Aman Karir
+# SPDX-License-Identifier: Apache-2.0
+# Part of Shadow AI Guard, https://github.com/AmanSK5/shadow-ai-guard
+#
+# OPTIONAL overlay: serve your organisation's own DADS token directory instead
+# of the tokens bundled with the portal.
+#
+# You do NOT need this to see the DADS-based design. The portal bundles the
+# public Digital Agency tokens (generated from @digital-go-jp/tailwind-theme-plugin,
+# MIT) and uses them by default. Use this overlay only when your organisation
+# keeps its own token package - for example a private design-system checkout -
+# and wants the portal to use it.
+#
+# The directory must contain all four files: index.css, dads.css, brand.css and
+# semantic.css. A directory that is missing any of them is ignored, the bundled
+# tokens are used, and the portal log says so at startup:
+#
+#     DADS_TOKENS_DIR=/absolute/path/to/tokens \
+#       docker compose -f docker-compose.yml -f docker-compose.dads-mount.yml up -d
+#
+# The mount is read-only. Nothing from it is copied into the image.
+services:
+  portal:
+    environment:
+      DADS_CSS_DIR: /run/dads/tokens
+    volumes:
+      - type: bind
+        source: ${DADS_TOKENS_DIR:?Set DADS_TOKENS_DIR to an absolute token directory}
+        target: /run/dads/tokens
+        read_only: true

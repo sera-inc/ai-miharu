@@ -10,6 +10,10 @@
 [data-theme=dark]{--pop-shadow:0 28px 80px var(--app-sg-shadow-color),0 4px 14px var(--app-sg-shadow-color)}
 html{background:var(--bg)}
 body{font:14px/1.5 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.004em}
+/* Japanese text breaks between phrases (auto-phrase) instead of inside a word such as
+   "デモ環境", and never before a small kana or a long-vowel mark (strict). Browsers that
+   do not know auto-phrase keep the default; nothing else depends on it. */
+body{word-break:auto-phrase;line-break:strict}
 aside{padding:0 0 14px;border-right:1px solid var(--app-sg-border-on-dark-subtle)}
 .brandline{border-color:var(--side-line)}
 .tenant-switch{border:1px solid var(--side-line);border-radius:9px;display:flex;align-items:center;gap:9px;color:var(--side-ink)}
@@ -1008,9 +1012,9 @@ td{padding:12px 14px}
 .candidate-identity>strong,.undecided-list>a>strong,.decision-section-head strong{font-size:12px}
 .register-overview{grid-template-columns:minmax(250px,.85fr) 1.65fr}
 .register-score{background:var(--app-sg-surface-card);padding:22px}
-.register-score-head span{font-size:11px;color:var(--app-sg-text-on-dark-secondary);letter-spacing:.07em}
+.register-score-head span{font-size:11px;color:var(--app-sg-text-secondary);letter-spacing:.07em}
 .register-score-head strong{font-size:32px;font-variant-numeric:tabular-nums}
-.register-score p{font-size:12px;color:var(--app-sg-text-on-dark-secondary)}
+.register-score p{font-size:12px;color:var(--app-sg-text-secondary)}
 .register-metrics div{padding:15px 20px}
 .register-metrics dt{font-size:24px;font-variant-numeric:tabular-nums}
 .register-metrics dd{font-size:11px}
@@ -1680,7 +1684,7 @@ td{font-size:12px;padding-top:11px;padding-bottom:11px}
 .ui-visibility-card>.ui-latest{flex:1 1 auto;min-height:0;overflow:hidden;margin-top:6px}
 .ui-visibility-card>.ui-latest .ui-widget-table td{padding-top:7px;padding-bottom:7px}
 .ui-visibility-card>.ui-latest td:first-child strong{text-transform:capitalize}
-.ui-silent-table td:last-child em{font-style:normal;color:var(--mut);opacity:.85;font-size:10px;margin-left:5px}
+.ui-silent-table td:last-child em{font-style:normal;color:var(--mut);font-size:10px;margin-left:5px}
 .wcard.ui-paste-card .ui-widget-table th:last-child,.wcard.ui-paste-card .ui-widget-table td:last-child{text-align:left;width:auto;white-space:normal}
 /* The two cards that fill a row of their own by height must not claim a
    whole stacked column, in the planner or on the page: in a stack the flex
@@ -1747,3 +1751,10 @@ td{font-size:12px;padding-top:11px;padding-bottom:11px}
     pointer-events: auto;
   }
 }
+/* The note under each headline number is a second <dd> (a <div> in a <dl> may hold only dt and dd),
+   drawn exactly as the <small> it replaced. */
+.executive-metrics dd.ui-metric-note{order:0;margin:9px 0 0;font-size:10px;line-height:1.5;color:var(--mut);font-weight:400;min-height:0}
+.ui-compact .executive-metrics dd.ui-metric-note{margin:6px 0 0;font-size:10px}
+/* The hidden "操作" label in an action column's header is absolutely positioned; without a positioned
+   cell it lands at the far edge of a wide table and widens the whole page on a narrow screen. */
+th.th-act{position:relative}

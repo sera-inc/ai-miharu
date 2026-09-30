@@ -2187,7 +2187,7 @@ def status_from(findings):
          "in Entra doesn't close that path."),
         ("fleet", "jamf_app", "Jamf applications", "scanner/README.md",
          "A Jamf Pro API client with read access to computer inventory. Set "
-         "AIGUARD_JAMF_URL, _CLIENT_ID and _CLIENT_SECRET. On Kandji, "
+         "AIGUARD_JAMF_BASE_URL, _CLIENT_ID and _CLIENT_SECRET. On Kandji, "
          "Addigy or another MDM: anything that emits the finding shape "
          "fills this row - see docs/writing-a-scanner.md."),
         ("fleet", "jamf_extension", "Jamf browser extensions", "scanner/README.md",
@@ -2200,7 +2200,7 @@ def status_from(findings):
          "Same Intune permissions. Not yet emitted by any scanner."),
         ("network", "sentinelone_dns", "SentinelOne DNS", "scanner/README.md",
          "A SentinelOne API token with Deep Visibility read access. Set "
-         "AIGUARD_S1_URL and AIGUARD_S1_TOKEN. Using a different DNS or "
+         "AIGUARD_S1_BASE_URL and AIGUARD_S1_API_TOKEN. Using a different DNS or "
          "network-security product? Anything that emits the finding shape "
          "fills this row - see docs/writing-a-scanner.md."),
         ("network", "sentinelone_network", "SentinelOne network", "scanner/README.md",

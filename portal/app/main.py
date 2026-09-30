@@ -1057,6 +1057,7 @@ def config(request: Request, _=Depends(require_auth)):
         "grafana_panels": panels,
         "grafana_dashboard_uid": dashboard_uid,
         "lookback_hours": LOOKBACK_HOURS,
+        "dads_tokens": dads_token_source(),
         "identity_map_configured": bool(IDENTITY_MAP and Path(IDENTITY_MAP).exists()),
         "cache_ttl_seconds": CACHE_TTL,
         "version": APP_VERSION,
@@ -2564,18 +2565,15 @@ def digest_text(g, s, hours):
                   for k, v in (g.get("tools") or {}).items()),
                  key=lambda kv: (-kv[1], kv[0]))[:5]
     n = len(pa)
-    lines = ["*ai-guard: the last %d days*" % round(hours / 24),
-             "• %d personal account%s across %d %s"
-             % (n, "" if n == 1 else "s", len(people),
-                "person" if len(people) == 1 else "people"),
-             "• %d tools in use on %d devices"
+    lines = ["*世良AIガバナンス: 直近 %d 日間*" % round(hours / 24),
+             "• 個人アカウント %d 件（%d 人）" % (n, len(people)),
+             "• 使用中のツール %d 件、端末 %d 台"
              % (counts.get("tools", 0), counts.get("devices", 0))]
     if top:
-        lines.append("• top tools: "
-                     + ", ".join("%s (%d)" % t for t in top))
+        lines.append("• 利用端末数の多いツール: "
+                     + "、".join("%s（%d 台）" % t for t in top))
     if silent:
-        lines.append("• %d detection source%s silent"
-                     % (len(silent), "" if len(silent) == 1 else "s"))
+        lines.append("• 報告のない検出ソース %d 件" % len(silent))
     return "\n".join(lines)
 
 
@@ -3426,6 +3424,30 @@ def sera_ai_governance_symbol(_=Depends(require_page_auth)):
     return FileResponse(STATIC / "sera-ai-governance-symbol.png", media_type="image/png")
 
 
+# The rest of the brand set, each named for the same reason: the page links a
+# fixed handful of files, and nothing here resolves a caller-supplied path.
+# The SVGs are the source of truth (assets/brand/); the colour mark is for
+# light surfaces and the white one for the blue sidebar and the dark theme.
+@app.get("/sera-ai-governance-symbol.svg")
+def sera_ai_governance_symbol_svg(_=Depends(require_page_auth)):
+    return FileResponse(STATIC / "sera-ai-governance-symbol.svg", media_type="image/svg+xml")
+
+
+@app.get("/sera-ai-governance-symbol-white.svg")
+def sera_ai_governance_symbol_white_svg(_=Depends(require_page_auth)):
+    return FileResponse(STATIC / "sera-ai-governance-symbol-white.svg", media_type="image/svg+xml")
+
+
+@app.get("/favicon.ico")
+def favicon(_=Depends(require_page_auth)):
+    return FileResponse(STATIC / "favicon.ico", media_type="image/x-icon")
+
+
+@app.get("/apple-touch-icon.png")
+def apple_touch_icon(_=Depends(require_page_auth)):
+    return FileResponse(STATIC / "apple-touch-icon.png", media_type="image/png")
+
+
 # The enterprise presentation layer is named explicitly for the same reason as
 # the logo: the page has one known asset, and no caller-controlled filesystem
 # path is ever resolved. It uses the page-auth boundary too, so classic-mode
@@ -3435,14 +3457,56 @@ def enterprise_css(_=Depends(require_page_auth)):
     return FileResponse(STATIC / "enterprise.css", media_type="text/css")
 
 
-# DADS assets are fixed filenames. They contain presentation tokens, no estate data,
-# and follow the HTML shell authentication boundary so the managed login can render.
-# The CSS directory is a read-only runtime mount; the image has no private tokens.
-def _dads_css_response(filename: str) -> FileResponse:
+# DADS design tokens (Layer 1) and the product adapter.
+#
+# Standard: the tokens are bundled with the portal (app/static/dads/, generated
+# from the MIT-licensed @digital-go-jp/tailwind-theme-plugin by tools/dads), so
+# a plain clone, build and run shows the DADS skin with nothing else installed.
+#
+# Optional: an organisation that keeps its own token directory - for example a
+# checkout of its private design system - mounts it read-only and points
+# DADS_CSS_DIR at it. A COMPLETE mount (all four files) replaces the bundle; an
+# incomplete one is refused loudly and the bundle is used, so a half-mounted
+# directory never yields a half-styled page nobody can explain.
+#
+# Filenames are fixed and no caller-controlled path is ever resolved. The files
+# hold presentation tokens and no estate data, and follow the HTML shell's
+# authentication boundary so the managed login can render.
+DADS_BUNDLE = STATIC / "dads"
+_DADS_MOUNT_FILES = ("index.css", "dads.css", "brand.css", "semantic.css")
+
+
+def _dads_mount() -> Path | None:
     base = os.environ.get("DADS_CSS_DIR")
     if not base:
-        raise HTTPException(status_code=404)
-    path = Path(base) / filename
+        return None
+    root = Path(base)
+    return root if all((root / name).is_file() for name in _DADS_MOUNT_FILES) else None
+
+
+def dads_token_source() -> str:
+    """Where the DADS tokens come from right now: "mounted" or "bundled"."""
+    return "mounted" if _dads_mount() else "bundled"
+
+
+def _dads_preflight() -> None:
+    """Say, once at startup, which tokens are in use and why.
+
+    A mount that is set but incomplete is the case worth shouting about: the
+    operator asked for their own tokens and would otherwise get the bundled
+    ones without being told.
+    """
+    base = os.environ.get("DADS_CSS_DIR")
+    if base and _dads_mount() is None:
+        missing = [n for n in _DADS_MOUNT_FILES if not (Path(base) / n).is_file()]
+        log.warning("DADS_CSS_DIR=%s is incomplete (missing: %s); serving the "
+                    "bundled DADS tokens instead", base, ", ".join(missing))
+    log.info("DADS tokens: %s", dads_token_source())
+
+
+def _dads_css_response(filename: str) -> FileResponse:
+    root = _dads_mount() or DADS_BUNDLE
+    path = root / filename
     if not path.is_file():
         raise HTTPException(status_code=404)
     return FileResponse(
@@ -3474,13 +3538,17 @@ def dads_semantic_css(_=Depends(require_page_auth)):
 
 @app.get("/dads-product.css")
 def dads_product_css(_=Depends(require_page_auth)):
-    # Without the private token mount, keep the original enterprise skin intact.
-    base = os.environ.get("DADS_CSS_DIR")
-    if not base or any(not (Path(base) / name).is_file() for name in
-                       ("index.css", "dads.css", "brand.css", "semantic.css")):
+    # The adapter needs Layer 1 (--dads-*) from either source. Without both the
+    # bundle and a complete mount, keep the original enterprise skin intact.
+    if _dads_mount() is None and not (DADS_BUNDLE / "dads.css").is_file():
         raise HTTPException(status_code=404)
     return FileResponse(STATIC / "dads-product.css", media_type="text/css",
                         headers={"Cache-Control": "private, no-store"})
+
+
+@app.on_event("startup")
+def _dads_startup():
+    _dads_preflight()
 
 
 # There is no /static route, deliberately. The UI has a fixed set of named

@@ -8,7 +8,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>ペーストガードの動作デモ</title>
+<title>貼り付けガードの動作デモ</title>
 <!--
   Zero-install demo of the paste guard. This page loads the REAL, unmodified
   ../src/guard.js and stubs the three chrome.* calls it makes, so what you
@@ -66,7 +66,7 @@
 </head>
 <body>
 
-<h1>ペーストガードの動作デモ</h1>
+<h1>貼り付けガードの動作デモ</h1>
 <p>このページでは、拡張機能の実際の <code>src/guard.js</code> を変更せずに動かします。
 下の欄をAIツールの入力欄に見立て、テスト例を貼り付けてください。
 警告画面と報告内容を確認できます。検出はこのページ内で行われ、貼り付けた本文は報告に含まれません。</p>
@@ -75,20 +75,20 @@
   <a href="?mode=warn" id="m-warn">警告</a>
   <a href="?mode=block" id="m-block">ブロック</a>
   <a href="?mode=off" id="m-off">無効</a>
-  <span class="muted">（警告モードでは「そのまま貼り付ける」を選べます。ブロックモードでは選べません）</span>
+  <span class="muted">（警告モードでは「それでも貼り付ける」を選べます。ブロックモードでは選べません）</span>
 </p>
 
 <div id="prompt" contenteditable="true"></div>
 
 <h2>報告される内容</h2>
-<div id="report" class="muted">まだ報告はありません。拡張機能がレシーバーに送る内容がここに表示されます。</div>
+<div id="report" class="muted">まだ報告はありません。拡張機能が受信サービスに送る内容がここに表示されます。</div>
 
 <h2>検出テスト用の例（すべて架空または公式資料の値）</h2>
 <table id="vectors">
   <tr><td><code>AKIAIOSFODNN7EXAMPLE</code></td><td>AWSアクセスキー（Amazon公式資料の例）</td><td></td></tr>
   <tr><td><code>4111 1111 1111 1111</code></td><td>クレジットカード番号（検証用番号。Luhnチェックを通過）</td><td></td></tr>
   <tr><td><code>password: Summer2026!</code></td><td>共有パスワード</td><td></td></tr>
-  <tr><td><code>CLIENT CONFIDENTIAL</code></td><td>文書の機密区分表示</td><td></td></tr>
+  <tr><td><code>CLIENT CONFIDENTIAL</code></td><td>文書の機密表示</td><td></td></tr>
   <tr><td><code>glpat-abcdefghij1234567890</code></td><td>GitLabパーソナルアクセストークン形式</td><td></td></tr>
   <tr><td><code>sk_live_abcdefghijklmnop1234</code></td><td>Stripe本番用キー形式</td><td></td></tr>
   <tr><td><code>AB 12 34 56 C</code></td><td>英国の国民保険番号形式</td><td></td></tr>

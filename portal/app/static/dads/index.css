@@ -1,0 +1,6 @@
+/*
+ * index.css - entry point for the bundled DADS Layer 1 tokens.
+ * The portal links this file. When an organisation mounts its own complete
+ * token directory (DADS_CSS_DIR), that directory's index.css is served instead.
+ */
+@import "./dads.css";

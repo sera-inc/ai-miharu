@@ -1,6 +1,31 @@
-/* Shadow AI Guard product adapter for sera-inc/digital-design-system. */
-/* DeepSeek v4.1 Flash mapping, pilot; preserve original functionality and dark mode. */
-/* DADS Layer 2 拡張案。未承認・未配布。semantic.css への適用前にレビューする。 */
+/* 世良AIガバナンス 製品アダプター: DADS Layer 1（--dads-*）の上に載る、製品ローカルの Layer 2 拡張案（--app-sg-*）。 */
+/* マッピング案は DeepSeek v4.1 Flash の出力（deepseek-v4.1-flash:cloud）で、人間による承認ではない。詳細は docs/mapping.md。 */
+/* Layer 1 は tools/dads の生成物または外部マウントで、この製品は改変しない。ダーク表示は維持する。 */
+
+/* スタンドアロン用の代替値。
+ * 外部の Layer 2（semantic.css の --app-*）を読み込んだ環境では、レイヤーに入れていない宣言が
+ * 優先されるため、下の値は使われない。同梱トークンだけで動かす標準構成でも、
+ * 同じ見た目になるよう、すべて DADS Layer 1 の値を参照する。 */
+@layer sera-standalone-fallback {
+  :root {
+    --app-focus-ring: var(--dads-color-focus-blue);
+    --app-focus-ring-width: 3px;
+    --app-focus-ring-offset: 2px;
+    --app-font-sans: var(--dads-font-sans);
+    --app-text-body-size: var(--dads-text-dns-14N-130-size);
+    --app-text-body-leading: var(--dads-text-dns-14N-130-leading);
+    --app-space-05: var(--dads-spacing-05);
+    --app-space-3: var(--dads-spacing-3);
+    --app-header-height: 56px;
+    --app-content-max: 1280px;
+    --app-shadow-raised: var(--dads-shadow-1);
+    --app-shadow-overlay: var(--dads-shadow-3);
+    --app-radius-sm: var(--dads-radius-6);
+    --app-radius-md: var(--dads-radius-8);
+    --app-text-inverse: var(--dads-color-white);
+  }
+}
+
 :root {
   --app-sg-surface-canvas: var(--dads-color-white);
   --app-sg-surface-panel: var(--dads-color-solid-gray-50);

@@ -1,5 +1,6 @@
 DADS_DOCS=2.17.1 (2026-08-19)
 DADS_FIGMA=2.17.1
 TAILWIND_PLUGIN=1.0.1
-DESIGN_TOKENS=未導入（トークンは TAILWIND_PLUGIN の dist/v4.css から scripts/build-dads-tokens.mjs で生成）
+DESIGN_TOKENS=同梱（公開の @digital-go-jp/tailwind-theme-plugin 1.0.1 から tools/dads で生成。private デザインシステムの内容は含まない）
 LAST_SYNC=2026-08-23
+PRODUCT_STATUS=管理者試験（DeepSeek 仮対応・人間レビュー未承認・Phase 1 未完了）。参照値であり、Phase 5 完了やデザインシステムの正式承認を示さない

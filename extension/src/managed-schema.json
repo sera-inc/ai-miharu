@@ -15,17 +15,17 @@
       "type": "string"
     },
     "deviceIdentifier": {
-      "title": "デバイス識別子",
-      "description": "MDM が設定する値です。検出イベントをデバイスまたは登録済みユーザーに関連付けます。",
+      "title": "端末の識別子",
+      "description": "MDM が設定する値です。検出イベントを端末または登録済みユーザーに関連付けます。",
       "type": "string"
     },
     "authToken": {
       "title": "認証トークン",
-      "description": "報告先に送る Bearer トークンです。レシーバー共通の AUTH_TOKEN、または管理モードの登録トークン（aige_...）を指定します。登録トークンは、このブラウザープロファイルがデバイス専用の資格情報に一度だけ交換します。",
+      "description": "報告先に送る Bearer トークンです。受信サービス共通の AUTH_TOKEN、または管理モードの登録トークン（aige_...）を指定します。登録トークンは、このブラウザープロファイルが、端末専用の認証情報に一度だけ交換します。",
       "type": "string"
     },
     "pasteGuardMode": {
-      "title": "ペーストガードのモード",
+      "title": "貼り付けガードのモード",
       "description": "off は無効、warn は警告後に貼り付けを許可、block は貼り付けを停止します。未設定時は warn として動作します。",
       "type": "string",
       "enum": [
@@ -35,8 +35,8 @@
       ]
     },
     "classificationMarkings": {
-      "title": "機密区分の表示",
-      "description": "ペーストガードが検出する文書の機密区分です。大文字と小文字を区別せず語句で照合します（例: Client Confidential）。大文字の CONFIDENTIAL は常に検出します。未設定時は guard.js の既定値を使います。",
+      "title": "機密表示の文言",
+      "description": "貼り付けガードが検出する、文書の機密表示の文言です。大文字と小文字を区別せず語句で照合します（例: Client Confidential）。大文字の CONFIDENTIAL は常に検出します。未設定時は guard.js の既定値を使います。",
       "type": "array",
       "items": {
         "type": "string"

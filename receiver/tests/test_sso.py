@@ -362,7 +362,7 @@ def test_an_empty_template_falls_back_to_the_built_in_one(managed):
     managed.set_setting("invite_body", "   ", "t")
     subject, body = main._invite_text("jo")
     assert subject == main.INVITE_SUBJECT
-    assert "An account has been created for you." in body
+    assert "あなたのアカウントを作成しました。" in body
     assert "{username}" not in body and "{portal_url}" not in body
 
 
@@ -374,8 +374,8 @@ def test_the_default_invite_carries_nothing_worth_intercepting(managed):
     lines = body.splitlines()
     # The whole line, so the address is the entire value of the field
     # rather than something appearing inside a longer one.
-    assert "Username: jo" in lines
-    assert "Where: https://portal.example.com" in lines
+    assert "ユーザー名: jo" in lines
+    assert "アクセス先: https://portal.example.com" in lines
     # No token, no password, no link that grants anything. An estate can
     # replace all of this - the guarantee is about what ships, not about
     # what somebody chooses to write instead.

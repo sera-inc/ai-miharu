@@ -127,7 +127,7 @@ const DETECTORS = [
     re: /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\b/ },
   { id: "google_api_key", label: "Google API キー",
     re: /\bAIza[0-9A-Za-z_-]{35}\b/ },
-  { id: "azure_storage_secret", label: "Azure ストレージ シークレット",
+  { id: "azure_storage_secret", label: "Azure ストレージのシークレット",
     re: /\b(?:AccountKey|SharedAccessSignature)=[A-Za-z0-9+/=%]{20,}/ },
 
   // --- marketing / SaaS platform credentials ---
@@ -148,12 +148,12 @@ const DETECTORS = [
 
   // --- personal and financial data ---
   { id: "payment_card", label: "カード番号", test: hasPaymentCard },
-  { id: "uk_nino", label: "国民保険番号",
+  { id: "uk_nino", label: "英国の国民保険番号（NINO）",
     re: /\b[A-CEGHJ-PR-TW-Z]{2}\s?\d{2}\s?\d{2}\s?\d{2}\s?[A-D]\b/ },
   { id: "iban", label: "IBAN",
     re: /\b(?:GB|IE|FR|DE|ES|IT|NL|BE|CH|PT|SE|DK|NO|PL|AT|FI|LU)\d{2}[A-Z0-9]{10,30}\b/ },
-  { id: "bulk_emails", label: "大量メールリスト", test: hasBulkEmails },
-  { id: "classification_marking", label: "分類マーキング",
+  { id: "bulk_emails", label: "メールアドレスの大量リスト", test: hasBulkEmails },
+  { id: "classification_marking", label: "機密表示",
     test: hasClassificationMarking },
 ];
 

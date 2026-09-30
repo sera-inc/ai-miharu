@@ -1,0 +1,14 @@
+{
+  "name": "sera-ai-governance-dads-tokens",
+  "private": true,
+  "description": "Builds the DADS Layer 1 token bridge served by the portal. Not part of the product image.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build-dads-tokens.mjs",
+    "check": "node build-dads-tokens.mjs --check"
+  },
+  "devDependencies": {
+    "@digital-go-jp/tailwind-theme-plugin": "1.0.1"
+  }
+}

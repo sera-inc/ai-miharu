@@ -619,9 +619,9 @@ _SCANNER_CRONJOB_TEMPLATE = """\
 # you use to the env below (from your own Secret, never this file):
 #   Entra/Exchange/Intune: AIGUARD_ENTRA_TENANT_ID, AIGUARD_ENTRA_CLIENT_ID,
 #                          AIGUARD_ENTRA_CLIENT_SECRET
-#   Jamf:                  AIGUARD_JAMF_URL, AIGUARD_JAMF_CLIENT_ID,
+#   Jamf:                  AIGUARD_JAMF_BASE_URL, AIGUARD_JAMF_CLIENT_ID,
 #                          AIGUARD_JAMF_CLIENT_SECRET
-#   SentinelOne:           AIGUARD_S1_URL, AIGUARD_S1_TOKEN
+#   SentinelOne:           AIGUARD_S1_BASE_URL, AIGUARD_S1_API_TOKEN
 apiVersion: v1
 kind: Secret
 metadata:

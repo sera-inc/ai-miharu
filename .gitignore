@@ -36,3 +36,6 @@ identity-map.csv
 .claude/
 # Local, untracked: see .githooks/deny-list.example.txt
 .githooks/deny-list.txt
+
+# DADS token generator dependencies (installed by `npm ci` in tools/dads)
+tools/dads/node_modules/

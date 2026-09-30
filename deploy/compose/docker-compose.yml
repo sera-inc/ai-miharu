@@ -4,6 +4,13 @@
 
 # ai-guard, deployed with Docker Compose.
 #
+# Sera AI Governance (世良AIガバナンス) fork: the four images are BUILT from this
+# checkout by default, so a plain clone runs this repository's code - the
+# Japanese portal and the bundled DADS design tokens - rather than the upstream
+# project's English images. `docker compose up -d --build` builds and starts.
+# To run images you have pushed to your own registry instead, set IMAGE_REPO
+# and IMAGE_TAG in .env and use `docker compose pull`.
+#
 # Two stateless containers. The receiver accepts findings and writes them as
 # JSON lines; the portal reads those lines back and derives relationships. That
 # is the whole of it, and neither needs an orchestrator to run.
@@ -61,7 +68,9 @@ services:
     restart: "no"
 
   receiver:
-    image: ghcr.io/amansk5/shadow-ai-guard/receiver:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-sera-ai-governance}/receiver:${IMAGE_TAG:-local}
+    build:
+      context: ../../receiver
     restart: unless-stopped
     environment:
       # Read from a file rather than the environment. Compose has no real
@@ -111,7 +120,11 @@ services:
   # Optional. Remove this service and everything above still works; it reads
   # and is not in the ingest path.
   portal:
-    image: ghcr.io/amansk5/shadow-ai-guard/portal:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-sera-ai-governance}/portal:${IMAGE_TAG:-local}
+    build:
+      context: ../../portal
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
     restart: unless-stopped
     environment:
       # Optional since managed mode can configure the log store in the
@@ -159,6 +172,11 @@ services:
       # There is no chart here, so the portal's settings page shows this and
       # leaves the Kubernetes-only fields empty rather than guessing at them.
       DEPLOY_CHART_VERSION: ${DEPLOY_CHART_VERSION:-compose}
+      # The portal's update card reads the ORIGINAL project's release feed
+      # (AmanSK5/shadow-ai-guard), not this repository's, and this fork
+      # publishes no releases of its own. So the check is off unless you turn
+      # it on, and the portal then makes no outbound request at all.
+      UPDATE_CHECK: ${UPDATE_CHECK:-off}
     volumes:
       - registry-dist:/etc/ai-guard:ro
     depends_on:
@@ -192,7 +210,9 @@ services:
   # itself, so this is on by default and costs an idle container until you
   # give it something to look at.
   scanner:
-    image: ghcr.io/amansk5/shadow-ai-guard/scanner:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-sera-ai-governance}/scanner:${IMAGE_TAG:-local}
+    build:
+      context: ../../scanner
     restart: unless-stopped
     environment:
       RECEIVER_URL: http://receiver:8080
@@ -225,7 +245,9 @@ services:
   #     docker compose --profile discovery up -d
   discovery:
     profiles: [discovery]
-    image: ghcr.io/amansk5/shadow-ai-guard/discovery:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REPO:-sera-ai-governance}/discovery:${IMAGE_TAG:-local}
+    build:
+      context: ../../discovery
     restart: unless-stopped
     environment:
       RECEIVER_URL: http://receiver:8080
