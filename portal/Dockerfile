@@ -18,11 +18,11 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /srv
-# The base image's pip 25.0.1 has fixed-version advisories; keep the build
-# installer at or above the first version that contains all current fixes.
-RUN python -m pip install --no-cache-dir --upgrade 'pip==26.2.1'
 COPY requirements.lock .
-RUN pip install --no-cache-dir --require-hashes -r requirements.lock
+# pip is only needed to assemble the image. Remove it from the runtime image
+# so its own packages and vendored dependencies are not an attack surface.
+RUN pip install --no-cache-dir --require-hashes -r requirements.lock \
+ && python -m pip uninstall -y pip
 COPY app/ app/
 # Verified copies of the endpoint collector scripts, for artifact downloads.
 # The build context is portal/, so the endpoint/ tree is out of reach; a test

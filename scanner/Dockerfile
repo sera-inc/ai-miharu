@@ -24,9 +24,6 @@ ENV TZ=UTC
 
 WORKDIR /srv
 
-# The base image's pip 25.0.1 has fixed-version advisories; keep the build
-# installer at or above the first version that contains all current fixes.
-RUN python -m pip install --no-cache-dir --upgrade 'pip==26.2.1'
 COPY requirements.lock ./
 # Hash-verified dependency install first, then the package itself with no
 # dependency resolution: the lockfile is the source of truth for what runs.
@@ -37,7 +34,10 @@ COPY requirements.lock ./
 RUN pip install --no-cache-dir --require-hashes -r requirements.lock
 COPY pyproject.toml README.md ./
 COPY ai_guard/ ./ai_guard/
-RUN pip install --no-cache-dir --no-deps .
+# This is the last package installation; pip is a build tool, not a scanner
+# runtime dependency. Remove it and its bundled libraries from the image.
+RUN pip install --no-cache-dir --no-deps . \
+ && python -m pip uninstall -y pip
 
 COPY receiver_reporter.py schedule.py entrypoint.py policy.yaml ./
 
