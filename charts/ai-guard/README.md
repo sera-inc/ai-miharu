@@ -1,5 +1,15 @@
 # ai-guard Helm chart
 
+> **世良AIガバナンス（派生版）の注意**: この文書は原著 Shadow AI Guard の英語のドキュメントを引き継いでいます。
+> 文中の `ghcr.io/amansk5/shadow-ai-guard/...` のイメージ・Helm チャートと、`AmanSK5/shadow-ai-guard` のタグは、
+> **原著（英語版の画面）の公開物**を指します。この派生版のイメージとチャートは公開していないため、そのまま実行すると
+> 日本語版ではなく原著が入ります。この派生版で動作を確認している手順は **Docker Compose** です（[deploy/compose/README.md](../../deploy/compose/README.md)）。
+> Kubernetes で動かす場合は、このリポジトリからイメージをビルドして自組織のレジストリに置き、チャートの
+> `image.repository` などを上書きしてください。この経路の動作確認は行っていません。
+>
+> *English: the `ghcr.io/amansk5/...` images and chart named below are the upstream project's English builds, not this
+> fork's. This fork publishes no images or chart. The path verified for this fork is Docker Compose.*
+
 Deploys the receiver: the one service every source reports to. The compiled
 registry ships with the chart, so an install gives you a working receiver
 with nothing to build first.

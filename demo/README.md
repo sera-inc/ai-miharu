@@ -1,8 +1,8 @@
 # Local demo
 
 See the platform work with synthetic data in about five minutes. No cluster,
-no real estate touched. Everything here is fake: demo users are named after
-Pokemon, findings are seeded locally. The portal runs managed mode like a
+no real estate touched. Everything here is fake: demo users carry common
+Japanese surnames, findings are seeded locally. The portal runs managed mode like a
 real deployment; the seeder walks the first-boot path for you - owner
 account, estate name, single sign-on - so the first visit is a sign-in
 screen with the Microsoft button already on it.
@@ -40,7 +40,7 @@ docker compose down -v
 Open http://localhost:8091 and press **Sign in with Microsoft**. The
 stand-in identity provider offers three people; pick **管理者**, whose
 address the seeder put on the owner account, and you are in. The password
-form works too: username `gengar`, password `gengar-demo-portal`.
+form works too: username `admin`, password `admin-demo-portal`.
 
 That account is the estate's owner and break-glass account - the one the
 setup code created - so it can do everything, including requiring single
@@ -49,7 +49,7 @@ sign-on for everyone else. The seeder claimed the setup code for you
 says so in its log); a real deployment reads the random one from the
 receiver's log instead. Being signed in unlocks the managed half of the
 platform: the setup wizard (`#wizard`), central settings, the fleet view and
-enrollment tokens. The estate is named "Pallet Town Ltd"; change it under
+enrollment tokens. The estate is named "株式会社世良（デモ環境）"; change it under
 Settings > Display & alerting.
 
 Those pages are not empty. The seeder also links three plans under Budget
@@ -84,14 +84,14 @@ card offers it:
 
 ```csv
 email,role,seat type
-squirtle@example.com,member,standard
-psyduck@example.com,member,standard
-misty@example.com,admin,premium
+takahashi@example.com,member,standard
+nakamura@example.com,member,standard
+matsumoto@example.com,admin,premium
 ```
 
 Give the standard tier a couple of seats and a price in the wizard and the
-card does the join the page exists for: psyduck shows as a paid seat with
-observed use, misty as a paid seat never observed, and squirtle's personal
+card does the join the page exists for: nakamura shows as a paid seat with
+observed use, matsumoto as a paid seat never observed, and takahashi's personal
 gmail sign-in surfaces right under the seats being paid for. With a real
 Anthropic or Fireflies admin key the user list syncs from the vendor's API
 instead of the CSV - the demo has no real org behind it, so the import is
@@ -137,8 +137,8 @@ the host answering changes. So what you walk here is the real integration.
 
 The seeder has already switched it on, so the sign-in screen offers the
 Microsoft button from the first visit. The stand-in provider offers three
-people: `gengar@example.com` is on the owner account and signs in;
-`snorlax@example.com` works once you have created a second account with
+people: `admin@example.com` is on the owner account and signs in;
+`operator@example.com` works once you have created a second account with
 that address (Settings > Account); `nobody@example.com` exists to show the
 refusal a sign-in with no matching account gets.
 

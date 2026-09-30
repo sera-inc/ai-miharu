@@ -29,8 +29,8 @@ deliberately not.
 Nothing touches your machine's configuration. Everything is synthetic.
 
 ```bash
-git clone https://github.com/AmanSK5/shadow-ai-guard.git
-cd shadow-ai-guard/demo
+git clone https://github.com/sera-inc/sera-ai-governance.git
+cd sera-ai-governance/demo
 docker compose up
 ```
 

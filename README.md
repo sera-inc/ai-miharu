@@ -1,499 +1,189 @@
 <a id="top"></a>
 
 <p align="center">
-  <img
-    src="assets/shadow-ai-guard-title.png"
-    alt="Shadow AI Guard"
-    width="650"
-  />
-</p>
-
-<hr>
-<p align="center">
-  <strong>See the AI your organisation is actually using.</strong><br>
-  Browser. CLI. IDE. Desktop. Network. Cloud. MCP.
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/sera-ai-governance-lockup-dark.png">
+    <img src="assets/brand/sera-ai-governance-lockup-light.png" alt="世良AIガバナンス" width="640">
+  </picture>
 </p>
 
 <p align="center">
-  <a href="#install-it"><strong>Install it</strong></a> ·
-  <a href="#try-it-in-five-minutes"><strong>Run the demo</strong></a> ·
-  <a href="#documentation"><strong>Read the docs</strong></a>
+  <strong>組織で使われている AI を、端末・アカウント・費用まで見える化する、自社運用のオープンソース</strong><br>
+  ブラウザー・CLI・IDE・デスクトップ・ネットワーク・クラウド・MCP
 </p>
 
-> [!NOTE]
-> **Beta release.** Under active development. It runs in production, the
-> finding schema is stable, and known limitations are tracked in
-> [Issues](../../issues).
+<p align="center">
+  <a href="#demo"><strong>デモを試す</strong></a> ·
+  <a href="#install"><strong>自社環境に導入する</strong></a> ·
+  <a href="#docs"><strong>ドキュメント</strong></a> ·
+  <a href="#attribution"><strong>原著とライセンス</strong></a>
+</p>
+
+> **この版について**: 株式会社世良が、Aman Karir 氏の [Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard)（Apache License 2.0）をもとに、
+> 画面とメッセージの日本語化、デジタル庁デザインシステム（DADS）に基づく画面、「世良AIガバナンス」としての名称・シンボルを加えた**派生版**です。
+> 試験段階のオープンソースで、**ホステッド SaaS と有償サポートは現時点で提供していません**。
+> 原著プロジェクトが運営・推奨・サポートするものではありません。詳しくは[原著・ライセンス・商標](#attribution)を参照してください。
+
+<p align="center">
+  <img src="assets/screenshots/overview.webp" alt="世良AIガバナンスの概要画面。全体状況、未解決の個人アカウント、観測したAIツール、収集エージェントのカバー率、AI台帳の判断記録を表示（サンプルデータ）" width="100%">
+</p>
+<p align="center"><sub>概要画面の例（サンプルデータ）。画面はすべて、この README の手順で起動できるデモから撮影しています。</sub></p>
+
+## 何ができるか
+
+AI の利用は、ブラウザーの拡張機能、開発者の CLI、IDE のプラグイン、デスクトップアプリ、ネットワーク、クラウドのサインインなど、複数の場所に現れます。
+世良AIガバナンスは、それらを同じ形の「検出結果」にそろえて集め、**どのツールが、どの端末・アカウントで使われているか**、**誰が何を判断したか**、
+**有償契約と実際の利用が合っているか**を、ひとつのポータルで確認できるようにします。
+
+| 利用環境 | 観測できるもの |
+|---|---|
+| **ブラウザー** | AI サイト、管理された拡張機能、アカウントのドメイン、貼り付けガードのイベント |
+| **CLI** | ローカルの AI ツールと、サインインしているアカウント |
+| **IDE** | AI コーディング拡張機能と連携 |
+| **デスクトップ** | インストールされた AI アプリとローカルの設定 |
+| **ネットワーク** | AI のドメインと、SentinelOne 経由のプロセスの特定 |
+| **クラウド** | Entra のサインイン、委任アクセス、OAuth の許可、Exchange の証跡、Intune、Jamf |
+| **MCP** | MCP サーバーとセキュリティ上の検出結果 |
+
+ポータルには 18 の画面があります（概要、Grafana、ツール、利用者、端末、個人アカウント、MCP サーバー、AI 台帳、ツールレジストリ、
+貼り付けガード、ISO/IEC 42001 証跡、予算、エージェント型 AI、検出ソース、収集エージェント未導入の端末、登録済み端末、登録トークン、設定）。
+それぞれの画面で確認できること・できないことは、[画面と機能の一覧](docs/feature-coverage.md)に、実際の画面の動作を確認して整理しています。
+
+主な機能:
+
+- **検出カバレッジ**: どの検出ソースが実際に報告しているかを、設定の有無ではなく届いた検出結果から判定します。報告のないソースは、必要な設定と一緒に表示します。
+- **AI 台帳**: 検出したツールごとに、利用判断・責任者・レビュー期限を記録します。承認は「安全」を意味せず、検出結果の重大度は変えません。
+- **個人アカウントの把握**: 会社のドメイン以外でサインインしている利用者を、「確認済み」または理由付きの「許容」として記録できます。
+- **貼り付けガード**: 対応ブラウザーの拡張機能が、機密情報らしい貼り付けを検査して警告またはブロックします。報告するのは検出ルールの識別子とアカウントのドメインだけで、貼り付けた内容は報告しません。
+- **予算**: AI ツールの契約（プラン・席数・単価）と実際の利用を突き合わせ、使われていない有償席や、席のない利用者を確認します。
+- **エージェント型 AI**: 人の操作なしに動く AI の処理と、その認証情報の持ち主を確認します。
+- **証跡**: ISO/IEC 42001 に関連する記録を、期間を指定して印刷／PDF または JSON（検査用ハッシュ付き）で出力します。**適合の判定や認証取得を保証するものではありません。**
+
+<a id="demo"></a>
+
+## 試す（5 分のデモ）
+
+Docker（Compose v2）があれば、クラスターや認証情報なしで、実物のポータル・受信サービス・ログ保存先・Grafana を架空のデータで動かせます。
+
+```bash
+git clone https://github.com/sera-inc/sera-ai-governance.git
+cd sera-ai-governance/demo
+docker compose up -d --build
+```
+
+- **ポータル**: <http://localhost:8091>（ユーザー名 `admin`、パスワード `admin-demo-portal`。デモ専用の公開値です）
+- **Grafana**: <http://localhost:3000>
+- **貼り付けガードの動作デモ**: <http://localhost:8090/demo/>（拡張機能の `guard.js` をそのまま動かします）
+
+使うポート: 8091（ポータル）、8080（受信サービス）、3000（Grafana）、3100（ログ保存先）、8090（貼り付けガードのデモ）、8025（メール受信箱）、8092（疑似の ID プロバイダー）。
+すべて `127.0.0.1` だけに公開します。ユーザー名と端末名は、すべて架空の日本の姓にもとづく作り物です。
+
+サンプルデータ、疑似の Entra、メール受信箱（Mailpit）、拡張機能のデモは**デモ専用**です。本番の構成には含めないでください。
+停止は `docker compose down`、データも消す場合は `docker compose down -v` です。詳しくは [demo/README.md](demo/README.md) を参照してください。
+
+<a id="install"></a>
+
+## 自社環境に導入する（最小の Docker Compose）
+
+動作を確認している導入経路は Docker Compose です。受信サービス・ポータル・スキャナー（と、`--profile discovery` を付けたときのディスカバリー）のイメージは、**クローンしたこのリポジトリからビルドされます**。
+原著のイメージは取得しません。
+
+```bash
+git clone https://github.com/sera-inc/sera-ai-governance.git
+cd sera-ai-governance/deploy/compose
+cp .env.example .env
+mkdir -p secrets && openssl rand -hex 32 > secrets/auth_token
+chmod 700 secrets && chmod 640 secrets/* && sudo chown :65532 secrets/*
+docker compose up -d --build
+docker compose logs receiver | grep setup_code
+```
+
+ポータルは `127.0.0.1:8091`、受信サービスは `127.0.0.1:8080` で待ち受けます。ログに出たセットアップコードでオーナーのアカウントを作成すると、初回のセットアップウィザードが残りの設定
+（受信サービスの公開 URL、ログ保存先、企業ドメインなど）を案内します。外部へ公開する場合は、HTTPS のリバースプロキシを前に置き、管理画面を認証付きにしてください。
+ログ保存先（Loki）と Grafana が無い場合は、`.env` の `LOKI_PUSH_URL` と `LOKI_URL` を設定したうえで `docker compose --profile with-logs up -d` で同梱のものを起動できます。詳しい手順・環境変数・バックアップは [deploy/compose/README.md](deploy/compose/README.md) を参照してください。
+
+**Kubernetes（Helm）について**: チャートは同梱していますが、既定のイメージ参照は原著のもの（英語版）で、この派生版のイメージは公開していません。この派生版を Kubernetes で動かす場合は、
+このリポジトリからイメージをビルドして自組織のレジストリに置き、`image.repository` などを上書きしてください。**この経路の動作確認は行っていません。**
+
+### 画面のデザイン（DADS）
+
+ポータルの画面は、デジタル庁デザインシステム（DADS）のデザイントークンを土台にしています。トークンは、公開パッケージ
+[`@digital-go-jp/tailwind-theme-plugin`](https://github.com/digital-go-jp/tailwind-theme-plugin) 1.0.1（MIT ライセンス）から `tools/dads` で生成して**同梱**しているため、
+クローンして起動するだけで同じ見た目になります。private のデザインシステムの内容は含みません。確認方法は、システム状態画面の「デザイントークン」が「同梱」であることと、
+ポータルのログの `DADS tokens: bundled` です。組織が自前のトークンを持つ場合は、読み取り専用でマウントして置き換えることもできます。
+これは**管理者試験の位置づけ**で、デザインシステムの正式な採用、全画面の移行、アクセシビリティの承認を意味しません。範囲と限界は [docs/dads-runtime-mount.md](docs/dads-runtime-mount.md) にあります。
+
+## 収集の範囲と限界
+
+- すべての AI 利用を網羅するものではありません。検出できる範囲は、導入した収集エージェント、端末の設定、ブラウザー、各サービスの仕様に依存します。**未検出は未利用の証拠ではありません。**
+- 収集エージェントは設定ファイルを読み、どのアカウントのドメインでサインインしているかを報告します。メッセージの内容、ファイルの内容、認証情報は読みません（[docs/deployment-privacy.md](docs/deployment-privacy.md)）。
+- 端末と利用者の対応は、管理者が対応表を登録した場合にだけ表示します。名前の一致から候補は提案しますが、自動では適用しません。
+- 予算は、登録した契約の単価と席数から算出します。各サービスの実際の請求額を自動で取得するものではありません。
+
+## リソースの目安
+
+計測値と推奨値は分けて書きます。
+
+- **計測値（2026-09-30、アイドル時）**: 8 vCPU・16 GiB の Docker ホストで、受信サービス・ポータル・スキャナーの 3 コンテナ（最小の Compose 構成）は合計約 116 MiB。
+  デモの 7 コンテナ（Loki、Grafana、疑似の Entra、メール受信箱、拡張機能デモ込み）は合計約 890 MiB で、うち Grafana が約 640 MiB でした。サンプルデータのみで、負荷試験ではありません。
+- **推奨値は確立していません。** 端末数、検出結果の量、ログの保存期間、バックアップと復元にかかる時間は計測していません。2 vCPU・4 GB 程度の仮想マシンは**出発点の候補**ですが、
+  実データを扱う前に、負荷・保存期間・バックアップ・復元を自組織の条件で試験してください。
+
+## 既知の制限
+
+- 世良AIガバナンスは試験段階の OSS です。可用性・サポート水準・特定の規格への適合を保証しません。
+- ポータルの「更新」カードは原著のリリース情報を参照する作りのため、この派生版の Compose 構成では既定でオフにしています（`UPDATE_CHECK`）。更新は `git pull` と `docker compose up -d --build` です。
+- Kubernetes（Helm）の経路、Jamf・Intune・SentinelOne などの外部サービスとの実接続は、この環境では確認していません（疑似の ID プロバイダーとサンプルデータで確認）。
+- ブラウザー拡張機能が動作するブラウザー、対象サイト、ポリシーの範囲は、導入前に確認してください。
+
+<a id="docs"></a>
+
+## ドキュメント
+
+| 目的 | 文書 |
+|---|---|
+| 画面ごとに確認できること・限界 | [docs/feature-coverage.md](docs/feature-coverage.md) |
+| 最初の 1 件の検出まで | [docs/getting-started.md](docs/getting-started.md)（英語・原著由来） |
+| Docker Compose での導入 | [deploy/compose/README.md](deploy/compose/README.md) |
+| デモ | [demo/README.md](demo/README.md) |
+| 設計の考え方 | [docs/architecture.md](docs/architecture.md) |
+| AI 台帳と判断の記録 | [docs/governance.md](docs/governance.md) |
+| 予算 | [docs/budget.md](docs/budget.md) |
+| エージェント型 AI | [docs/agentic.md](docs/agentic.md) |
+| 証跡 | [docs/evidence.md](docs/evidence.md) |
+| 収集するもの・しないもの | [docs/deployment-privacy.md](docs/deployment-privacy.md) |
+| DADS の適用範囲と限界 | [docs/dads-runtime-mount.md](docs/dads-runtime-mount.md)、[docs/mapping.md](docs/mapping.md)、[docs/deviations.md](docs/deviations.md) |
+| 日本語表記の方針 | [docs/ja-ui-copy-review.md](docs/ja-ui-copy-review.md) |
+| ブランド素材と由来 | [assets/brand/README.md](assets/brand/README.md) |
+| セキュリティモデル | [SECURITY.md](SECURITY.md) |
+| 原著の README（英語） | [docs/upstream-README.md](docs/upstream-README.md) |
+
+テストの実行方法は [TESTING.md](TESTING.md) と [CLAUDE.md](CLAUDE.md) にあります。
+
+<a id="attribution"></a>
+
+## 原著・ライセンス・商標
+
+- **原著**: Shadow AI Guard（作者 Aman Karir 氏）<https://github.com/AmanSK5/shadow-ai-guard>。著作権表示は [NOTICE](NOTICE) とソースファイルの表示にあり、削除・変更していません。
+- **ライセンス**: [Apache License 2.0](LICENSE)。この派生版も同じライセンスで公開します。改変の内容は、このリポジトリの git 履歴と [NOTICE](NOTICE) に記載しています。
+- **独立した提供**: 世良AIガバナンスは株式会社世良が独立して提供する派生版で、Shadow AI Guard プロジェクトが運営・推奨・サポートするものではありません。
+  原著のソフトウェアは、公式のリポジトリから無償で入手できます。
+- **名称とロゴ**: 「Shadow AI Guard」の名称とロゴは原著の作者が商標として主張しています（[TRADEMARKS.md](TRADEMARKS.md)）。この派生版は原著のロゴを使わず、別の名称とシンボルを使います。
+  シンボルの由来は [assets/brand/README.md](assets/brand/README.md) に記録しています。
+- **デジタル庁デザインシステム**: デザイントークンは、デジタル庁の公開パッケージ（MIT ライセンス）から機械的に変換したものです。デジタル庁が提供・推奨するものではありません（[NOTICE](NOTICE)）。
+
+<p align="right"><a href="#top">先頭へ ↑</a></p>
 
 ---
 
-<p align="center">
-  <img
-    src="assets/Shadow-AI-Guard-Portal.png"
-    alt="Shadow AI Guard Portal"
-    width="100%"
-  />
-</p>
-
-Shadow AI Guard detects AI usage across the places it actually appears, then
-correlates the findings so you can see the tools, accounts, users, devices and
-sources behind it - and, for the tools you pay for, whether the seats on the
-invoice match the people actually using them.
-
-You install it once and run the whole thing from the portal: connect your log
-store, set your corporate domains, approve tools, review what discovery finds,
-enroll and revoke devices, manage who can sign in, and download pre-configured
-deployment files for every surface. After the install you never need this
-repository again.
-
-It is self-hosted and free. There is no SaaS platform behind it and nothing
-leaves your infrastructure.
-
-## Contents
-
-<p align="center">
-  <a href="#install-it">Install it</a> ·
-  <a href="#what-it-sees">What it sees</a> ·
-  <a href="#everything-runs-from-the-portal">The portal</a> ·
-  <a href="#what-runs-without-a-person">Agentic AI</a> ·
-  <a href="#try-it-in-five-minutes">Try it</a> ·
-  <a href="#how-it-works">How it works</a>
-  <br>
-  <a href="#prefer-files-to-a-portal">Classic mode</a> ·
-  <a href="#documentation">Documentation</a> ·
-  <a href="#what-you-need">Requirements</a> ·
-  <a href="#finding-schema">Finding schema</a> ·
-  <a href="#governance-and-privacy">Governance</a> ·
-  <a href="#status-and-known-limitations">Limitations</a>
-</p>
-
-## Install it
-
-One command, then the portal takes over:
-
-```bash
-helm install ai-guard oci://ghcr.io/amansk5/shadow-ai-guard/charts/ai-guard \
-  --namespace ai-guard --create-namespace \
-  --set ingress.enabled=true --set ingress.host=ai-guard.your.domain \
-  --set portal.ingress.enabled=true --set portal.ingress.host=ai-guard-portal.your.domain
-```
-
-The receiver prints a one-time setup code to its log. Open the portal, create
-the owner account with it, and the first-run wizard walks you through the
-rest in seven steps: receiver URL, log store, corporate domains, tool
-approvals, the browser extension, alerting, and ready-to-run downloads for
-the collectors and the scanners. Two of those are marked required, because a
-deployment missing them runs wrong rather than not running. You can leave the
-wizard at any point and pick it up again under Settings > Getting started.
-
-```bash
-kubectl logs deploy/ai-guard -n ai-guard | grep setup_code
-```
-
-Docker Compose works the same way: `docker compose up -d` in
-`deploy/compose/`, then the same setup code and wizard.
-[Getting started](docs/getting-started.md) walks the whole flow end to end.
-
-## What it sees
-
-No single commercial tool sees all of the places AI tools turn up. CASB and
-DLP products see the browser. Endpoint tools see installed applications.
-Cloud access tools see OAuth grants. None of them read `~/.claude.json` to
-tell you which account your developers' AI CLIs are signed into - and the
-account is the part that matters: an approved tool on a personal account is
-still unmanaged data flow, invisible spend and an offboarding gap.
-
-| Surface | What Shadow AI Guard can observe |
-|---|---|
-| **Browser** | AI websites, managed extensions, account domains and Paste Guard events |
-| **CLI** | Local AI tooling and the account it is signed into |
-| **IDE** | AI coding extensions and integrations |
-| **Desktop** | Installed AI applications and local configuration |
-| **Network** | AI domains and local process attribution through SentinelOne |
-| **Cloud** | Entra sign-ins, delegated access, OAuth grants, Exchange evidence, Intune and Jamf |
-| **MCP** | MCP servers and security findings |
-
-Every source emits the same finding shape, so new scanners and collectors plug
-into the same downstream pipeline.
-
-## Everything runs from the portal
-
-The portal is not a dashboard bolted onto the side. It is where the platform
-is operated:
-
-- **Setup and coverage.** The wizard configures the deployment, and the
-  Sources page tells you which detection sources are reporting, which are set
-  up but silent, and which you have not enabled yet. A source that reports
-  nothing might be clean or might be broken; those look identical in a log
-  stream, so the portal tells you the difference.
-- **The estate.** Tools, people, devices, personal accounts and MCP servers,
-  correlated from the raw findings. The overview shows what changed this
-  week, not just totals, and tools that need a look sort first with the
-  reasons spelled out.
-- **The review queue.** Discovery watches your fleet's DNS and your endpoint
-  configs for AI tools the registry does not know yet, and queues them for a
-  human decision. One click adds a tool to detection; nothing is detected
-  until a person decides.
-- **Governance.** The AI register records what each tool is, how it is used,
-  and what was decided about it: owner, status, review date. Personal-account
-  findings carry their own lifecycle - acknowledge one, or accept it with a
-  reason and it leaves the open count.
-- **Budget.** What each AI tool costs, joined against what the estate is
-  observed doing: seats nobody uses, people using a tool no seat covers, and
-  personal accounts running alongside paid ones. User lists sync from a
-  vendor's admin API where one exists and import from its member export where
-  it does not, and one subscription covers every tool its licence entitles,
-  so a Claude seat is counted once across Claude and Claude Code.
-- **Identity.** The platform never guesses who owns a machine, but it will
-  propose: download the suggested device-to-person map, correct it, and
-  upload it back in the portal. A mounted file still works; what you save in
-  the portal wins over it.
-- **The fleet.** Devices enroll with their own credential and can be revoked
-  individually. Enrollment tokens are invitations; devices are badges; both
-  are managed here.
-- **Accounts.** Three roles. The **owner** is the account the setup code
-  creates and the one that cannot be locked out: an admin cannot make
-  another owner, so the last one cannot be removed. **Admins** run the
-  platform. **Viewers** read every page and can change nothing - made for
-  the auditor and the exec. Nobody can act on an account that outranks
-  them, or grant a role above their own, which is what stops an admin
-  reaching an owner by resetting a password or changing a role. Sign-in is
-  a username and password, or Microsoft Entra where you would rather not
-  keep a second set of credentials - a six-step wizard sets that up, each
-  step checked against the provider rather than accepted as typed. It
-  authenticates and never provisions: no sign-in creates an account. You
-  can require it, in which case one account keeps its password as the way
-  back in, and set how recently somebody must have signed in at the
-  provider before the portal will take it - twelve hours by default, and
-  verified rather than merely requested. Every change lands in an audit
-  trail with who did it.
-- **Telling people they have an account.** Point it at a mail relay and
-  creating an account emails the person to say so. The wizard knows the
-  common providers and fills in the host, port and encryption for the one
-  you pick; a Kubernetes deployment can mount the credential from the
-  Secret it already has instead. It never blocks: the account is created
-  whether or not the relay answers, the portal says plainly when nobody was
-  emailed, and one button later sends the invites that were missed. The
-  invite carries no token, no password and no link that grants anything,
-  and the wording is yours to rewrite.
-- **What is still not set up.** Finishing the wizard means "stop showing me
-  the wizard", not "everything is configured". A bell in the header lists
-  what is outstanding and what each gap makes the platform get wrong rather
-  than refuse to do. It pulses once, until it has been opened, and then
-  never again.
-- **Notifications.** A webhook fires the moment discovery finds something
-  new, and a weekly digest summarises the estate to Slack or anything
-  webhook-compatible.
-- **Finding your way around.** A guided walkthrough runs on a first sign-in
-  and covers every section of the portal, in the words of the role taking
-  it: an admin is told what to change, a viewer who to ask. The overview is
-  arranged per person - drag the cards, stack them, resize or hide them -
-  and that arrangement is yours, not the deployment's. Both are available
-  again at any time under Settings > Getting started.
-
-- **What runs without a person.** <a id="what-runs-without-a-person"></a>Every
-  page above assumes somebody did something. This one is the exception: tools
-  that start on a timer or a trigger, the credential each holds, and what it
-  can reach once running. A key in a unit file belongs to no leaver, so
-  revoking somebody's sign-on does not stop it. It will not call something
-  autonomous on silence, and it says what it deliberately does not answer -
-  see [Agentic AI](docs/agentic.md).
-
-Grafana is optional and complementary: better at graphs and history, and the
-portal can embed its panels. The portal is better at relationships, current
-state, and doing something about what it shows.
-
-## Try it in five minutes
-
-You do not need a Kubernetes cluster, an MDM, or any cloud credentials to see
-what the project does. The demo runs the real receiver, portal, Loki and
-Grafana against synthetic data:
-
-```bash
-git clone https://github.com/AmanSK5/shadow-ai-guard.git
-cd shadow-ai-guard/demo
-docker compose up
-```
-
-Then open:
-
-- **Shadow AI Guard Portal:** http://localhost:8091
-- **Grafana:** http://localhost:3000
-- **Paste Guard demo:** http://localhost:8090/demo/
-
-The demo runs managed mode like a real deployment. Its seeder walks the
-first-boot path for you - owner account, estate name, single sign-on against
-a stand-in identity provider - and posts fake findings, linked plans and
-enrolled devices across every surface and OS, so you land on a sign-in
-screen with the Microsoft button on it and nothing behind it is empty.
-
-### Portal
-
-Use the portal to explore people, devices, tools, source health and the
-relationships between them.
-
-https://github.com/user-attachments/assets/bac90dff-1c83-4c71-9808-8125eda2cc75
-
-When a newer release is out, System health says so with the upgrade command
-for your route, and `aiguardctl upgrade` runs it from your machine with your
-own credentials while the portal shows the progress - see `cli/README.md`.
-
-### Grafana
-
-Grafana is the deeper telemetry view: usage over time, personal versus work
-accounts, per-tool breakdowns and MCP findings. Import
-`dashboards/ai-guard.json` in a real deployment; the demo comes with it
-provisioned.
-
-### Paste Guard
-
-The demo also serves a stand-in AI prompt box running the browser extension's
-real, unmodified `guard.js`. Paste a fake AWS key or payment card number and
-watch it get stopped before it reaches the page. The panel underneath shows
-the report that would have been sent, which never contains what you pasted.
-
-https://github.com/user-attachments/assets/16dd7857-935b-40c8-ad73-524b30271ec7
-
----
-
-<p align="right"><a href="#top">Back to top ↑</a></p>
-
-## How it works
-
-```text
-browser extension ─┐
-macOS collector  ──┤
-Windows collector ─┤
-Linux collector  ──┼──► receiver ──► logs (Loki) ──┬──► portal
-cloud scanners  ───┤       │                       │
-network scanner ───┤       │                       └──► Grafana
-MCP scanner ───────┘       │
-                           └──────► Alertmanager ──► alerts
-                             ▲
-                             │
-                  registry + portal decisions
-```
-
-- **receiver**: FastAPI service. Accepts findings, logs them as structured
-  JSON, fires alerts for personal accounts, serves the registry to
-  collectors, and in managed mode holds the platform's one piece of state:
-  enrollment, accounts, settings and decisions, in a single SQLite file.
-- **registry**: what counts as an AI tool: domains, extension IDs, config
-  file paths. A compiled copy ships with the chart, and the portal adds your
-  own entries on top at runtime, so adding a tool never touches an endpoint.
-- **portal**: the operating view described above. It reads findings from the
-  log store, proxies decisions to the receiver, and is not in the ingest
-  path, so collection carries on if it falls over.
-- **endpoint**: collectors for macOS, Windows and Linux. These read local AI
-  tool configuration to report which account each tool is signed into. This
-  is the data most API-level products do not have.
-- **scanner**: cloud and fleet scanners for Entra ID sign-ins, Exchange
-  signup evidence, Intune and Jamf software inventory, SentinelOne DNS
-  telemetry and MCP security checks. Each module is optional; run the ones
-  your estate supports. The portal generates the CronJobs.
-- **discovery**: a scheduled job that looks at your fleet's DNS activity,
-  filters out domains the registry already knows, and classifies the rest.
-  Anything that looks like an AI service lands in the portal's review queue
-  as "new AI tool found on N devices". Nothing is detected until a person
-  decides.
-- **Grafana / Alertmanager**: optional analytics and paging.
-
-## Prefer files to a portal?
-
-Classic mode (`managed.enabled=false`, or the compose classic overlay) is the
-same codebase with no server-side state at all. Every setting is a file or an
-environment variable in your own repo: `governance.yaml` for decisions,
-`registry/registry.yaml` for detection, `CORP_DOMAINS` and friends for
-config. Changes go through your normal merge request review, which some teams
-prefer as their audit trail. Managed is classic plus a small state database,
-not a fork; if you are not sure which you want, start with managed. The
-[deployment docs](docs/deployment/README.md) compare the two.
-
-## Documentation
-
-| I want to... | Start here |
-|---|---|
-| Go from zero to first finding | [Getting started](docs/getting-started.md) |
-| Try it without company infrastructure | [Testing guide](TESTING.md) |
-| Deploy it | [Deployment](docs/deployment/README.md) |
-| Understand the architecture | [Architecture](docs/architecture.md) |
-| Operate the portal | [Portal](portal/README.md) |
-| Configure the receiver | [Receiver](receiver/README.md) |
-| Record approvals, owners and review dates | [Governance decisions](docs/governance.md) |
-| Track paid seats against observed use | [Budget](docs/budget.md) |
-| See what runs with no person behind it | [Agentic AI](docs/agentic.md) |
-| Produce evidence for an AI management system | [Evidence](docs/evidence.md) |
-| Deploy macOS collection | [macOS collector](endpoint/macos/README.md) |
-| Deploy Windows collection | [Windows collector](endpoint/windows/README.md) |
-| Deploy Linux collection | [Linux collector](endpoint/linux/README.md) |
-| Deploy the browser extension | [Browser extension](extension/README.md) |
-| Configure cloud and network scanners | [Scanner docs](scanner/README.md) |
-| Write another scanner | [Writing a scanner](docs/writing-a-scanner.md) |
-| Review the trust model | [Security model](SECURITY.md) |
-| Assess privacy impact | [Privacy and DPIA guidance](docs/deployment-privacy.md) |
-| Something isn't working | [Troubleshooting](TROUBLESHOOTING.md) |
-
-## What you need
-
-- **Somewhere to run two containers**: a Kubernetes cluster or a host with
-  Docker Compose. Prebuilt multi-arch images are published to GHCR, so
-  nothing needs building.
-- **A Loki-compatible log store** for findings. Connect one you already run
-  through the wizard, or the compose file includes one.
-- **At least one detection source** for the surfaces you care about, and
-  credentials for whichever you enable. Currently supported: Microsoft Graph
-  (Entra, Exchange, Intune), Jamf Pro, SentinelOne, Chrome/Edge managed
-  extension policy, and endpoint collectors for macOS, Windows and Linux.
-- Grafana and Alertmanager if you want the analytics dashboard and paging.
-  Both optional.
-
-## Finding schema
-
-Every source uses the same shape. Any scanner or collector that emits it works
-with everything downstream.
-
-```json
-{
-  "tool": "claude-code",
-  "surface": "cli",
-  "os": "macos",
-  "account_domain": "gmail.com",
-  "device": "SERIAL123",
-  "device_name": "ASK-SERIAL123",
-  "user": "aman.test",
-  "evidence": "~/.claude.json",
-  "severity": "warn",
-  "reported_at": "2026-01-01T09:00:00Z",
-  "source": "collector-macos"
-}
-```
-
-Five optional fields carry what a source knows beyond presence. A sender that
-omits them is unaffected, and every one of them reads as unknown when absent
-rather than as its more interesting value.
-
-| Field | Values | Means |
-|---|---|---|
-| `signal` | `active`, `ambient` | whether a model ran, or the product is merely installed. Only ever `ambient` for an editor that bundles AI, where finding it installed proves an editor is installed |
-| `mode` | `interactive`, `autonomous` | whether a person was at the keyboard |
-| `identity` | `person`, `machine`, `none` | who the credential belongs to. `machine` is a key that authenticates with nobody behind it, which is the one that survives offboarding |
-| `trigger` | free text | what starts it, in the scheduler's own words |
-| `schedule` | dialect-prefixed spec | the raw cadence: `cron:0 2 * * *`, `interval:21600`, `atlogin` |
-
-`mode` and `identity` are the two that must never be inferred: absence is not
-autonomy, and a blank account domain is not a machine identity. See
-[Agentic AI](docs/agentic.md).
-
-`severity` is `warn` when the account domain is not one of your corporate
-domains, and `info` otherwise.
-
-The `user` field carries an account name where the source can provide one, so
-a finding can be followed up with the right person. See
-[privacy](docs/deployment-privacy.md) for exactly when it is populated.
-
-`device` carries the most stable identifier the source can obtain, usually a
-hardware serial, because that is what Jamf, Intune, SentinelOne and most RMMs
-key on. `device_name` carries the hostname, which is what a human recognises
-and what a platform with no serial can still join on.
-
-## Governance and privacy
-
-The registry ships with every tool set to `approved: false`. Approval is your
-organisation's decision, not this project's default. Discovery can propose
-new tools; it never approves them automatically.
-
-The findings, register and audit trail can provide evidence for an AI
-management system such as ISO/IEC 42001: what tools have been observed, where
-they were seen, which accounts are being used, what was decided and by whom.
-Shadow AI Guard does **not** determine ISO/IEC 42001 compliance on its own;
-organisational controls, risk decisions, policies, training and management
-review still require human ownership.
-
-Before deploying, read
-[docs/deployment-privacy.md](docs/deployment-privacy.md). This is workplace
-monitoring in most jurisdictions and usually warrants a DPIA.
-
-## Status and known limitations
-
-This is a beta. It runs in production, and the rough edges are listed here
-rather than hidden.
-
-The list keeps shrinking: registry fallback drift, the Entra scanner counting
-failed sign-ins as usage, unreported delegated access, and browser extension
-inventory have all been fixed and tested since the first release.
-
-Current known limitations:
-
-- **Single sign-on is beta.** Microsoft Entra sign-in has now been run end
-  to end against a real app registration - one, which is not the same as
-  proven - so pilot it on one account before moving anybody across. It
-  authenticates rather than provisions: the account must already exist with
-  a matching email address, and the first successful sign-in binds it to
-  that Entra identity permanently. Passwords keep working alongside it
-  unless you require single sign-on, and the account the setup code created
-  keeps its password either way as the way back in.
-- **Outbound mail is one hop.** Invites are sent through a relay you
-  configure, synchronously, with no queue and no retry. A relay that is down
-  when an account is created means that person was not emailed; the portal
-  says so rather than implying otherwise, and a button resends to everybody
-  who was missed. Delivery beyond the relay is between you and it - a test
-  send reports what the relay said, which is not the same as landing in an
-  inbox.
-- **Snap Chromium profiles.** The collectors inventory installed browser
-  extensions from Chrome, Chromium, Brave and Edge profiles, but snap Chromium
-  on Linux keeps its profile under `~/snap` and is not read, so an AI extension
-  there is invisible.
-- **Sign-in coverage.** The Entra sign-in scan reads interactive sign-ins only.
-  Non-interactive ones are covered separately as delegated access findings:
-  one per user and app per day, carrying the OAuth scopes the app is using.
-  Service principal and managed identity sign-ins are not read as usage; the
-  service principal and consent scans show that a grant exists, not that
-  anything is using it. The delegated access query needs the Graph beta
-  endpoint because the `signInEventTypes` filter is not available on v1.0.
-- **The Windows delivery path.** The Linux collector is driven end to end in CI
-  and the macOS path has been run on a fresh cluster; the Windows collector has
-  had the least real-world running. Pilot on one machine first.
-
-> [!IMPORTANT]
-> Treat findings as leads to follow up, not verdicts.
-
-If you hit something wrong or missing, an issue with the finding JSON and what
-you expected is genuinely useful.
-
-<p align="right"><a href="#top">Back to top ↑</a></p>
-
-## Security model
-
-See [SECURITY.md](SECURITY.md).
-
-Short version: devices enroll for their own revocable credentials (a shared
-token covers the transition); public ingest should be rate-limited; findings
-can carry usernames, account domains, device identifiers and hostnames, so
-treat the log store and portal as sensitive; and endpoint collectors run as
-root/SYSTEM through your MDM or RMM, so review them like anything else you
-deploy at that privilege level.
-
-<p align="right"><a href="#top">Back to top ↑</a></p>
-
-## License and credit
-
-Copyright 2026 Aman Karir. Shadow AI Guard was designed and written by Aman
-Karir and is free and open source under Apache-2.0.
-
-That licence permits commercial use, and others may legitimately charge for
-hosting, deployment, support or managed services built on it. It also
-requires that every copy, modified or not, keeps the copyright notice, the
-[NOTICE](NOTICE) file and the attribution in the source files. A service or
-product built on this code must credit it as the work of Aman Karir and may
-not present the software as its own; see [TRADEMARKS.md](TRADEMARKS.md) for
-the name, the logo and what a paid offering has to say. The software itself
-can always be obtained from this repository for free.
-
-There is a commercial edition, **Nyxus**, distributed as private images under
-a subscription with support, licensed separately. Nothing here is held back
-for it: this repository is the whole open product, and it stays that way.
-An activation key gates nothing in this code either - it names the
-organisation a subscription was issued to and doubles as the credential that
-pulls those images. **System health** in the portal is where one is entered,
-checked offline against a signature the portal already holds, and where the
-commands to move a deployment across are written out.
+## English summary
+
+**Sera AI Governance (世良AIガバナンス)** is a Japanese-language, self-hosted open-source derivative of
+[Shadow AI Guard](https://github.com/AmanSK5/shadow-ai-guard) by Aman Karir (Apache License 2.0), modified by Sera Inc. (株式会社世良).
+It shows which AI tools are used across browsers, CLIs, IDEs, desktop apps, the network, the cloud and MCP, on which devices and accounts,
+what the organisation decided about each tool, and whether paid seats match real use.
+
+- Try it: `git clone https://github.com/sera-inc/sera-ai-governance.git && cd sera-ai-governance/demo && docker compose up -d --build`, then open <http://localhost:8091> (`admin` / `admin-demo-portal`, demo-only). All data is fictional.
+- Deploy: Docker Compose under [`deploy/compose`](deploy/compose/README.md), built from this checkout. The Helm chart is included but points at the upstream project's English images by default; that route is unverified for this fork.
+- Status: an experimental OSS release. No hosted service and no paid support are offered. Not operated, supported or endorsed by the Shadow AI Guard project or the Digital Agency of Japan.
+- Upstream README: [docs/upstream-README.md](docs/upstream-README.md). Licence and attribution: [LICENSE](LICENSE), [NOTICE](NOTICE), [TRADEMARKS.md](TRADEMARKS.md).

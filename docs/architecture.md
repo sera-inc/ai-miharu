@@ -350,3 +350,22 @@ full.
 The extension point is always the finding. A new detection source emits the
 schema and posts to the receiver; nothing else changes. See
 `docs/writing-a-scanner.md` for the concrete steps.
+
+## 世良AIガバナンス（派生版）: 動作確認済みの構成と常駐メモリ（2026-09-30）
+
+**動作を確認している構成は Docker Compose です。** 本番向けの最小構成は [`deploy/compose`](../deploy/compose/README.md)（受信サービス、ポータル、スキャナー。ログ保存先と Grafana は `with-logs` プロファイル）で、
+イメージはクローンしたこのリポジトリからビルドされる。`demo/` はサンプルデータ、疑似の Entra、メール受信箱（Mailpit）、拡張機能のデモを含む**デモ専用**で、本番の構成に含めない。
+Kubernetes（Helm）のチャートは同梱しているが、既定のイメージ参照は原著のもので、この派生版では未確認。
+
+**計測値（アイドル時、サンプルデータ、負荷なし）**: 8 vCPU・16 GiB の Docker ホストで `docker stats --no-stream` を取った。
+
+| 構成 | コンテナ | 常駐メモリの合計 |
+|---|---|---|
+| 最小の Compose（`deploy/compose`） | 受信サービス 約43 MiB、ポータル 約42 MiB、スキャナー 約28 MiB | 約 116 MiB |
+| デモ（`demo/`） | ポータル 約44、受信サービス 約81、Grafana 約642、Loki 約90、拡張機能デモ 約10、疑似の Entra 約15、Mailpit 約10（MiB） | 約 891 MiB |
+
+CPU はどれもアイドル時に数 % 以下。Grafana は起動直後にメモリが大きく、時間とともに変わる。
+
+**推奨値ではない。** 検出結果の量（端末数×報告頻度）、ログ保存先（Loki）の保存期間とディスクの増え方、バックアップと復元にかかる時間、同時に閲覧する人数での CPU と応答は計測していない。
+2 vCPU・4 GB の仮想マシンは、上の計測値に対して余裕のある**出発点の候補**だが、実データを扱う前に、自組織の端末数・保存期間・バックアップと復元の手順で試験してから決めること。
+単一のサーバーでは高可用性を保証しない。

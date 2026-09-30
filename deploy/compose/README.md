@@ -42,11 +42,23 @@ logged with the likely cause. If collectors report POST failures, check
     chmod 640 secrets/*
     sudo chown :65532 secrets/*
 
-Edit `.env`: pin `IMAGE_TAG` to a released version rather than leaving it at
-`latest`. Everything else can wait for the portal.
+Edit `.env` only if you need to. The four images are built from this checkout
+(`IMAGE_REPO=sera-ai-governance`, `IMAGE_TAG=local`), so the first start takes a
+few minutes to build. Everything else can wait for the portal.
 
-    docker compose up -d
+    docker compose up -d --build
     docker compose logs receiver | grep setup_code
+
+The build runs the same Dockerfiles as CI. What you are running is the code you
+cloned, including the bundled DADS design tokens: the portal's system status
+page shows "同梱" next to "デザイントークン", and the portal log says
+`DADS tokens: bundled` at startup. To run images from your own registry instead,
+see the comment above `IMAGE_REPO` in `.env`.
+
+Nothing in this file publishes or pulls the upstream project's images. Do not
+use the sample data, mock Entra, mail catcher or extension demo under `demo/`
+for a real deployment: they exist to show the product, and they are not part of
+this route.
 
 The receiver is on `127.0.0.1:8080` and the portal on `127.0.0.1:8091`. Open
 the portal, enter the setup code, create the admin account, and the first-run
@@ -290,16 +302,27 @@ After editing `registry/registry.yaml`:
 
 ## Updating
 
+The images are built from your clone, so an update is a new checkout and a
+rebuild:
+
+    git pull
+    docker compose up -d --build
+
+If you run images from your own registry instead (`IMAGE_REPO` set in `.env`),
+build and push the new images, change `IMAGE_TAG` to the version you pushed,
+then:
+
     docker compose pull
     docker compose up -d
 
-Or, from a machine with this Docker context and access to the portal,
-`aiguardctl upgrade --portal <portal URL>`: it pulls and recreates only this
-project's receiver and portal services, after an owner approves in the
-portal, and reports each step to System health. See `cli/README.md`.
-
-If `IMAGE_TAG` is pinned, that is a no-op until you change it, which is the
+If `IMAGE_TAG` is pinned, `pull` is a no-op until you change it, which is the
 point of pinning it.
+
+`aiguardctl upgrade --portal <portal URL>` pulls and recreates the receiver and
+portal services after an owner approves in the portal. It assumes pushed
+images, so it fits the registry route above and not the build-from-clone
+default; the portal's update card checks the upstream project's releases, not
+this repository's. See `cli/README.md`.
 
 ## Checking it works
 
