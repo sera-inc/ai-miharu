@@ -71,6 +71,8 @@ services:
     image: ${IMAGE_REPO:-sera-ai-governance}/receiver:${IMAGE_TAG:-local}
     build:
       context: ../../receiver
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
     restart: unless-stopped
     environment:
       # Read from a file rather than the environment. Compose has no real

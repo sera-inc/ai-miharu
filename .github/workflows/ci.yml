@@ -516,6 +516,7 @@ jobs:
           sudo chown :65532 secrets/*
           {
             echo "IMAGE_TAG=ci"
+            echo "APP_VERSION=ci-test"
             echo "LOKI_PUSH_URL=http://loki:3100/loki/api/v1/push"
             echo "LOKI_URL=http://loki:3100"
             echo "GRAFANA_ADMIN_PASSWORD=$(openssl rand -hex 12)"
