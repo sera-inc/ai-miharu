@@ -337,6 +337,13 @@ from configuration being present. Immediately after install everything is
 silent, which is the honest picture rather than a broken one: roll one collector
 and it appears.
 
+`docker compose ps` shows the `scanner` container as `unhealthy` until you give it
+credentials for at least one cloud source (Entra, Jamf, SentinelOne and so on, in
+`scanner.env`). Without them its log says `no scanner ran: check credentials and
+policy.yaml` and it waits for the next pass (`SCAN_INTERVAL`). Nothing is being
+scanned in that state, and no other service depends on the container; it is the
+unconfigured state, not a crash (seen with the 2026-09-30 local build).
+
 ## Logs
 
     docker compose logs -f receiver
