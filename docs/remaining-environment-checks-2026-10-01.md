@@ -14,6 +14,8 @@ NODE_USE_ENV_PROXY=1 node scripts/resources/verify-catalog-release.mjs
 
 結果: exit 1、`fetch failed` の原因は `Proxy response (403) !== 200 when HTTP Tunneling` / `UND_ERR_ABORTED`。対象は設定済みSupabase `resource-catalog` Edge Function。プロキシ設定の値や資格情報は資料に含めていない。
 
+設定担当者への最小許可依頼: 宛先host `jmtkgixrvzqagzqsqrrr.supabase.co` のTCP443へのHTTPS CONNECT。HTTP単位で制限できる場合は `GET /functions/v1/resource-catalog`、クエリ `operation=asset&key=all%2Fsummary&version=1cec0452da4cc176`。現在の固定snapshotの読取り照合だけで、Supabase全体のwildcard、DBポート、管理API、書込み権限は不要。API認証失敗ではなくトンネル確立前の拒否として切り分けた。
+
 前回の `npm run build` のprerender `dist/index.html` 不在は、先行するgate失敗の後に出る二次エラー。必須gateを単独実行し、接続拒否を切り分けた。外部gate無効化時のコンパイル・4,213ルート生成・静的検証成功を通常build成功へ読み替えない。gateを変更せず、接続許可されたビルド環境で通常buildを実行することが残件。拒否された経路を別プロキシで迂回していない。
 
 ## 10/1 SEO変更・観察ロックの保護

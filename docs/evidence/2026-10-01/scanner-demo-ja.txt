@@ -1,0 +1,95 @@
+
+デモモードで実行中 — すべて合成サンプルデータです。
+
+AIミハル v0.1.0
+ツールレジストリ: 31件のAIツール
+検出ソース: sentinelone, entra, exchange, intune, jamf, mcp
+
+  ⟳ sentinelone: 検出中...  ✓ sentinelone: 検出3件（7.6秒）
+  ⟳ entra: 検出中...  ✓ entra: 検出1件（4.2秒）
+  ⟳ exchange: 検出中...  ✓ exchange: 検出1件（3.8秒）
+  ⟳ intune: 検出中...  ✓ intune: 検出2件（2.8秒）
+  ⟳ jamf: 検出中...  ✓ jamf: 検出1件（3.2秒）
+  ⟳ mcp: 検出中...  ✓ mcp: 検出1件（0.8秒）
+
+╭───────────────────────────────────────────╮
+│ AIミハル — 未把握のAI利用の検出レポート   │
+│ 作成日時: 2026-10-01 16:04:06             │
+│ 実行した検出ソース: 6 | 検出件数: 9       │
+│ 機密 — 従業員名と端末の識別情報を含みます │
+╰───────────────────────────────────────────╯
+
+検出ソースの状態
+┏━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┓
+┃ 検出ソース  ┃ 状態 ┃ 検出件数 ┃ 所要時間 ┃
+┡━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━┩
+│ sentinelone │ 正常 │ 3        │ 7.6秒    │
+│ entra       │ 正常 │ 1        │ 4.2秒    │
+│ exchange    │ 正常 │ 1        │ 3.8秒    │
+│ intune      │ 正常 │ 2        │ 2.8秒    │
+│ jamf        │ 正常 │ 1        │ 3.2秒    │
+│ mcp         │ 正常 │ 1        │ 0.8秒    │
+└─────────────┴──────┴──────────┴──────────┘
+
+利用者別の検出結果
+
+  blastoise@demo-corp.example
+    中 Notion AI — OAuth consent grant to Notion AI — delegated permissions: 
+User.Read, Files.Read — last used 47 days ago (2026年07月 — 2026年08月)
+
+  charizard@demo-corp.example
+    高 ChatGPT — [BLOCKED] DNS lookup for chatgpt.com (via chrome.exe) — 847 
+queries over 14 days, bursty weekday pattern (2026年09月 — 2026年10月)
+    高 ChatGPT — [BLOCKED] DNS lookup for cdn.oaistatic.com (via chrome.exe) — 
+CDN asset loads confirming active sessions (2026年09月 — 2026年10月)
+
+  gengar@demo-corp.example
+    高 Atlassian Rovo — Over-permissioned MCP connector: Atlassian Rovo — OAuth 
+scopes include write:jira-work, write:confluence-content, 
+admin:confluence-space; 15 tools (9 write); verdict BLOCK (2026年09月 — 
+2026年10月)
+
+  pikachu@demo-corp.example
+    中 Grammarly — Signup confirmation email from noreply@grammarly.com — 
+subject: "Welcome to Grammarly!" (2026年09月)
+    中 Grammarly — Browser extension: Grammarly for Chrome 
+(kbfnbcaeplbcioakkpcpgfkobkghlhen) on managed device (2026年09月)
+
+  venusaur@demo-corp.example
+    低 GitHub Copilot — [APPROVED] DNS lookup for copilot.github.com (via code) 
+— IDE extension traffic (2026年09月 — 2026年10月)
+    低 GitHub Copilot — [APPROVED] Discovered app: GitHub Copilot (VS Code 
+extension runtime) on managed Windows device (2026年09月 — 2026年10月)
+    低 GitHub Copilot — [APPROVED] Application inventory: Visual Studio Code 
+with Copilot extension bundle on macOS (2026年08月 — 2026年10月)
+
+ツール別の検出結果
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ ツール         ┃ 提供元      ┃ リスク ┃ 利用者数 ┃ 端末数 ┃ 検出ソース       ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ Atlassian Rovo │ Atlassian   │ 高     │ 1        │ -      │ mcp_scan         │
+│ ChatGPT        │ OpenAI      │ 高     │ 1        │ 1      │ sentinelone_dns  │
+│ GitHub Copilot │ GitHub      │ 低     │ 1        │ 2      │ intune_app,      │
+│                │             │        │          │        │ jamf_app,        │
+│                │             │        │          │        │ sentinelone_dns  │
+│ Grammarly      │ Grammarly   │ 中     │ 1        │ 1      │ exchange_email,  │
+│                │             │        │          │        │ intune_extension │
+│ Notion AI      │ Notion Labs │ 中     │ 1        │ -      │ entra_consent_g… │
+└────────────────┴─────────────┴────────┴──────────┴────────┴──────────────────┘
+SentinelOneの結果は端末単位で重複を除いています。各行は利用者と端末の組合せを示
+し、イベント数ではありません。
+
+対応が必要な項目
+
+  禁止ツールの利用
+    • charizard@demo-corp.example が chrome.exe経由でChatGPTを利用しています
+    対応: 
+利用者に確認してください。これらのツールは組織の禁止リストに登録されています。
+
+  AIデスクトップアプリの利用
+    • venusaur@demo-corp.example が codeデスクトップアプリ経由でGitHub 
+Copilotを利用しています
+    対応: 
+これらの利用者はAIデスクトップアプリをインストールし、APIを呼び出しています。組
+織のAI利用ポリシーに沿っているか確認してください。
+

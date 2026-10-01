@@ -19,6 +19,16 @@ ROUTES = {
 BUNDLED = ("index.css", "dads.css")
 
 
+def test_portal_image_license_copies_match_the_source_notices():
+    """The portal-only Docker context must retain upstream permissions."""
+    portal = Path(__file__).resolve().parents[1]
+    root = portal.parent
+    for relative in ("LICENSE", "NOTICE", "licenses/dads-html-MIT.txt",
+                     "licenses/dads-tailwind-theme-plugin-MIT.txt"):
+        assert (portal / relative).read_bytes() == (root / relative).read_bytes()
+
+
+
 def _route(path):
     for route in main.app.routes:
         if getattr(route, "path", None) == path:

@@ -40,18 +40,18 @@ console = Console()
     "--config", "-c",
     type=click.Path(exists=True),
     default=None,
-    help="Path to policy config YAML (default: ./policy.yaml)",
+    help="ポリシー設定YAMLのパス（既定: ./policy.yaml）",
 )
 @click.option(
     "--env-file", "-e",
     type=click.Path(),
     default=".env",
     show_default=True,
-    help="Path to .env file for API credentials.",
+    help="API認証情報を読み込む.envファイルのパス。",
 )
 @click.pass_context
 def main(ctx, config, env_file):
-    """AI Guard: Shadow AI discovery and MCP security scanner."""
+    """AIミハル: 未把握のAI利用を検出し、MCPのセキュリティを評価します。"""
     # Auto-load .env file if it exists
     env_path = Path(env_file)
     if env_path.exists():
@@ -62,10 +62,10 @@ def main(ctx, config, env_file):
             console.print(f"[yellow]{perm_warning}[/yellow]")
 
         load_dotenv(env_path, override=False)
-        console.print(f"[dim]Loaded credentials from {env_path}[/dim]")
+        console.print(f"[dim]認証情報を読み込みました: {env_path}[/dim]")
     elif env_file != ".env":
         # Only warn if they explicitly specified a non-default path
-        console.print(f"[yellow]Env file not found: {env_path}[/yellow]")
+        console.print(f"[yellow]環境設定ファイルが見つかりません: {env_path}[/yellow]")
     ctx.ensure_object(dict)
 
     if config:
@@ -86,29 +86,29 @@ def main(ctx, config, env_file):
 @click.option(
     "--scanner", "-s",
     multiple=True,
-    help="Run specific scanner(s) only. Can be repeated.",
+    help="指定した検出ソースだけを実行します。複数回指定できます。",
 )
 @click.option(
     "--format", "-f", "output_format",
     type=click.Choice(["terminal", "json", "csv", "confluence"]),
     default="terminal",
-    help="Output format.",
+    help="出力形式。",
 )
 @click.option(
     "--output", "-o",
     type=click.Path(),
     default=None,
-    help="Output file path (for json/csv).",
+    help="出力先ファイルのパス（json/csv）。",
 )
 @click.option(
     "--demo",
     is_flag=True,
     default=False,
-    help="Run with synthetic fixture data (no API calls).",
+    help="合成サンプルデータで実行します（APIを呼び出しません）。",
 )
 @click.pass_context
 def scan(ctx, scanner, output_format, output, demo):
-    """Run shadow AI discovery scanners."""
+    """未把握のAI利用を検出します。"""
     registry: Registry = ctx.obj["registry"]
 
     if demo:
@@ -123,13 +123,13 @@ def scan(ctx, scanner, output_format, output, demo):
     if demo:
         from ai_guard.scanners.demo import load_demo_scanners
 
-        console.print("\n[bold yellow]Running in demo mode — all data is synthetic.[/bold yellow]\n")
-        console.print(f"[bold]AI Guard v{__version__}[/bold]")
-        console.print(f"Registry: {registry.stats['total_services']} AI services indexed")
+        console.print("\n[bold yellow]デモモードで実行中 — すべて合成サンプルデータです。[/bold yellow]\n")
+        console.print(f"[bold]AIミハル v{__version__}[/bold]")
+        console.print(f"ツールレジストリ: {registry.stats['total_services']}件のAIツール")
 
         demo_scanners = load_demo_scanners(registry)
         scanner_names = [s.name for s in demo_scanners]
-        console.print(f"Scanners: {', '.join(scanner_names)}\n")
+        console.print(f"検出ソース: {', '.join(scanner_names)}\n")
 
         log_scan_start(scanners=scanner_names, config_path="demo")
 
@@ -142,10 +142,10 @@ def scan(ctx, scanner, output_format, output, demo):
                 results.append(ScanResult(scanner_name=scanner_instance.name, skipped_reason=msg))
                 continue
 
-            console.print(f"  [blue]⟳ {scanner_instance.name}: scanning...[/blue]", end="")
+            console.print(f"  [blue]⟳ {scanner_instance.name}: 検出中...[/blue]", end="")
             result = asyncio.run(scanner_instance.scan())
             results.append(result)
-            console.print(f"\r  [green]✓ {scanner_instance.name}: {result.finding_count} findings ({result.duration_seconds:.1f}s)[/green]")
+            console.print(f"\r  [green]✓ {scanner_instance.name}: 検出{result.finding_count}件（{result.duration_seconds:.1f}秒）[/green]")
 
     else:
         # Determine which scanners to run
@@ -159,23 +159,23 @@ def scan(ctx, scanner, output_format, output, demo):
 
         if not scanner_names:
             console.print(
-                "[yellow]No scanners enabled. "
-                "Enable scanners in policy.yaml or use --scanner flag.[/yellow]\n"
-                "Available scanners: " + ", ".join(ALL_SCANNERS.keys())
+                "[yellow]有効な検出ソースがありません。"
+                "policy.yamlで有効にするか、--scannerで指定してください。[/yellow]\n"
+                "利用できる検出ソース: " + ", ".join(ALL_SCANNERS.keys())
             )
             sys.exit(1)
 
         log_scan_start(scanners=scanner_names, config_path=str(ctx.parent.params.get("config") or "default"))
 
-        console.print(f"\n[bold]AI Guard v{__version__}[/bold]")
-        console.print(f"Registry: {registry.stats['total_services']} AI services indexed")
-        console.print(f"Scanners: {', '.join(scanner_names)}\n")
+        console.print(f"\n[bold]AIミハル v{__version__}[/bold]")
+        console.print(f"ツールレジストリ: {registry.stats['total_services']}件のAIツール")
+        console.print(f"検出ソース: {', '.join(scanner_names)}\n")
 
         results = []
 
         for name in scanner_names:
             if name not in ALL_SCANNERS:
-                console.print(f"[red]Unknown scanner: {name}[/red]")
+                console.print(f"[red]不明な検出ソース: {name}[/red]")
                 continue
 
             scanner_cls = ALL_SCANNERS[name]
@@ -195,15 +195,15 @@ def scan(ctx, scanner, output_format, output, demo):
                 results.append(ScanResult(scanner_name=name, skipped_reason=msg))
                 continue
 
-            console.print(f"  [blue]⟳ {name}: scanning...[/blue]", end="")
+            console.print(f"  [blue]⟳ {name}: 検出中...[/blue]", end="")
 
             result = asyncio.run(scanner_instance.scan())
             results.append(result)
 
             if result.errors:
-                console.print(f"\r  [red]✗ {name}: {result.finding_count} findings, {len(result.errors)} error(s)[/red]")
+                console.print(f"\r  [red]✗ {name}: 検出{result.finding_count}件、エラー{len(result.errors)}件[/red]")
             else:
-                console.print(f"\r  [green]✓ {name}: {result.finding_count} findings ({result.duration_seconds:.1f}s)[/green]")
+                console.print(f"\r  [green]✓ {name}: 検出{result.finding_count}件（{result.duration_seconds:.1f}秒）[/green]")
 
     # Apply policy overrides to risk tiers
     for result in results:
@@ -241,7 +241,7 @@ def scan(ctx, scanner, output_format, output, demo):
 @click.argument("config_path", type=click.Path(exists=True))
 @click.pass_context
 def mcp_scan(ctx, config_path):
-    """Standalone MCP server security assessment."""
+    """MCPサーバーのセキュリティを個別に評価します。"""
     registry: Registry = ctx.obj["registry"]
 
     log_mcp_scan(config_path=config_path)
@@ -263,25 +263,26 @@ def mcp_scan(ctx, config_path):
         Verdict.ALLOW: "green",
     }
 
-    console.print(f"\n[bold]MCP Security Assessment: {assessment.server_name}[/bold]")
-    console.print(f"Description: {assessment.server_description}")
-    console.print(f"Auth method: {assessment.auth_method}")
-    console.print(f"Tools: {assessment.tool_count} total ({len(assessment.read_tools)} read, {len(assessment.write_tools)} write)")
+    console.print(f"\n[bold]MCPセキュリティ評価: {assessment.server_name}[/bold]")
+    console.print(f"説明: {assessment.server_description}")
+    console.print(f"認証方式: {assessment.auth_method}")
+    console.print(f"ツール: 全{assessment.tool_count}件（読取り{len(assessment.read_tools)}件、書込み{len(assessment.write_tools)}件）")
 
     if assessment.oauth_scopes:
-        console.print(f"OAuth scopes: {', '.join(assessment.oauth_scopes)}")
+        console.print(f"OAuthスコープ: {', '.join(assessment.oauth_scopes)}")
 
     color = verdict_colors.get(assessment.verdict, "white")
-    console.print(f"\n[bold {color}]Verdict: {assessment.verdict.value.upper()}[/bold {color}]")
+    verdict_label = {"block": "禁止", "allow_with_conditions": "条件付き許可", "allow": "許可"}.get(assessment.verdict.value, assessment.verdict.value)
+    console.print(f"\n[bold {color}]判定: {verdict_label}[/bold {color}]")
 
     if assessment.risks:
-        console.print(f"\n[bold]Risks ({len(assessment.risks)})[/bold]")
+        console.print(f"\n[bold]リスク（{len(assessment.risks)}件）[/bold]")
 
         risk_table = Table(show_header=True, header_style="bold")
-        risk_table.add_column("Level")
-        risk_table.add_column("Category")
-        risk_table.add_column("Risk")
-        risk_table.add_column("Recommendation")
+        risk_table.add_column("重大度")
+        risk_table.add_column("分類")
+        risk_table.add_column("リスク")
+        risk_table.add_column("推奨する対応")
 
         level_colors = {
             RiskLevel.CRITICAL: "red bold",
@@ -294,7 +295,7 @@ def mcp_scan(ctx, config_path):
         for risk in sorted(assessment.risks, key=lambda r: list(RiskLevel).index(r.level)):
             style = level_colors.get(risk.level, "white")
             risk_table.add_row(
-                Text(risk.level.value.upper(), style=style),
+                Text({"critical": "重大", "high": "高", "medium": "中", "low": "低", "info": "参考情報"}.get(risk.level.value, risk.level.value), style=style),
                 risk.category,
                 f"{risk.title}\n{risk.detail}",
                 risk.recommendation,
@@ -302,7 +303,7 @@ def mcp_scan(ctx, config_path):
 
         console.print(risk_table)
     else:
-        console.print("\n[green]No risks identified.[/green]")
+        console.print("\n[green]リスクは検出されませんでした。[/green]")
 
     console.print()
 
@@ -310,19 +311,19 @@ def mcp_scan(ctx, config_path):
 @main.command()
 @click.pass_context
 def registry(ctx):
-    """Display the loaded AI service registry."""
+    """読み込んだツールレジストリを表示します。"""
     reg: Registry = ctx.obj["registry"]
 
-    console.print(f"\n[bold]AI Service Registry[/bold]")
-    console.print(f"Services: {reg.stats['total_services']}")
+    console.print(f"\n[bold]ツールレジストリ[/bold]")
+    console.print(f"ツール数: {reg.stats['total_services']}")
 
     table = Table(show_header=True, header_style="bold")
-    table.add_column("Service")
-    table.add_column("Vendor")
-    table.add_column("Category")
-    table.add_column("Risk")
-    table.add_column("Domains")
-    table.add_column("Detection Methods")
+    table.add_column("ツール")
+    table.add_column("提供元")
+    table.add_column("分類")
+    table.add_column("リスク")
+    table.add_column("ドメイン")
+    table.add_column("検出方法")
 
     for svc in sorted(reg.services, key=lambda s: (s.risk_tier, s.name)):
         methods = []
@@ -331,11 +332,11 @@ def registry(ctx):
         if svc.entra_app_ids:
             methods.append("Entra")
         if svc.email_domains:
-            methods.append("Email")
+            methods.append("メール")
         if svc.desktop_apps.get("windows") or svc.desktop_apps.get("macos"):
-            methods.append("App")
+            methods.append("アプリ")
         if any(svc.browser_extensions.values()):
-            methods.append("Ext")
+            methods.append("拡張機能")
         if svc.mcp_identifiers:
             methods.append("MCP")
 
@@ -345,7 +346,7 @@ def registry(ctx):
             svc.name,
             svc.vendor,
             svc.category,
-            Text(svc.risk_tier.upper(), style=risk_color),
+            Text({"high": "高", "medium": "中", "low": "低"}.get(svc.risk_tier, svc.risk_tier), style=risk_color),
             ", ".join(svc.domains[:2]) + ("..." if len(svc.domains) > 2 else ""),
             ", ".join(methods),
         )
@@ -357,10 +358,10 @@ def registry(ctx):
 @main.command()
 @click.pass_context
 def init(ctx):
-    """Set up AI Guard in the current directory.
+    """現在のディレクトリにAIミハルの初期設定を作成します。
 
-    Creates .env from template (with restricted permissions) and copies
-    the default policy.yaml.
+    テンプレートからアクセス権限を制限した.envを作成し、
+    既定のpolicy.yamlをコピーします。
     """
     import shutil
 
@@ -371,31 +372,31 @@ def init(ctx):
     env_example = package_dir / ".env.example"
 
     if env_file.exists():
-        console.print("[yellow].env already exists — skipping[/yellow]")
+        console.print("[yellow].envが存在するため作成を省略します[/yellow]")
         # Still check permissions on existing file
         _secure_env_file(env_file)
     elif env_example.exists():
         shutil.copy(env_example, env_file)
         _secure_env_file(env_file)
-        console.print("[green]Created .env with restricted permissions (600) — fill in your API credentials[/green]")
+        console.print("[green].envを権限600で作成しました。API認証情報を設定してください[/green]")
     else:
-        console.print("[yellow].env.example not found in package — create .env manually[/yellow]")
+        console.print("[yellow]同梱の.env.exampleが見つかりません。.envを手動で作成してください[/yellow]")
 
     # Copy policy.yaml if not present
     policy_file = Path("policy.yaml")
     policy_template = package_dir / "policy.yaml"
 
     if policy_file.exists():
-        console.print("[yellow]policy.yaml already exists — skipping[/yellow]")
+        console.print("[yellow]policy.yamlが存在するため作成を省略します[/yellow]")
     elif policy_template.exists():
         shutil.copy(policy_template, policy_file)
-        console.print("[green]Created policy.yaml — edit to enable scanners and set your policy[/green]")
+        console.print("[green]policy.yamlを作成しました。検出ソースとポリシーを設定してください[/green]")
 
     console.print(
-        "\n[bold]Next steps:[/bold]\n"
-        "  1. Edit .env with your API credentials\n"
-        "  2. Edit policy.yaml to enable scanners and set blocked/approved services\n"
-        "  3. Run: ai-guard scan\n"
+        "\n[bold]次の手順:[/bold]\n"
+        "  1. .envにAPI認証情報を設定します\n"
+        "  2. policy.yamlで検出ソースを有効にし、禁止・承認するツールを設定します\n"
+        "  3. 実行: ai-guard scan\n"
     )
 
 
@@ -414,18 +415,17 @@ def _secure_env_file(path: Path) -> None:
     type=int,
     default=14,
     show_default=True,
-    help="Days of DNS history to search (max 14).",
+    help="DNS履歴を検索する日数（最大14日）。",
 )
 @click.pass_context
 def discover(ctx, lookback):
-    """Keyword DNS sweep to find unknown AI tools.
+    """DNSのキーワード検索で未登録のAIツールを探します。
 
-    Queries SentinelOne Deep Visibility for DNS lookups containing
-    common AI-related keywords, then filters out domains already in
-    the registry and common false positives. What remains is a list
-    of potentially unknown AI tools, grouped by observation frequency.
+    SentinelOne Deep VisibilityでAI関連キーワードを含むDNS検索を調べ、
+    登録済みドメインと代表的な誤検出を除き、
+    未登録のAIツール候補を観測回数順に表示します。
 
-    Requires AIGUARD_S1_BASE_URL and AIGUARD_S1_API_TOKEN.
+    AIGUARD_S1_BASE_URLとAIGUARD_S1_API_TOKENの設定が必要です。
     """
     from ai_guard.discover import AI_KEYWORDS, run_discover
     from ai_guard.utils.auth import AuthError, SentinelOneAuth
@@ -439,12 +439,12 @@ def discover(ctx, lookback):
         console.print(f"[red]{e}[/red]")
         sys.exit(1)
 
-    console.print(f"\n[bold]AI Guard — Discovery Sweep[/bold]")
-    console.print(f"Keywords: {', '.join(AI_KEYWORDS)}")
-    console.print(f"Lookback: {lookback} days")
-    console.print(f"Registry: {registry.stats['total_services']} known services ({registry.stats['indexed_domains']} domains filtered)\n")
-    console.print("[blue]Running keyword DNS sweep via SentinelOne Deep Visibility...[/blue]")
-    console.print("[dim]This may take several minutes due to API rate limits.[/dim]\n")
+    console.print(f"\n[bold]AIミハル — 未登録ツールの探索[/bold]")
+    console.print(f"キーワード: {', '.join(AI_KEYWORDS)}")
+    console.print(f"検索期間: 過去{lookback}日間")
+    console.print(f"ツールレジストリ: 登録済み{registry.stats['total_services']}件（{registry.stats['indexed_domains']}ドメインを除外）\n")
+    console.print("[blue]SentinelOne Deep VisibilityでDNSのキーワード検索を実行しています...[/blue]")
+    console.print("[dim]APIの呼出し回数制限により数分かかる場合があります。[/dim]\n")
 
     domain_counts, errors = asyncio.run(
         run_discover(auth=auth, registry=registry, lookback_days=lookback)
@@ -452,29 +452,29 @@ def discover(ctx, lookback):
 
     # Show errors if any
     if errors:
-        console.print(f"[yellow]Encountered {len(errors)} error(s):[/yellow]")
+        console.print(f"[yellow]エラーが{len(errors)}件発生しました:[/yellow]")
         for err in errors:
             console.print(f"  [dim]{err}[/dim]")
         console.print()
 
     # Display results
     if not domain_counts:
-        console.print("[green]No unknown AI-related domains found.[/green]\n")
+        console.print("[green]未登録のAI関連ドメインは見つかりませんでした。[/green]\n")
         return
 
-    console.print(f"[bold]Potentially unknown AI-related domains ({len(domain_counts)} unique):[/bold]\n")
+    console.print(f"[bold]未登録のAI関連ドメイン候補（重複を除いて{len(domain_counts)}件）:[/bold]\n")
 
     table = Table(show_header=True, header_style="bold")
-    table.add_column("Domain", style="cyan")
-    table.add_column("Hits", justify="right")
+    table.add_column("ドメイン", style="cyan")
+    table.add_column("観測回数", justify="right")
 
     for domain, count in domain_counts.most_common():
         table.add_row(domain, str(count))
 
     console.print(table)
     console.print(
-        f"\n[dim]These domains matched AI keywords but are not in the registry.\n"
-        f"Review and add confirmed AI services to ai_services.yaml.[/dim]\n"
+        f"\n[dim]これらのドメインはAIキーワードに一致しましたが、ツールレジストリに未登録です。\n"
+        f"確認後、AIツールと判断したものをai_services.yamlに追加してください。[/dim]\n"
     )
 
 
