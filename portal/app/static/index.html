@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AIミハル</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="/ai-miharu-symbol.svg">
+<link rel="icon" type="image/png" href="/ai-miharu-symbol.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 /* Light is the default and dark is the [data-theme=dark] overlay. The
@@ -975,11 +975,11 @@ a.libtn:hover{border-color:var(--pri)}
 <link rel="stylesheet" href="/dads-product.css">
 <a class="skip-link" href="#app">メインコンテンツへスキップ</a>
 <div class="overlay" id="overlay"></div>
-<div class="drawer" id="drawer"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="詳細" aria-hidden="true" inert></div>
 <div class="shell" id="shell">
   <aside id="app-sidebar" tabindex="-1">
     <button class="brand" id="brand-home" type="button"
-      aria-label="概要へ移動"><img src="/ai-miharu-symbol-white.svg" alt=""><span>AIミハル</span></button>
+      aria-label="概要へ移動"><img src="/ai-miharu-symbol.png" alt=""><span>AIミハル</span></button>
     <div class="brandline"></div>
     <button class="tenant-switch" id="estate-status" type="button"
       aria-label="システム状態を開く">
@@ -1289,7 +1289,7 @@ function chrome(on) {
   document.querySelector('.topbar').style.display = on ? '' : 'none';
   document.getElementById('nav').style.display = on ? '' : 'none';
   document.getElementById('fold').style.display = on ? '' : 'none';
-  if (!on) { detail = null; DSTACK = []; document.body.classList.remove('open'); }
+  if (!on) { detail = null; DSTACK = []; document.body.classList.remove('open'); syncDetailLayer(); }
   const so = document.getElementById('signout'), who = document.getElementById('who');
   const login = AUTH && AUTH.mode === 'login';
   so.style.display = on && login ? '' : 'none';
@@ -1501,7 +1501,7 @@ function showLogin(msg) {
       create ? 'アカウントを作成' : 'サインイン'}</button>`;
   app.innerHTML = `<div style="max-width:470px;margin:9vh auto 0">
     <div class="wcard licard" style="padding:28px 30px">
-    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img class="mark-on-light" src="/ai-miharu-symbol.svg" alt="" style="width:52px;height:52px;object-fit:contain"><img class="mark-on-dark" src="/ai-miharu-symbol-white.svg" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">AIミハル</strong></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 20px"><img class="mark-on-light" src="/ai-miharu-symbol.png" alt="" style="width:52px;height:52px;object-fit:contain"><img class="mark-on-dark" src="/ai-miharu-symbol.png" alt="" style="width:52px;height:52px;object-fit:contain"><strong style="font-size:22px">AIミハル</strong></div>
     <h2>${create ? '管理者アカウントを作成' : 'サインイン'}</h2>
     <p class="lede">${create
       ? `管理者アカウントはまだありません。受信サービスが起動時に1回限りのセットアップコードをログへ出力しています。<code>kubectl logs deploy/&lt;release&gt;-ai-guard | grep setup_code</code> または <code>docker compose logs receiver</code> で確認してください。コードは1回だけ使えます。分からなくなった場合は、受信サービスを再起動すると新しいコードが発行されます。`
@@ -1825,7 +1825,7 @@ function drawSetup() {
   panel.innerHTML = '<h4>' + (req
       ? 'この環境には未設定の項目があります'
       : '設定しておくとよい項目があります') + '</h4>'
-    + '<p class="lede" style="font-size:12px;margin:0 0 8px">' + (req
+    + '<p class="lede" style="font-size:var(--app-text-body-sm-size);margin:0 0 8px">' + (req
       ? '必須項目が未設定でも動作は止まりません。ただし、<b>誤った結果</b>を表示します。'
       : '不具合ではありません。設定すると、まだ使っていない機能が役立つようになります。') + '</p>'
     + items.map(i => '<div class="si"><b>' + esc(i.t)
@@ -3529,7 +3529,7 @@ function deviceDetail(k) {
         `<div style="margin:2px 0"><span class="pill p-mut">${esc(uiToolName(t))}</span>
          ${accts.length ? accts.map(a =>
             `<span class="pill ${(d.personal_accounts||[]).includes(a)?'p-warn':'p-ok'}">${esc(a)}</span>`).join('')
-          : '<span style="color:var(--mut);font-size:11px">アカウント未検出</span>'}</div>`).join('')
+          : '<span style="color:var(--mut);font-size:var(--app-text-body-sm-size)">アカウント未検出</span>'}</div>`).join('')
       : (d.tools||[]).map(t=>`<span class="pill p-mut">${esc(uiToolName(t))}</span>`).join('')}</td></tr>
     <tr><th>接続先</th><td>${bridges.map(b=>`<span class="pill p-acc">${esc(b)}</span>`).join('') || '—'}</td></tr>
   </table>`;
@@ -3554,7 +3554,7 @@ function toolDetail(k) {
       t.usage === 'installed' && (t.devices||[]).length
         ? ' <span class="src-note" style="font-style:normal">AIツールとして使われた形跡はありません</span>' : ''}</td></tr>
   <tr><th>アカウント</th><td>${esc((t.accounts||[]).join(', ')) || '—'}</td></tr></table>
-  <h2 style="margin-top:22px;font-size:16px">検出された端末</h2>
+  <h2 style="margin-top:var(--app-space-3);font-size:var(--app-text-heading-sm-size)">検出された端末</h2>
   ${(t.devices||[]).map(dk => G.devices[dk] ? card(dk, G.devices[dk]) : '').join('')}`;
 }
 
@@ -3895,10 +3895,10 @@ function rwRail() {
       <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
   }).join('')}</ol>
   <div class="sssum">
-    <div class="lede" style="font-size:11.5px">利用環境 ${RW_SURFACES.length} 種類中 ${cov} 種類に識別子あり</div>
+    <div class="lede" style="font-size:var(--app-text-body-sm-size)">利用環境 ${RW_SURFACES.length} 種類中 ${cov} 種類に識別子あり</div>
     <div class="barwrap"><div class="bar"
       style="width:${cov / RW_SURFACES.length * 100}%"></div></div>
-    <div class="lede" style="font-size:11.5px">識別子がない利用環境は、自社環境の不備ではありません。その利用環境ではこのツールを検出できない、という意味です。</div>
+    <div class="lede" style="font-size:var(--app-text-body-sm-size)">識別子がない利用環境は、自社環境の不備ではありません。その利用環境ではこのツールを検出できない、という意味です。</div>
   </div></div>`;
 }
 
@@ -3988,7 +3988,7 @@ function rwBodyReview() {
     const seen = c.some(x => x.why === 'ev' || x.why === 'saved');
     return `<tr><td class="sname">${esc(sf[0])}</td>
       <td>${c.length ? c.map(x => `<div class="mono"
-        style="font-size:12px">${esc(x.v)}</div>`).join('')
+        style="font-size:var(--app-text-body-sm-size)">${esc(x.v)}</div>`).join('')
         : '<span style="color:var(--mut)">照合対象なし</span>'}</td>
       <td>${!c.length ? '<span class="pill p-mut">検出できない</span>'
         : seen ? '<span class="pill p-ok">一致あり</span>'
@@ -4092,7 +4092,7 @@ async function registryView() {
     <button class="mini" style="padding:6px 14px" data-act="reg-add">ツールを追加</button>
   </div>`}
 
-  <h2 style="font-size:16px">この環境で追加したツール（${RENTRIES.length}）</h2>
+  <h2 style="font-size:var(--app-text-heading-sm-size)">この環境で追加したツール（${RENTRIES.length}）</h2>
   ${RENTRIES.length ? `<table>
   <tr><th>識別子</th><th>名前</th><th>提供元</th><th>検出用識別子の数</th><th>更新日時</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${RENTRIES.map(x => {
@@ -4112,7 +4112,7 @@ async function registryView() {
   : `<p class="lede">まだありません。AI台帳に表示されたツールがレジストリ未登録の場合は、そのツールの「レジストリに追加」ボタンから登録できます。検出される前に、ここで定義しておくこともできます。</p>`}
 
   <details style="margin-top:22px">
-  <summary style="cursor:pointer;font-size:14px">製品に同梱のツール定義（${shipped.length}）— 読み取り専用・リリースごとに更新</summary>
+  <summary style="cursor:pointer;font-size:var(--app-text-body-size)">製品に同梱のツール定義（${shipped.length}）— 読み取り専用・リリースごとに更新</summary>
   <table style="margin-top:10px"><tr><th>識別子</th><th>名前</th><th>提供元</th></tr>
   ${shipped.map(t => `<tr><td class="mono">${esc(t.id)}</td>
     <td>${esc(uiRegistryToolName(t))}</td><td style="color:var(--mut)">${esc(t.vendor)}</td></tr>`).join('')}
@@ -4136,7 +4136,7 @@ function watchlistBlock(observedIds) {
                not_approved: ['未承認', 'p-warn']};
   const undecided = rows.filter(t => !decided[t.id]).length;
   return `<details id="wl-details" style="margin-top:22px" ${WLOPEN ? 'open' : ''}>
-  <summary data-act="wl-toggle" style="cursor:pointer;font-size:14px">
+  <summary data-act="wl-toggle" style="cursor:pointer;font-size:var(--app-text-body-size)">
     登録済みだが未検出のツール（${rows.length} 件${undecided
       ? `、うち判断なし ${undecided} 件` : ''}）</summary>
   <p class="lede" style="margin-top:10px">ここで記録した判断は、ツールが初めて検出された時点から適用されます。承認には下のレビュー期限が設定されます。</p>
@@ -4848,7 +4848,7 @@ function extSettingsState() {
 function extStatusRows(mode) {
   const st = extSettingsState();
   const pill = val => val
-    ? `<span class="pill p-ok">設定済み</span> <span class="mono" style="font-size:11px">${esc(val)}</span>`
+    ? `<span class="pill p-ok">設定済み</span> <span class="mono" style="font-size:var(--app-text-body-sm-size)">${esc(val)}</span>`
     : '<span class="none">未設定</span>';
   return `<dl class="kv">
     <dt>Chromium 拡張機能 ID</dt><dd>${pill(st.id)}</dd>
@@ -4909,10 +4909,10 @@ async function extSetup() {
       <span class="${p.line ? 'val' : 'pend'}">${esc(p.line || p.d)}</span></span>
     </li>`).join('')}</ol>
     <div class="sssum">
-      <div class="lede" style="font-size:11.5px">必須の手順 ${need.length} 件中 ${ndone} 件が完了</div>
+      <div class="lede" style="font-size:var(--app-text-body-sm-size)">必須の手順 ${need.length} 件中 ${ndone} 件が完了</div>
       <div class="barwrap"><div class="bar"
         style="width:${ndone / need.length * 100}%"></div></div>
-      <div class="lede" style="font-size:11.5px">Firefox 版は任意です。この画面で拡張機能のソースを取得する必要はありません。保存した設定は、いつでも該当する手順に戻って変更できます。</div>
+      <div class="lede" style="font-size:var(--app-text-body-sm-size)">Firefox 版は任意です。この画面で拡張機能のソースを取得する必要はありません。保存した設定は、いつでも該当する手順に戻って変更できます。</div>
     </div></div>`;
 
   const dlBtn = (kind, label) => `<button class="mini" style="padding:6px 14px"
@@ -5138,15 +5138,15 @@ async function wizard() {
         <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
     }).join('')}</ol>
     <div class="sssum">${canGo
-      ? `<div class="lede" style="font-size:11.5px;color:var(--pri);font-weight:600">収集エージェントを配布できます</div>
+      ? `<div class="lede" style="font-size:var(--app-text-body-sm-size);color:var(--pri);font-weight:600">収集エージェントを配布できます</div>
          <div class="barwrap"><div class="bar" style="width:100%"></div></div>
-         <div class="lede" style="font-size:11.5px">必須の2項目は設定済みです。残りは後からでも構いません。配布用ファイルを端末に配布すると、収集エージェントがすぐに報告を始めます。</div>
+         <div class="lede" style="font-size:var(--app-text-body-sm-size)">必須の2項目は設定済みです。残りは後からでも構いません。配布用ファイルを端末に配布すると、収集エージェントがすぐに報告を始めます。</div>
          <p style="margin:9px 0 0"><button class="mini pri" data-act="wiz-step"
            data-key="7">配布用ファイルへ</button></p>`
-      : `<div class="lede" style="font-size:11.5px">必須の項目 ${reqN} 件中 ${reqDone} 件が完了</div>
+      : `<div class="lede" style="font-size:var(--app-text-body-sm-size)">必須の項目 ${reqN} 件中 ${reqDone} 件が完了</div>
          <div class="barwrap"><div class="bar"
            style="width:${reqDone / reqN * 100}%"></div></div>
-         <div class="lede" style="font-size:11.5px">任意の項目は後から設定できます。どの値も「設定」画面で変更できます。</div>`}
+         <div class="lede" style="font-size:var(--app-text-body-sm-size)">任意の項目は後から設定できます。どの値も「設定」画面で変更できます。</div>`}
     </div></div>`;
 
   let body = '';
@@ -5232,7 +5232,7 @@ async function wizard() {
     <button class="mini" data-act="artifact" data-key="discovery-cronjob">Discovery（新規ツール検出）CronJob</button>
   </div>` : `<div class="note">受信サービスの公開URLが未設定のため、収集エージェントが接続できるURLをファイルに埋め込めません。手順1で保存すると、ここにダウンロードボタンが表示されます。</div>`}`;
   return `<h2>ようこそ — 環境をセットアップしましょう</h2>
-  <p class="lede">1項目ずつ進めます。ここで設定した内容は後から「設定」画面で変更でき、変更は再配布なしですぐに反映されます。</p>
+  <p class="lede">1項目ずつ進めます。ここで設定した内容は後から「設定」画面で変更できます。貼り付けガードの動作を変える場合は、ポリシーを再生成して端末へ再配布してください。拡張機能の報告先URLを変える場合は、パッケージの再生成・再配布も必要です。</p>
   ${SETMSG ? `<div class="note">${esc(SETMSG)}</div>` : ''}
   <div class="ssow">${rail}
     <div class="ssmain">${body}
@@ -5331,7 +5331,7 @@ const MAIL_PRESETS = {
     host: '', port: '25', security: 'none',
     help: `<p>自社でサーバーを運用している環境の多くがすでに持っている構成で、最初に確認する価値があります。Kubernetes では、ホストはサービス名（<span class="mono">postfix.mail.svc.cluster.local</span>、同じ名前空間からなら <span class="mono">postfix</span> だけでも可）です。それ以外の環境ではリレーのホスト名です。ポートは <b>25</b>、セキュリティは<b>なし</b>を選びます。自社で管理するネットワーク内のリレーは、TLS ではなく送信元のアドレスで受け付けるかどうかを判断するためです。</p>
     <p><b>多くの場合、値を一から調べる必要はありません。</b>GitLab、Grafana、Alertmanager など、すでにメールを送っている仕組みに同じ設定があります。次のコマンドで確認して流用してください：</p>
-    <p class="mono" style="font-size:12px">helm get values &lt;release&gt; -n &lt;namespace&gt;</p>
+    <p class="mono" style="font-size:var(--app-text-body-sm-size)">helm get values &lt;release&gt; -n &lt;namespace&gt;</p>
     <p>ツールによって項目名が異なります。GitLab の <span class="mono">authentication: plain</span> は SMTP AUTH の認証方式で、暗号化の設定<b>ではありません</b>。この画面では、セキュリティを<b>なし</b>のままにして、ユーザー名とパスワードを入力する設定に当たります。このセキュリティ欄に対応するのは、GitLab の <span class="mono">tls</span> と <span class="mono">starttls_auto</span> です。</p>
     <p>オンプレミスの Exchange も通常は同じで、既知のアドレスからの匿名リレーをポート25で受け付ける受信コネクタを使います。認証情報が必要な構成なら、ポート587とSTARTTLSです。</p>`,
   },
@@ -5586,7 +5586,7 @@ function mailBody(k) {
          ['none', 'なし（信頼済みネットワークのみ）']].map(o => `<option value="${o[0]}"${
         MAILW.security === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}
       </select></p>
-    <p class="lede" style="font-size:12.5px">ポートを空欄にすると587（暗黙的 TLS の場合は465）を使います。ポート465のリレーでは、STARTTLS ではなく「暗黙的 TLS」を選んでください。選び間違えると、エラーにならず接続が止まったままになります。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">ポートを空欄にすると587（暗黙的 TLS の場合は465）を使います。ポート465のリレーでは、STARTTLS ではなく「暗黙的 TLS」を選んでください。選び間違えると、エラーにならず接続が止まったままになります。</p>
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-server-next">次へ</button></div>`;
   if (k === 'from') return `
@@ -5603,7 +5603,7 @@ function mailBody(k) {
       placeholder="ai-guard@example.com" value="${esc(MAILW.from)}"></p>
     <p><input id="mw-portal" class="mfield" style="min-width:340px"
       placeholder="https://ai-guard.example.com" value="${esc(MAILW.portal)}"></p>
-    <p class="lede" style="font-size:12.5px">最後の項目は、メールで案内するポータルのアドレスです。受信サービスはこのポータルのホスト名を知らないため、ここで指定します。誤ったアドレスへのリンクは、リンクがないよりも有害です。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">最後の項目は、メールで案内するポータルのアドレスです。受信サービスはこのポータルのホスト名を知らないため、ここで指定します。誤ったアドレスへのリンクは、リンクがないよりも有害です。</p>
     ${err}<div class="ssacts">
       <button class="mini" data-act="mail-save" ${busy ? 'disabled' : ''}>${busy
         ? '<span class="ssspin"></span>保存中…' : '保存して続行'}</button></div>`;
@@ -5617,7 +5617,7 @@ function mailBody(k) {
     <p><textarea id="mw-body" class="mfield" rows="12"
       style="min-width:340px;width:100%;max-width:560px;
       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-      font-size:12.5px;line-height:1.5">${esc(MAILW.body)}</textarea></p>
+      font-size:var(--app-text-body-size);line-height:1.5">${esc(MAILW.body)}</textarea></p>
     <div class="ssacts" style="margin-top:0">
       <button class="mini" id="mw-reset" data-act="mail-reset"
         ${def ? 'disabled' : ''}>既定の文面に戻す</button>
@@ -5664,10 +5664,10 @@ function mailWizard() {
             : `<span class="pend">${esc(s.d)}</span>`}</span></li>`;
       }).join('')}</ol>
       <div class="sssum">
-        <div class="lede" style="font-size:11.5px">${MAIL_STEPS.length} 手順中 ${n} 手順が完了</div>
+        <div class="lede" style="font-size:var(--app-text-body-sm-size)">${MAIL_STEPS.length} 手順中 ${n} 手順が完了</div>
         <div class="barwrap"><div class="bar"
           style="width:${n / MAIL_STEPS.length * 100}%"></div></div>
-        <div class="lede" style="font-size:11.5px">メールの設定は任意です。設定しなくてもアカウントは作成できます。</div>
+        <div class="lede" style="font-size:var(--app-text-body-sm-size)">メールの設定は任意です。設定しなくてもアカウントは作成できます。</div>
       </div>
     </div>
     <div class="ssmain">${mailBody(MAIL_STEPS[MAILW.step].k)}
@@ -5697,7 +5697,7 @@ function mailSettings() {
     ? '設定を確認' : '設定する'}</button>
     ${ready ? `<button class="mini" data-act="mail-quick-test"
       style="margin-left:6px">テストメールを送信</button>` : ''}
-    ${MAILMSG ? `<span class="lede" style="margin:0 0 0 8px;font-size:12.5px"
+    ${MAILMSG ? `<span class="lede" style="margin:0 0 0 8px;font-size:var(--app-text-body-sm-size)"
       >${MAILMSG}</span>` : ''}</p>
   ${missed ? `<div class="note">アカウントを作成済みで、まだ案内メールを受け取っていない人が ${missed} 人います。
     ${ready ? `<button class="mini" data-act="user-invite-all"
@@ -5955,7 +5955,7 @@ function ssoBody(k) {
     <p class="lede">Entra 管理センターで <span class="mono">Entra ID → アプリの登録 → 新規登録</span> を開きます。チームで分かる名前を付け、サポートされるアカウントの種類はシングルテナントのままにします。プラットフォームとして <b>Web</b> を追加し、次のリダイレクト URI を設定します：</p>
     <div class="sscopy"><span class="mono">${esc(ssoRedirectGuess())}</span>
       <button class="mini" data-act="sso-copy">コピー</button></div>
-    <p class="lede" style="font-size:12.5px">正確に貼り付けてください。Entra は文字単位で照合するため、末尾のスラッシュがあるだけでも別のアドレスとして扱われます。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">正確に貼り付けてください。Entra は文字単位で照合するため、末尾のスラッシュがあるだけでも別のアドレスとして扱われます。</p>
     <button class="sshelp" data-act="sso-help">必要な値はどこで確認できますか？</button>
     ${SSOW.help ? `<div class="sshelpbody"><ol>
       <li><b>ディレクトリ（テナント）ID</b>：アプリ登録の「概要」ページ</li>
@@ -5969,7 +5969,7 @@ function ssoBody(k) {
     <p><input id="sso-tenant" class="mfield" style="min-width:340px"
       placeholder="00000000-0000-0000-0000-000000000000"
       value="${esc(SSOW.tenant)}"></p>
-    <p class="lede" style="font-size:12.5px">保存される前に Microsoft に問い合わせるため、入力ミスは最後ではなくこの時点で判明します。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">保存される前に Microsoft に問い合わせるため、入力ミスは最後ではなくこの時点で判明します。</p>
     ${SSOW.done.tenant && SSOW.issuer ? `<div class="note">確認できました。サインインは <span class="mono">${esc(SSOW.issuer)}</span> が発行します。</div>` : ''}
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-tenant"
       ${busy ? 'disabled' : ''}>${busy
@@ -5983,7 +5983,7 @@ function ssoBody(k) {
       style="min-width:340px" autocomplete="new-password"
       placeholder="${SSOW.secretSet ? '保存済み（空欄のままなら変更しません）'
                                     : 'クライアントシークレットの値'}"></p>
-    <p class="lede" style="font-size:12.5px">作成時にシークレットをコピーしなかった場合は、新しいものを作成する必要があります。Entra では値が一度しか表示されません。ここでこれらの値を使って Microsoft にトークンを要求するため、シークレットが間違っていれば、最初にサインインしようとする人ではなく、この時点で検出されます。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">作成時にシークレットをコピーしなかった場合は、新しいものを作成する必要があります。Entra では値が一度しか表示されません。ここでこれらの値を使って Microsoft にトークンを要求するため、シークレットが間違っていれば、最初にサインインしようとする人ではなく、この時点で検出されます。</p>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-check-client"
       ${busy ? 'disabled' : ''}>${busy
         ? '<span class="ssspin"></span>Microsoft に確認中…'
@@ -5993,7 +5993,7 @@ function ssoBody(k) {
     <p class="lede">サインインを終えた利用者を、Entra がこのアドレスに戻します。アプリ登録に設定した URI と完全に一致している必要があります。下に表示しているのは、現在このポータルにアクセスしているアドレスです。</p>
     <p><input id="sso-redirect" class="mfield" style="min-width:340px"
       value="${esc(SSOW.redirect)}"></p>
-    <p class="lede" style="font-size:12.5px">チームが複数のアドレスでポータルにアクセスしている場合は、それらすべてを登録に追加し、サインインの着地点として使用するものをここに設定してください。</p>
+    <p class="lede" style="font-size:var(--app-text-body-sm-size)">チームが複数のアドレスでポータルにアクセスしている場合は、それらすべてを登録に追加し、サインインの着地点として使用するものをここに設定してください。</p>
     <div class="note">保存してもシングルサインオンは有効になりません。それが最後の手順であり、実際のサインインが成功した後にのみ行います。</div>
     ${err}<div class="ssacts"><button class="mini" data-act="sso-save"
       ${SSOW.busy === 'save' ? 'disabled' : ''}>${SSOW.busy === 'save'
@@ -6015,7 +6015,7 @@ function ssoBody(k) {
         ${SSOW.done.test && !saving ? '' : 'disabled'}>${
         saving ? '<span class="ssspin"></span>有効化中…'
                : 'シングルサインオンを有効にする'}</button>
-      ${SSOW.done.test ? '' : `<span class="lede" style="font-size:12.5px"
+      ${SSOW.done.test ? '' : `<span class="lede" style="font-size:var(--app-text-body-sm-size)"
         >サインインが成功すると利用可能になります</span>`}</div>`;
 }
 
@@ -6041,10 +6041,10 @@ function ssoWizard() {
         </li>`;
       }).join('')}</ol>
       <div class="sssum">
-        <div class="lede" style="font-size:11.5px">${SSO_STEPS.length} 手順中 ${n} 手順を確認済み</div>
+        <div class="lede" style="font-size:var(--app-text-body-sm-size)">${SSO_STEPS.length} 手順中 ${n} 手順を確認済み</div>
         <div class="barwrap"><div class="bar"
           style="width:${n / SSO_STEPS.length * 100}%"></div></div>
-        <div class="lede" style="font-size:11.5px">すべての手順を確認できた場合にだけ、シングルサインオンを有効にできます。</div>
+        <div class="lede" style="font-size:var(--app-text-body-sm-size)">すべての手順を確認できた場合にだけ、シングルサインオンを有効にできます。</div>
       </div>
     </div>
     <div class="ssmain">${ssoBody(SSO_STEPS[SSOW.step].k)}
@@ -6086,7 +6086,7 @@ function accountSettings() {
   <div class="wcard" style="margin-bottom:10px"><h3>アカウント</h3>
     <p class="lede" style="margin-bottom:10px">オーナーはサインインできる人を決め、管理者はプラットフォームを運用し、閲覧者はすべてのページを見られますが変更はできません（監査担当者や経営層向け）。自分より上位のアカウントを操作したり、自分より上位のロールを付与したりはできません。ロールの変更は、次回のサインインではなく次の操作から適用されます。サインアウトは不要ですが、開いたままのページは再読み込みするまで以前のボタンが表示されます。</p>
     ${USERR ? `<div class="note">${esc(USERR)}</div>` : ''}
-    <table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>案内メール</th><th>最終サインイン</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
+    <div class="ui-data-scroll"><table><tr><th>ユーザー名</th><th>メールアドレス</th><th>ロール</th><th>案内メール</th><th>最終サインイン</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
     ${USERS.map(u => {
       // The same rank rule the receiver enforces, so the page does not
       // offer a control that is going to come back 403. Equal rank is not
@@ -6108,7 +6108,7 @@ function accountSettings() {
             ? ` <button class="mini" data-act="user-email-form"
                  data-key="${esc(u.id)}">編集</button>` : ''}`}</td>
       <td>${may
-        ? `<select class="mfield" data-role-for="${esc(u.id)}" style="min-width:100px">
+        ? `<select class="mfield" data-role-for="${esc(u.id)}" aria-label="${esc(u.username)} のロール" style="min-width:100px">
              ${ROLE_ORDER.filter(r => (RANK[r] || 0) <= mine).map(r =>
                `<option value="${r}"${u.role === r ? ' selected' : ''}>${({viewer:'閲覧者',admin:'管理者',owner:'オーナー'}[r] || r)}</option>`).join('')}
            </select>`
@@ -6128,7 +6128,7 @@ function accountSettings() {
            <button class="mini" data-act="user-reset-cancel">キャンセル</button>`
         : may ? `<button class="mini" data-act="user-reset-form" data-key="${esc(u.id)}">パスワードをリセット</button>
            <button class="mini" data-act="user-delete" data-key="${esc(u.id)}">削除</button>` : ''}</td>
-    </tr>`;}).join('')}</table>
+    </tr>`;}).join('')}</table></div>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <input id="user-name" class="mfield" placeholder="ユーザー名"
         name="ai-guard-new-account" autocomplete="off"
@@ -6139,7 +6139,7 @@ function accountSettings() {
         data-lpignore="true" data-1p-ignore data-bwignore>
       <input id="user-email" class="mfield" placeholder="メールアドレス（必須）"
         autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore>
-      <select id="user-role" class="mfield" style="min-width:110px">
+      <select id="user-role" class="mfield" aria-label="新しいアカウントのロール" style="min-width:110px">
         ${ROLE_ORDER.filter(r =>
           (RANK[r] || 0) <= (RANK[(AUTH && AUTH.role) || 'viewer'] || 0)
         ).map(r => `<option value="${r}">${({viewer:'閲覧者',admin:'管理者',owner:'オーナー'}[r] || r)}</option>`).join('')}
@@ -6208,7 +6208,7 @@ function ssoEnforceBlock() {
   const ready = v('sso_enforce_ready') === '1';
   const bg = v('sso_break_glass');
   return `<div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
-    <p style="margin:0 0 6px"><b style="font-size:13px">シングルサインオンを必須にする</b> <span class="pill ${on ? 'p-ok' : 'p-mut'}">${
+    <p style="margin:0 0 6px"><b style="font-size:var(--app-text-body-size)">シングルサインオンを必須にする</b> <span class="pill ${on ? 'p-ok' : 'p-mut'}">${
       on ? 'オン' : 'オフ'}</span></p>
     <p class="lede">${on
       ? `パスワードではサインインできません${bg
@@ -6219,9 +6219,9 @@ function ssoEnforceBlock() {
       : `<div class="note" style="border-color:var(--warn)">この環境には緊急用アカウントがないため、Entra に接続できなくなったときにパスワードでサインインする手段がありません。緊急用アカウントができるまで、シングルサインオンは必須にできません。</div>`}
     ${!on && !ready ? `<div class="note" style="border-color:var(--warn)">Entra 経由でサインインできたオーナーがまだいません。一度も成功していない状態で必須化すると、緊急用アカウントでしかサインインできなくなるため、オーナーが一度サインインするまでこの設定はオンにできません。</div>` : ''}
     <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
-      <p style="margin:0 0 6px"><b style="font-size:13px">サインインを求める間隔</b></p>
+      <p style="margin:0 0 6px"><b style="font-size:var(--app-text-body-size)">サインインを求める間隔</b></p>
       <p class="lede">以前は、ブラウザーで Microsoft にサインイン済みの人は、何も操作せずにこのポータルに入れていました（リンクを開くだけで、誰がどのAIを使っているかが分かる画面に入れてしまう状態でした）。現在はサインインのたびにアカウントの選択を求めます。この設定では、Microsoft でのサインインからどれだけ時間がたったら、もう一度本人確認を求めるかを決めます。</p>
-      <p><select id="sso-maxage" class="mfield" style="min-width:260px">
+      <p><select id="sso-maxage" class="mfield" aria-label="シングルサインオンの再認証までの時間" style="min-width:260px">
         ${[['', '12時間ごと（既定）'], ['0', '毎回'],
            ['1', '1時間ごと'], ['4', '4時間ごと'],
            ['8', '8時間ごと'], ['24', '24時間ごと'],
@@ -6235,7 +6235,7 @@ function ssoEnforceBlock() {
       ${(on || (ready && bg)) ? '' : 'disabled'}>${
       on ? '必須化を解除' : 'シングルサインオンを必須にする'}</button>
       ${on || (ready && bg) ? '' : `<span class="lede"
-        style="margin:0 0 0 8px;font-size:12.5px">条件を満たすと押せます</span>`}</p>
+        style="margin:0 0 0 8px;font-size:var(--app-text-body-sm-size)">条件を満たすと押せます</span>`}</p>
   </div>`;
 }
 
@@ -6383,13 +6383,13 @@ function diagnosticsCards() {
         <div><dt>最後に成功した読み取り</dt><dd>${ago(r.loki_last_success)}</dd></div>
         <div><dt>対象期間 / キャッシュ</dt><dd>${esc(r.lookback_hours)}時間 <span>·</span> ${esc(r.cache_ttl_seconds)}秒</dd></div></dl>
       ${r.portal_read_credential === 'the signed-in account' ? `<p class="health-note warning">このポータル自身にはログ保存先の認証情報がないため、閲覧者の読み込みは拒否されます。<span class="mono">RECEIVER_ADMIN_TOKEN</span>、またはポータル用の <span class="mono">LOKI_URL</span> と認証情報を設定してください。</p>` : ''}
-      ${r.loki_last_error ? `<p class="health-note danger"><b>直近のエラー</b> ${esc(r.loki_last_error)}${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
+      ${r.loki_last_error ? `<p class="health-note danger"><b>ログ保存先との通信に失敗しました</b>（診断コード: ${esc(r.loki_last_error)}）${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
     </section>
 
     <section class="health-card ${r.registry_loaded ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>参照データ</span><h3>ツールレジストリ</h3></div>${r.registry_loaded ? '<span class="pill p-ok">読み込み済み</span>' : '<span class="pill p-warn">利用不可</span>'}</div>
       <dl class="health-facts"><div><dt>ツール</dt><dd>${esc(r.registry_tools)}${r.registry_tools_with_domains != null && r.registry_tools_with_domains !== r.registry_tools ? ` <span>· ${esc(r.registry_tools_with_domains)}（ドメインあり）</span>` : ''}</dd></div>
         <div><dt>レジストリパス</dt><dd class="mono">${esc(r.registry_path)}</dd></div></dl>
-      ${r.registry_error ? `<p class="health-note danger"><b>エラー</b> ${esc(r.registry_error)}</p>` : ''}
+      ${r.registry_error ? `<p class="health-note danger"><b>ツールレジストリを読み込めませんでした</b>（診断コード: ${esc(r.registry_error)}）。接続設定と受信サービスのログを確認してください。</p>` : ''}
       ${!r.registry_loaded ? `<p class="health-note warning">レジストリがないと、検出ソースごとに異なるツール名を1つにまとめられません。</p>` : ''}
     </section>
 
@@ -6726,7 +6726,7 @@ async function settings() {
   else { SETTAB = 'fleet'; body = fleetSettings(); }
   return `<h2>設定</h2>
   ${settingsChangedNote()}
-  <p class="lede">ここで保存した設定は、再起動なしで各端末と受信サービスに反映され、対応する環境変数より優先されます。</p>
+  <p class="lede">保存した設定の反映方法は項目によって異なります。受信サービスの中央設定は対応する環境変数より優先されます。貼り付けガードの動作を変える場合はポリシーを再生成して端末へ再配布し、拡張機能の報告先URLを変える場合はパッケージも再生成・再配布してください。</p>
   ${SETMSG ? `<div class="note">${esc(SETMSG)}</div>` : ''}
   <div class="tabs">${STABS.map(([id, lbl]) =>
     `<button data-settab="${id}" class="${SETTAB===id?'on':''}">${lbl}</button>`).join('')}</div>
@@ -6771,7 +6771,7 @@ function setup() {
       <td>${esc(uiSourceLabel(r.source))}
         ${r.reporting ? '' : `<details class="how"><summary>設定方法</summary>
           <div>${esc(uiSourceNeeds(r.source, r.needs || ''))}
-          <br><a class="mono" style="font-size:11px;color:var(--acc)"
+          <br><a class="mono" style="font-size:var(--app-text-body-sm-size);color:var(--acc)"
             href="${esc(docUrl(r.doc))}" target="_blank"
             rel="noopener noreferrer">設定ガイドを読む</a></div></details>`}
         ${r.artifact && CFG.managed && CFG.managed.artifacts_ready ? `<div style="margin-top:6px">
@@ -6893,9 +6893,9 @@ async function fleet() {
   ${ds.length ? `<table><tr><th>端末</th><th>OS</th><th>シリアル番号</th>
     <th>登録日時</th><th>最終確認</th><th>エージェントのバージョン</th><th>状態</th><th class="th-act"><span class="sr-only">操作</span></th></tr>
   ${ds.map(d => `<tr>
-    <td>${esc(d.hostname || d.serial)}<br><span class="mono" style="font-size:11px;color:var(--mut)">${esc(d.id)}</span></td>
+    <td>${esc(d.hostname || d.serial)}<br><span class="mono" style="font-size:var(--app-text-body-sm-size);color:var(--mut)">${esc(d.id)}</span></td>
     <td>${esc(uiTerm(d.platform))}</td><td class="mono">${esc(d.serial)}</td>
-    <td>${when(d.enrolled_at)}${d.reenrolled_at ? `<br><span style="font-size:11px;color:var(--mut)">再登録 ${esc(String((d.enrollments || 1) - 1))} 回（直近: ${when(d.reenrolled_at)}）</span>` : ''}</td><td>${when(d.last_seen)}</td>
+    <td>${when(d.enrolled_at)}${d.reenrolled_at ? `<br><span style="font-size:var(--app-text-body-sm-size);color:var(--mut)">再登録 ${esc(String((d.enrollments || 1) - 1))} 回（直近: ${when(d.reenrolled_at)}）</span>` : ''}</td><td>${when(d.last_seen)}</td>
     <td>${esc(uiTerm(d.agent_version || '—'))}</td>
     <td>${d.revoked_at ? (d.reenroll_allowed_at
                        ? '<span class="pill p-amb" title="失効済みですが、このシリアル番号でもう一度だけ登録できます">再登録を許可済み</span>'
@@ -6940,7 +6940,7 @@ async function tokens() {
        </div>`) : ''}
   <div style="margin:10px 0 16px">
     <input id="mint-note" class="mfield" placeholder="メモ（例: macOS 向け Jamf 展開）">
-    <label style="font-size:12px;color:var(--mut)">有効期間
+    <label style="font-size:var(--app-text-body-sm-size);color:var(--mut)">有効期間
       <input id="mint-ttl" class="mfield" style="min-width:74px" value="180"
         title="このトークンが機能しなくなるまでの日数"> 日</label>
     <button class="mini" data-act="mint">トークンを発行</button>
@@ -7493,11 +7493,11 @@ function bwRail() {
         <span class="${ln.c}">${esc(ln.t)}</span></span></li>`;
     }).join('')}</ol>
     <div class="sssum">
-      <div class="lede" style="font-size:11.5px">月額費用</div>
+      <div class="lede" style="font-size:var(--app-text-body-sm-size)">月額費用</div>
       <div class="money" id="bw-money">${tot.monthly
         ? bMoney(tot.monthly, bWizCur())
-        : '<span style="color:var(--mut);font-size:13px;font-weight:400">料金が未入力です</span>'}</div>
-      <div class="lede" style="font-size:11.5px">${tot.seats
+        : '<span style="color:var(--mut);font-size:var(--app-text-body-sm-size);font-weight:400">料金が未入力です</span>'}</div>
+      <div class="lede" style="font-size:var(--app-text-body-sm-size)">${tot.seats
         ? '1つのライセンスで' + eff + 'ツール・' + tot.seats + 'シート'
         : '1つのライセンスで' + eff + 'ツールが対象'}</div>
     </div></div>`;
@@ -7625,7 +7625,7 @@ function bwBodySource() {
   const counts = {};
   rows.forEach(r => { counts[r[2]] = (counts[r[2]] || 0) + 1; });
   const everything = !rows.length ? '' : `<details style="margin:0 0 12px">
-    <summary style="font-size:12.5px;color:var(--mut);cursor:pointer">自動同期に対応済みのツール（プルダウンの選択肢）: ${counts.built || 0}件。同梱ツール ${rows.length}件についてベンダー側の対応状況を確認できます${counts.vendor
+    <summary style="font-size:var(--app-text-body-size);color:var(--mut);cursor:pointer">自動同期に対応済みのツール（プルダウンの選択肢）: ${counts.built || 0}件。同梱ツール ${rows.length}件についてベンダー側の対応状況を確認できます${counts.vendor
         ? `（管理APIあり・未接続: ${counts.vendor}件）`
         : ''}。独自に追加したツールは含まれません。</summary>
     <div class="rvw" style="margin:9px 0 0"><table>
@@ -7711,7 +7711,7 @@ function bwBodySeats() {
   ${bTierRows(w.tiers, eff, bWizCur())}
   <div class="tsum"><span class="big" id="bw-tsum">${tot.monthly
     ? bMoney(tot.monthly, bWizCur())
-    : '<span style="color:var(--mut);font-weight:400;font-size:13px">料金が未入力です</span>'}</span>
+    : '<span style="color:var(--mut);font-weight:400;font-size:var(--app-text-body-sm-size)">料金が未入力です</span>'}</span>
     <span style="color:var(--mut)">月額（<span id="bw-tseats">${tot.seats}</span> シート）</span></div>
   <dl class="kv" style="margin-top:16px">
     <dt>通貨</dt><dd><input id="bw-currency" class="mfield" style="max-width:110px"
@@ -7735,10 +7735,10 @@ function bwBodyReview() {
   <div class="rvw"><table>
     <tr><th>項目</th><th>内容</th></tr>
     <tr><td class="sname">ライセンス</td><td>${esc(w.plan || '—')}
-      <div style="color:var(--mut);font-size:12px">${esc(w.vendor || 'ベンダー未入力')}</div></td></tr>
+      <div style="color:var(--mut);font-size:var(--app-text-body-sm-size)">${esc(w.vendor || 'ベンダー未入力')}</div></td></tr>
     <tr><td class="sname">対象ツール</td><td>
       ${eff.map(t => `<span class="pill p-mut">${esc(uiToolName(t))}</span>`).join(' ')}
-      <div style="color:var(--mut);font-size:12px">費用は1回だけ計上します。これらのどのツールで確認されたメンバーも、利用確認済みとして数えます。</div></td></tr>
+      <div style="color:var(--mut);font-size:var(--app-text-body-sm-size)">費用は1回だけ計上します。これらのどのツールで確認されたメンバーも、利用確認済みとして数えます。</div></td></tr>
     <tr><td class="sname">メンバー</td><td>${esc(bwSrcName(w.source))}
       ${w.source === 'api' ? `<span class="pill p-mut">${esc(w.provider || '')}</span>` : ''}
       ${w.source === 'csv' && !w.editing
@@ -7749,7 +7749,7 @@ function bwBodyReview() {
           = ${bMoney((t.seats || 0) * (t.unit_price_monthly || 0), w.currency)} / 月</div>`).join('')
       : '<span style="color:var(--mut)">未設定</span>'}</td></tr>
     <tr><td class="sname">月額</td><td><b>${bMoney(tot.monthly, w.currency)}</b>
-      <div style="color:var(--mut);font-size:12px">更新日 ${esc(w.renewal || '—')}
+      <div style="color:var(--mut);font-size:var(--app-text-body-sm-size)">更新日 ${esc(w.renewal || '—')}
       · 担当者 ${esc(w.owner || '—')}</div></td></tr>
   </table></div>
   <div class="callout"><b>対象に含めるツール</b>は、登録前にもう一度確認してください。同じライセンスを共有する2つのツールを別々に登録すると、費用が二重に計上され、利用確認の結果も2つの契約に分かれてしまいます。しかも、後から見ても原因は分かりません。</div>`;
@@ -7788,7 +7788,7 @@ function bwLive() {
   if (rail) rail.outerHTML = bwRail();
   const sum = document.getElementById('bw-tsum');
   if (sum) sum.innerHTML = tot.monthly ? esc(bMoney(tot.monthly, bWizCur()))
-    : '<span style="color:var(--mut);font-weight:400;font-size:13px">料金が未入力です</span>';
+    : '<span style="color:var(--mut);font-weight:400;font-size:var(--app-text-body-sm-size)">料金が未入力です</span>';
   // The rail was replaced above, so its money node is the new one.
   const st = document.getElementById('bw-tseats');
   if (st) st.textContent = tot.seats;
@@ -7919,10 +7919,10 @@ function budgetCard(sub) {
   matched.forEach(x => { seenOnByEmail[x.m.email] = x.seenOn; });
   const pills = m => eff.length > 1 && (seenOnByEmail[m.email] || []).length
     ? `<br>${seenOnByEmail[m.email].map(t =>
-        `<span class="pill p-ok" style="font-size:10px">${esc(uiToolName(t))}</span>`).join(' ')}`
+        `<span class="pill p-ok" style="font-size:var(--app-text-body-sm-size)">${esc(uiToolName(t))}</span>`).join(' ')}`
     : '';
   const memberRow = m => `<tr>
-    <td>${esc(m.email)}${m.name ? `<br><span style="font-size:11px;color:var(--mut)">${esc(m.name)}</span>` : ''}${pills(m)}</td>
+    <td>${esc(m.email)}${m.name ? `<br><span style="font-size:var(--app-text-body-sm-size);color:var(--mut)">${esc(m.name)}</span>` : ''}${pills(m)}</td>
     <td>${esc(bRoleLabel(m.role) || '—')}</td><td>${esc(uiPlanTier(m.seat_tier || '—'))}</td>
     <td>${esc(usageBits(m)) || '<span class="src-note">—</span>'}</td>
     <td>${m.source === 'manual' && !ro
@@ -8132,7 +8132,7 @@ function budgetReport() {
     return `<div class="wcard" style="margin-bottom:14px">
     <h3 style="margin-top:0">${esc(uiToolName(sub.tool_id))}
       ${sub.plan ? `<span class="pill p-acc">${esc(sub.plan)}</span>` : ''}
-      ${eff.length > 1 ? `<span style="font-size:12px;color:var(--mut);font-weight:normal">${eff.map(t => esc(uiToolName(t))).join('、')} が対象</span>` : ''}</h3>
+      ${eff.length > 1 ? `<span style="font-size:var(--app-text-body-sm-size);color:var(--mut);font-weight:normal">${eff.map(t => esc(uiToolName(t))).join('、')} が対象</span>` : ''}</h3>
     <p class="src-note" style="margin-top:0">
       ${bMoney(monthly, sub.currency)} /月
       ${sub.renewal_date ? ` · 更新: ${esc(sub.renewal_date)}` : ''}
@@ -8507,6 +8507,40 @@ const uiApiName = v => {
   return /[ぁ-んァ-ヶ一-龯]$/.test(n) ? n : n + ' ';
 };
 const EN_ERROR_PATTERNS = [
+  [/^(login required|authentication required|bad token)$/, () => 'サインインの有効期限が切れたか、認証情報を確認できません。もう一度サインインしてください。'],
+  [/^(invalid credentials|bad username or password)$/, () => 'ユーザー名またはパスワードが正しくありません。'],
+  [/^current password is wrong$/, () => '現在のパスワードが正しくありません。入力内容を確認してください。'],
+  [/^only an owner account can change this$/, () => 'この設定を変更できるのはオーナーだけです。オーナーに変更を依頼してください。'],
+  [/^this account is read-only: an admin account has to make this change$/, () => 'このアカウントは閲覧専用です。管理者またはオーナーに変更を依頼してください。'],
+  [/^that account holds a role above yours$/, () => '自分より上位の権限を持つアカウントは変更できません。'],
+  [/^you cannot grant a role above your own$/, () => '自分より上位の権限を付与することはできません。'],
+  [/^cannot remove the last owner$/, () => '最後のオーナーは削除・権限変更できません。先に別のオーナーを登録してください。'],
+  [/^that username already exists$/, () => 'そのユーザー名は登録済みです。別の名前を入力してください。'],
+  [/^that does not look like an email address$/, () => 'メールアドレスの形式を確認してください。'],
+  [/^(no such account|no account with that id)$/, () => 'アカウントが見つかりません。一覧を更新してください。'],
+  [/^that account has no email address$/, () => 'このアカウントにはメールアドレスが登録されていません。先に登録してください。'],
+  [/^too many attempts; try again later$/, () => '試行回数が上限に達しました。しばらく待ってから、もう一度お試しください。'],
+  [/^No log store is configured\./, () => 'ログ保存先が設定されていません。「設定」で受信サービスと同じログ保存先の URL を保存するか、環境変数 LOKI_URL を設定してください。'],
+  [/^Could not read findings from Loki at .+ \([A-Za-z]+\)\. See the portal logs for detail\.$/, () => 'ログ保存先（Loki）から検出結果を読み込めませんでした。接続設定と稼働状況を確認してください。詳しい原因はポータルのログに記録されています。'],
+  [/^(registry not available|collector registry not available)$/, () => 'ツールレジストリを読み込めませんでした。受信サービスの稼働状況とレジストリの設定を確認してください。'],
+  [/^(firefox )?extension id cannot contain whitespace$/, () => '拡張機能 ID に空白や制御文字は使用できません。貼り付けた内容を確認してください。'],
+  [/^corp domain too long: /, () => '法人ドメインは1件あたり253文字以内で入力してください。'],
+  [/^marking too long: /, () => '機密表示は1件あたり120文字以内で入力してください。'],
+  [/^marking cannot contain control characters$/, () => '機密表示に改行などの制御文字は使用できません。1行ずつ入力してください。'],
+  [/^paste_guard_mode must be one of: /, () => '貼り付けガードの動作を「オフ」「警告」「ブロック」から選択してください。'],
+  [/^working_hours must look like 09:00-18:00\./, () => '勤務時間は 09:00-18:00 の形式で入力してください。22:00-06:00 のように日付をまたぐ時間帯も指定できます。'],
+  [/^smtp_port must be a number from 1 to 65535$/, () => 'メールサーバーのポートは1〜65535の整数で入力してください。'],
+  [/^smtp_security must be one of: /, () => 'メールサーバーの暗号化方式を「なし」「STARTTLS」「TLS」から選択してください。'],
+  [/^\S+ must be http:\/\/ or https:\/\/$/, () => 'URL は http:// または https:// で始まる形式で入力してください。'],
+  [/^single sign-on has to be on before it can be required$/, () => 'シングルサインオンを必須にする前に、有効にしてください。'],
+  [/^no owner has completed a single sign-on yet\./, () => 'まだオーナーのシングルサインオンを確認できていません。先にオーナーが認証サービス経由でサインインしてから、必須にしてください。'],
+  [/^sso_max_age_hours is a whole number of hours from 0 to 720, or empty for the default$/, () => '再認証までの時間は0〜720の整数で入力してください。空欄にすると既定値を使います。'],
+  [/^malformed (user|device|token|run) id$/, () => '対象の ID の形式が正しくありません。一覧を更新して、もう一度選択してください。'],
+  [/^no such active (token|device)$/, () => '有効な登録トークンまたは端末が見つかりません。一覧を更新してください。'],
+  [/^(malformed code|no request with that code)$/, () => '承認リクエストが見つかりません。コマンドを再実行して、新しいリンクを開いてください。'],
+  [/^the request expired before it was approved$/, () => '承認される前にリクエストが期限切れになりました。コマンドを再実行してください。'],
+  [/^denied by the owner$/, () => 'オーナーがリクエストを拒否しました。'],
+  [/^(Failed to fetch|NetworkError when attempting to fetch resource\.)$/, () => 'サーバーに接続できませんでした。ネットワーク接続を確認して、もう一度お試しください。'],
   [/^a server and a from address are needed first$/,
     () => 'メールサーバーと差出人アドレスを先に設定してください。'],
   [/^(.+) answered 401: the key is wrong, expired or revoked$/,
@@ -8564,6 +8598,9 @@ const EN_ERROR_PATTERNS = [
     m => `${m[1]} には契約が ${m[2]} 件あります（${m[3]}）。どのプランの操作かを指定してください。`],
 ];
 function uiErrorText(raw, status) {
+  // FastAPI validation details contain user input. Do not echo the payload
+  // or turn it into [object Object]; give a safe, actionable Japanese answer.
+  if (Array.isArray(raw)) return '入力内容の形式や文字数を確認してください。必須項目が未入力の場合は入力してから、もう一度保存してください。';
   if (raw == null) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
   const s = String(raw);
   if (!s) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
@@ -10148,7 +10185,7 @@ async function renderView(rev) {
   if (sec) SECTAB[sec.id] = view;
   drawNav();
   // A full render is a change of place, so the inspector closes with it.
-  if (!detail) { DSTACK = []; document.body.classList.remove('open'); }
+  if (!detail) { DSTACK = []; document.body.classList.remove('open'); syncDetailLayer(); }
   const tb = tabbar() + loadBanner();
   // settings and register each read a second endpoint, so they are async.
   if (view === 'settings') { const html = tb + await settings(); if (rev !== RENDER_REV) return; commit(html); return; }
@@ -10260,7 +10297,22 @@ async function render() {
 // change, a neighbour growing, or a narrower window never leaves a row cut
 // through the middle. An opened card ("Show all") is left alone.
 let UI_FIT_TIMER = null;
+function uiDetailTriggers(root = document) {
+  root.querySelectorAll('[data-open]').forEach(el => {
+    if (!el.matches('button,a,input,select,textarea') && !el.hasAttribute('tabindex')) {
+      el.tabIndex = 0;
+      el.setAttribute('aria-haspopup', 'dialog');
+    }
+  });
+}
 function uiFit() {
+  uiDetailTriggers();
+  // Standalone management tables need the same bounded scrolling as list cards.
+  document.querySelectorAll('#app > table').forEach(table => {
+    const scroller = document.createElement('div');
+    scroller.className = 'ui-data-scroll';
+    table.before(scroller); scroller.append(table);
+  });
   const bodies = [...document.querySelectorAll('.ui-widget:not(.ui-open)>.ui-table-scroll, .ui-tools-card:not(.ui-open)>.ui-table-scroll, .ui-tools-card:not(.ui-open)>.ui-tool-list, .ui-tools-card:not(.ui-open)>.ui-tool-bars')]
     .filter(b => b.offsetParent);
   // First the basis: a body asks its row for the smaller of its content and
@@ -10280,7 +10332,27 @@ function uiFit() {
   // A timer, not an animation frame: frames do not run in a tab that is
   // not visible, and a page that fits itself only once it is looked at
   // shows its rows cut through the middle for the first paint.
-  setTimeout(() => uiCut(bodies), 0);
+  setTimeout(() => { uiCut(bodies); uiScrollRegions(); }, 0);
+}
+function uiScrollRegions() {
+  document.querySelectorAll('#app .tcard, #app .ui-table-scroll, #app table, #app .rvw, #app .ui-data-scroll').forEach(el => {
+    const cs = getComputedStyle(el);
+    const scrolls = ((el.scrollWidth > el.clientWidth + 1) && /auto|scroll/.test(cs.overflowX))
+      || ((el.scrollHeight > el.clientHeight + 1) && /auto|scroll/.test(cs.overflowY));
+    if (scrolls && !el.hasAttribute('tabindex')) {
+      el.tabIndex = 0; el.dataset.scrollFocus = 'true';
+      if (el.tagName !== 'TABLE' && !el.hasAttribute('role')) {
+        el.setAttribute('role', 'region');
+        el.setAttribute('aria-label', '表のスクロール領域');
+        el.dataset.scrollRegion = 'true';
+      }
+    } else if (!scrolls && el.dataset.scrollFocus === 'true') {
+      el.removeAttribute('tabindex'); delete el.dataset.scrollFocus;
+      if (el.dataset.scrollRegion === 'true') {
+        el.removeAttribute('role'); el.removeAttribute('aria-label'); delete el.dataset.scrollRegion;
+      }
+    }
+  });
 }
 // Every replacement of the page's content is a new layout to fit: the
 // views redraw themselves as later reads arrive, not only through render().
@@ -10316,6 +10388,24 @@ window.addEventListener('resize', () => {
 // content in place. The drawer keeps its own trail, so drilling from a tool
 // into one of its devices offers a back step rather than only the ×.
 let DSTACK = [];
+let DETAIL_RETURN_FOCUS = null;
+function syncDetailLayer() {
+  const open = document.body.classList.contains('open');
+  const drawer = document.getElementById('drawer');
+  drawer.inert = !open;
+  drawer.setAttribute('aria-hidden', String(!open));
+  document.getElementById('shell').inert = open;
+}
+function closePortalPopovers() {
+  navFlyClose(); hideNavTip(); umClose();
+  for (const id of ['qresults', 'setuppanel']) {
+    const el = document.getElementById(id); if (el) el.hidden = true;
+  }
+  SETUPOPEN = false;
+  const bell = document.getElementById('setupbell');
+  if (bell) bell.setAttribute('aria-expanded', 'false');
+  document.querySelectorAll('.ctip.on').forEach(el => el.classList.remove('on'));
+}
 function drawDetail() {
   const D = {device: deviceDetail, tool: toolDetail, mcp: mcpDetail};
   const drawer = document.getElementById('drawer');
@@ -10323,13 +10413,22 @@ function drawDetail() {
     + (DSTACK.length > 1 ? '<button class="back" data-dback="">‹ 戻る</button>' : '')
     + D[detail[0]](detail[1]);
   drawer.scrollTop = 0;
+  closeMobileNav(); closePortalPopovers();
   document.body.classList.add('open');
+  syncDetailLayer();
+  uiDetailTriggers(drawer);
+  drawer.querySelector('.dclose')?.focus({preventScroll:true});
 }
 function open_(kind, key) {
-  if (!kind) { detail = null; DSTACK = []; document.body.classList.remove('open'); return; }
+  if (!kind) {
+    const wasOpen = document.body.classList.contains('open');
+    detail = null; DSTACK = []; document.body.classList.remove('open'); syncDetailLayer();
+    if (wasOpen && DETAIL_RETURN_FOCUS?.isConnected) DETAIL_RETURN_FOCUS.focus({preventScroll:true});
+    DETAIL_RETURN_FOCUS = null; return;
+  }
   // A click from a list starts a fresh trail; one from inside the drawer
   // extends it.
-  if (!document.body.classList.contains('open')) DSTACK = [];
+  if (!document.body.classList.contains('open')) { DSTACK = []; DETAIL_RETURN_FOCUS = document.activeElement; }
   const top = DSTACK[DSTACK.length - 1];
   if (top && top[0] === kind && top[1] === key) return;
   detail = [kind, key];
@@ -10343,6 +10442,13 @@ function open_(kind, key) {
 // the tour is up: the overlay owns the keyboard then, and its own way out
 // is the End tour button, which records that it was skipped.
 document.addEventListener('keydown', e => {
+  if (e.key === 'Tab' && document.body.classList.contains('open') && !TOUR && !document.querySelector('dialog[open]')) {
+    const controls = focusableIn(document.getElementById('drawer'));
+    const first = controls[0], last = controls[controls.length - 1];
+    if (first && (e.shiftKey ? document.activeElement === first : document.activeElement === last)) {
+      e.preventDefault(); (e.shiftKey ? last : first).focus();
+    }
+  }
   if (e.key !== 'Escape' || TOUR || pwIsOpen() || skipIsOpen()
       || tourDlgIsOpen()) return;
   if (!document.body.classList.contains('open')) return;
@@ -10363,7 +10469,15 @@ app.addEventListener('click', e => {
   const el = e.target.closest('[data-open]');
   if (!el) return;
   const kind = el.getAttribute('data-open');
+  el.focus({ preventScroll: true });
   open_(kind || null, el.getAttribute('data-key'));
+});
+// Keep native controls' keyboard behavior; non-native detail rows use Enter/Space.
+document.addEventListener('keydown', e => {
+  const el = e.target.closest('[data-open]');
+  if (!el || e.target !== el || el.matches('button,a,input,select,textarea')) return;
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault(); el.click();
 });
 // The in-page tabs, delegated for the same reason as the rows: the bar is
 // re-rendered with every view.
@@ -10743,6 +10857,7 @@ function setMobileNavState(open, opts = {}) {
   if (!mobileNav) return;
   const isMobile = isMobileNav();
   const shouldOpen = !!(open && isMobile);
+  if (shouldOpen) { open_(null); closePortalPopovers(); }
   const aside = mobileAside();
 
   document.body.classList.toggle('nav-open', shouldOpen);
@@ -11134,6 +11249,7 @@ async function tourRemember(v) {
 }
 
 async function tourStart(intro) {
+  open_(null); closeMobileNav(); closePortalPopovers();
   const role = tourRole();
   // An opening replaces the welcome rather than preceding it: the welcome
   // introduces the product, and every case with its own opening is one

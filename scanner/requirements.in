@@ -14,5 +14,8 @@ msal>=1.28
 # MSAL pulls PyJWT transitively. Keep its security floor explicit so a lock
 # refresh cannot restore versions affected by CVE-2026-102268.
 pyjwt>=2.14.0
+# Requests pulls urllib3 transitively. Keep the security floor for
+# CVE-2026-97687 and CVE-2026-97689 explicit across lock refreshes.
+urllib3>=2.8.0
 tabulate>=0.9
 python-dotenv>=1.0

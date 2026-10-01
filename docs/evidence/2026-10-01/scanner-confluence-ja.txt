@@ -1,0 +1,51 @@
+h1. AIミハル — 未把握のAI利用の検出レポート
+
+*作成日時:* 2026-10-01 16:08:33 | *実行した検出ソース:* 6 | *検出件数:* 9
+_機密 — 従業員名と端末の識別情報を含みます_
+
+h2. 検出ソースの状態
+|| 検出ソース || 状態 || 検出件数 || 所要時間 ||
+| sentinelone | {color:green}正常{color} | 3 | 7.6秒 |
+| entra | {color:green}正常{color} | 1 | 4.2秒 |
+| exchange | {color:green}正常{color} | 1 | 3.8秒 |
+| intune | {color:green}正常{color} | 2 | 2.8秒 |
+| jamf | {color:green}正常{color} | 1 | 3.2秒 |
+| mcp | {color:green}正常{color} | 1 | 0.8秒 |
+
+h2. 利用者別の検出結果
+h3. blastoise@demo-corp.example
+* {color:#ff8b00}中{color} *Notion AI* — OAuth consent grant to Notion AI — delegated permissions: User.Read, Files.Read — last used 47 days ago (2026年07月 — 2026年08月)
+h3. charizard@demo-corp.example
+* {color:red}高{color} *ChatGPT* — [BLOCKED] DNS lookup for chatgpt.com (via chrome.exe) — 847 queries over 14 days, bursty weekday pattern (2026年09月 — 2026年10月)
+* {color:red}高{color} *ChatGPT* — [BLOCKED] DNS lookup for cdn.oaistatic.com (via chrome.exe) — CDN asset loads confirming active sessions (2026年09月 — 2026年10月)
+h3. gengar@demo-corp.example
+* {color:red}高{color} *Atlassian Rovo* — Over-permissioned MCP connector: Atlassian Rovo — OAuth scopes include write:jira-work, write:confluence-content, admin:confluence-space; 15 tools (9 write); verdict BLOCK (2026年09月 — 2026年10月)
+h3. pikachu@demo-corp.example
+* {color:#ff8b00}中{color} *Grammarly* — Signup confirmation email from noreply@grammarly.com — subject: "Welcome to Grammarly!" (2026年09月)
+* {color:#ff8b00}中{color} *Grammarly* — Browser extension: Grammarly for Chrome (kbfnbcaeplbcioakkpcpgfkobkghlhen) on managed device (2026年09月)
+h3. venusaur@demo-corp.example
+* {color:green}低{color} *GitHub Copilot* — [APPROVED] DNS lookup for copilot.github.com (via code) — IDE extension traffic (2026年09月 — 2026年10月)
+* {color:green}低{color} *GitHub Copilot* — [APPROVED] Discovered app: GitHub Copilot (VS Code extension runtime) on managed Windows device (2026年09月 — 2026年10月)
+* {color:green}低{color} *GitHub Copilot* — [APPROVED] Application inventory: Visual Studio Code with Copilot extension bundle on macOS (2026年08月 — 2026年10月)
+
+h2. ツール別の検出結果
+|| ツール || 提供元 || リスク || 利用者数 || 端末数 || 検出ソース ||
+| Atlassian Rovo | Atlassian | {color:red}高{color} | 1 | - | mcp_scan |
+| ChatGPT | OpenAI | {color:red}高{color} | 1 | 1 | sentinelone_dns |
+| GitHub Copilot | GitHub | {color:green}低{color} | 1 | 2 | intune_app, jamf_app, sentinelone_dns |
+| Grammarly | Grammarly | {color:#ff8b00}中{color} | 1 | 1 | exchange_email, intune_extension |
+| Notion AI | Notion Labs | {color:#ff8b00}中{color} | 1 | - | entra_consent_grant |
+
+_SentinelOneの結果は端末単位で重複を除いています。各行は利用者と端末の組合せを示し、イベント数ではありません。_
+
+h2. 対応が必要な項目
+{panel:title=禁止ツールの利用|borderColor=red}
+* {color:red}(!){color} *charizard@demo-corp.example* が chrome.exe経由で{color:red}ChatGPT{color}を利用しています
+
+_対応: 利用者に確認してください。これらのツールは組織の禁止リストに登録されています。_
+{panel}
+{panel:title=AIデスクトップアプリの利用}
+* *venusaur@demo-corp.example* が *code* デスクトップアプリ経由で*GitHub Copilot* を利用しています
+
+_対応: これらの利用者はAIデスクトップアプリをインストールし、APIを呼び出しています。組織のAI利用ポリシーに沿っているか確認してください。_
+{panel}

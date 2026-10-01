@@ -1,0 +1,25 @@
+[
+  {
+    "operation": "token issue then revoke",
+    "issued": "トークン 4f839b5f を発行しました。",
+    "row": "4f839b5f\tQA approved migration temporary token\t2026-10-01\t2026-10-02\t失効済み\t"
+  },
+  {
+    "operation": "accept personal account",
+    "accepted": 1
+  },
+  {
+    "operation": "restore personal account",
+    "accepted": 0
+  },
+  {
+    "operation": "save register decision",
+    "id": "claude-code",
+    "clearAvailable": 1
+  },
+  {
+    "operation": "restore register decision",
+    "id": "claude-code",
+    "clearAvailable": 0
+  }
+]

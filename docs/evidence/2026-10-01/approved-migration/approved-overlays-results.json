@@ -1,0 +1,114 @@
+[
+  {
+    "theme": "light",
+    "operation": "account menu",
+    "visible": true
+  },
+  {
+    "theme": "light",
+    "operation": "password modal focus",
+    "dialogOpen": true,
+    "focusInside": true,
+    "focus": "set-curpass"
+  },
+  {
+    "theme": "light",
+    "operation": "escape password",
+    "open": 0
+  },
+  {
+    "theme": "light",
+    "operation": "drag widget",
+    "before": [
+      "stat_row",
+      "top_tools",
+      "activity_trend",
+      "recent_personal_accounts",
+      "detection_coverage",
+      "source_health",
+      "paste_guard"
+    ],
+    "after": [
+      "top_tools",
+      "stat_row",
+      "activity_trend",
+      "recent_personal_accounts",
+      "detection_coverage",
+      "source_health",
+      "paste_guard"
+    ],
+    "changed": true
+  },
+  {
+    "theme": "light",
+    "operation": "keyboard focus",
+    "id": "setupbell",
+    "tag": "BUTTON",
+    "outline": "rgb(8, 119, 215) solid 3px",
+    "boxShadow": "none",
+    "focusVisible": true
+  },
+  {
+    "theme": "light",
+    "operation": "mobile navigation",
+    "bodyClass": "nav-open",
+    "navVisible": true,
+    "focus": "app-sidebar"
+  },
+  {
+    "theme": "dark",
+    "operation": "account menu",
+    "visible": true
+  },
+  {
+    "theme": "dark",
+    "operation": "password modal focus",
+    "dialogOpen": true,
+    "focusInside": true,
+    "focus": "set-curpass"
+  },
+  {
+    "theme": "dark",
+    "operation": "escape password",
+    "open": 0
+  },
+  {
+    "theme": "dark",
+    "operation": "drag widget",
+    "before": [
+      "stat_row",
+      "top_tools",
+      "activity_trend",
+      "recent_personal_accounts",
+      "detection_coverage",
+      "source_health",
+      "paste_guard"
+    ],
+    "after": [
+      "top_tools",
+      "stat_row",
+      "activity_trend",
+      "recent_personal_accounts",
+      "detection_coverage",
+      "source_health",
+      "paste_guard"
+    ],
+    "changed": true
+  },
+  {
+    "theme": "dark",
+    "operation": "keyboard focus",
+    "id": "setupbell",
+    "tag": "BUTTON",
+    "outline": "rgb(197, 215, 251) solid 3px",
+    "boxShadow": "none",
+    "focusVisible": true
+  },
+  {
+    "theme": "dark",
+    "operation": "mobile navigation",
+    "bodyClass": "nav-open",
+    "navVisible": false,
+    "focus": "app-sidebar"
+  }
+]

@@ -24,6 +24,10 @@ COPY requirements.lock .
 RUN pip install --no-cache-dir --require-hashes -r requirements.lock \
  && python -m pip uninstall -y pip
 COPY app/ app/
+# Keep the product notice and third-party permissions in the distributed image.
+# The build context is portal/; tests keep these copies in sync with the root.
+COPY LICENSE NOTICE ./
+COPY licenses/ licenses/
 # Verified copies of the endpoint collector scripts, for artifact downloads.
 # The build context is portal/, so the endpoint/ tree is out of reach; a test
 # asserts these are byte-identical to the sources, the same pattern as the

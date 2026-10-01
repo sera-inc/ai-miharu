@@ -140,6 +140,26 @@ def test_the_accounts_table_ships_the_role_control():
     assert "async function userRole" in INDEX
 
 
+def test_account_selects_have_distinct_japanese_accessible_names():
+    """A table header or nearby paragraph does not label a native select.
+
+    Existing-account roles must identify whose role changes; creating an
+    account and choosing the reauthentication interval are separate actions.
+    """
+    import re
+
+    selects = re.findall(r"<select\b[^>]*>", INDEX)
+    expected = {
+        'data-role-for=': '${esc(u.username)} のロール',
+        'id="user-role"': '新しいアカウントのロール',
+        'id="sso-maxage"': 'シングルサインオンの再認証までの時間',
+    }
+    for marker, label in expected.items():
+        matching = [tag for tag in selects if marker in tag]
+        assert len(matching) == 1, marker
+        assert f'aria-label="{label}"' in matching[0], marker
+
+
 def test_the_page_offers_no_control_whose_answer_is_already_403():
     """A read-only account, and an account looking at one that outranks
     it, both see the role plainly rather than a dropdown that refuses.

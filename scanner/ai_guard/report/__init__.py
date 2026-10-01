@@ -61,9 +61,9 @@ RISK_COLORS = {
 }
 
 RISK_EMOJI = {
-    "high": "[red]HIGH[/red]",
-    "medium": "[yellow]MED[/yellow]",
-    "low": "[green]LOW[/green]",
+    "high": "[red]高[/red]",
+    "medium": "[yellow]中[/yellow]",
+    "low": "[green]低[/green]",
 }
 
 
@@ -96,46 +96,46 @@ class ReportGenerator:
         console.print()
         console.print(
             Panel.fit(
-                "[bold]AI Guard — Shadow AI Discovery Report[/bold]\n"
-                f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Scanners run: {len(self.results)} | "
-                f"Total findings: {len(self.all_findings)}\n"
-                "[dim]CONFIDENTIAL — Contains employee names and device identifiers[/dim]",
+                "[bold]AIミハル — 未把握のAI利用の検出レポート[/bold]\n"
+                f"作成日時: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"実行した検出ソース: {len(self.results)} | "
+                f"検出件数: {len(self.all_findings)}\n"
+                "[dim]機密 — 従業員名と端末の識別情報を含みます[/dim]",
                 border_style="blue",
             )
         )
 
         # Scanner status summary
-        console.print("\n[bold]Scanner Status[/bold]")
+        console.print("\n[bold]検出ソースの状態[/bold]")
         status_table = Table(show_header=True, header_style="bold")
-        status_table.add_column("Scanner")
-        status_table.add_column("Status")
-        status_table.add_column("Findings")
-        status_table.add_column("Duration")
+        status_table.add_column("検出ソース")
+        status_table.add_column("状態")
+        status_table.add_column("検出件数")
+        status_table.add_column("所要時間")
 
         for result in self.results:
             if result.skipped_reason:
-                status = f"[dim]Skipped: {result.skipped_reason}[/dim]"
+                status = f"[dim]省略: {result.skipped_reason}[/dim]"
             elif result.errors:
-                status = f"[red]Errors: {len(result.errors)}[/red]"
+                status = f"[red]エラー件数: {len(result.errors)}[/red]"
             else:
-                status = "[green]OK[/green]"
+                status = "[green]正常[/green]"
 
             status_table.add_row(
                 result.scanner_name,
                 status,
                 str(result.finding_count),
-                f"{result.duration_seconds:.1f}s",
+                f"{result.duration_seconds:.1f}秒",
             )
 
         console.print(status_table)
 
         if not self.all_findings:
-            console.print("\n[green]No AI tool usage detected.[/green]\n")
+            console.print("\n[green]AIツールの利用は検出されませんでした。検出ソースの状態も確認してください。[/green]\n")
             return
 
         # Findings by user
-        console.print("\n[bold]Findings by User[/bold]")
+        console.print("\n[bold]利用者別の検出結果[/bold]")
         by_user = defaultdict(list)
         no_user = []
         for f in self.all_findings:
@@ -152,35 +152,35 @@ class ReportGenerator:
                 risk = RISK_EMOJI.get(f.risk_tier, f.risk_tier)
                 line = f"    {risk} {f.service.name} — {f.detail}"
                 if f.first_seen and f.last_seen:
-                    start = f.first_seen.strftime("%b %Y")
-                    end = f.last_seen.strftime("%b %Y")
+                    start = f.first_seen.strftime("%Y年%m月")
+                    end = f.last_seen.strftime("%Y年%m月")
                     line += f" ({start} — {end})" if start != end else f" ({start})"
                 console.print(line)
 
         if no_user:
-            console.print("\n  [bold]Unattributed[/bold]")
+            console.print("\n  [bold]利用者を特定できない検出結果[/bold]")
             for f in no_user:
                 risk = RISK_EMOJI.get(f.risk_tier, f.risk_tier)
                 line = f"    {risk} {f.service.name} — {f.detail}"
                 if f.first_seen and f.last_seen:
-                    start = f.first_seen.strftime("%b %Y")
-                    end = f.last_seen.strftime("%b %Y")
+                    start = f.first_seen.strftime("%Y年%m月")
+                    end = f.last_seen.strftime("%Y年%m月")
                     line += f" ({start} — {end})" if start != end else f" ({start})"
                 console.print(line)
 
         # Findings by service
-        console.print("\n[bold]Findings by Service[/bold]")
+        console.print("\n[bold]ツール別の検出結果[/bold]")
         by_service = defaultdict(list)
         for f in self.all_findings:
             by_service[f.service.name].append(f)
 
         svc_table = Table(show_header=True, header_style="bold")
-        svc_table.add_column("Service")
-        svc_table.add_column("Vendor")
-        svc_table.add_column("Risk")
-        svc_table.add_column("Users")
-        svc_table.add_column("Endpoints")
-        svc_table.add_column("Sources")
+        svc_table.add_column("ツール")
+        svc_table.add_column("提供元")
+        svc_table.add_column("リスク")
+        svc_table.add_column("利用者数")
+        svc_table.add_column("端末数")
+        svc_table.add_column("検出ソース")
 
         for svc_name in sorted(by_service.keys()):
             svc_findings = by_service[svc_name]
@@ -193,7 +193,7 @@ class ReportGenerator:
             svc_table.add_row(
                 svc_name,
                 first.service.vendor,
-                Text(first.risk_tier.upper(), style=risk_color),
+                Text({"high": "高", "medium": "中", "low": "低"}.get(first.risk_tier, first.risk_tier), style=risk_color),
                 str(len(users)) if users else "-",
                 str(len(endpoints)) if endpoints else "-",
                 ", ".join(sorted(sources)),
@@ -201,14 +201,14 @@ class ReportGenerator:
 
         console.print(svc_table)
         console.print(
-            "[dim]SentinelOne results are deduplicated by endpoint — "
-            "each row represents a unique user/endpoint, not event volume.[/dim]"
+            "[dim]SentinelOneの結果は端末単位で重複を除いています。"
+            "各行は利用者と端末の組合せを示し、イベント数ではありません。[/dim]"
         )
 
         # ─────────────────────────────────────────────
         # Actionable Summary
         # ─────────────────────────────────────────────
-        console.print("\n[bold]Action Required[/bold]")
+        console.print("\n[bold]対応が必要な項目[/bold]")
 
         # 1. Blocked tool violations
         blocked = [
@@ -216,21 +216,21 @@ class ReportGenerator:
             if f.user_upn and "[BLOCKED]" in f.detail
         ]
         if blocked:
-            console.print("\n  [bold red]Blocked Tool Violations[/bold red]")
+            console.print("\n  [bold red]禁止ツールの利用[/bold red]")
             seen_blocked = set()
             for f in blocked:
                 key = (f.user_upn, f.service.name)
                 if key in seen_blocked:
                     continue
                 seen_blocked.add(key)
-                process = f.raw_evidence.get("process", "browser")
+                process = f.raw_evidence.get("process", "ブラウザー")
                 console.print(
-                    f"    [red]•[/red] [bold]{f.user_upn}[/bold] is using "
-                    f"[red]{f.service.name}[/red] via {process}"
+                    f"    [red]•[/red] [bold]{f.user_upn}[/bold] が "
+                    f"{process}経由で[red]{f.service.name}[/red]を利用しています"
                 )
             console.print(
-                "    [dim]Action: Review with users — these tools are on "
-                "the organisation's blocked list.[/dim]"
+                "    [dim]対応: 利用者に確認してください。これらのツールは"
+                "組織の禁止リストに登録されています。[/dim]"
             )
 
         # 2. Bridge connections (non-browser processes hitting SaaS APIs)
@@ -239,24 +239,24 @@ class ReportGenerator:
             if f.source.value == "sentinelone_bridge" and f.user_upn
         ]
         if bridges:
-            console.print("\n  [bold yellow]SaaS Bridge Connections[/bold yellow]")
+            console.print("\n  [bold yellow]SaaSへのアプリ経由の接続[/bold yellow]")
             seen_bridges = set()
             for f in bridges:
-                process = f.raw_evidence.get("process_name", "unknown")
+                process = f.raw_evidence.get("process_name", "不明")
                 target = f.raw_evidence.get("bridge_target", f.service.name)
                 key = (f.user_upn, process, target)
                 if key in seen_bridges:
                     continue
                 seen_bridges.add(key)
                 console.print(
-                    f"    [yellow]•[/yellow] [bold]{f.user_upn}[/bold] has "
-                    f"[yellow]{process}[/yellow] connecting to "
-                    f"[bold]{target}[/bold]"
+                    f"    [yellow]•[/yellow] [bold]{f.user_upn}[/bold] の "
+                    f"[yellow]{process}[/yellow]が"
+                    f"[bold]{target}[/bold]へ接続しています"
                 )
             console.print(
-                "    [dim]Action: Investigate — a non-browser application is "
-                "accessing your SaaS tools, possibly via an API key or "
-                "MCP integration. Review whether this is authorised.[/dim]"
+                "    [dim]対応: ブラウザー以外のアプリがSaaSツールへ"
+                "アクセスしています。APIキーやMCP連携の可能性があります。"
+                "許可された利用か確認してください。[/dim]"
             )
 
         # 3. Shadow AI usage via desktop apps (not browsers)
@@ -282,32 +282,32 @@ class ReportGenerator:
                 desktop_ai_real.append(f)
 
         if desktop_ai_real:
-            console.print("\n  [bold]AI Desktop App Usage[/bold]")
+            console.print("\n  [bold]AIデスクトップアプリの利用[/bold]")
             seen_desktop = set()
             for f in desktop_ai_real:
-                process = f.raw_evidence.get("process", "unknown")
+                process = f.raw_evidence.get("process", "不明")
                 key = (f.user_upn, f.service.name, process)
                 if key in seen_desktop:
                     continue
                 seen_desktop.add(key)
                 console.print(
-                    f"    • [bold]{f.user_upn}[/bold] is using "
-                    f"[bold]{f.service.name}[/bold] via the "
-                    f"[bold]{process}[/bold] desktop app"
+                    f"    • [bold]{f.user_upn}[/bold] が "
+                    f"[bold]{process}[/bold]デスクトップアプリ経由で"
+                    f"[bold]{f.service.name}[/bold]を利用しています"
                 )
             console.print(
-                "    [dim]Action: Review — these users have AI desktop "
-                "applications installed and actively making API calls. "
-                "Verify this aligns with your AI usage policy.[/dim]"
+                "    [dim]対応: これらの利用者はAIデスクトップアプリを"
+                "インストールし、APIを呼び出しています。"
+                "組織のAI利用ポリシーに沿っているか確認してください。[/dim]"
             )
 
         if not blocked and not bridges and not desktop_ai_real:
-            console.print("  [green]No actions required.[/green]")
+            console.print("  [green]この集計で追加の対応項目はありません。[/green]")
 
         # Errors
         all_errors = [e for r in self.results for e in r.errors]
         if all_errors:
-            console.print("\n[bold red]Errors[/bold red]")
+            console.print("\n[bold red]エラー[/bold red]")
             for error in all_errors:
                 console.print(f"  [red]• {error}[/red]")
 
@@ -317,40 +317,40 @@ class ReportGenerator:
         lines: list[str] = []
 
         risk_markup = {
-            "high": "{color:red}HIGH{color}",
-            "medium": "{color:#ff8b00}MEDIUM{color}",
-            "low": "{color:green}LOW{color}",
+            "high": "{color:red}高{color}",
+            "medium": "{color:#ff8b00}中{color}",
+            "low": "{color:green}低{color}",
         }
 
         # Header
-        lines.append("h1. AI Guard — Shadow AI Discovery Report")
+        lines.append("h1. AIミハル — 未把握のAI利用の検出レポート")
         lines.append("")
         lines.append(
-            f"*Generated:* {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | "
-            f"*Scanners run:* {len(self.results)} | "
-            f"*Total findings:* {len(self.all_findings)}"
+            f"*作成日時:* {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | "
+            f"*実行した検出ソース:* {len(self.results)} | "
+            f"*検出件数:* {len(self.all_findings)}"
         )
-        lines.append("_CONFIDENTIAL — Contains employee names and device identifiers_")
+        lines.append("_機密 — 従業員名と端末の識別情報を含みます_")
         lines.append("")
 
         # Scanner status table
-        lines.append("h2. Scanner Status")
-        lines.append("|| Scanner || Status || Findings || Duration ||")
+        lines.append("h2. 検出ソースの状態")
+        lines.append("|| 検出ソース || 状態 || 検出件数 || 所要時間 ||")
         for result in self.results:
             if result.skipped_reason:
-                status = f"Skipped: {result.skipped_reason}"
+                status = f"省略: {result.skipped_reason}"
             elif result.errors:
-                status = f"{{color:red}}Errors: {len(result.errors)}{{color}}"
+                status = f"{{color:red}}エラー件数: {len(result.errors)}{{color}}"
             else:
-                status = "{color:green}OK{color}"
+                status = "{color:green}正常{color}"
             lines.append(
                 f"| {result.scanner_name} | {status} "
-                f"| {result.finding_count} | {result.duration_seconds:.1f}s |"
+                f"| {result.finding_count} | {result.duration_seconds:.1f}秒 |"
             )
         lines.append("")
 
         if not self.all_findings:
-            lines.append("{color:green}No AI tool usage detected.{color}")
+            lines.append("{color:green}AIツールの利用は検出されませんでした。検出ソースの状態も確認してください。{color}")
             output = "\n".join(lines)
             if output_path:
                 self._write_secure_file(output_path, output)
@@ -359,7 +359,7 @@ class ReportGenerator:
             return
 
         # Findings by user
-        lines.append("h2. Findings by User")
+        lines.append("h2. 利用者別の検出結果")
         by_user: dict[str, list[Finding]] = defaultdict(list)
         no_user: list[Finding] = []
         for f in self.all_findings:
@@ -375,27 +375,27 @@ class ReportGenerator:
                 risk = risk_markup.get(f.risk_tier, f.risk_tier)
                 entry = f"* {risk} *{f.service.name}* — {f.detail}"
                 if f.first_seen and f.last_seen:
-                    start = f.first_seen.strftime("%b %Y")
-                    end = f.last_seen.strftime("%b %Y")
+                    start = f.first_seen.strftime("%Y年%m月")
+                    end = f.last_seen.strftime("%Y年%m月")
                     entry += f" ({start} — {end})" if start != end else f" ({start})"
                 lines.append(entry)
 
         if no_user:
-            lines.append("h3. Unattributed")
+            lines.append("h3. 利用者を特定できない検出結果")
             for f in no_user:
                 risk = risk_markup.get(f.risk_tier, f.risk_tier)
                 entry = f"* {risk} *{f.service.name}* — {f.detail}"
                 if f.first_seen and f.last_seen:
-                    start = f.first_seen.strftime("%b %Y")
-                    end = f.last_seen.strftime("%b %Y")
+                    start = f.first_seen.strftime("%Y年%m月")
+                    end = f.last_seen.strftime("%Y年%m月")
                     entry += f" ({start} — {end})" if start != end else f" ({start})"
                 lines.append(entry)
 
         lines.append("")
 
         # Findings by service table
-        lines.append("h2. Findings by Service")
-        lines.append("|| Service || Vendor || Risk || Users || Endpoints || Sources ||")
+        lines.append("h2. ツール別の検出結果")
+        lines.append("|| ツール || 提供元 || リスク || 利用者数 || 端末数 || 検出ソース ||")
 
         by_service: dict[str, list[Finding]] = defaultdict(list)
         for f in self.all_findings:
@@ -417,35 +417,35 @@ class ReportGenerator:
 
         lines.append("")
         lines.append(
-            "_SentinelOne results are deduplicated by endpoint — "
-            "each row represents a unique user/endpoint, not event volume._"
+            "_SentinelOneの結果は端末単位で重複を除いています。"
+            "各行は利用者と端末の組合せを示し、イベント数ではありません。_"
         )
         lines.append("")
 
         # Action required
-        lines.append("h2. Action Required")
+        lines.append("h2. 対応が必要な項目")
 
         action_sections: list[str] = []
 
         # Blocked tool violations
         blocked = [f for f in self.all_findings if f.user_upn and "[BLOCKED]" in f.detail]
         if blocked:
-            section = ["{panel:title=Blocked Tool Violations|borderColor=red}"]
+            section = ["{panel:title=禁止ツールの利用|borderColor=red}"]
             seen: set[tuple[str | None, str]] = set()
             for f in blocked:
                 key = (f.user_upn, f.service.name)
                 if key in seen:
                     continue
                 seen.add(key)
-                process = f.raw_evidence.get("process", "browser")
+                process = f.raw_evidence.get("process", "ブラウザー")
                 section.append(
-                    f"* {{color:red}}(!){{color}} *{f.user_upn}* is using "
-                    f"{{color:red}}{f.service.name}{{color}} via {process}"
+                    f"* {{color:red}}(!){{color}} *{f.user_upn}* が "
+                    f"{process}経由で{{color:red}}{f.service.name}{{color}}を利用しています"
                 )
             section.append("")
             section.append(
-                "_Action: Review with users — these tools are on "
-                "the organisation's blocked list._"
+                "_対応: 利用者に確認してください。これらのツールは"
+                "組織の禁止リストに登録されています。_"
             )
             section.append("{panel}")
             action_sections.append("\n".join(section))
@@ -456,24 +456,24 @@ class ReportGenerator:
             if f.source.value == "sentinelone_bridge" and f.user_upn
         ]
         if bridges:
-            section = ["{panel:title=SaaS Bridge Connections|borderColor=#ff8b00}"]
+            section = ["{panel:title=SaaSへのアプリ経由の接続|borderColor=#ff8b00}"]
             seen_bridges: set[tuple[str | None, str, str]] = set()
             for f in bridges:
-                process = f.raw_evidence.get("process_name", "unknown")
+                process = f.raw_evidence.get("process_name", "不明")
                 target = f.raw_evidence.get("bridge_target", f.service.name)
                 key = (f.user_upn, process, target)
                 if key in seen_bridges:
                     continue
                 seen_bridges.add(key)
                 section.append(
-                    f"* {{color:#ff8b00}}(!){{color}} *{f.user_upn}* has "
-                    f"{{color:#ff8b00}}{process}{{color}} connecting to *{target}*"
+                    f"* {{color:#ff8b00}}(!){{color}} *{f.user_upn}* の "
+                    f"{{color:#ff8b00}}{process}{{color}}が*{target}*へ接続しています"
                 )
             section.append("")
             section.append(
-                "_Action: Investigate — a non-browser application is "
-                "accessing your SaaS tools, possibly via an API key or "
-                "MCP integration. Review whether this is authorised._"
+                "_対応: ブラウザー以外のアプリがSaaSツールへ"
+                "アクセスしています。APIキーやMCP連携の可能性があります。"
+                "許可された利用か確認してください。_"
             )
             section.append("{panel}")
             action_sections.append("\n".join(section))
@@ -498,23 +498,23 @@ class ReportGenerator:
             if (f.raw_evidence.get("process", "") or "").lower() in ai_app_processes
         ]
         if desktop_ai_real:
-            section = ["{panel:title=AI Desktop App Usage}"]
+            section = ["{panel:title=AIデスクトップアプリの利用}"]
             seen_desktop: set[tuple[str | None, str, str]] = set()
             for f in desktop_ai_real:
-                process = f.raw_evidence.get("process", "unknown")
+                process = f.raw_evidence.get("process", "不明")
                 key = (f.user_upn, f.service.name, process)
                 if key in seen_desktop:
                     continue
                 seen_desktop.add(key)
                 section.append(
-                    f"* *{f.user_upn}* is using *{f.service.name}* "
-                    f"via the *{process}* desktop app"
+                    f"* *{f.user_upn}* が *{process}* デスクトップアプリ経由で"
+                    f"*{f.service.name}* を利用しています"
                 )
             section.append("")
             section.append(
-                "_Action: Review — these users have AI desktop "
-                "applications installed and actively making API calls. "
-                "Verify this aligns with your AI usage policy._"
+                "_対応: これらの利用者はAIデスクトップアプリを"
+                "インストールし、APIを呼び出しています。"
+                "組織のAI利用ポリシーに沿っているか確認してください。_"
             )
             section.append("{panel}")
             action_sections.append("\n".join(section))
@@ -522,14 +522,14 @@ class ReportGenerator:
         if action_sections:
             lines.append("\n".join(action_sections))
         else:
-            lines.append("{color:green}No actions required.{color}")
+            lines.append("{color:green}この集計で追加の対応項目はありません。{color}")
 
         lines.append("")
 
         # Errors
         all_errors = [e for r in self.results for e in r.errors]
         if all_errors:
-            lines.append("h2. Errors")
+            lines.append("h2. エラー")
             for error in self._sanitize_errors(all_errors):
                 lines.append(f"* {{color:red}}{error}{{color}}")
             lines.append("")

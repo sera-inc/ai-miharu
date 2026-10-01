@@ -8,6 +8,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>貼り付けガードの動作デモ</title>
 <!--
   Zero-install demo of the paste guard. This page loads the REAL, unmodified
@@ -25,18 +26,20 @@
     color-scheme: dark;
     /* Standalone demo subset of the DADS Layer 2 adapter. */
     --app-sg-surface-canvas: var(--dads-color-black, #000000);
-    --app-sg-text-primary: var(--dads-color-solid-gray-50, #f9f9f9);
+    --app-sg-text-primary: var(--dads-color-solid-gray-50, #f2f2f2);
     --app-sg-text-secondary: var(--dads-color-solid-gray-200, #cccccc);
     --app-sg-text-on-dark: var(--dads-color-white, #ffffff);
-    --app-sg-text-on-dark-secondary: var(--dads-color-solid-gray-300, #b3b3b3);
-    --app-sg-border-subtle: var(--dads-color-solid-gray-500, #7f7f7f);
+    --app-sg-text-on-dark-secondary: var(--dads-color-solid-gray-200, #cccccc);
+    --app-sg-border-subtle: var(--dads-color-solid-gray-300, #b3b3b3);
     --app-sg-border-strong: var(--dads-color-solid-gray-300, #b3b3b3);
     --app-sg-surface-prompt: var(--dads-color-solid-gray-800, #333333);
     --app-sg-surface-code: var(--dads-color-solid-gray-800, #333333);
     --app-sg-surface-button-neutral: var(--dads-color-solid-gray-700, #4d4d4d);
     --app-sg-surface-hover: color-mix(in srgb, var(--dads-color-white, #ffffff) 10%, transparent);
     --app-sg-surface-panel: var(--dads-color-solid-gray-900, #1a1a1a);
-    --app-sg-border-mode-active: var(--dads-color-orange-400, #ff8d44);
+    --app-sg-border-mode-active: var(--dads-color-blue-200, #c5d7fb);
+    --app-sg-success: var(--dads-color-green-200, #9bd4b5);
+    --app-sg-focus-ring: var(--dads-color-blue-200, #c5d7fb);
   }
   body { font-family: -apple-system, "Segoe UI", sans-serif; background:var(--app-sg-surface-canvas);
          color:var(--app-sg-text-primary); max-width:880px; margin:32px auto; padding:0 20px;
@@ -57,6 +60,9 @@
   button.copy { background:var(--app-sg-surface-button-neutral); color:var(--app-sg-text-on-dark-secondary); border:1px solid var(--app-sg-border-subtle);
                 border-radius:4px; padding:3px 10px; cursor:pointer;
                 font:inherit; font-size:0.85em; }
+  button.copy:hover { background:var(--app-sg-surface-prompt); }
+  #prompt:focus-visible { outline:2px solid var(--app-sg-focus-ring); outline-offset:2px; }
+  :where(a,button):focus-visible { outline:2px solid var(--app-sg-focus-ring); outline-offset:2px; }
   button.copy:active { background:var(--app-sg-surface-hover); }
   #report { background:var(--app-sg-surface-panel); border:1px solid var(--app-sg-border-subtle); border-radius:8px;
             padding:12px; min-height:60px; font-family:ui-monospace, monospace;
@@ -100,6 +106,8 @@
 
 <p class="muted">検出対象と意図的な除外の全一覧は <code>src/guard.js</code> に記載しています。実際の導入方法は、このフォルダー内のREADMEを参照してください。</p>
 
+<footer><p class="muted">AIミハル · 株式会社世良 · <a href="mailto:info@sera-inc.co.jp">お問い合わせ</a><br>合成サンプルによる動作確認用です。実際の秘密情報は入力しないでください。</p></footer>
+
 <script>
   // Stub the three chrome.* touchpoints guard.js uses. Everything else on
   // this page is presentation.
@@ -138,9 +146,15 @@
     if (!codeEl || !cell) return;
     const b = document.createElement("button");
     b.className = "copy"; b.textContent = "コピー";
+    b.setAttribute("aria-live", "polite");
     b.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(codeEl.textContent);
-      b.textContent = "コピーしました"; b.classList.add("ok");
+      try {
+        await navigator.clipboard.writeText(codeEl.textContent);
+        b.textContent = "コピーしました"; b.classList.add("ok");
+      } catch (e) {
+        b.textContent = "コピーできません。例文を選択してコピーしてください";
+        return;
+      }
       setTimeout(() => { b.textContent = "コピー"; b.classList.remove("ok"); }, 1200);
     });
     cell.appendChild(b);

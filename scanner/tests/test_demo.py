@@ -25,7 +25,12 @@ def test_demo_scan_output():
     assert result.returncode == 0, f"Demo scan failed:\n{output}"
 
     # Banner
-    assert "demo mode" in output.lower(), "Missing demo mode banner"
+    assert "デモモードで実行中" in output, "Missing Japanese demo mode banner"
+
+    assert "AIミハル" in output
+    assert "検出ソースの状態" in output
+    assert "利用者別の検出結果" in output
+    assert "禁止ツールの利用" in output
 
     # Expected users appear in output
     expected_users = [
@@ -71,6 +76,11 @@ def test_demo_scan_device_names_json():
 
     with open(out_path) as f:
         data = json.load(f)
+
+    # Localisation must not change machine-readable integration values.
+    assert {f["risk_tier"] for f in data["findings"]} <= {"low", "medium", "high"}
+    assert any("[BLOCKED]" in f["detail"] for f in data["findings"])
+    assert any("[APPROVED]" in f["detail"] for f in data["findings"])
 
     devices = {f["device_name"] for f in data["findings"] if f.get("device_name")}
 

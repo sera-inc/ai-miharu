@@ -1,0 +1,15 @@
+[
+  {
+    "tourVisible": "on plain",
+    "cardZ": "auto",
+    "bodyClass": "",
+    "drawerInert": true,
+    "accountMenuHidden": true,
+    "card": "AIミハルへようこそ\n\nポータルの主な画面を、約2分のツアーでご案内します。途中でいつでも終了できます。\n\nツアーを終了\n開始"
+  },
+  {
+    "tourVisible": "",
+    "shellInert": false,
+    "dialogs": 0
+  }
+]

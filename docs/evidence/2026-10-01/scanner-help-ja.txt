@@ -1,0 +1,16 @@
+Usage: python -m ai_guard.cli [OPTIONS] COMMAND [ARGS]...
+
+  AIミハル: 未把握のAI利用を検出し、MCPのセキュリティを評価します。
+
+Options:
+  --version            Show the version and exit.
+  -c, --config PATH    ポリシー設定YAMLのパス（既定: ./policy.yaml）
+  -e, --env-file PATH  API認証情報を読み込む.envファイルのパス。  [default: .env]
+  --help               Show this message and exit.
+
+Commands:
+  discover  DNSのキーワード検索で未登録のAIツールを探します。
+  init      現在のディレクトリにAIミハルの初期設定を作成します。
+  mcp-scan  MCPサーバーのセキュリティを個別に評価します。
+  registry  読み込んだツールレジストリを表示します。
+  scan      未把握のAI利用を検出します。
