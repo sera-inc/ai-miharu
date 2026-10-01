@@ -1,0 +1,38 @@
+{
+  "checked_main": "af27978d59957a3bbe17fbe08bb93257bb03f159",
+  "seo_fix_commit": "aae985a8493ab6f5ea510b0169e2f755628d0daa",
+  "files": [
+    {
+      "path": "scripts/analytics/measure-products.mjs",
+      "identical_to_main": true,
+      "sha256": "acd47823d5f67268523b7bff3e62bab33518bb837f22299afd3424d903a28a83"
+    },
+    {
+      "path": "scripts/analytics/product-paths.mjs",
+      "identical_to_main": true,
+      "sha256": "d25221da697e3b6a3c46a2f829372d327db46c6f628a7031d18bb66584441a71"
+    },
+    {
+      "path": "src/data/analyticsCatalog.ts",
+      "identical_to_main": true,
+      "sha256": "480c0d34f56ae709085fbf8448394efe4a8b3be3b819206f2b941e41a9be1c0f"
+    },
+    {
+      "path": "src/lib/siteAnalytics.ts",
+      "identical_to_main": true,
+      "sha256": "3ac526f597bd4f9146c4d7ccfe5fb936c7fe0494b9c586951e2c1d127c555cde"
+    },
+    {
+      "path": "tests/product-measurement.test.mjs",
+      "identical_to_main": true,
+      "sha256": "04483af9afe10c12ed6eeb20efd690b657ea365028650efe8e76598eb89bb40a"
+    },
+    {
+      "path": "tests/site-analytics.test.mjs",
+      "identical_to_main": true,
+      "sha256": "5251b4c35cd42da55be1727991d0de725e6436a5b15df4050b223d4c89d5a5c4"
+    }
+  ],
+  "seo_history_diff": "",
+  "sumai_shared_diff": ""
+}

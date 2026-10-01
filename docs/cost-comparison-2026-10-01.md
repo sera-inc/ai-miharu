@@ -26,14 +26,35 @@ Lovable は LP/新規フロントエンドの開発基盤として比較でき�
 | 基盤 | 現実的な導入経路 | ゼロ顧客時 | 小規模時の条件付き計算 | 初期実装工数の見立て |
 |---|---|---|---|---|
 | AWS | Lightsail Linux/Unix、IPv4、2 vCPU/4 GB/80 GB | 不要な VM を作らなければ $0。保持すれば $24/月 | **$24/月（約3,600円）** + バックアップ等。公式 bundle の転送枠内想定 | 1–3 人日: Compose、TLS、バックアップ、復元試験 |
-| GCP | Compute Engine e2-medium + disk。Cloud Run は永続状態を再設計してから | VM 未作成なら $0。停止でも disk 等は残る | 米国参考 e2-medium $0.03350571/h ×730 = **$24.46/月**、disk/IP/通信別。日本リージョン見積は要再取得 | VM 1–3 人日。Cloud Run 化 5–15 人日 |
-| Azure | VM + Compose を第一候補。Container Apps は永続化/ジョブ分離の設計後 | 消費プランのゼロ replica の compute は $0、保存/ログ等別 | 公式動的価格の数値を取得できず **総額未確定**。下記の使用量式で公式 calculator を使用 | VM 1–3 人日。Container Apps 化 5–15 人日 |
+| GCP | Compute Engine e2-medium + disk。Cloud Run は永続状態を再設計してから | VM 未作成なら $0。停止でも disk 等は残る | 米国参考 e2-medium $0.03350571/h ×730 = **$24.46/月**、disk/IP/通信別。東京は下記の単価取得待ち式。IPv4は $3.65/月を確認 | VM 1–3 人日。Cloud Run 化 5–15 人日 |
+| Azure | VM + Compose を第一候補。Container Apps は永続化/ジョブ分離の設計後 | 消費プランのゼロ replica の compute は $0、保存/ログ等別 | Japan East Linux B2s + Standard SSD E10 + Standard IPv4 の **総額未確定**。下記にSKU・式・取得条件を固定 | VM 1–3 人日。Container Apps 化 5–15 人日 |
 | Lovable | LP / 新規 UI。既存 backend は別ホスト | Free の範囲で開発可。Cloud 消費枠と実使用を区別 | Pro **$25/月〜**は開発 credits を含むプラン。既存 backend $24/月なら単純合算 **$49/月〜**、Cloud 超過別。製品全体の実行料ではない | LP 1–3 人日。既存 backend 置換は 15–30 人日以上、現時点では非推奨 |
 | Cloudflare | Pages/Workers の LP + VM backend。Containers への移植も別途評価 | 静的 LP が無料枠内なら $0 | LP + AWS VM **$24/月〜**。Workers Paid を使えば $29/月〜。Containers 全体の $5 移行とはしない | LP 1–2 人日。Containers 永続化移植 5–15 人日 |
 
 工数は担当者の経験がある前提の計画上の推定で、ベンダー見積・実績ではない。1 人日 8 時間、社内原価を仮に 5,000 円/時とすると 1–3 人日 = 4–12 万円、5–15 人日 = 20–60 万円。複雑な SSO/ネットワーク審査は含まない。
 
 一次出典: [AWS Lightsail pricing](https://aws.amazon.com/lightsail/pricing/)、[GCP General Purpose VM pricing](https://cloud.google.com/products/compute/pricing/general-purpose)、[Azure Container Apps pricing](https://azure.microsoft.com/en-us/pricing/details/container-apps/)、[Lovable pricing](https://lovable.dev/pricing)、[Lovable Cloud](https://docs.lovable.dev/features/cloud)、[Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)。GCP の公式価格表本文は取得エラーになったが、公式ページの検索結果で上記 hourly rate を確認。リージョンを選択した正式見積もりを代替するものではない。
+
+## 日本リージョンの再調査と見積もり入力（2026-10-01 追補）
+
+地域未指定の検索結果を東京価格に流用せず、次の構成で再取得する。Linux は追加ライセンス料金のないイメージ、オンデマンド、単一ゾーン、730時間、割引契約なし。いずれもバックアップ、転送、監視、税は別。
+
+| 対象 | 固定した入力 | 月額式（USD） | 確認できた範囲 |
+|---|---|---|---|
+| GCP 東京 | `asia-northeast1`、e2-medium 1台、zonal pd-balanced 80 GiB、使用中 external IPv4 1個 | `730 × V_tokyo + 80 × D_tokyo + 3.65` | `V_tokyo` はVM USD/時、`D_tokyo` はdisk USD/GiB月。東京の両単価は未取得。IPv4は公式 $0.005/時 ×730 = $3.65（約548円）。アカウント単位の月1時間無料枠をここでは差し引かない |
+| Azure Japan East VM | `japaneast`、Linux `Standard_B2s` 1台、Standard SSD LRS E10 128 GiB 1枚（OS/データ兼用）、Standard static IPv4 1個 | `730 × V_jp + E10_jp + 730 × IP_jp + T_jp` | VM、disk、IP の地域単価は未取得。`T_jp` はStandard SSDの課金対象I/O取引。80 GiBと同一容量ではなく128 GiBのSKUで比較 |
+| Azure Japan East Container Apps | Consumption、合計1 vCPU/2 GiBを常時active、15万request、無料枠が他アプリに使われていない想定 | `2448000 × C_jp + 4896000 × M_jp` | `C_jp` はUSD/vCPU秒、`M_jp` はUSD/GiB秒。日本地域のactive単価は未取得。requestは無料枠内。永続化/ログ/通信/追加環境機能は別 |
+
+出典: [GCP IPv4料金](https://cloud.google.com/vpc/network-pricing#ipaddress)、[GCP disk料金](https://cloud.google.com/compute/disks-image-pricing)、[Azure Linux VM料金](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/)、[Azure Managed Disks料金](https://azure.microsoft.com/en-us/pricing/details/managed-disks/)、[Azure IP料金](https://azure.microsoft.com/en-us/pricing/details/ip-addresses/)。diskは実使用量でなく確保容量が課金基準。GCPの静的IPは停止中VMに割当済みでも使用中扱いなので、停止だけで月額ゼロとはしない。
+
+取得結果は次のとおり。これは認証不足や有料契約不足と断定していない。
+
+- クラウド環境のHTTPS取得は `cloud.google.com` と `prices.azure.com` とも `Tunnel connection failed: 403 Forbidden`。プロキシを迂回しない。
+- web取得でもAzure Retail APIの地域/SKUフィルター付きURLと基本URLは取得不能。公式APIは認証不要と記載されており、料金確認のために新規契約は必要ない。
+- Azure公式ページは取得できたが、VMのB2s金額は本文に存在せず、Container Apps、Managed Disks E10、IPの地域価格は `$-` の動的表示。Microsoft Q&Aの概算や第三者集計値を日本の確定単価に置換しない。
+- GCPのVM公式ページはweb取得でtimeout。disk本文は取得できたが初期選択 `Iowa (us-central1)` の表で、東京を選択した証拠がない。地域選択肢にTokyoがあることだけではその後の数値を東京価格と解釈できない。Cloud Buildのe2-medium料金は別サービスであり採用しない。
+
+再取得時は[Azure Retail Prices API公式仕様](https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices)に従い、`https://prices.azure.com/api/retail/prices` の `$filter` に `armRegionName eq 'japaneast' and armSkuName eq 'Standard_B2s' and priceType eq 'Consumption'` を渡す。返却されたLinux通常料金を選び、Windows・Spot・Low Priority・予約を混在させず、`unitOfMeasure`、`currencyCode`、`effectiveStartDate`、`meterId`、`isPrimaryMeterRegion`を保存する。Container Appsは同地域の `serviceName eq 'Azure Container Apps'` を取得してactive CPU/RAMとidleを区別する。次ページがあれば `NextPageLink` を最後まで読む。GCPは[公式calculator](https://cloud.google.com/products/calculator)でTokyoを明示し、VM/disk/IP明細を保存する。これらの取得が成功するまでは、上の式を正式な日本月額見積もりと表示しない。
 
 ## サーバーレスの計算と制約
 
