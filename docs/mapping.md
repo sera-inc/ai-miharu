@@ -2,13 +2,15 @@
 
 **対象**: リポジトリ直下（Layer 1 の生成物 `portal/app/static/dads/`、`tools/`、`docs/`、`.scratch/`、`node_modules` は除く）　**再インベントリ**: 2026-09-30　**生成**: デザインシステムの `scripts/inventory.mjs`（測定にだけ使用。原本は複製していない）
 **ステータス**: DeepSeek 4.1 Flash による仮対応（**人間レビュー未承認**、Phase 1 未完了）
-**現行の実装値**: 14 ファイル・**143 種・2,180 出現**（色 17 種 36 出現／フォントサイズ 37 種 511 出現／余白 47 種 1,379 出現／角丸 28 種 230 出現／z-index 14 種 24 出現）
-**現行の内訳**: AI仮対応 31・保留 65・除外 36・**未判定 11**（計 143）。判定は 2026-09-27 の値単位の DeepSeek 出力を引き継いだもので、現行の出現箇所での再判定は行っていない。
+**2026-09-30時点の実装値**: 14 ファイル・**143 種・2,180 出現**（色 17 種 36 出現／フォントサイズ 37 種 511 出現／余白 47 種 1,379 出現／角丸 28 種 230 出現／z-index 14 種 24 出現）
+**旧インベントリの訂正後内訳（2026-10-01）**: AI仮対応 31・保留 65・除外 27・**未判定 20**（計143）。実在z-index9値の誤除外をCodexが訂正した。その他は旧DeepSeek判定の引継ぎで、全面的な文脈再判定・人間承認は未実施。未解決（保留＋未判定）は85種。
 
 > この表は設計書 §6 Phase 1 の中核資産です。設計書は人間による対応トークンの決定とレビュー承認を要求します。
 > 今回は依頼者の 2026-09-27 の明示指示により、DeepSeek 4.1 Flash（`deepseek-v4.1-flash:cloud`）単独で仮判定しました。
 > **人間承認を受けたものとして扱いません。** 「AI仮対応」は提案であり、承認・確定ではありません。
 > **未解決（保留・未判定）が残るため、Phase 1 / Phase 2 は完了していません。** 未解決を 0 と表示しません。
+
+2026-10-01の変更後機械抽出は [dads-inventory-2026-10-01.md](dads-inventory-2026-10-01.md) に別保存。旧143種と新143種が同数でも出現回数・用途が同一とは扱わない。旧baselineは変更していない。
 
 ## 数字の読み方（旧版 352 種との関係）
 
@@ -196,21 +198,21 @@ node /path/to/digital-design-system/scripts/inventory.mjs /tmp/inv-target --out 
 
 | 実装値 | 出現回数 | 対応トークン | 状態 | 備考（代表ファイル） |
 |---|---|---|---|---|
-| `1` | 5 | 除外 | 除外 | `portal/app/static/enterprise.css`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: ソース文脈に z-index:1 が確認できず、v1.1.0 や -1、initial-scale=1 など非 z-index の数値・コード内出現のみ。抽出誤検知と判断。 |
+| `1` | 5 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/enterprise.css:206,208,212,397,1589` に実宣言あり（姿勢表示・編集表示・sticky表見出し）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
 | `60` | 4 | --app-z-popover | AI仮対応 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: #navtip の z-index:60 として使用され、ツールチップ/ポップオーバーの用途。候補トークンの --app-z-popover に対応。 |
-| `2` | 3 | 除外 | 除外 | `portal/app/static/enterprise.css` 他1件。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: 著作権年 2026 や SVG の points 値などに含まれる数値で、z-index としての使用が確認できない。抽出誤検知。 |
+| `2` | 3 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/enterprise.css:674 / index.html:827,842` に実宣言あり（nav-pin・グラフ表示）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
 | `2147483647` | 2 | --app-z-toast | AI仮対応 | `extension/src/guard.js` 他1件。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: guard.js の固定通知（position:fixed; top:16px; right:16px; z-index:2147483647）で最大値を使用。トースト/通知の用途なので --app-z-toast に対応。 |
 | `19` | 1 | 保留 | 保留 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: .posture-mark の z-index:19 として使用されているが、装飾マーク用途に合う候補トークンがなく一意に決められない。 |
-| `20` | 1 | 除外 | 除外 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: 著作権年 2026 に含まれる数値で、z-index:20 は確認できない。抽出誤検知。 |
-| `3` | 1 | 除外 | 除外 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: カテゴリは z-index だが、文脈では margin-top:3px や色値・JS コメント内の数字などであり、z-index 宣言ではない抽出誤検知と判断できるため。 |
-| `4` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: box-shadow の 0 4px 14px などに出現し、z-index:4 は確認できない。抽出誤検知。 |
-| `40` | 1 | 除外 | 除外 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: minmax(400px,1fr) や SVG パス座標などに出現し、z-index:40 は確認できない。抽出誤検知。 |
-| `5` | 1 | 除外 | 除外 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: URL の AmanSK5 や行番号などに出現し、z-index:5 は確認できない。抽出誤検知。 |
-| `70` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: box-shadow の 70px や 70% などに出現し、z-index:70 は確認できない。抽出誤検知。 |
+| `20` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/index.html:396` に実宣言あり（drawer）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
+| `3` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/index.html:806` に実宣言あり（グラフ装飾）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
+| `4` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/enterprise.css:1623` に実宣言あり（ダッシュボード編集ドロップ領域）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
+| `40` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/index.html:267` に実宣言あり（固定設定バー）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
+| `5` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/index.html:118` に実宣言あり（stickyヘッダー）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
+| `70` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/enterprise.css:802` に実宣言あり（検索結果popover）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
 | `75` | 1 | 保留 | 保留 | `portal/app/static/enterprise.css`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: #setupbell .bcount の z-index:75（バッジ）と推測されるが、バッジ用途に合う候補トークンがなく一意に決められない。 |
-| `90` | 1 | 除外 | 除外 | `portal/app/static/enterprise.css`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: 90deg や right:-90px、rotate(-90deg) など角度・位置指定として出現し、z-index:90 は確認できない。抽出誤検知。 |
+| `90` | 1 | — | 未判定 | 2026-10-01 Codex訂正: `portal/app/static/enterprise.css:123` に実宣言あり（モバイルaside）。旧「宣言なし・誤検出」除外を撤回。重なり順と周辺stacking contextの再判定が必要。トークン未承認。 |
 | `9000` | 1 | 保留 | 保留 | `portal/app/static/index.html`。2026-09-27 の DeepSeek 判定（現行の出現箇所での再判定は未実施）: #tour の固定全画面オーバーレイ用 z-index であり、候補の modal/popover/toast とは用途が異なる。9000 に対応する専用の z-index トークンが候補にないため。 |
 
 ---
 
-検査ファイル数: 14 / 抽出値: 143 種・2,180 出現（AI仮対応 31、保留 65、除外 36、未判定 11）
+検査ファイル数: 14 / 抽出値: 143 種・2,180 出現（訂正後: AI仮対応31、保留65、除外27、未判定20。2026-09-30インベントリに対する判定）

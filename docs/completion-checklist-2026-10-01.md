@@ -40,3 +40,13 @@
 - main反映条件を満たしていないため、main統合/push・本番公開は実行しない。公開siteはendpoint-operationsとの親調整も未了。レビュー可能な個別branchに保持する。
 - ポータル内部URLは http://localhost:8091、LP内部URLは http://localhost:5173/information-systems/products/ai-miharu/ 。いずれも利用者が外部から開けるURLとは主張しない。人が確認する機会の確保と停止手順を親へ引き継ぐ。
 - 追加検証: 実DS外部mountと同梱fallbackをlight/dark×7要素×7属性で比較し差分0。網羅的な全値移行完了とは区別する。`/dads.css` 404はaxeによる相対importの再取得に限られ、通常ブラウザ読み込みでは再現せず。
+
+## 保存・停止の最終記録
+
+- 製品ドラフトPR: https://github.com/sera-inc/ai-miharu/pull/7 。公開済コードhead `db775f8bc15994753b902aec2d492dbe2260a304`。通常CI / Trivy両方成功。
+- 公開siteドラフトPR: https://github.com/sera-inc/sera-inc-public-site/pull/74 。remote head `26cc48530ab78262fb7660f0733065f0fd67fa13`。CLI write認証がなかったためGitHub connectorで保存。local `677d4d01` とremoteのtree SHA `c726daa4b25802aa1af65aed0d0fc1e6bc8502e4` が一致することを検証。対象commitのGitHub Actions実行は0件（CI成功とは表現しない）。
+- siteのmain統合は未実施。endpoint-operationsと競合し得る共有ファイルはrouteSeo.ts、生成llms文書、package-lock.json。最新remoteで比較し、統合時にllmsを再生成する。
+- 画面確認用GitHub画像URLを途中共有済み。インタラクティブな外部URLは未提供という制約を明示した。
+- 最終停止: 今回のportal/receiver/mock/extension HTTP/Vite、demo Composeを通常停止。8080/8091/8092/8093/8094/5173/3000/3100/8025は待受なし、起動中Dockerコンテナ0。volume削除はしていない。
+- 対応表は実在z-index9値を未判定へ訂正し、未解決85種。機械再抽出は143種/2,186出現。人間による対応決定や承認を捏造しない。
+- 最後の文書訂正はクラウド内の追加commit/patchとして保持する。動作コードを変えていないため既済みの検証を再利用し、文書だけを理由にCI一式を再起動しない。次の実装・統合時にまとめて反映する。

@@ -9,7 +9,7 @@
 - 合成Microsoft Entraプロバイダーはホスト8092で起動。ブラウザーでMicrosoftサインイン→管理者選択→portal `#wizard` 復帰まで成功。PKCE・コード交換は製品の通常処理。
 - 拡張デモのnginxはマウントしたクラウドcheckoutのファイル権限により403。製品ファイルを変更せず、同じextensionディレクトリーをPython HTTP server（8093）で配信して操作した。
 - Chromium `/usr/bin/chromium`、既存 `tools/screenshots` のPlaywrightを利用。録画は既存 `/usr/bin/ffmpeg` をPlaywrightの実行パスへリンクした。専用ffmpeg CDNは403だった。
-- portal URLはクラウド内部 `http://localhost:8091`。外部の人が開けるプレビューURLとは区別する。検証後も親の確認待ちとして起動を継続した。
+- portal URLはクラウド内部 `http://localhost:8091`。外部の人が開けるプレビューURLとは区別する。確認画像URLを共有して確認の機会を設けた後、引き継ぎ時に停止した。外部の対話プレビューは提供できていない。
 
 ## 画面・レスポンシブ
 
