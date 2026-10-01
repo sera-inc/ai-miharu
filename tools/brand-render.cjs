@@ -1,11 +1,18 @@
 #!/usr/bin/env node
-// Renders the PNG / ICO exports of the AIミハル symbol from the SVG sources
+// Legacy exporter: renders the previous AIミハル SVG symbol to PNG / ICO.
+// The current generated PNG source is assets/brand/ai-miharu-symbol-generated-20261001.png.
+// This tool cannot export the current mark and must not silently replace it.
+// Renders the PNG / ICO exports of the previous symbol from the SVG sources
 // in assets/brand/. The SVG files are the source of truth; nothing here draws the mark.
 //
 //   node tools/brand-render.cjs [--chromium /path/to/chrome] [--playwright /path/to/node_modules]
 //
 // Needs a headless Chromium and playwright-core. They are not dependencies of the product,
 // so pass their locations (or have them resolvable). Outputs are written next to the sources.
+if (!process.argv.includes('--legacy-brand')) {
+  console.error('現行ロゴは生成PNGです。旧SVGの書き出しを明示する場合だけ --legacy-brand を指定してください。現行ロゴを上書きします。');
+  process.exit(1);
+}
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

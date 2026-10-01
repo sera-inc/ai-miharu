@@ -32,9 +32,8 @@ def test_service_symbol_uses_the_page_auth_boundary():
     resp = route.endpoint()
     assert str(resp.path) == str(main.STATIC / "ai-miharu-symbol.png")
     assert resp.media_type == "image/png"
-    # The page itself draws the mark from the SVG sources (test_brand_assets.py
-    # covers them); the PNG stays served for READMEs, previews and old links.
-    assert "/ai-miharu-symbol.svg" in HTML
+    # The page uses the generated mark; legacy SVG routes stay compatible.
+    assert "/ai-miharu-symbol.png" in HTML
 
 
 def test_pinned_destinations_are_stored_as_a_string():

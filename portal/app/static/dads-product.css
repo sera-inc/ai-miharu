@@ -43,6 +43,13 @@
     --app-shadow-raised: var(--dads-shadow-1);
     --app-shadow-overlay: var(--dads-shadow-3);
     --app-radius-sm: var(--dads-radius-6);
+    --app-radius-lg: var(--dads-radius-12);
+    --app-text-display-sm-size: var(--dads-text-std-32B-150-size);
+    --app-text-numeric-size: var(--dads-text-dns-14N-130-size);
+    --app-z-sticky: 100;
+    --app-z-drawer: 200;
+    --app-z-modal: 300;
+    --app-z-popover: 400;
     --app-radius-md: var(--dads-radius-8);
     --app-text-inverse: var(--dads-color-white);
   }
@@ -676,12 +683,6 @@ main a:not(.btn) { text-underline-offset:.2em; }
   :where(a,button,input,select,textarea,[tabindex]):focus-visible { outline-color:Highlight!important; }
 }
 
-/* The existing white service glyph needs a contrasting tile on the light shell. */
-:root:not([data-theme="dark"]) .brand img {
-  background:var(--app-primary);
-  border-radius:var(--app-radius-md);
-  padding:var(--app-space-05);
-}
 [data-theme="dark"] {
   --side:var(--app-sg-surface-panel);
   --side-ink:var(--app-sg-text-primary);
@@ -689,3 +690,87 @@ main a:not(.btn) { text-underline-offset:.2em; }
   --side-on-ink:var(--app-sg-text-link);
 }
 nav button.nav-child { min-height:2.75rem; font-size:var(--app-text-body-size); }
+
+/* User-approved direction C (2026-10-01): product-local dark roles.
+ * This does not change the shared DS or its distribution contract. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --app-sg-border-subtle: var(--dads-color-solid-gray-300);
+  --app-sg-border-raised: var(--app-sg-border-strong);
+  --app-sg-text-on-dark-secondary: var(--dads-color-solid-gray-200);
+  --app-sg-success: var(--dads-color-green-200);
+  --app-sg-chart-axis: var(--app-sg-text-secondary);
+  --app-sg-focus-ring: var(--dads-color-blue-200);
+  --app-focus-ring: var(--app-sg-focus-ring);
+  --app-sg-warning-on-dark: var(--dads-color-yellow-300);
+  --app-sg-warning-action-bg: var(--dads-color-yellow-300);
+  --app-sg-warning-action-text: var(--dads-color-solid-gray-900);
+}
+
+/* User-approved A/B/D, 2026-10-01. Independent adapter using actual DS roles.
+ * Compact mode keeps the same readable type scale; diagram/editor geometry is retained. */
+body,.ui-compact { font-size:var(--app-text-body-size); }
+.view-head h2,h2,.drawer h2,.ui-compact .view-head h2,
+.executive-posture>strong,.ui-compact .executive-posture>strong,
+.wcard h3,.card h3,.tcard>h3 { font-size:var(--app-text-heading-sm-size); line-height:1.5; }
+.gcard>.stats dt,.wcard .stats dt,#app>.stats dt,
+.executive-metrics dt,.ui-compact .executive-metrics dt,
+.ui-compact #app>.stats dt,.ui-compact .inventory-summary b,
+.ui-compact .ui-tiles dt,.ui-compact .ui-ring strong { font-size:var(--app-text-display-sm-size); line-height:1.5; }
+.topbar #who { font-size:var(--app-text-body-size)!important; }
+.note,.src-note,.card-meta,.view-kicker,.meta-chip,.live-state,.search-key { font-size:var(--app-text-body-sm-size); }
+th,.tcard th,.wcard .ui-inventory th,.wcard .ui-widget-table th { font-size:var(--app-text-label-size); }
+td,.tcard td,.wcard .ui-inventory td,.wcard .ui-widget-table td,
+.ui-compact .tcard td,.ui-compact .wcard .ui-inventory td { font-size:var(--app-text-table-size); }
+.card-kv dd,.view-head .lede,.lede { font-size:var(--app-text-body-size); }
+.card-kv dt { font-size:var(--app-text-label-size); }
+/* Surface radii; circles, chips, fields, flat table cells and graph marks keep their shape. */
+.wcard,.card,.tcard,.ag-card,.ag-cov,.ag-limit,.gcard>.stats,.overview-posture,
+.executive-posture,.executive-metrics,.register-record,.register-score,
+.budget-card,.evidence-summary,.health-summary,.health-card,.ssow,
+.ov-placeholder,.ov-tray,.ov-drop-end,dialog { border-radius:var(--app-radius-lg); }
+.licard { border-radius:var(--app-radius-lg)!important; }
+#setuppanel,#usermenu,#navflyout,.widget-picker { border-radius:var(--app-radius-sm); }
+.dragging .editing .gcard>.ov-stack-zone,.dragging .gcard>.ov-stack-zone,
+.editing .gcard>.ov-stack-zone { border-radius:0 0 var(--app-radius-lg) var(--app-radius-lg); }
+/* Normal gutters and content padding. The grid's 18px gap / 9px half-width,
+ * planner header reserve (44px) and all chart/drag offsets remain coupled. */
+.card,.ag-card,.ag-cov,.ag-limit { padding:var(--app-space-2); }
+.cards { gap:var(--app-space-2); }
+.ssrail,.ssmain { padding:var(--app-space-3); }
+.ssstep { padding:var(--app-space-1); }
+.tenant-switch { gap:var(--app-space-1); margin:var(--app-space-2) var(--app-space-1) var(--app-space-1); }
+.nav-area-trigger { padding:var(--app-space-1); }
+.tabs { gap:var(--app-space-2); }
+.tabs button { padding:var(--app-space-1) var(--app-space-05); }
+.tabrow { margin-bottom:var(--app-space-3); }
+.view-head .lede { margin-top:var(--app-space-1); }
+.posture-facts,.posture-actions { gap:var(--app-space-1); }
+.posture-actions { margin-left:var(--app-space-05); }
+.gcard>.stats>div,#app>.stats div,.ui-compact #app>.stats div { padding:var(--app-space-2); }
+.executive-metrics>div { padding:var(--app-space-2); }
+.ui-panel-head,.ui-panel-footer,.ui-compact .ui-panel-head,.ui-compact .ui-panel-footer { padding:var(--app-space-2); }
+.ui-panel-footer>span,.ui-steplist { gap:var(--app-space-1); }
+.ui-source-grid,.ui-compact .ui-source-grid { padding:var(--app-space-2); gap:var(--app-space-1) var(--app-space-2); }
+.ui-source-heading,.ui-compact .ui-source-heading { padding:var(--app-space-2) var(--app-space-2) 0; }
+.ui-tool-bars,.ui-compact .ui-tool-bars { padding:0 var(--app-space-2) var(--app-space-2); }
+.ui-cmd { gap:var(--app-space-1); padding:var(--app-space-1) var(--app-space-2); }
+.ui-compact .wcard .ui-inventory th,.ui-compact .wcard .ui-inventory td,
+.ui-compact .wcard .ui-widget-table th,.ui-compact .wcard .ui-widget-table td,
+.ui-compact .tcard th,.ui-compact .tcard td { padding:var(--app-space-1) var(--app-space-2); }
+
+/* User-approved E: global layers; local chart/editor levels stay local. */
+.topbar,.setbar { z-index:var(--app-z-sticky); }
+.overlay { z-index:calc(var(--app-z-drawer) - 1); }
+.drawer { z-index:var(--app-z-drawer); }
+#tour { z-index:var(--app-z-modal); }
+#qresults,#navflyout,#navtip,#usermenu,#setuppanel,.ctip { z-index:var(--app-z-popover); }
+@media (max-width:900px) { aside { z-index:var(--app-z-drawer); } }
+/* A hidden drawer must not expose focusable controls off screen. */
+.drawer[aria-hidden="true"] { visibility:hidden; }
+
+/* Original generated service mark, approved available-image route. */
+:root .brand img { background:transparent; padding:0; border-radius:0; }
+
+/* Readable table typography must not widen the page or exclude keyboard users. */
+.ui-data-scroll { max-width:100%; min-width:0; overflow-x:auto; }

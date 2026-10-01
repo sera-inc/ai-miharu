@@ -47,7 +47,7 @@ def test_the_page_links_only_routes_that_exist():
     assert links, "the page should declare its icons"
     assert set(links) <= served
     assert "/favicon.ico" in links and "/apple-touch-icon.png" in links
-    assert "/ai-miharu-symbol.svg" in links
+    assert "/ai-miharu-symbol.png" in links
 
 
 def test_the_public_logo_route_is_the_current_mark_not_the_upstream_logo():
@@ -56,10 +56,10 @@ def test_the_public_logo_route_is_the_current_mark_not_the_upstream_logo():
     assert (main.STATIC / "logo.png").read_bytes() == (main.STATIC / "ai-miharu-symbol.png").read_bytes()
 
 
-def test_the_sidebar_uses_the_white_mark_and_the_sign_in_card_has_both():
-    assert re.search(r'id="brand-home"[^>]*>\s*<img src="/ai-miharu-symbol-white\.svg"', HTML)
-    assert 'class="mark-on-light" src="/ai-miharu-symbol.svg"' in HTML
-    assert 'class="mark-on-dark" src="/ai-miharu-symbol-white.svg"' in HTML
+def test_sidebar_and_sign_in_use_the_generated_mark_in_both_themes():
+    assert re.search(r'id="brand-home"[^>]*>\s*<img src="/ai-miharu-symbol\.png"', HTML)
+    assert 'class="mark-on-light" src="/ai-miharu-symbol.png"' in HTML
+    assert 'class="mark-on-dark" src="/ai-miharu-symbol.png"' in HTML
     assert "[data-theme=dark] .mark-on-light{display:none}" in HTML
 
 
