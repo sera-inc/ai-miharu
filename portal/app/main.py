@@ -1828,8 +1828,8 @@ def _sso_page(title: str, body: str, go: str = "",
         else '<p><a href="/">サインイン画面に戻る</a></p>'
     support = ('<p class=support>株式会社世良 · '
                '<a href="mailto:info@sera-inc.co.jp">お問い合わせ</a></p>')
-    return HTMLResponse(tell +
-        "<!doctype html><meta charset=utf-8>"
+    return HTMLResponse(
+        '<!doctype html><html lang="ja"><head><meta charset=utf-8>'
         "<meta name=viewport content='width=device-width,initial-scale=1'>"
         f"<title>{esc_attr(title)}</title>"
         "<style>body{font:15px/1.5 -apple-system,'Segoe UI',sans-serif;"
@@ -1840,8 +1840,8 @@ def _sso_page(title: str, body: str, go: str = "",
         # The test tab keeps the closing line and drops the link that
         # would take it into the portal; a real sign-in does the reverse.
         "[data-test] a{display:none}[data-test] p.t{display:block!important}"
-        "</style>"
-        f"<h1>{esc_attr(title)}</h1><p>{esc_attr(body)}</p>{onward}{support}")
+        "</style></head><body>" + tell +
+        f"<h1>{esc_attr(title)}</h1><p>{esc_attr(body)}</p>{onward}{support}</body></html>")
 
 
 @app.get("/sso/start")

@@ -8,6 +8,28 @@
  * 同じ見た目になるよう、すべて DADS Layer 1 の値を参照する。 */
 @layer sera-standalone-fallback {
   :root {
+    /* Public DADS primitives for independently authored role fallbacks. */
+    --app-surface: var(--dads-color-white);
+    --app-surface-sunken: var(--dads-color-solid-gray-50);
+    --app-surface-raised: var(--dads-color-white);
+    --app-surface-hover: var(--dads-color-solid-gray-50);
+    --app-border: var(--dads-color-solid-gray-420);
+    --app-border-strong: var(--dads-color-solid-gray-536);
+    --app-text: var(--dads-color-solid-gray-800);
+    --app-text-muted: var(--dads-color-solid-gray-600);
+    --app-text-link: var(--dads-color-blue-1000);
+    --app-primary: var(--dads-color-blue-900);
+    --app-primary-hover: var(--dads-color-blue-1000);
+    --app-primary-bg: var(--dads-color-blue-50);
+    --app-space-1: var(--dads-spacing-1);
+    --app-space-2: var(--dads-spacing-2);
+    --app-space-4: var(--dads-spacing-4);
+    --app-text-heading-lg-size: var(--dads-text-std-24B-150-size);
+    --app-text-heading-size: var(--dads-text-std-20B-160-size);
+    --app-text-heading-sm-size: var(--dads-text-std-18B-160-size);
+    --app-text-table-size: var(--dads-text-dns-14N-130-size);
+    --app-text-body-sm-size: 0.75rem;
+    --app-text-label-size: 0.75rem;
     --app-focus-ring: var(--dads-color-focus-blue);
     --app-focus-ring-width: 3px;
     --app-focus-ring-offset: 2px;
@@ -563,3 +585,107 @@ input:focus-visible,select:focus-visible,.mfield:focus-visible,button.mini:focus
   flex: 0 0 auto;
   white-space: nowrap;
 }
+
+/* Codex 2026-10-01: reviewed role aliases and product layout refinement.
+ * Reference: sera-inc/digital-design-system 6051bce, semantic roles §3.
+ * This independently authored adapter is not a copy/distribution of Layer 2.
+ * Shared tokens from a complete external mount win over the layered fallback.
+ * Product-specific dark/chart roles remain documented deviations. */
+:root:not([data-theme="dark"]) {
+  --app-sg-surface-canvas: var(--app-surface-sunken);
+  --app-sg-surface-panel: var(--app-surface-sunken);
+  --app-sg-surface-card: var(--app-surface);
+  --app-sg-surface-raised: var(--app-surface-raised);
+  --app-sg-surface-hover: var(--app-surface-hover);
+  --app-sg-border-subtle: var(--app-border);
+  --app-sg-border-strong: var(--app-border-strong);
+  --app-sg-text-primary: var(--app-text);
+  --app-sg-text-secondary: var(--app-text-muted);
+  --app-sg-text-link: var(--app-text-link);
+  --app-sg-accent-primary: var(--app-primary);
+  --app-sg-accent-primary-hover: var(--app-primary-hover);
+  --app-sg-accent-subtle: var(--app-primary-bg);
+  --side: var(--app-surface);
+  --side-ink: var(--app-text);
+  --side-mut: var(--app-text-muted);
+  --side-line: var(--app-border);
+  --side-on: var(--app-primary-bg);
+  --side-on-ink: var(--app-primary);
+}
+body { line-height:1.6; letter-spacing:normal; }
+aside { background:var(--side); color:var(--side-ink); border-right-color:var(--side-line); }
+nav button { min-height:2.75rem; font-size:var(--app-text-body-size); line-height:1.5; color:var(--side-mut); }
+nav button:hover,nav button.on { color:var(--side-on-ink); background:var(--side-on); box-shadow:none; }
+nav button.on:before,.nav-child.on .nav-dot { background:var(--side-on-ink); box-shadow:none; }
+nav .count { color:var(--app-sg-danger); font-size:var(--app-text-label-size); }
+.nav-area-trigger { font-weight:700; }
+.nav-child .lbl { line-height:1.5; }
+.tenant-copy b { font-size:var(--app-text-body-size); }
+.tenant-copy span,.foot,.foot a { font-size:var(--app-text-body-sm-size); color:var(--side-mut); }
+.brand { color:var(--side-ink); }
+.fold { background:var(--side); color:var(--side-ink); min-height:2.75rem; }
+.topbar { min-height:4rem; height:auto; padding-top:var(--app-space-1); padding-bottom:var(--app-space-1); backdrop-filter:none; }
+.topbar #who { font-size:var(--app-text-body-sm-size)!important; }
+main { width:100%; padding:var(--app-space-4); }
+.view-head { gap:var(--app-space-2); flex-wrap:wrap; margin-bottom:var(--app-space-3); }
+.view-head h2,h2 { font-size:var(--app-text-heading-lg-size); line-height:1.5; letter-spacing:normal; }
+.view-head .lede,.lede { font-size:var(--app-text-body-size); line-height:1.7; max-width:65ch; }
+.view-kicker,.meta-chip,.src-note,.card-meta,.live-state,.search-key { font-size:var(--app-text-body-sm-size); line-height:1.5; }
+.wcard,.card,.tcard,.ag-card,.ag-cov,.ag-limit { box-shadow:none; }
+.wcard h3,.card h3,.tcard>h3 { font-size:var(--app-text-heading-sm-size); line-height:1.5; font-weight:700; }
+table { font-size:var(--app-text-table-size); line-height:1.6; }
+th,td { padding:var(--app-space-2); }
+th { background:var(--app-sg-surface-panel); color:var(--app-sg-text-primary); }
+input,select,textarea,.mfield { font-size:var(--app-text-body-size); line-height:1.5; border-color:var(--app-sg-border-strong); }
+input:not([type="checkbox"]):not([type="radio"]),select { min-height:2.75rem; }
+button.mini,.btn,.back,.tabs button,.dclose { min-height:2.75rem; font-size:var(--app-text-body-size); }
+.dclose { min-width:2.75rem; }
+.note,label { line-height:1.6; }
+.note { font-size:var(--app-text-body-size); }
+.gcard>.stats dt { font-size:var(--app-text-heading-lg-size); line-height:1.5; }
+.gcard>.stats dd { font-size:var(--app-text-body-sm-size); }
+.overview-posture,.overview-posture.good { background:var(--app-sg-accent-subtle); color:var(--app-sg-text-primary); box-shadow:none; border:1px solid var(--app-sg-border-subtle); border-left:4px solid var(--app-sg-accent-primary); padding:var(--app-space-3); }
+.overview-posture:after { display:none; }
+.posture-copy span,.posture-copy p,.posture-fact span { color:var(--app-sg-text-secondary); font-size:var(--app-text-body-sm-size); line-height:1.6; }
+.posture-copy strong { font-size:var(--app-text-heading-sm-size); line-height:1.5; }
+.posture-fact b { color:var(--app-sg-text-primary); }
+:where(a,button,input,select,textarea,[tabindex]):focus-visible,.ov-chip:focus-visible {
+  outline:var(--app-focus-ring-width) solid var(--app-focus-ring)!important;
+  outline-offset:var(--app-focus-ring-offset)!important;
+}
+main a:not(.btn) { text-underline-offset:.2em; }
+.window-pick select,.window-field select { font-size:var(--app-text-body-sm-size); min-height:2.75rem; }
+@media (max-width:900px) {
+  main { padding:var(--app-space-2); }
+  .topbar { padding-left:var(--app-space-2); padding-right:var(--app-space-2); }
+  .view-meta { margin-left:0; flex-wrap:wrap; white-space:normal; }
+  .overview-posture { gap:var(--app-space-2); }
+  .posture-facts { flex-wrap:wrap; gap:var(--app-space-2); }
+}
+@media (max-width:600px) {
+  .view-head h2,h2 { font-size:var(--app-text-heading-size); }
+  th,td { padding:var(--app-space-1); }
+  .posture-facts { margin-left:0; }
+  .tabs { overflow-x:auto; max-width:100%; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+@media (forced-colors:active) {
+  nav button.on { outline:1px solid Highlight; }
+  :where(a,button,input,select,textarea,[tabindex]):focus-visible { outline-color:Highlight!important; }
+}
+
+/* The existing white service glyph needs a contrasting tile on the light shell. */
+:root:not([data-theme="dark"]) .brand img {
+  background:var(--app-primary);
+  border-radius:var(--app-radius-md);
+  padding:var(--app-space-05);
+}
+[data-theme="dark"] {
+  --side:var(--app-sg-surface-panel);
+  --side-ink:var(--app-sg-text-primary);
+  --side-mut:var(--app-sg-text-secondary);
+  --side-on-ink:var(--app-sg-text-link);
+}
+nav button.nav-child { min-height:2.75rem; font-size:var(--app-text-body-size); }

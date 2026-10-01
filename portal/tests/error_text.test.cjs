@@ -30,6 +30,28 @@ function load() {
 }
 const { uiErrorText, uiRelayText } = load();
 
+test('settings failures explain how to recover without echoing input', () => {
+  assert.match(uiErrorText('working_hours must look like 09:00-18:00. A shift crossing midnight is fine: 22:00-06:00.', 422), /勤務時間は 09:00-18:00/);
+  assert.match(uiErrorText('smtp_port must be a number from 1 to 65535', 422), /1〜65535の整数/);
+  assert.match(uiErrorText('corp domain too long: secret.example', 422), /253文字以内/);
+  assert.doesNotMatch(uiErrorText('corp domain too long: secret.example', 422), /secret/);
+  assert.match(uiErrorText('portal_url must be http:// or https://', 422), /URL は http/);
+  assert.match(uiErrorText('only an owner account can change this', 403), /オーナーに変更を依頼/);
+  assert.match(uiErrorText('cannot remove the last owner', 409), /先に別のオーナー/);
+});
+
+test('missing or unreachable logs do not look like an empty estate', () => {
+  assert.match(uiErrorText('No log store is configured. Save its base URL in Settings (managed mode), or set LOKI_URL - the same store the receiver writes to.', 503), /ログ保存先が設定されていません/);
+  assert.match(uiErrorText('Could not read findings from Loki at http://loki:3100 (ConnectError). See the portal logs for detail.', 502), /検出結果を読み込めませんでした/);
+  assert.match(uiErrorText('Failed to fetch', 0), /ネットワーク接続を確認/);
+});
+
+test('structured validation errors never expose submitted values', () => {
+  const text = uiErrorText([{loc: ['body', 'password'], msg: 'too short', input: 'secret'}], 422);
+  assert.match(text, /入力内容の形式や文字数/);
+  assert.doesNotMatch(text, /secret|password|object Object/);
+});
+
 test('a known English sentence that quotes a Japanese name is still translated', () => {
   // The bug: any Japanese character made the whole string look Japanese, so
   // this reached the screen in English.

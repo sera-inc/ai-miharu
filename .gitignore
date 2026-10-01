@@ -43,3 +43,6 @@ tools/dads/node_modules/
 # Screenshot tooling dependencies (installed by `npm ci` in tools/screenshots)
 tools/screenshots/node_modules/
 tools/screenshots/out/
+
+# Full local QA captures; curated evidence is versioned under docs/evidence.
+artifacts/

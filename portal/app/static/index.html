@@ -6108,7 +6108,7 @@ function accountSettings() {
             ? ` <button class="mini" data-act="user-email-form"
                  data-key="${esc(u.id)}">編集</button>` : ''}`}</td>
       <td>${may
-        ? `<select class="mfield" data-role-for="${esc(u.id)}" style="min-width:100px">
+        ? `<select class="mfield" data-role-for="${esc(u.id)}" aria-label="${esc(u.username)} のロール" style="min-width:100px">
              ${ROLE_ORDER.filter(r => (RANK[r] || 0) <= mine).map(r =>
                `<option value="${r}"${u.role === r ? ' selected' : ''}>${({viewer:'閲覧者',admin:'管理者',owner:'オーナー'}[r] || r)}</option>`).join('')}
            </select>`
@@ -6139,7 +6139,7 @@ function accountSettings() {
         data-lpignore="true" data-1p-ignore data-bwignore>
       <input id="user-email" class="mfield" placeholder="メールアドレス（必須）"
         autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore>
-      <select id="user-role" class="mfield" style="min-width:110px">
+      <select id="user-role" class="mfield" aria-label="新しいアカウントのロール" style="min-width:110px">
         ${ROLE_ORDER.filter(r =>
           (RANK[r] || 0) <= (RANK[(AUTH && AUTH.role) || 'viewer'] || 0)
         ).map(r => `<option value="${r}">${({viewer:'閲覧者',admin:'管理者',owner:'オーナー'}[r] || r)}</option>`).join('')}
@@ -6221,7 +6221,7 @@ function ssoEnforceBlock() {
     <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
       <p style="margin:0 0 6px"><b style="font-size:13px">サインインを求める間隔</b></p>
       <p class="lede">以前は、ブラウザーで Microsoft にサインイン済みの人は、何も操作せずにこのポータルに入れていました（リンクを開くだけで、誰がどのAIを使っているかが分かる画面に入れてしまう状態でした）。現在はサインインのたびにアカウントの選択を求めます。この設定では、Microsoft でのサインインからどれだけ時間がたったら、もう一度本人確認を求めるかを決めます。</p>
-      <p><select id="sso-maxage" class="mfield" style="min-width:260px">
+      <p><select id="sso-maxage" class="mfield" aria-label="シングルサインオンの再認証までの時間" style="min-width:260px">
         ${[['', '12時間ごと（既定）'], ['0', '毎回'],
            ['1', '1時間ごと'], ['4', '4時間ごと'],
            ['8', '8時間ごと'], ['24', '24時間ごと'],
@@ -6383,13 +6383,13 @@ function diagnosticsCards() {
         <div><dt>最後に成功した読み取り</dt><dd>${ago(r.loki_last_success)}</dd></div>
         <div><dt>対象期間 / キャッシュ</dt><dd>${esc(r.lookback_hours)}時間 <span>·</span> ${esc(r.cache_ttl_seconds)}秒</dd></div></dl>
       ${r.portal_read_credential === 'the signed-in account' ? `<p class="health-note warning">このポータル自身にはログ保存先の認証情報がないため、閲覧者の読み込みは拒否されます。<span class="mono">RECEIVER_ADMIN_TOKEN</span>、またはポータル用の <span class="mono">LOKI_URL</span> と認証情報を設定してください。</p>` : ''}
-      ${r.loki_last_error ? `<p class="health-note danger"><b>直近のエラー</b> ${esc(r.loki_last_error)}${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
+      ${r.loki_last_error ? `<p class="health-note danger"><b>ログ保存先との通信に失敗しました</b>（診断コード: ${esc(r.loki_last_error)}）${r.loki_last_error_at ? ` · ${ago(r.loki_last_error_at)}` : ''}</p>` : ''}
     </section>
 
     <section class="health-card ${r.registry_loaded ? '' : 'needs-attention'}"><div class="health-card-head"><div><span>参照データ</span><h3>ツールレジストリ</h3></div>${r.registry_loaded ? '<span class="pill p-ok">読み込み済み</span>' : '<span class="pill p-warn">利用不可</span>'}</div>
       <dl class="health-facts"><div><dt>ツール</dt><dd>${esc(r.registry_tools)}${r.registry_tools_with_domains != null && r.registry_tools_with_domains !== r.registry_tools ? ` <span>· ${esc(r.registry_tools_with_domains)}（ドメインあり）</span>` : ''}</dd></div>
         <div><dt>レジストリパス</dt><dd class="mono">${esc(r.registry_path)}</dd></div></dl>
-      ${r.registry_error ? `<p class="health-note danger"><b>エラー</b> ${esc(r.registry_error)}</p>` : ''}
+      ${r.registry_error ? `<p class="health-note danger"><b>ツールレジストリを読み込めませんでした</b>（診断コード: ${esc(r.registry_error)}）。接続設定と受信サービスのログを確認してください。</p>` : ''}
       ${!r.registry_loaded ? `<p class="health-note warning">レジストリがないと、検出ソースごとに異なるツール名を1つにまとめられません。</p>` : ''}
     </section>
 
@@ -8507,6 +8507,40 @@ const uiApiName = v => {
   return /[ぁ-んァ-ヶ一-龯]$/.test(n) ? n : n + ' ';
 };
 const EN_ERROR_PATTERNS = [
+  [/^(login required|authentication required|bad token)$/, () => 'サインインの有効期限が切れたか、認証情報を確認できません。もう一度サインインしてください。'],
+  [/^(invalid credentials|bad username or password)$/, () => 'ユーザー名またはパスワードが正しくありません。'],
+  [/^current password is wrong$/, () => '現在のパスワードが正しくありません。入力内容を確認してください。'],
+  [/^only an owner account can change this$/, () => 'この設定を変更できるのはオーナーだけです。オーナーに変更を依頼してください。'],
+  [/^this account is read-only: an admin account has to make this change$/, () => 'このアカウントは閲覧専用です。管理者またはオーナーに変更を依頼してください。'],
+  [/^that account holds a role above yours$/, () => '自分より上位の権限を持つアカウントは変更できません。'],
+  [/^you cannot grant a role above your own$/, () => '自分より上位の権限を付与することはできません。'],
+  [/^cannot remove the last owner$/, () => '最後のオーナーは削除・権限変更できません。先に別のオーナーを登録してください。'],
+  [/^that username already exists$/, () => 'そのユーザー名は登録済みです。別の名前を入力してください。'],
+  [/^that does not look like an email address$/, () => 'メールアドレスの形式を確認してください。'],
+  [/^(no such account|no account with that id)$/, () => 'アカウントが見つかりません。一覧を更新してください。'],
+  [/^that account has no email address$/, () => 'このアカウントにはメールアドレスが登録されていません。先に登録してください。'],
+  [/^too many attempts; try again later$/, () => '試行回数が上限に達しました。しばらく待ってから、もう一度お試しください。'],
+  [/^No log store is configured\./, () => 'ログ保存先が設定されていません。「設定」で受信サービスと同じログ保存先の URL を保存するか、環境変数 LOKI_URL を設定してください。'],
+  [/^Could not read findings from Loki at .+ \([A-Za-z]+\)\. See the portal logs for detail\.$/, () => 'ログ保存先（Loki）から検出結果を読み込めませんでした。接続設定と稼働状況を確認してください。詳しい原因はポータルのログに記録されています。'],
+  [/^(registry not available|collector registry not available)$/, () => 'ツールレジストリを読み込めませんでした。受信サービスの稼働状況とレジストリの設定を確認してください。'],
+  [/^(firefox )?extension id cannot contain whitespace$/, () => '拡張機能 ID に空白や制御文字は使用できません。貼り付けた内容を確認してください。'],
+  [/^corp domain too long: /, () => '法人ドメインは1件あたり253文字以内で入力してください。'],
+  [/^marking too long: /, () => '機密表示は1件あたり120文字以内で入力してください。'],
+  [/^marking cannot contain control characters$/, () => '機密表示に改行などの制御文字は使用できません。1行ずつ入力してください。'],
+  [/^paste_guard_mode must be one of: /, () => '貼り付けガードの動作を「オフ」「警告」「ブロック」から選択してください。'],
+  [/^working_hours must look like 09:00-18:00\./, () => '勤務時間は 09:00-18:00 の形式で入力してください。22:00-06:00 のように日付をまたぐ時間帯も指定できます。'],
+  [/^smtp_port must be a number from 1 to 65535$/, () => 'メールサーバーのポートは1〜65535の整数で入力してください。'],
+  [/^smtp_security must be one of: /, () => 'メールサーバーの暗号化方式を「なし」「STARTTLS」「TLS」から選択してください。'],
+  [/^\S+ must be http:\/\/ or https:\/\/$/, () => 'URL は http:// または https:// で始まる形式で入力してください。'],
+  [/^single sign-on has to be on before it can be required$/, () => 'シングルサインオンを必須にする前に、有効にしてください。'],
+  [/^no owner has completed a single sign-on yet\./, () => 'まだオーナーのシングルサインオンを確認できていません。先にオーナーが認証サービス経由でサインインしてから、必須にしてください。'],
+  [/^sso_max_age_hours is a whole number of hours from 0 to 720, or empty for the default$/, () => '再認証までの時間は0〜720の整数で入力してください。空欄にすると既定値を使います。'],
+  [/^malformed (user|device|token|run) id$/, () => '対象の ID の形式が正しくありません。一覧を更新して、もう一度選択してください。'],
+  [/^no such active (token|device)$/, () => '有効な登録トークンまたは端末が見つかりません。一覧を更新してください。'],
+  [/^(malformed code|no request with that code)$/, () => '承認リクエストが見つかりません。コマンドを再実行して、新しいリンクを開いてください。'],
+  [/^the request expired before it was approved$/, () => '承認される前にリクエストが期限切れになりました。コマンドを再実行してください。'],
+  [/^denied by the owner$/, () => 'オーナーがリクエストを拒否しました。'],
+  [/^(Failed to fetch|NetworkError when attempting to fetch resource\.)$/, () => 'サーバーに接続できませんでした。ネットワーク接続を確認して、もう一度お試しください。'],
   [/^a server and a from address are needed first$/,
     () => 'メールサーバーと差出人アドレスを先に設定してください。'],
   [/^(.+) answered 401: the key is wrong, expired or revoked$/,
@@ -8564,6 +8598,9 @@ const EN_ERROR_PATTERNS = [
     m => `${m[1]} には契約が ${m[2]} 件あります（${m[3]}）。どのプランの操作かを指定してください。`],
 ];
 function uiErrorText(raw, status) {
+  // FastAPI validation details contain user input. Do not echo the payload
+  // or turn it into [object Object]; give a safe, actionable Japanese answer.
+  if (Array.isArray(raw)) return '入力内容の形式や文字数を確認してください。必須項目が未入力の場合は入力してから、もう一度保存してください。';
   if (raw == null) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';
   const s = String(raw);
   if (!s) return status ? `処理できませんでした（HTTP ${status}）。` : '処理できませんでした。';

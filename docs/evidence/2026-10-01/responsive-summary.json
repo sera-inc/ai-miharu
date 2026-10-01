@@ -1,0 +1,293 @@
+{
+  "errors": [],
+  "results": [
+    {
+      "route": "overview",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "tools",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "people",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "devices",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "personal",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "mcp",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "register",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "registry",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "paste",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "iso",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "budget",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "agentic",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "setup",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "coverage",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "fleet",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "tokens",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "settings/fleet",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "settings/connection",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "settings/alerting",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "settings/account",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "settings/start",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "dashboard",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "diagnostics",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "wizard",
+      "width": 1440,
+      "title": "AIミハル",
+      "scrollWidth": 1440
+    },
+    {
+      "route": "overview",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "tools",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "people",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "devices",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "personal",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "mcp",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "register",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "registry",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "paste",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "iso",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "budget",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "agentic",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "setup",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "coverage",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "fleet",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "tokens",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "settings/fleet",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "settings/connection",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "settings/alerting",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "settings/account",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "settings/start",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "dashboard",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "diagnostics",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    },
+    {
+      "route": "wizard",
+      "width": 390,
+      "title": "AIミハル",
+      "scrollWidth": 390
+    }
+  ]
+}

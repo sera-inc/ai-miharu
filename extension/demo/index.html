@@ -8,6 +8,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>貼り付けガードの動作デモ</title>
 <!--
   Zero-install demo of the paste guard. This page loads the REAL, unmodified
@@ -100,6 +101,8 @@
 
 <p class="muted">検出対象と意図的な除外の全一覧は <code>src/guard.js</code> に記載しています。実際の導入方法は、このフォルダー内のREADMEを参照してください。</p>
 
+<footer><p class="muted">AIミハル · 株式会社世良 · <a href="mailto:info@sera-inc.co.jp">お問い合わせ</a><br>合成サンプルによる動作確認用です。実際の秘密情報は入力しないでください。</p></footer>
+
 <script>
   // Stub the three chrome.* touchpoints guard.js uses. Everything else on
   // this page is presentation.
@@ -138,9 +141,15 @@
     if (!codeEl || !cell) return;
     const b = document.createElement("button");
     b.className = "copy"; b.textContent = "コピー";
+    b.setAttribute("aria-live", "polite");
     b.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(codeEl.textContent);
-      b.textContent = "コピーしました"; b.classList.add("ok");
+      try {
+        await navigator.clipboard.writeText(codeEl.textContent);
+        b.textContent = "コピーしました"; b.classList.add("ok");
+      } catch (e) {
+        b.textContent = "コピーできません。例文を選択してコピーしてください";
+        return;
+      }
       setTimeout(() => { b.textContent = "コピー"; b.classList.remove("ok"); }, 1200);
     });
     cell.appendChild(b);

@@ -1,0 +1,371 @@
+{
+  "bundled": {
+    "styles": {
+      "light": {
+        "body": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(242, 242, 242)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "aside": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(148, 148, 148)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px 0px 14px",
+          "minHeight": "auto"
+        },
+        "main": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "32px",
+          "minHeight": "0px"
+        },
+        ".view-head h2": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        ".wcard": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(148, 148, 148)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "100%"
+        },
+        "input": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "11px",
+          "lineHeight": "17.6px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "nav button.nav-child": {
+          "color": "rgb(0, 23, 193)",
+          "backgroundColor": "rgb(232, 241, 254)",
+          "borderColor": "rgb(0, 23, 193)",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "padding": "6px 36px 6px 32px",
+          "minHeight": "33px"
+        }
+      },
+      "dark": {
+        "body": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(26, 26, 26)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "aside": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(26, 26, 26)",
+          "borderColor": "rgb(127, 127, 127)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px 0px 14px",
+          "minHeight": "auto"
+        },
+        "main": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "32px",
+          "minHeight": "0px"
+        },
+        ".view-head h2": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        ".wcard": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(51, 51, 51)",
+          "borderColor": "rgb(127, 127, 127)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "100%"
+        },
+        "input": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "11px",
+          "lineHeight": "17.6px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "nav button.nav-child": {
+          "color": "rgb(197, 215, 251)",
+          "backgroundColor": "color(srgb 0.286275 0.47451 0.960784 / 0.2)",
+          "borderColor": "rgb(197, 215, 251)",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "padding": "6px 36px 6px 32px",
+          "minHeight": "33px"
+        }
+      }
+    },
+    "bad": [
+      {
+        "phase": "axe",
+        "url": "http://localhost:8091/dads.css",
+        "status": 404
+      }
+    ],
+    "css": [
+      {
+        "phase": "normal",
+        "url": "http://localhost:8091/enterprise.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8091/dads-product.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8091/digital-design-system/tokens/index.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8091/digital-design-system/tokens/dads.css",
+        "status": 200
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8091/dads.css",
+        "status": 404
+      }
+    ],
+    "axe": []
+  },
+  "mounted": {
+    "styles": {
+      "light": {
+        "body": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(242, 242, 242)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "aside": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(148, 148, 148)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px 0px 14px",
+          "minHeight": "auto"
+        },
+        "main": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "32px",
+          "minHeight": "0px"
+        },
+        ".view-head h2": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        ".wcard": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(148, 148, 148)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "100%"
+        },
+        "input": {
+          "color": "rgb(51, 51, 51)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(51, 51, 51)",
+          "fontSize": "11px",
+          "lineHeight": "17.6px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "nav button.nav-child": {
+          "color": "rgb(0, 23, 193)",
+          "backgroundColor": "rgb(232, 241, 254)",
+          "borderColor": "rgb(0, 23, 193)",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "padding": "6px 36px 6px 32px",
+          "minHeight": "33px"
+        }
+      },
+      "dark": {
+        "body": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(26, 26, 26)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "aside": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(26, 26, 26)",
+          "borderColor": "rgb(127, 127, 127)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px 0px 14px",
+          "minHeight": "auto"
+        },
+        "main": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "32px",
+          "minHeight": "0px"
+        },
+        ".view-head h2": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "24px",
+          "lineHeight": "36px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        ".wcard": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgb(51, 51, 51)",
+          "borderColor": "rgb(127, 127, 127)",
+          "fontSize": "13px",
+          "lineHeight": "20.8px",
+          "padding": "0px",
+          "minHeight": "100%"
+        },
+        "input": {
+          "color": "rgb(242, 242, 242)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(242, 242, 242)",
+          "fontSize": "11px",
+          "lineHeight": "17.6px",
+          "padding": "0px",
+          "minHeight": "0px"
+        },
+        "nav button.nav-child": {
+          "color": "rgb(197, 215, 251)",
+          "backgroundColor": "color(srgb 0.286275 0.47451 0.960784 / 0.2)",
+          "borderColor": "rgb(197, 215, 251)",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "padding": "6px 36px 6px 32px",
+          "minHeight": "33px"
+        }
+      }
+    },
+    "bad": [
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/semantic.css",
+        "status": 404
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/dads.css",
+        "status": 404
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/brand.css",
+        "status": 404
+      }
+    ],
+    "css": [
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/dads-product.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/digital-design-system/tokens/index.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/enterprise.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/digital-design-system/tokens/dads.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/digital-design-system/tokens/semantic.css",
+        "status": 200
+      },
+      {
+        "phase": "normal",
+        "url": "http://localhost:8094/digital-design-system/tokens/brand.css",
+        "status": 200
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/semantic.css",
+        "status": 404
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/dads.css",
+        "status": 404
+      },
+      {
+        "phase": "axe",
+        "url": "http://localhost:8094/brand.css",
+        "status": 404
+      }
+    ],
+    "axe": []
+  },
+  "differences": []
+}
